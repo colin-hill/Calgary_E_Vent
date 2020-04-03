@@ -1,6 +1,10 @@
+
 #include <elapsedMillis.h>
+#include "LiquidCrystal.h"
 
 //Begin User Defined Section---------------------------------------------------------------------------------------------
+
+const char softwareVersion[] = "Version 1.0"; //In case we test a few versions?
 
 //IO Pin Definintions----------------------------------------------------------------------------------------------------
 #define setParameterPin 25 //Pin for the set parameter button
@@ -13,6 +17,18 @@
 #define setThresholdPressurePotPin 9
 #define setTVPotPin 6
 //-----------------------------------------------------------------------------------------------------------------------
+
+//LCD Denfinitions---------------------------------------------------------------------------------------------------
+#define lcdEnable 7
+#define lcdRS 8
+#define lcdDB4 9
+#define lcdDB5 10
+#define lcdDB6 11
+#define lcdDB7 12
+
+LiquidCrystal lcd(lcdRS, lcdEnable, lcdDB4, lcdDB5, lcdDB6, lcdDB7);
+
+//----------------------------------------------------------------------------------------------------------------------
 
 //ADC Definitions--------------------------------------------------------------------------------------------------------
 #define maxADCVoltage 5.0 //ATMega standard max input voltage
@@ -49,7 +65,7 @@
 //-----------------------------------------------------------------------------------------------------------------------
 
 //Threshold Pressure Definitions-----------------------------------------------------------------------------------------
-#define minThresholdPressure 1.0 
+#define minThresholdPressure 1.0
 #define maxThresholdPressure 2.0
 //-----------------------------------------------------------------------------------------------------------------------
 
@@ -78,7 +94,7 @@ float voltageToIERatioConversion(float potVoltage);
 float voltageToTVConversion(float potVoltage);
 void parameterChangeButtonISR();
 
-enum machineStates{
+enum machineStates {
   Startup,
   MotorZeroing,
   BreathLoopStart,
@@ -86,7 +102,7 @@ enum machineStates{
   VCMode
 };
 
-enum acModeStates{
+enum acModeStates {
   ACStart,
   ACInhaleWait,
   ACInhale,
@@ -95,7 +111,7 @@ enum acModeStates{
   ACReset
 };
 
-enum vcModeStates{
+enum vcModeStates {
   VCStart,
   VCInhale,
   VCPeak,
@@ -146,7 +162,7 @@ machineStates machineState = Startup;
 acModeStates acModeState = ACStart;
 vcModeStates vcModeState = VCStart;
 //-----------------------------------------------------------------------------------------------------------------------
- 
+
 void setup() {
 
   //Pin Setup------------------------------------------------------------------------------------------------------------
@@ -160,28 +176,34 @@ void setup() {
   pinMode(setTVPotPin, INPUT);
 
   //Switch input pin setup
-  pinMode(setParameterPin,INPUT);
-  pinMode(limitSwitchPin,INPUT);
-  pinMode(alarmSwitchPin,INPUT);
+  pinMode(setParameterPin, INPUT);
+  pinMode(limitSwitchPin, INPUT);
+  pinMode(alarmSwitchPin, INPUT);
 
   //Pressure sensor input pin setup
-  pinMode(pressureSensorPin,INPUT);
+  pinMode(pressureSensorPin, INPUT);
 
   //Parameter change interrupt setup
   attachInterrupt(digitalPinToInterrupt(setParameterPin),parameterChangeButtonISR,FALLING);
 
-  //LCD Setup********
-  
+  //LCD Setup
+  lcd.begin(20, 4); //set number of columns and rows
 
   readPotentiometers(setThresholdPressurePotPin, setBPMPotPin, setIERatioPotPin, setTVPotPin, internalThresholdPressure, internalBPM, internalIERatio, internalTV);
 
-  //LCD Display Startup Message for two seconds********
-  
+  //LCD Display Startup Message for two seconds
+  displayStartScreen(softwareVersion);
+
+
   cli(); //Turn off ointerrupts before reading paramChange
-  while(paramChange == false){
-    
+  while (paramChange == false) {
+
     sei();
-    //LCD Display Internal Variables********
+    //LCD Display Internal Variables
+    displayParameterScreen(internalTV, internalBPM, internalIERatio, internalThresholdPressure);
+
+
+
 
     readPotentiometers(setThresholdPressurePotPin, setBPMPotPin, setIERatioPotPin, setTVPotPin, internalThresholdPressure, internalBPM, internalIERatio, internalTV);
     cli();
@@ -189,17 +211,18 @@ void setup() {
   paramChange = false;
   sei();
 
-  //LCD Display Homing Message********
+  //LCD Display Homing Message
+  displayHomingScreen();
+
 
   //Motor Homing Sequence
-  while(digitalRead(limitSwitchPin) == 0){
+  while (digitalRead(limitSwitchPin) == 0) {
     //Move motor at Vhome********
   }
 
-  //LCD Display FInding Zero********
 
   //Motor Zero Sequence
-  while(digitalRead(limitSwitchPin) == 1){
+  while (digitalRead(limitSwitchPin) == 1) {
     //Move motor at Vzero********
   }
 
@@ -213,21 +236,24 @@ void loop() {
 
   //Update LCD*********
   cli(); //Prevent interrupts from occuring
-  if(paramChange == true){
+  if (paramChange == true) {
     sei();
     readPotentiometers(setThresholdPressurePotPin, setBPMPotPin, setIERatioPotPin, setTVPotPin, tempThresholdPressure, tempBPM, tempIERatio, tempTV);
-    
+
     //LCD display temp screen and variables
+    displayParameterScreen(tempTV, tempBPM, tempIERatio, tempThresholdPressure);
+
   }
-  else{
+  else {
     sei();
 
     //LCD display internal variables and regular screen
+    displayVentilationScreen(internalTV, internalBPM, internalIERatio, internalThresholdPressure, machineState, peakPressure, plateauPressure, peepPressure);
   }
 
-//Beginning of state machine code
-  
-  if(machineState == 2){ //BreathLoopStart---------------------------------------------------------------------------------
+  //Beginning of state machine code
+
+  if (machineState == 2) { //BreathLoopStart---------------------------------------------------------------------------------
 
     cli();
     loopThresholdPressure = internalThresholdPressure;
@@ -235,6 +261,7 @@ void loop() {
     loopIERatio = internalIERatio;
     loopTV = internalTV;
     sei();
+
 
     singleBreathTime = 60.0/loopBPM;
     inspirationTime = singleBreathTime / (1 + loopIERatio);
@@ -248,16 +275,16 @@ void loop() {
     }
   }//----------------------------------------------------------------------------------------------------------------------
   //ACMode-----------------------------------------------------------------------------------------------------------------
-  else if(machineState == 3){ //Check for ACMode
-    if(acModeState == 0){ //ACStart
+  else if (machineState == 3) { //Check for ACMode
+    if (acModeState == 0) { //ACStart
       breathTimer = 0;
       //Send motor to zero point******* (Consider watchdog timer for each state)
     }
-    if(acModeState == 1){ //ACInhaleWait-------------------------------------------------------------------------------------
+    if (acModeState == 1) { //ACInhaleWait-------------------------------------------------------------------------------------
 
-      readPressureSensor(pressureSensorPin,pressure);
-      
-      if(breathTimer > acThresholdTime*1000){
+      readPressureSensor(pressureSensorPin, pressure);
+
+      if (breathTimer > acThresholdTime * 1000) {
         acModeState = ACInhale;
         //SOUND LOW RR ALARM********
         breathTimer = 0;
@@ -269,79 +296,80 @@ void loop() {
         tempPeakPressure = 0;
       }
     }//-----------------------------------------------------------------------------------------------------------------------
-    else if(acModeState == 2){ //ACInhale-------------------------------------------------------------------------------------
-      
+    else if (acModeState == 2) { //ACInhale-------------------------------------------------------------------------------------
+
       //Set motor velocity and position********
 
-      readPressureSensor(pressureSensorPin,pressure);
+      readPressureSensor(pressureSensorPin, pressure);
 
-      if(pressure > tempPeakPressure){ //Update the peak pressure
+      if (pressure > tempPeakPressure) { //Update the peak pressure
         tempPeakPressure = pressure;
       }
-      
-      if(breathTimer > inspirationTime*1000){
+
+      if (breathTimer > inspirationTime * 1000) {
         breathTimer = 0;
         acModeState = ACPeak;
         peakPressure = tempPeakPressure;
       }
-      else if(pressure > maxPressure){
+      else if (pressure > maxPressure) {
         //SOUND THE PRESSURE ALARM, scream inernally because we don't know what to do next
       }
     }//-----------------------------------------------------------------------------------------------------------------------
-    else if(acModeState == 3){ //ACPeak-----------------------------------------------------------------------------------------
+    else if (acModeState == 3) { //ACPeak-----------------------------------------------------------------------------------------
 
       //Hold motor in position********
-      
-      readPressureSensor(pressureSensorPin,pressure);
 
-      if(breathTimer > holdTime*1000){//******** how and where is hold time defined, currently hard coded
+      readPressureSensor(pressureSensorPin, pressure);
+
+      if (breathTimer > holdTime * 1000) { //******** how and where is hold time defined, currently hard coded
         acModeState = ACExhale;
         plateauPressure = pressure;
         breathTimer = 0;
       }
-      else if(pressure > maxPressure){
+      else if (pressure > maxPressure) {
         //SOUND THE PRESURE ALARM, scream inernally because we don't know what to do next
       }
     }//--------------------------------------------------------------------------------------------------------------------------
-    else if(acModeState == 4){ //ACExhale---------------------------------------------------------------------------------------
+    else if (acModeState == 4) { //ACExhale---------------------------------------------------------------------------------------
 
       //Send motor to zero position********
+
       
       readPressureSensor(pressureSensorPin,pressure);
 
-      if(breathTimer > expirationTime*1000){
+      if (breathTimer > expirationTime * 1000) {
         acModeState = ACReset;
         peepPressure = pressure;
       }
     }//--------------------------------------------------------------------------------------------------------------------------
-    else if(acModeState == 5){ //ACReset-----------------------------------------------------------------------------------------
+    else if (acModeState == 5) { //ACReset-----------------------------------------------------------------------------------------
 
-      readPressureSensor(pressureSensorPin,pressure);
+      readPressureSensor(pressureSensorPin, pressure);
 
-      if(pressure > maxPeepPressure){
+      if (pressure > maxPeepPressure) {
         //SOUND THE ALARM******
       }
-      else if(pressure < minPeepPressure){
+      else if (pressure < minPeepPressure) {
         //SOUND THE ALARM********
       }
       breathTimer = 0;
+
       acModeState = ACStart;
       machineState = BreathLoopStart;
     }
   }//End ACMode
-  else if(machineState == 4){ //VCMode-------------------------------------------------------------------------------------------
-    if(vcModeState == 0){ //VCStart-----------------------------------------------------------------------------------------------
+  else if (machineState == 4) { //VCMode-------------------------------------------------------------------------------------------
+    if (vcModeState == 0) { //VCStart-----------------------------------------------------------------------------------------------
       breathTimer = 0;
       vcModeState = VCInhale;
       tempPeakPressure = 0;
     }//---------------------------------------------------------------------------------------------------------------------------
-    else if(vcModeState == 1){ //VCInhale---------------------------------------------------------------------------------------------
+    else if (vcModeState == 1) { //VCInhale---------------------------------------------------------------------------------------------
 
       //Set motor position and speed
-
       readPressureSensor(pressureSensorPin,pressure);
 
-      if(pressure > tempPeakPressure){
+      if (pressure > tempPeakPressure) {
         tempPeakPressure = pressure;
       }
 
@@ -351,15 +379,15 @@ void loop() {
         peakPressure = tempPeakPressure;
       }
 
-      if(pressure > maxPressure){
+      if (pressure > maxPressure) {
         //Scream loudly********
       }
     }//-------------------------------------------------------------------------------------------------------------------------
-    else if(vcModeState == 2){ //VCPeak------------------------------------------------------------------------------------------
+    else if (vcModeState == 2) { //VCPeak------------------------------------------------------------------------------------------
 
       //Hold motor in position********
 
-      readPressureSensor(pressureSensorPin,pressure);
+      readPressureSensor(pressureSensorPin, pressure);
 
       if(breathTimer > holdTime*1000){
         vcModeState = VCExhale;
@@ -367,25 +395,25 @@ void loop() {
         plateauPressure = pressure;
       }
 
-      if(pressure > maxPressure){
+      if (pressure > maxPressure) {
         //Scream loudly*******************************
       }
     }//------------------------------------------------------------------------------------------------------------------------
-    else if(vcModeState == 3){ //VCExhale-------------------------------------------------------------------------------------
+    else if (vcModeState == 3) { //VCExhale-------------------------------------------------------------------------------------
 
       //Set motor vlocity and desired position
 
-      readPressureSensor(pressureSensorPin,pressure);
+      readPressureSensor(pressureSensorPin, pressure);
 
-      if(breathTimer > expirationTime){
+      if (breathTimer > expirationTime) {
         vcModeState = VCReset;
         peepPressure = pressure;
       }
 
-      if(pressure > maxPeepPressure){
+      if (pressure > maxPeepPressure) {
         //Yell*********
       }
-      else if(pressure < minPeepPressure){
+      else if (pressure < minPeepPressure) {
         //Yell*********
       }
     }//-------------------------------------------------------------------------------------------------------------------------
@@ -393,27 +421,28 @@ void loop() {
 
       machineState = BreathLoopStart;
       vcModeState = VCStart;
-      
+  
     }
   }// End VCMode----------------------------------------------------------------------------------------------------------------------------
-    
 
 
-  
 
-  
+
+
+
 
 }
 
 //FUNCTIONS
 
 /*Function to read the pressure sensor
+<<<<<<< HEAD
  * Inputs:
  *  -The pressure sensor pin
  * Outputs:
  *  -The pressure is output pass by reference
  */
-void readPressureSensor(uint8_t funPressureSensorPin, float &pressure){
+void readPressureSensor(uint8_t funcPressureSensorPin, float &pressure){
 
   uint16_t pressurePinADCReading = analogRead(pressureSensorPin);
 
@@ -425,6 +454,7 @@ void readPressureSensor(uint8_t funPressureSensorPin, float &pressure){
 }
 
 /*Function to read the potentiometer inputs
+<<<<<<< HEAD
  * Inputs:
  *  -The Threshold pressure potentiometer pin
  *  -The BPM potentiometer pin
@@ -453,13 +483,13 @@ void readPotentiometers(uint8_t thresholdPressurePotPin, uint8_t bpmPotPin, uint
 }
 
 /*Function to convert pressure sensor voltage to usable pressure value
- * Inputs: 
- *    -sensorVoltage: The voltage output by the sesnor, must be converted to volts from adc reading prior to use of function
- *    
- * Outputs:
- *    -pressure in (psi? cmH2O)
- */
-float voltageToPressureConversion(float sensorVoltage){ 
+   Inputs:
+      -sensorVoltage: The voltage output by the sesnor, must be converted to volts from adc reading prior to use of function
+
+   Outputs:
+      -pressure in (psi? cmH2O)
+*/
+float voltageToPressureConversion(float sensorVoltage) {
 
   float pressure = (maxPressure - minPressure) / (maxPressureSensorVoltage - minPressureSensorVoltage) * sensorVoltage;
 
@@ -469,23 +499,24 @@ float voltageToPressureConversion(float sensorVoltage){
 }
 
 /*Function to convert the pressure potentiometer voltage to a desired set pressure
- * Inputs:
- *    -potVoltage: The voltage output of the potentiometer, must be converted to volts from adc reading prior to use of function
- * 
- * Outputs:
- *    -setPressure (in psi? cmH2O?)
- */
-float voltageToSetThresholdPressureConversion(float potVoltage){
+   Inputs:
+      -potVoltage: The voltage output of the potentiometer, must be converted to volts from adc reading prior to use of function
+
+   Outputs:
+      -setPressure (in psi? cmH2O?)
+*/
+float voltageToSetThresholdPressureConversion(float potVoltage) {
 
   float setPressure = (maxThresholdPressure - minThresholdPressure) / (setThresholdPressurePotMaxVoltage - 0.0) * potVoltage;
 
   setPressure += minThresholdPressure;
 
   return setPressure;
-  
+
 }
 
 /*Function to convert the breaths per minute potentiometer voltage to a desired breaths per minute
+<<<<<<< HEAD
  * Inputs:
  *    -potVoltage: The voltage output of the potentiometer, must be converted to volts from adc reading prior to use of function
  * 
@@ -502,6 +533,7 @@ float voltageToBPMConversion(float potVoltage){
 }
 
 /*Function to convert inspiration - expiration ratio potentiometer voltage to a desired IE ratio
+<<<<<<< HEAD
  * Inputs:
  *    -potVoltage: The voltage output of the potentiometer, must be converted to volts from adc reading prior to use of function
  * 
@@ -518,6 +550,7 @@ float voltageToIERatioConversion(float potVoltage){
 }
 
 /*Function to convert tidal volume percentage potentiometer voltage to a desired tidal volume percentage
+<<<<<<< HEAD
  * Inputs:
  *    -potVoltage: The voltage output of the potentiometer, must be converted to volts from adc reading prior to use of function
  * 
@@ -533,13 +566,13 @@ float voltageToTVConversion(float potVoltage){
   return TV;
 }
 
-void parameterChangeButtonISR(){
+void parameterChangeButtonISR() {
 
   if(paramChangeDebounceTimer > 0.1*1000){
     if(paramChange == false){
       paramChange = true;
     }
-    else{
+    else {
       paramChange = false;
       internalThresholdPressure = tempThresholdPressure;
       internalBPM = tempBPM;
@@ -548,4 +581,167 @@ void parameterChangeButtonISR(){
     }
     paramChangeDebounceTimer = 0;
   }
+}
+
+//------------------------------------------------------------------------------------------------------------------------------
+//LCD Support Functions...here be dragons...
+
+
+/*Function to display the parameter change screen on the LCD
+   Inputs:
+      - temp values for TV, BPM, IERatio, ThresholdPressure
+*/
+void displayParameterScreen(float tempTV, float tempBPM, float tempIERatio, float tempThresholdPressure) {
+  //Prep variable for output
+  int lcdTV = roundAndCast(tempTV);
+  int lcdBPM = roundAndCast(tempBPM);
+  int lcdIERatio = roundAndCast(tempIERatio);
+  int lcdThresholdPressure = roundAndCast(tempThresholdPressure);
+
+  //Prep lines for output
+  char parameterScreenL1[] = "PRESS SET TO CONFIRM";
+  char parameterScreenL2[];
+  char parameterScreenL3[];
+  char parameterScreenL4[];
+  sprintf(parameterScreenL2, "TV=%3d%%   BPM=%2d/MIN", lcdTV, lcdBPM); //Spacing checked
+  sprintf(parameterScreenL3, "I:E=1:%1d", lcdIERatio);
+  sprintf(parameterScreenL4, "AC_THRESHOLD=%2d MBAR", lcdThresholdPressure);//Spacing checked
+
+  //Display data
+  lcd.clear();
+  lcd.print(parameterScreenL1);
+  lcd.setCursor(0, 1);
+  lcd.write(parameterScreenL2);
+  lcd.setCursor(0, 2);
+  lcd.write(parameterScreenL3);
+  lcd.setCursor(0, 3);
+  lcd.write(parameterScreenL4);
+}
+
+/*Function to display the ventilator (regular) screen on the LCD
+   Inputs:
+      - temp values for TV, BPM, IERatio, ThresholdPressure
+      - Ventilaton mode
+      - Pressure data for peak, plateau, peep
+*/
+void displayVentilationScreen(float intTV, float intBPM, float intIERatio, float intThresholdPressure, enum machineStates machineState, float peakPressure, float plateauPressure, float peepPressure) {
+
+  //Prep variable for output
+  int lcdTV = roundAndCast(intTV);
+  int lcdBPM = roundAndCast(intBPM);
+  int lcdIERatio = roundAndCast(intIERatio);
+  int lcdThresholdPressure = roundAndCast(intThresholdPressure);
+  int lcdPeakPressure = roundAndCast(peakPressure);
+  int lcdPlateauPressure = roundAndCast(plateauPressure);
+  int lcdPeepPressure = roundAndCast(peepPressure);
+
+  char ventilatorScreenL1[];
+  char ventilatorScreenL2[];
+  char ventilatorScreenL3[];
+  char ventilatorScreenL4[];
+
+  //Prep first line
+  if (machineState == ACMode) {
+    sprintf(ventilatorScreenL1, "AC (ACT=%2d)    DATA:", lcdThresholdPressure); //Spacing checked
+  }
+  else if (machineState == VCMode) {
+    sprintf(ventilatorScreenL1, "VC             DATA:"); //Spacing checked
+  }
+  else {
+    sprintf(ventilatorScreenL1, "N/A        DATA:"); //Spacing checked
+  }
+  //Prep remaining lines
+  sprintf(ventilatorScreenL2, "TV=%3d%%      PEAK:%2d", lcdTV, lcdPeakPressure); //Spacing checked
+  sprintf(ventilatorScreenL3, "BPM=%2d/MIN   PLAT:%2d", lcdBPM, lcdPlateauPressure); //Spacing checked
+  sprintf(ventilatorScreenL4, "I:E=%1d        PEEP=%2d", lcdIERatio, lcdPeepPressure); //Spacing checked
+
+  //Display data
+  lcd.clear();
+  lcd.print(ventilatorScreenL1);
+  lcd.setCursor(0, 1);
+  lcd.write(ventilatorScreenL2);
+  lcd.setCursor(0, 2);
+  lcd.write(ventilatorScreenL3);
+  lcd.setCursor(0, 3);
+  lcd.write(ventilatorScreenL4);
+
+}
+
+/*Function to display start up screen on LCD
+   Inputs:
+      - current software version
+*/
+void displayStartScreen(const char softwareVersion[]) {
+  const char splashScreen[] = "CALGARY E-VENT";
+  lcd.clear();
+  lcd.print(splashScreen);
+  lcd.setCursor(0, 1);
+  lcd.print(softwareVersion);
+  delay(2000);
+}
+
+/*Function to display errors on LCD
+   Inputs:
+      - 8-bit error code number
+          Bit   Error
+          0     High Peak Pressure
+          1     Low Peak Pressure/Disconnection
+          2     High PEEP
+          3     Low PEEP
+          4     Apnea
+*/
+void displayErrorScreen(uint8_t error) {
+  
+  const char errorScreenL1[] = "ALARM CONDITIONS:";
+  char errorScreenL2[]=" ";
+  char errorScreenL3[]=" ";
+  char errorScreenL4[]=" ";
+  //Peak Pressure Alarms
+  if (bitRead(error, 0) == 1) {
+    sprintf(errorScreenL2, "PEAK HIGH");
+  }
+  if (bitRead(error, 1) == 1) {
+    sprintf(errorScreenL2, "PEAK LOW/DISCONNECT");
+  }
+  if (bitRead(error, 2) == 1) {
+    sprintf(errorScreenL3, "PEEP HIGH");
+  }
+  if (bitRead(error, 3) == 1) {
+    sprintf(errorScreenL3, "PEEP LOW");
+  }
+  if (bitRead(error, 4) == 1) {
+    sprintf(errorScreenL4, "APNEA");
+  }
+  lcd.clear();
+  lcd.print(errorScreenL1);
+  lcd.setCursor(0, 1);
+  lcd.write(erroorScreenL2);
+  lcd.setCursor(0, 2);
+  lcd.write(errorScreenL3);
+  lcd.setCursor(0, 3);
+  lcd.write(errorScreenL4);
+}
+
+/*Function to display homing message on LCD
+   
+*/
+void displayHomingScreen() {
+  const char calibrationScreenL1[] = "Calibration in";
+  const char calibrationScreenL2[] = "progress...";
+  lcd.clear();
+  lcd.print(calibrationScreenL1);
+  lcd.setCursor(0, 1);
+  lcd.print(calibrationScreenL2);
+}
+
+/*Function to display start up screen on LCD
+   Inputs:
+      - float
+
+   Outputs:
+      - a rounded integer
+*/
+int roundAndCast(float x) {
+  int new_var;
+  new_var = (int) round(x);
 }
