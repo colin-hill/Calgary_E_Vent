@@ -4,7 +4,7 @@
 
 //Begin User Defined Section---------------------------------------------------------------------------------------------
 
-const char softwareVersion[] = "Version 1.0"; //In case we test a few versions?
+const char softwareVersion[] = "     Version 1.0"; //In case we test a few versions?
 
 //IO Pin Definintions----------------------------------------------------------------------------------------------------
 #define setParameterPin 25 //Pin for the set parameter button
@@ -19,14 +19,27 @@ const char softwareVersion[] = "Version 1.0"; //In case we test a few versions?
 //-----------------------------------------------------------------------------------------------------------------------
 
 //LCD Denfinitions---------------------------------------------------------------------------------------------------
-#define lcdEnable 7
-#define lcdRS 8
-#define lcdDB4 9
-#define lcdDB5 10
-#define lcdDB6 11
-#define lcdDB7 12
+//Need to change these for the Mega
 
-LiquidCrystal lcd(lcdRS, lcdEnable, lcdDB4, lcdDB5, lcdDB6, lcdDB7);
+//Parameter LCD
+#define parameterDispEnable 7
+#define parameterDispRS 8
+#define parameterDispDB4 9
+#define parameterDispDB5 10
+#define parameterDispDB6 11
+#define parameterDispDB7 12
+
+//Add Mega pins at a later time
+#define alarmDispEnable 11
+#define alarmDispRS 11
+#define alarmDispDB4 11
+#define alarmDispDB5 11
+#define alarmDispDB6 11
+#define alarmDispDB7 11
+
+
+LiquidCrystal parameterDisp(parameterDispRS, parameterDispEnable, parameterDispDB4, parameterDispDB5, parameterDispDB6, parameterDispDB7);
+LiquidCrystal alarmDisp(alarmDispRS, alarmDispEnable, alarmDispDB4, alarmDispDB5, alarmDispDB6, alarmDispDB7)
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -187,7 +200,8 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(setParameterPin),parameterChangeButtonISR,FALLING);
 
   //LCD Setup
-  lcd.begin(20, 4); //set number of columns and rows
+  parameterDisp.begin(20, 4); //set number of columns and rows
+  alarmDisp.begin(20,4);
 
   readPotentiometers(setThresholdPressurePotPin, setBPMPotPin, setIERatioPotPin, setTVPotPin, internalThresholdPressure, internalBPM, internalIERatio, internalTV);
 
@@ -608,14 +622,14 @@ void displayParameterScreen(float tempTV, float tempBPM, float tempIERatio, floa
   sprintf(parameterScreenL4, "AC_THRESHOLD=%2d MBAR", lcdThresholdPressure);//Spacing checked
 
   //Display data
-  lcd.clear();
-  lcd.print(parameterScreenL1);
-  lcd.setCursor(0, 1);
-  lcd.write(parameterScreenL2);
-  lcd.setCursor(0, 2);
-  lcd.write(parameterScreenL3);
-  lcd.setCursor(0, 3);
-  lcd.write(parameterScreenL4);
+  parameterDisp.clear();
+  parameterDisp.print(parameterScreenL1);
+  parameterDisp.setCursor(0, 1);
+  parameterDisp.write(parameterScreenL2);
+  parameterDisp.setCursor(0, 2);
+  parameterDisp.write(parameterScreenL3);
+  parameterDisp.setCursor(0, 3);
+  parameterDisp.write(parameterScreenL4);
 }
 
 /*Function to display the ventilator (regular) screen on the LCD
@@ -656,14 +670,14 @@ void displayVentilationScreen(float intTV, float intBPM, float intIERatio, float
   sprintf(ventilatorScreenL4, "I:E=%1d        PEEP=%2d", lcdIERatio, lcdPeepPressure); //Spacing checked
 
   //Display data
-  lcd.clear();
-  lcd.print(ventilatorScreenL1);
-  lcd.setCursor(0, 1);
-  lcd.write(ventilatorScreenL2);
-  lcd.setCursor(0, 2);
-  lcd.write(ventilatorScreenL3);
-  lcd.setCursor(0, 3);
-  lcd.write(ventilatorScreenL4);
+  parameterDisp.clear();
+  parameterDisp.print(ventilatorScreenL1);
+  parameterDisp.setCursor(0, 1);
+  parameterDisp.write(ventilatorScreenL2);
+  parameterDisp.setCursor(0, 2);
+  parameterDisp.write(ventilatorScreenL3);
+  parameterDisp.setCursor(0, 3);
+  parameterDisp.write(ventilatorScreenL4);
 
 }
 
@@ -672,11 +686,13 @@ void displayVentilationScreen(float intTV, float intBPM, float intIERatio, float
       - current software version
 */
 void displayStartScreen(const char softwareVersion[]) {
-  const char splashScreen[] = "CALGARY E-VENT";
-  lcd.clear();
-  lcd.print(splashScreen);
-  lcd.setCursor(0, 1);
-  lcd.print(softwareVersion);
+  alarmDisp.clear();
+  parameterDisp.clear();
+  parameterDisp.print("     EMERGENCY");
+  parameterDisp.setCursor(0, 1);
+  parameterDisp.print("     VENTILATOR")
+  parameterDisp.setCursor(0,3);
+  parameterDisp.print(softwareVersion);
   delay(2000);
 }
 
@@ -690,9 +706,8 @@ void displayStartScreen(const char softwareVersion[]) {
           3     Low PEEP
           4     Apnea
 */
-void displayErrorScreen(uint8_t error) {
+void displayErrorScreen(uint8_t error) { //Function needs to be rewritten 
   
-  const char errorScreenL1[] = "ALARM CONDITIONS:";
   char errorScreenL2[]=" ";
   char errorScreenL3[]=" ";
   char errorScreenL4[]=" ";
@@ -712,26 +727,25 @@ void displayErrorScreen(uint8_t error) {
   if (bitRead(error, 4) == 1) {
     sprintf(errorScreenL4, "APNEA");
   }
-  lcd.clear();
-  lcd.print(errorScreenL1);
-  lcd.setCursor(0, 1);
-  lcd.write(erroorScreenL2);
-  lcd.setCursor(0, 2);
-  lcd.write(errorScreenL3);
-  lcd.setCursor(0, 3);
-  lcd.write(errorScreenL4);
+  parameterDisp.clear();
+  parameterDisp.print("ALARM CONDITIONS:");
+  parameterDisp.setCursor(0, 1);
+  parameterDisp.write(erroorScreenL2);
+  parameterDisp.setCursor(0, 2);
+  parameterDisp.write(errorScreenL3);
+  parameterDisp.setCursor(0, 3);
+  parameterDisp.write(errorScreenL4);
 }
 
 /*Function to display homing message on LCD
    
 */
 void displayHomingScreen() {
-  const char calibrationScreenL1[] = "Calibration in";
-  const char calibrationScreenL2[] = "progress...";
-  lcd.clear();
-  lcd.print(calibrationScreenL1);
-  lcd.setCursor(0, 1);
-  lcd.print(calibrationScreenL2);
+  alarmDisp.clear();
+  parameterDisp.clear();
+  parameterDisp.print("Calibration in");
+  parameterDisp.setCursor(0, 1);
+  parameterDisp.print("progress...");
 }
 
 /*Function to display start up screen on LCD
