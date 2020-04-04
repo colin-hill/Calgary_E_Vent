@@ -4,7 +4,10 @@
 
 //Begin User Defined Section---------------------------------------------------------------------------------------------
 
-const char softwareVersion[] = "     Version 1.0"; //In case we test a few versions?
+#define SERIAL_DEBUG //Comment this out if not debugging, used for visual confirmation of state changes
+#define NO_INPUT_DEBUG //Comment this out if not debugging, used to spoof input parameters at startup when no controls are present
+
+const char softwareVersion[] = "Version 1.0"; //In case we test a few versions?
 
 //IO Pin Definintions----------------------------------------------------------------------------------------------------
 #define setParameterPin 25 //Pin for the set parameter button
@@ -19,27 +22,14 @@ const char softwareVersion[] = "     Version 1.0"; //In case we test a few versi
 //-----------------------------------------------------------------------------------------------------------------------
 
 //LCD Denfinitions---------------------------------------------------------------------------------------------------
-//Need to change these for the Mega
+#define lcdEnable 7
+#define lcdRS 8
+#define lcdDB4 9
+#define lcdDB5 10
+#define lcdDB6 11
+#define lcdDB7 12
 
-//Parameter LCD
-#define parameterDispEnable 7
-#define parameterDispRS 8
-#define parameterDispDB4 9
-#define parameterDispDB5 10
-#define parameterDispDB6 11
-#define parameterDispDB7 12
-
-//Add Mega pins at a later time
-#define alarmDispEnable 11
-#define alarmDispRS 11
-#define alarmDispDB4 11
-#define alarmDispDB5 11
-#define alarmDispDB6 11
-#define alarmDispDB7 11
-
-
-LiquidCrystal parameterDisp(parameterDispRS, parameterDispEnable, parameterDispDB4, parameterDispDB5, parameterDispDB6, parameterDispDB7);
-LiquidCrystal alarmDisp(alarmDispRS, alarmDispEnable, alarmDispDB4, alarmDispDB5, alarmDispDB6, alarmDispDB7)
+//LiquidCrystal lcd(lcdRS, lcdEnable, lcdDB4, lcdDB5, lcdDB6, lcdDB7);
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -74,7 +64,7 @@ LiquidCrystal alarmDisp(alarmDispRS, alarmDispEnable, alarmDispDB4, alarmDispDB5
 
 //Inspiration Expiration Ratio Definitions-------------------------------------------------------------------------------
 #define minIERatio 1.0 //Inspiration to Expiration ratio 1:1
-#define maxIERatio 0.25 //Inspiration to Expiration ratio 1:4
+#define maxIERatio 4.0 //Inspiration to Expiration ratio 1:4
 //-----------------------------------------------------------------------------------------------------------------------
 
 //Threshold Pressure Definitions-----------------------------------------------------------------------------------------
@@ -95,6 +85,8 @@ float acThresholdTime = 0.5; //Seconds
 //Useful Definitions and Macros------------------------------------------------------------------------------------------
 #define ACMODE true
 #define VCMODE false
+
+#define MotorSerial Serial1
 //-----------------------------------------------------------------------------------------------------------------------
 
 //Function Definitions---------------------------------------------------------------------------------------------------
@@ -118,6 +110,7 @@ enum machineStates {
 enum acModeStates {
   ACStart,
   ACInhaleWait,
+  ACInhaleCommand,
   ACInhale,
   ACPeak,
   ACExhale,
@@ -127,6 +120,7 @@ enum acModeStates {
 enum vcModeStates {
   VCStart,
   VCInhale,
+  VCInhaleCommand,
   VCPeak,
   VCExhale,
   VCReset
@@ -178,9 +172,14 @@ vcModeStates vcModeState = VCStart;
 
 void setup() {
 
+  #ifdef SERIAL_DEBUG
+    Serial.begin(9600);
+    Serial.println("StartUpInitiated");
+  #endif //SERIAL_DEBUG
+
   //Pin Setup------------------------------------------------------------------------------------------------------------
   //Motor serial communications startup
-  Serial.begin(9600); //********
+  MotorSerial.begin(9600); //********
 
   //Potentiometer input pin setup
   pinMode(setThresholdPressurePotPin, INPUT);
@@ -200,21 +199,28 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(setParameterPin),parameterChangeButtonISR,FALLING);
 
   //LCD Setup
-  parameterDisp.begin(20, 4); //set number of columns and rows
-  alarmDisp.begin(20,4);
+  //lcd.begin(20, 4); //set number of columns and rows
 
   readPotentiometers(setThresholdPressurePotPin, setBPMPotPin, setIERatioPotPin, setTVPotPin, internalThresholdPressure, internalBPM, internalIERatio, internalTV);
 
   //LCD Display Startup Message for two seconds
-  displayStartScreen(softwareVersion);
-
-
+  //displayStartScreen(softwareVersion);
+  #ifdef NO_INPUT_DEBUG //Skips parameter input section
+    cli();
+    paramChange = true;
+    sei();
+    internalThresholdPressure = 5;
+    internalBPM = 10;
+    internalIERatio = 4;
+    internalTV = 100;
+  #endif //NO_INPUT_DEBUG
+    
   cli(); //Turn off ointerrupts before reading paramChange
   while (paramChange == false) {
 
     sei();
     //LCD Display Internal Variables
-    displayParameterScreen(internalTV, internalBPM, internalIERatio, internalThresholdPressure);
+    //displayParameterScreen(internalTV, internalBPM, internalIERatio, internalThresholdPressure);
 
 
 
@@ -226,16 +232,18 @@ void setup() {
   sei();
 
   //LCD Display Homing Message
-  displayHomingScreen();
+  //displayHomingScreen();
 
+  #ifdef SERIAL_DEBUG
+    Serial.println("Homing Motor");
+  #endif //SERIAL_DEBUG
 
   //Motor Homing Sequence
+  #ifndef NO_INPUT_DEBUG
   while (digitalRead(limitSwitchPin) == 0) {
     //Move motor at Vhome********
   }
 
-
-  //Motor Zero Sequence
   while (digitalRead(limitSwitchPin) == 1) {
     //Move motor at Vzero********
   }
@@ -244,10 +252,13 @@ void setup() {
   //Move motor x degrees inward********
 
   //Zero the encoder********
+  #endif //NO_INPUT_DEBUG
+
+  machineState = BreathLoopStart;
 }
 
 void loop() {
-
+  
   //Update LCD*********
   cli(); //Prevent interrupts from occuring
   if (paramChange == true) {
@@ -255,20 +266,24 @@ void loop() {
     readPotentiometers(setThresholdPressurePotPin, setBPMPotPin, setIERatioPotPin, setTVPotPin, tempThresholdPressure, tempBPM, tempIERatio, tempTV);
 
     //LCD display temp screen and variables
-    displayParameterScreen(tempTV, tempBPM, tempIERatio, tempThresholdPressure);
+    //displayParameterScreen(tempTV, tempBPM, tempIERatio, tempThresholdPressure);
 
   }
   else {
     sei();
 
     //LCD display internal variables and regular screen
-    displayVentilationScreen(internalTV, internalBPM, internalIERatio, internalThresholdPressure, machineState, peakPressure, plateauPressure, peepPressure);
+    //displayVentilationScreen(internalTV, internalBPM, internalIERatio, internalThresholdPressure, machineState, peakPressure, plateauPressure, peepPressure);
   }
 
   //Beginning of state machine code
 
-  if (machineState == 2) { //BreathLoopStart---------------------------------------------------------------------------------
-
+  if (machineState == BreathLoopStart) { //BreathLoopStart---------------------------------------------------------------------------------
+    
+    #ifdef SERIAL_DEBUG
+      Serial.println("Breath Loop Start");
+    #endif //SERIAL_DEBUG
+    
     cli();
     loopThresholdPressure = internalThresholdPressure;
     loopBPM = internalBPM;
@@ -289,30 +304,55 @@ void loop() {
     }
   }//----------------------------------------------------------------------------------------------------------------------
   //ACMode-----------------------------------------------------------------------------------------------------------------
-  else if (machineState == 3) { //Check for ACMode
+  else if (machineState == ACMode) { //Check for ACMode
     if (acModeState == 0) { //ACStart
+      #ifdef SERIAL_DEBUG
+        Serial.println("ACStart");
+      #endif //SERIAL_DEBUG
       breathTimer = 0;
       //Send motor to zero point******* (Consider watchdog timer for each state)
+      acModeState = ACInhaleWait;
     }
-    if (acModeState == 1) { //ACInhaleWait-------------------------------------------------------------------------------------
-
+    if (acModeState == ACInhaleWait) { //ACInhaleWait-------------------------------------------------------------------------------------
+      
+      #ifdef SERIAL_DEBUG
+        Serial.print("ACInhaleWait: ");
+        Serial.println(breathTimer);
+      #endif //SERIAL_DEBUG
+      
       readPressureSensor(pressureSensorPin, pressure);
 
       if (breathTimer > acThresholdTime * 1000) {
-        acModeState = ACInhale;
+        acModeState = ACInhaleCommand;
         //SOUND LOW RR ALARM********
         breathTimer = 0;
         tempPeakPressure = 0;
       }
       else if(pressure < loopThresholdPressure){
-        acModeState = ACInhale;
+        acModeState = ACInhaleCommand;
         breathTimer = 0;
         tempPeakPressure = 0;
       }
     }//-----------------------------------------------------------------------------------------------------------------------
-    else if (acModeState == 2) { //ACInhale-------------------------------------------------------------------------------------
-
+    else if (acModeState == ACInhaleCommand) { //ACInhale Command
+      
+      #ifdef SERIAL_DEBUG
+        Serial.print("ACInhaleCommand: ");
+      #endif //SERIAL_DEBUG
+      
       //Set motor velocity and position********
+      acModeState = ACInhale;
+    }//---------------------------------------------------------------------------------------------------------------------------
+    else if (acModeState == ACInhale) { //ACInhale-------------------------------------------------------------------------------------
+
+      #ifdef SERIAL_DEBUG
+        Serial.print("ACInhale: ");
+        Serial.println(breathTimer);
+        Serial.print("Desired Inhale Time: ");
+        Serial.println(inspirationTime);
+      #endif //SERIAL_DEBUG
+
+      //Check motor position********
 
       readPressureSensor(pressureSensorPin, pressure);
 
@@ -324,13 +364,21 @@ void loop() {
         breathTimer = 0;
         acModeState = ACPeak;
         peakPressure = tempPeakPressure;
+        //Check that motor made it to the appropriate position********
       }
       else if (pressure > maxPressure) {
-        //SOUND THE PRESSURE ALARM, scream inernally because we don't know what to do next
+        //SOUND THE PRESSURE ALARM, scream internally because we don't know what to do next
       }
     }//-----------------------------------------------------------------------------------------------------------------------
-    else if (acModeState == 3) { //ACPeak-----------------------------------------------------------------------------------------
+    else if (acModeState == ACPeak) { //ACPeak-----------------------------------------------------------------------------------------
 
+      #ifdef SERIAL_DEBUG
+        Serial.print("ACPeak: ");
+        Serial.println(breathTimer);
+        Serial.print("Desired Peak Time: ");
+        Serial.println(holdTime);
+      #endif //SERIAL_DEBUG
+      
       //Hold motor in position********
 
       readPressureSensor(pressureSensorPin, pressure);
@@ -344,11 +392,17 @@ void loop() {
         //SOUND THE PRESURE ALARM, scream inernally because we don't know what to do next
       }
     }//--------------------------------------------------------------------------------------------------------------------------
-    else if (acModeState == 4) { //ACExhale---------------------------------------------------------------------------------------
+    else if (acModeState == ACExhale) { //ACExhale---------------------------------------------------------------------------------------
 
-      //Send motor to zero position********
-
+      #ifdef SERIAL_DEBUG
+        Serial.print("ACExhale: ");
+        Serial.println(breathTimer);
+        Serial.print("Desired Exhale Time: ");
+        Serial.println(expirationTime);
+      #endif //SERIAL_DEBUG
       
+      //Send motor to zero position********
+  
       readPressureSensor(pressureSensorPin,pressure);
 
       if (breathTimer > expirationTime * 1000) {
@@ -356,7 +410,11 @@ void loop() {
         peepPressure = pressure;
       }
     }//--------------------------------------------------------------------------------------------------------------------------
-    else if (acModeState == 5) { //ACReset-----------------------------------------------------------------------------------------
+    else if (acModeState == ACReset) { //ACReset-----------------------------------------------------------------------------------------
+
+      #ifdef SERIAL_DEBUG
+        Serial.print("ACReset");
+      #endif //SERIAL_DEBUG
 
       readPressureSensor(pressureSensorPin, pressure);
 
@@ -372,15 +430,38 @@ void loop() {
       machineState = BreathLoopStart;
     }
   }//End ACMode
-  else if (machineState == 4) { //VCMode-------------------------------------------------------------------------------------------
-    if (vcModeState == 0) { //VCStart-----------------------------------------------------------------------------------------------
+  else if (machineState == VCMode) { //VCMode-------------------------------------------------------------------------------------------
+    if (vcModeState == VCStart) { //VCStart-----------------------------------------------------------------------------------------------
+
+      #ifdef SERIAL_DEBUG
+        Serial.print("VCStart");
+      #endif //SERIAL_DEBUG
+      
       breathTimer = 0;
-      vcModeState = VCInhale;
+      vcModeState = VCInhaleCommand;
       tempPeakPressure = 0;
     }//---------------------------------------------------------------------------------------------------------------------------
-    else if (vcModeState == 1) { //VCInhale---------------------------------------------------------------------------------------------
+    else if (vcModeState == VCInhaleCommand) { //VCInhaleCommand----------------------------------------------------------------------
+
+      #ifdef SERIAL_DEBUG
+        Serial.print("VCInhaleCommand");
+      #endif //SERIAL_DEBUG
+
+      //Set motor speed and position
+      
+      vcModeState = VCInhale;
+    }//--------------------------------------------------------------------------------------------------------------------------------
+    else if (vcModeState == VCInhale) { //VCInhale---------------------------------------------------------------------------------------------
+
+      #ifdef SERIAL_DEBUG
+        Serial.print("VCInhale: ");
+        Serial.println(breathTimer);
+        Serial.print("Desired Inhale Time: ");
+        Serial.println(inspirationTime);
+      #endif //SERIAL_DEBUG
 
       //Set motor position and speed
+      
       readPressureSensor(pressureSensorPin,pressure);
 
       if (pressure > tempPeakPressure) {
@@ -391,13 +472,21 @@ void loop() {
         vcModeState = VCPeak;
         breathTimer = 0;
         peakPressure = tempPeakPressure;
+        //Check motor position********
       }
 
       if (pressure > maxPressure) {
         //Scream loudly********
       }
     }//-------------------------------------------------------------------------------------------------------------------------
-    else if (vcModeState == 2) { //VCPeak------------------------------------------------------------------------------------------
+    else if (vcModeState == VCPeak) { //VCPeak------------------------------------------------------------------------------------------
+
+      #ifdef SERIAL_DEBUG
+        Serial.print("VCPeak: ");
+        Serial.println(breathTimer);
+        Serial.print("Desired Peak Time: ");
+        Serial.println(inspirationTime);
+      #endif //SERIAL_DEBUG
 
       //Hold motor in position********
 
@@ -413,7 +502,14 @@ void loop() {
         //Scream loudly*******************************
       }
     }//------------------------------------------------------------------------------------------------------------------------
-    else if (vcModeState == 3) { //VCExhale-------------------------------------------------------------------------------------
+    else if (vcModeState == VCExhale) { //VCExhale-------------------------------------------------------------------------------------
+
+      #ifdef SERIAL_DEBUG
+        Serial.print("VCExhale: ");
+        Serial.println(breathTimer);
+        Serial.print("Desired Exhale Time: ");
+        Serial.println(expirationTime);
+      #endif //SERIAL_DEBUG
 
       //Set motor vlocity and desired position
 
@@ -431,7 +527,11 @@ void loop() {
         //Yell*********
       }
     }//-------------------------------------------------------------------------------------------------------------------------
-    else if(vcModeState == 4){
+    else if(vcModeState == VCReset){ //VCReset-----------------------------------------------------------------------------------
+
+      #ifdef SERIAL_DEBUG
+        Serial.print("VCReset");
+      #endif //SERIAL_DEBUG
 
       machineState = BreathLoopStart;
       vcModeState = VCStart;
@@ -605,6 +705,7 @@ void parameterChangeButtonISR() {
    Inputs:
       - temp values for TV, BPM, IERatio, ThresholdPressure
 */
+/*
 void displayParameterScreen(float tempTV, float tempBPM, float tempIERatio, float tempThresholdPressure) {
   //Prep variable for output
   int lcdTV = roundAndCast(tempTV);
@@ -622,22 +723,23 @@ void displayParameterScreen(float tempTV, float tempBPM, float tempIERatio, floa
   sprintf(parameterScreenL4, "AC_THRESHOLD=%2d MBAR", lcdThresholdPressure);//Spacing checked
 
   //Display data
-  parameterDisp.clear();
-  parameterDisp.print(parameterScreenL1);
-  parameterDisp.setCursor(0, 1);
-  parameterDisp.write(parameterScreenL2);
-  parameterDisp.setCursor(0, 2);
-  parameterDisp.write(parameterScreenL3);
-  parameterDisp.setCursor(0, 3);
-  parameterDisp.write(parameterScreenL4);
+  lcd.clear();
+  lcd.print(parameterScreenL1);
+  lcd.setCursor(0, 1);
+  lcd.write(parameterScreenL2);
+  lcd.setCursor(0, 2);
+  lcd.write(parameterScreenL3);
+  lcd.setCursor(0, 3);
+  lcd.write(parameterScreenL4);
 }
-
+*/
 /*Function to display the ventilator (regular) screen on the LCD
    Inputs:
       - temp values for TV, BPM, IERatio, ThresholdPressure
       - Ventilaton mode
       - Pressure data for peak, plateau, peep
 */
+/*
 void displayVentilationScreen(float intTV, float intBPM, float intIERatio, float intThresholdPressure, enum machineStates machineState, float peakPressure, float plateauPressure, float peepPressure) {
 
   //Prep variable for output
@@ -670,32 +772,31 @@ void displayVentilationScreen(float intTV, float intBPM, float intIERatio, float
   sprintf(ventilatorScreenL4, "I:E=%1d        PEEP=%2d", lcdIERatio, lcdPeepPressure); //Spacing checked
 
   //Display data
-  parameterDisp.clear();
-  parameterDisp.print(ventilatorScreenL1);
-  parameterDisp.setCursor(0, 1);
-  parameterDisp.write(ventilatorScreenL2);
-  parameterDisp.setCursor(0, 2);
-  parameterDisp.write(ventilatorScreenL3);
-  parameterDisp.setCursor(0, 3);
-  parameterDisp.write(ventilatorScreenL4);
+  lcd.clear();
+  lcd.print(ventilatorScreenL1);
+  lcd.setCursor(0, 1);
+  lcd.write(ventilatorScreenL2);
+  lcd.setCursor(0, 2);
+  lcd.write(ventilatorScreenL3);
+  lcd.setCursor(0, 3);
+  lcd.write(ventilatorScreenL4);
 
 }
-
+*/
 /*Function to display start up screen on LCD
    Inputs:
       - current software version
 */
+/*
 void displayStartScreen(const char softwareVersion[]) {
-  alarmDisp.clear();
-  parameterDisp.clear();
-  parameterDisp.print("     EMERGENCY");
-  parameterDisp.setCursor(0, 1);
-  parameterDisp.print("     VENTILATOR")
-  parameterDisp.setCursor(0,3);
-  parameterDisp.print(softwareVersion);
+  const char splashScreen[] = "CALGARY E-VENT";
+  lcd.clear();
+  lcd.print(splashScreen);
+  lcd.setCursor(0, 1);
+  lcd.print(softwareVersion);
   delay(2000);
 }
-
+*/
 /*Function to display errors on LCD
    Inputs:
       - 8-bit error code number
@@ -706,8 +807,10 @@ void displayStartScreen(const char softwareVersion[]) {
           3     Low PEEP
           4     Apnea
 */
-void displayErrorScreen(uint8_t error) { //Function needs to be rewritten 
+/*
+void displayErrorScreen(uint8_t error) {
   
+  const char errorScreenL1[] = "ALARM CONDITIONS:";
   char errorScreenL2[]=" ";
   char errorScreenL3[]=" ";
   char errorScreenL4[]=" ";
@@ -727,27 +830,29 @@ void displayErrorScreen(uint8_t error) { //Function needs to be rewritten
   if (bitRead(error, 4) == 1) {
     sprintf(errorScreenL4, "APNEA");
   }
-  parameterDisp.clear();
-  parameterDisp.print("ALARM CONDITIONS:");
-  parameterDisp.setCursor(0, 1);
-  parameterDisp.write(erroorScreenL2);
-  parameterDisp.setCursor(0, 2);
-  parameterDisp.write(errorScreenL3);
-  parameterDisp.setCursor(0, 3);
-  parameterDisp.write(errorScreenL4);
+  lcd.clear();
+  lcd.print(errorScreenL1);
+  lcd.setCursor(0, 1);
+  lcd.write(erroorScreenL2);
+  lcd.setCursor(0, 2);
+  lcd.write(errorScreenL3);
+  lcd.setCursor(0, 3);
+  lcd.write(errorScreenL4);
 }
-
+*/
 /*Function to display homing message on LCD
    
 */
+/*
 void displayHomingScreen() {
-  alarmDisp.clear();
-  parameterDisp.clear();
-  parameterDisp.print("Calibration in");
-  parameterDisp.setCursor(0, 1);
-  parameterDisp.print("progress...");
+  const char calibrationScreenL1[] = "Calibration in";
+  const char calibrationScreenL2[] = "progress...";
+  lcd.clear();
+  lcd.print(calibrationScreenL1);
+  lcd.setCursor(0, 1);
+  lcd.print(calibrationScreenL2);
 }
-
+*/
 /*Function to display start up screen on LCD
    Inputs:
       - float
@@ -755,7 +860,9 @@ void displayHomingScreen() {
    Outputs:
       - a rounded integer
 */
+/*
 int roundAndCast(float x) {
   int new_var;
   new_var = (int) round(x);
 }
+*/
