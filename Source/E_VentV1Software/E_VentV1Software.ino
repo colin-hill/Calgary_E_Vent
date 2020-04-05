@@ -1,6 +1,9 @@
-#include "elapsedMillis.h"
 #include <LiquidCrystal.h>
 #include "Wire.h"
+
+#include "elapsedMillis.h"
+#include "pressure.h"
+#include "alarms.h"
 
 
 //Begin User Defined Section----------------------------------------------------
@@ -16,15 +19,10 @@ const int limitSwitchPin             = 23;
 const int alarmSwitchPin             = 24;
 const int modeSwitchPin              = 20;
 const int alarmBuzzerPin             = 21;
-const int pressureSensorPin          = 10;
 const int setBPMPotPin               = 7;
 const int setIERatioPotPin           = 8;
-const int setThresholdPressurePotPin = 9;
 const int setTVPotPin                = 6;
 //------------------------------------------------------------------------------
-
-//Alarm Sound definitions-------------------------------------------------------
-const float alarmSoundLength = 0.5; //Seconds
 
 //LCD Denfinitions--------------------------------------------------------------
 const int lcdEnable = 7;
@@ -43,19 +41,10 @@ const float maxADCVoltage = 5.0;  //ATMega standard max input voltage
 const int maxADCValue     = 1024; //ATMega standard 10-bit ADC
 //------------------------------------------------------------------------------
 
-//Pressure Sensor Definitions---------------------------------------------------
-const float minPressureSensorVoltage = 0.0;
-const float maxPressureSensorVoltage = 5.0; // Assumed 0-5V sensor
-
-const float minPressure = 0.0; //Absolute psi,cmH20?
-const float maxPressure = 3.0; //Absolute psi, cmH20?
-//------------------------------------------------------------------------------
-
 //Potenitometer Definitions-----------------------------------------------------
 const float bpmPotMaxVoltage = 5.0;
 const float ieRatioPotMaxVoltage = 5.0;
 const float tvPotMaxVoltage = 5.0;
-const float setThresholdPressurePotMaxVoltage = 5.0;
 //------------------------------------------------------------------------------
 
 //Breath Per Minute Definitions-------------------------------------------------
@@ -73,16 +62,6 @@ const float minIERatio = 1.0; //Inspiration to Expiration ratio 1:1
 const float maxIERatio = 4.0; //Inspiration to Expiration ratio 1:4
 //------------------------------------------------------------------------------
 
-//Threshold Pressure Definitions------------------------------------------------
-const float minThresholdPressure = 1.0;
-const float maxThresholdPressure = 2.0;
-//------------------------------------------------------------------------------
-
-//Max & Min Pressures-----------------------------------------------------------
-const float maxPeepPressure = 20.0; //cmH2O
-const float minPeepPressure = 0.0; //cmH2O
-//------------------------------------------------------------------------------
-
 //Breath hold time--------------------------------------------------------------
 const float holdTime        = 0.25; //Seconds
 const float acThresholdTime = 0.5; //Seconds
@@ -94,22 +73,9 @@ const float acThresholdTime = 0.5; //Seconds
 
 #define MotorSerial Serial1
 
-// Alarm flags
-const uint16_t HIGH_PRESSURE_ALARM  = 0x01 << 0;
-const uint16_t LOW_PRESSURE_ALARM   = 0x01 << 1;
-const uint16_t HIGH_PEEP_ALARM      = 0x01 << 2;
-const uint16_t LOW_PEEP_ALARM       = 0x01 << 3;
-const uint16_t DISCONNECT_ALARM     = 0x01 << 4;
-const uint16_t HIGH_TEMP_ALARM      = 0x01 << 5;
-const uint16_t APNEA_ALARM          = 0x01 << 6;
-const uint16_t DEVICE_FAILURE_ALARM = 0x01 << 7;
-//------------------------------------------------------------------------------
-
 //Function Definitions---------------------------------------------------------------------------------------------------
-float readPressureSensor(void);
 void readPotentiometers(uint8_t thresholdPressurePotPin, uint8_t bpmPotPin, uint8_t ieRatioPotPin, uint8_t tvPotPin, volatile float &thresholdPressure, volatile float &bpm, volatile float &ieRatio, volatile float &tv);
-float voltageToPressureConversion(float sensorVoltage);
-float voltageToSetThresholdPressureConversion(float potVoltage);
+
 float voltageToBPMConversion(float potVoltage);
 float voltageToIERatioConversion(float potVoltage);
 float voltageToTVConversion(float potVoltage);
@@ -178,6 +144,8 @@ uint16_t errors = 0;
 elapsedMillis paramChangeDebounceTimer;
 elapsedMillis otherDebounceTimer;
 elapsedMillis breathTimer;
+
+// TODO: move these to alarms.h?
 elapsedMillis alarmBuzzerTimer;
 elapsedMillis highPressureAlarmTimer;
 elapsedMillis lowPressureAlarmTimer;
@@ -393,6 +361,7 @@ void loop() {
                 tempPeakPressure = pressure;
             }
 
+            // TODO: nervous about this else if for alarm.
             if (breathTimer > inspirationTime * 1000) {
                 breathTimer = 0;
                 acModeState = ACPeak;
@@ -531,9 +500,7 @@ void loop() {
                 plateauPressure = pressure;
             }
 
-            if (pressure > maxPressure) {
-                errors |= HIGH_PRESSURE_ALARM;
-            }
+            errors |= check_high_pressure(pressure);
         }//-------------------------------------------------------------------------------
         else if (vcModeState == VCExhale) { //VCExhale-------------------------------------------------------------------------------------
 
@@ -553,12 +520,7 @@ void loop() {
                 peepPressure = pressure;
             }
 
-            if (pressure > maxPeepPressure) {
-                errors |= HIGH_PEEP_ALARM;
-            }
-            else if (pressure < minPeepPressure) {
-                errors |= LOW_PEEP_ALARM;
-            }
+            errors |= check_peep(pressure);
         }//--------------------------------------------------------------------------------
         else if(vcModeState == VCReset){ //VCReset-----------------------------------------------------------------------------------
 
@@ -623,15 +585,6 @@ void loop() {
 
 //FUNCTIONS
 
-/* Function to read the pressure sensor on the pressureSensorPin.
- * Inputs: None.
- * Outputs:
- *  -The pressure is returned in a float
- *    + TODO: Units?
- */
-float readPressureSensor(){
-    return voltageToPressureConversion(analogRead(pressureSensorPin));
-}
 
 /*Function to read the potentiometer inputs
   * Inputs:
@@ -658,28 +611,6 @@ void readPotentiometers(uint8_t thresholdPressurePotPin, uint8_t bpmPotPin, uint
     tv = voltageToTVConversion(setTVPotVoltage);
 
     return;
-}
-
-/*Function to convert pressure sensor voltage to usable pressure value
-  Inputs:
-  -sensorVoltage: The voltage output by the sesnor, must be converted to volts from adc reading prior to use of function
-
-  Outputs:
-  -pressure in (psi? cmH2O)
-*/
-float voltageToPressureConversion(const float sensorVoltage) {
-    return (maxPressure - minPressure) / (maxPressureSensorVoltage - minPressureSensorVoltage) * sensorVoltage + minPressure;
-}
-
-/*Function to convert the pressure potentiometer voltage to a desired set pressure
-  Inputs:
-  -potVoltage: The voltage output of the potentiometer, must be converted to volts from adc reading prior to use of function
-
-  Outputs:
-  -setPressure (in psi? cmH2O?)
-*/
-float voltageToSetThresholdPressureConversion(const float potVoltage) {
-    return (maxThresholdPressure - minThresholdPressure) / setThresholdPressurePotMaxVoltage * potVoltage + minThresholdPressure;
 }
 
 /*Function to convert the breaths per minute potentiometer voltage to a desired breaths per minute
