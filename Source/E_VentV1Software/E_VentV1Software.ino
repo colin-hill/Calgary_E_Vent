@@ -575,12 +575,6 @@ void loop() {
         digitalWrite(alarmBuzzerPin,LOW);
     }
     //End error Handling-------------------------------------------------------------------------------------------
-
-
-
-
-
-
 }
 
 //FUNCTIONS
