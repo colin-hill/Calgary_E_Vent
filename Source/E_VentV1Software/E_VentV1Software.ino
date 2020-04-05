@@ -6,6 +6,7 @@
 #include "alarms.h"
 #include "ACMode.h"
 #include "VCMode.h"
+#include "breathing.h"
 
 //Begin User Defined Section----------------------------------------------------
 
@@ -41,31 +42,6 @@ const int lcdDB7    = 12;
 const float maxADCVoltage = 5.0;  //ATMega standard max input voltage
 const int maxADCValue     = 1024; //ATMega standard 10-bit ADC
 //------------------------------------------------------------------------------
-
-//Potenitometer Definitions-----------------------------------------------------
-const float bpmPotMaxVoltage = 5.0;
-const float ieRatioPotMaxVoltage = 5.0;
-const float tvPotMaxVoltage = 5.0;
-//------------------------------------------------------------------------------
-
-//Breath Per Minute Definitions-------------------------------------------------
-const float minBPM = 10.0; //Breaths per Minute
-const float maxBPM = 40.0; //Breaths per Minute
-//------------------------------------------------------------------------------
-
-//Tidal Volume Definitions------------------------------------------------------
-const float minTV = 0.0; //Tidal Volume (% of max)
-const float maxTV = 100.0; //Tidal Volume (% of max)
-//------------------------------------------------------------------------------
-
-//Inspiration Expiration Ratio Definitions--------------------------------------
-const float minIERatio = 1.0; //Inspiration to Expiration ratio 1:1
-const float maxIERatio = 4.0; //Inspiration to Expiration ratio 1:4
-//------------------------------------------------------------------------------
-
-//Breath hold time--------------------------------------------------------------
-const float holdTime        = 0.25; //Seconds
-const float acThresholdTime = 0.5; //Seconds
 
 //End User Defined Section------------------------------------------------------
 //Useful Definitions and Macros-------------------------------------------------
@@ -304,7 +280,7 @@ void loop() {
       
             pressure = readPressureSensor();
 
-            if (breathTimer > acThresholdTime * 1000) {
+            if (breathTimer > AC_THRESHOLD_TIME * 1000) {
                 acModeState = ACInhaleCommand;
                 errors |= APNEA_ALARM;
                 breathTimer = 0;
@@ -359,14 +335,14 @@ void loop() {
             Serial.print("ACPeak: ");
             Serial.println(breathTimer);
             Serial.print("Desired Peak Time: ");
-            Serial.println(holdTime);
+            Serial.println(HOLD_TIME);
 #endif //SERIAL_DEBUG
       
             //Hold motor in position********
 
             pressure = readPressureSensor();
 
-            if (breathTimer > holdTime * 1000) { //******** how and where is hold time defined, currently hard coded
+            if (breathTimer > HOLD_TIME * 1000) { //******** how and where is hold time defined, currently hard coded
                 acModeState = ACExhale;
                 plateauPressure = pressure;
                 breathTimer = 0;
@@ -475,7 +451,7 @@ void loop() {
 
             pressure = readPressureSensor();
 
-            if(breathTimer > holdTime*1000){
+            if(breathTimer > HOLD_TIME*1000){
                 vcModeState = VCExhale;
                 breathTimer = 0;
                 plateauPressure = pressure;
@@ -586,39 +562,6 @@ void readPotentiometers(uint8_t thresholdPressurePotPin, uint8_t bpmPotPin, uint
     tv = voltageToTVConversion(setTVPotVoltage);
 
     return;
-}
-
-/*Function to convert the breaths per minute potentiometer voltage to a desired breaths per minute
-  * Inputs:
-  *    -potVoltage: The voltage output of the potentiometer, must be converted to volts from adc reading prior to use of function
-  * 
-  * Outputs:
-  *    -set breaths per mintue
-  */
-float voltageToBPMConversion(const float potVoltage){
-    return (maxBPM - minBPM) / bpmPotMaxVoltage * potVoltage + minBPM;
-}
-
-/*Function to convert inspiration - expiration ratio potentiometer voltage to a desired IE ratio
-  * Inputs:
-  *    -potVoltage: The voltage output of the potentiometer, must be converted to volts from adc reading prior to use of function
-  * 
-  * Outputs:
-  *    -set IE ratio
-  */
-float voltageToIERatioConversion(const float potVoltage){
-    return (maxIERatio - minIERatio) / ieRatioPotMaxVoltage * potVoltage + minIERatio;
-}
-
-/*Function to convert tidal volume percentage potentiometer voltage to a desired tidal volume percentage
-  * Inputs:
-  *    -potVoltage: The voltage output of the potentiometer, must be converted to volts from adc reading prior to use of function
-  * 
-  * Outputs:
-  *    -set tidal volume percentage
-  */
-float voltageToTVConversion(const float potVoltage){
-    return (maxTV - minTV) / tvPotMaxVoltage * potVoltage + minTV;
 }
 
 void parameterChangeButtonISR() {

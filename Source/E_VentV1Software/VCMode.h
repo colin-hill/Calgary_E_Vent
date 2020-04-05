@@ -13,6 +13,7 @@ enum vcModeStates {
                    VCStart,
                    VCInhale,
                    VCInhaleCommand,
+                   VCInhaleAbort,
                    VCPeak,
                    VCExhale,
                    VCReset
