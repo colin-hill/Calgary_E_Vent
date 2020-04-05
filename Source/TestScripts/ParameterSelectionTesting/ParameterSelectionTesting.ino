@@ -85,6 +85,7 @@ void loop() {
   cli();
   if(paramSelect){
     sei();
+    paramSelectEncoder.write(0);
     if(digitalRead(thresholdPressureSelectPin)){
       currentlySelectedParameter = ThresholdPressure;
     }
