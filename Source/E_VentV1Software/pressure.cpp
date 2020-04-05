@@ -1,7 +1,8 @@
 #include "pressure.h"
-
+//TODO: Replace the adc to voltage conversion factor in readPressureSensor
+const float ADC_READING_TO_VOLTS_FACTOR_PRESSURE = 5.0/1024.0; //5 volts divided by 10 bits, will fix maginc number later
 float readPressureSensor(){
-    return voltageToPressureConversion(analogRead(PRESSURE_SENSOR_PIN));
+    return voltageToPressureConversion(ADC_READING_TO_VOLTS_FACTOR_PRESSURE * (float)analogRead(PRESSURE_SENSOR_PIN));
 }
 
 

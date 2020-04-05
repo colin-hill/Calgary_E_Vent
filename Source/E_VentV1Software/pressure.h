@@ -22,7 +22,7 @@ const float MAX_PRESSURE_SENSOR_VOLTAGE = 5.0; // Assumed 0-5V sensor
 
 // TODO: Double check these constants. I'm unclear on the units.
 const float MIN_PRESSURE = 0.0; //Absolute psi,cmH20?
-const float MAX_PRESSURE = 3.0; //Absolute psi, cmH20?
+const float MAX_PRESSURE = 10.0; //Absolute psi, cmH20?
 //------------------------------------------------------------------------------
 
 //Threshold Pressure Definitions------------------------------------------------

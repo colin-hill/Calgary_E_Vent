@@ -1,3 +1,4 @@
+#define SERIAL_DEBUG
 #include "VCMode.h"
 
 #include "alarms.h"
@@ -11,7 +12,7 @@
 
 vcModeStates vcStart(elapsedMillis &breathTimer, float &tempPeakPressure) {
 #ifdef SERIAL_DEBUG
-    Serial.print("VCStart");
+    Serial.println("VCStart");
 #endif //SERIAL_DEBUG
 
     // Reset timer and peak pressure reading.
@@ -23,7 +24,7 @@ vcModeStates vcStart(elapsedMillis &breathTimer, float &tempPeakPressure) {
 
 vcModeStates vcInhaleCommand(void) {
 #ifdef SERIAL_DEBUG
-    Serial.print("VCInhaleCommand");
+    Serial.println("VCInhaleCommand");
 #endif //SERIAL_DEBUG
 
     // TODO: Set motor speed and position
@@ -62,6 +63,7 @@ vcModeStates vcInhale(elapsedMillis &breathTimer, const float &inspirationTime,
     }
 
     errors |= check_high_pressure(pressure);
+    //Serial.println(pressure);
 
     // If there's high pressure, abort inhale.
     // TODO: will this state and VCInhaleAbort raise alarm? Is that fine?
@@ -93,6 +95,7 @@ vcModeStates vcInhaleAbort(elapsedMillis &breathTimer,
 
 
 // Unused parameter warning is due to inspirationTime only being used for debug information.
+// The debug information should be displayingthe hold tim, this has been altered
 vcModeStates vcPeak(elapsedMillis &breathTimer, const float &inspirationTime,
                     float &pressure, float &plateauPressure,
                     uint16_t &errors) {
@@ -100,7 +103,7 @@ vcModeStates vcPeak(elapsedMillis &breathTimer, const float &inspirationTime,
     Serial.print("VCPeak: ");
     Serial.println(breathTimer);
     Serial.print("Desired Peak Time: ");
-    Serial.println(inspirationTime);
+    Serial.println(HOLD_TIME);
 #endif //SERIAL_DEBUG
 
     vcModeStates next_state = VCPeak;
@@ -133,7 +136,7 @@ vcModeStates vcExhale(const elapsedMillis &breathTimer,
     // TODO: Set motor velocity and desired position
 
     pressure = readPressureSensor();
-    if (expirationTime < breathTimer) {
+    if (breathTimer > (expirationTime * S_TO_MS)) {
         next_state = VCReset;
         peepPressure = pressure;
     }
@@ -144,7 +147,7 @@ vcModeStates vcExhale(const elapsedMillis &breathTimer,
 
 vcModeStates vcReset(machineStates &machineState) {
 #ifdef SERIAL_DEBUG
-    Serial.print("VCReset");
+    Serial.println("VCReset");
 #endif //SERIAL_DEBUG
 
     machineState = BreathLoopStart;
@@ -172,7 +175,7 @@ vcModeStates vc_mode_step(vcModeStates current_state,
     case VCExhale:
         return vcExhale(breathTimer, expirationTime, pressure, peepPressure, errors);
     case VCReset:
-        vcReset(machineState);
+        return vcReset(machineState);
         break;
     default:
         // Should not happen

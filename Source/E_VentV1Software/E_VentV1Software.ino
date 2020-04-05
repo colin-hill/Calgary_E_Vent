@@ -1,3 +1,6 @@
+#define SERIAL_DEBUG //Comment this out if not debugging, used for visual confirmation of state changes
+#define NO_INPUT_DEBUG //Comment this out if not debugging, used to spoof input parameters at startup when no controls are present
+
 #include <LiquidCrystal.h>
 #include "Wire.h"
 
@@ -12,8 +15,8 @@
 
 //Begin User Defined Section----------------------------------------------------
 
-#define SERIAL_DEBUG //Comment this out if not debugging, used for visual confirmation of state changes
-#define NO_INPUT_DEBUG //Comment this out if not debugging, used to spoof input parameters at startup when no controls are present
+//#define SERIAL_DEBUG //Comment this out if not debugging, used for visual confirmation of state changes
+//#define NO_INPUT_DEBUG //Comment this out if not debugging, used to spoof input parameters at startup when no controls are present
 
 const char softwareVersion[] = "Version 1.0"; //In case we test a few versions?
 
@@ -99,7 +102,7 @@ elapsedMillis breathTimer;
 //------------------------------------------------------------------------------
 
 //Ease of use conversion factor------------------------------------------------------------------------------------------
-float adcReadingToVoltsFactor = maxADCVoltage / ((float)maxADCValue);
+const float ADC_READING_TO_VOLTS_FACTOR = maxADCVoltage / ((float)maxADCValue);
 //------------------------------------------------------------------------------
 
 //Enumerators------------------------------------------------------------------------------------------------------------
@@ -366,7 +369,7 @@ void loop() {
         }
     }//End ACMode
     else if (VCMode == machineState) {
-        vc_mode_step(vcModeState, breathTimer, inspirationTime, expirationTime,
+        vcModeState = vc_mode_step(vcModeState, breathTimer, inspirationTime, expirationTime,
                      tempPeakPressure, peakPressure, pressure, peepPressure,
                      plateauPressure, errors, machineState);
     }
@@ -391,10 +394,10 @@ void readPotentiometers(uint8_t thresholdPressurePotPin, uint8_t bpmPotPin, uint
     uint16_t setIERatioPotPinADCReading = analogRead(ieRatioPotPin);
     uint16_t setTVPotPinADCReading = analogRead(tvPotPin);
 
-    float setThresholdPressurePotVoltage = setThresholdPressurePotPinADCReading * adcReadingToVoltsFactor;
-    float setBPMPotVoltage = setBPMPotPinADCReading * adcReadingToVoltsFactor;
-    float setIERatioPotVoltage = setIERatioPotPinADCReading * adcReadingToVoltsFactor;
-    float setTVPotVoltage = setTVPotPinADCReading * adcReadingToVoltsFactor;
+    float setThresholdPressurePotVoltage = setThresholdPressurePotPinADCReading * ADC_READING_TO_VOLTS_FACTOR;
+    float setBPMPotVoltage = setBPMPotPinADCReading * ADC_READING_TO_VOLTS_FACTOR;
+    float setIERatioPotVoltage = setIERatioPotPinADCReading * ADC_READING_TO_VOLTS_FACTOR;
+    float setTVPotVoltage = setTVPotPinADCReading * ADC_READING_TO_VOLTS_FACTOR;
 
     thresholdPressure = voltageToSetThresholdPressureConversion(setThresholdPressurePotVoltage);
     bpm = voltageToBPMConversion(setBPMPotVoltage);
