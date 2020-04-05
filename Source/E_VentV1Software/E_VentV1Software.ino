@@ -1,5 +1,5 @@
-#include <elapsedMillis.h>
-#include "LiquidCrystal.h"
+#include "elapsedMillis.h"
+#include <LiquidCrystal.h>
 #include "Wire.h"
 
 
@@ -24,7 +24,7 @@ const int setTVPotPin                = 6;
 //------------------------------------------------------------------------------
 
 //Alarm Sound definitions-------------------------------------------------------
-#define alarmSoundLength 0.5 //Seconds
+const float alarmSoundLength = 0.5; //Seconds
 
 //LCD Denfinitions--------------------------------------------------------------
 const int lcdEnable = 7;
@@ -106,7 +106,7 @@ const uint16_t DEVICE_FAILURE_ALARM = 0x01 << 7;
 //------------------------------------------------------------------------------
 
 //Function Definitions---------------------------------------------------------------------------------------------------
-float readPressureSensor(uint8_t funcPressureSensorPin);
+float readPressureSensor(void);
 void readPotentiometers(uint8_t thresholdPressurePotPin, uint8_t bpmPotPin, uint8_t ieRatioPotPin, uint8_t tvPotPin, volatile float &thresholdPressure, volatile float &bpm, volatile float &ieRatio, volatile float &tv);
 float voltageToPressureConversion(float sensorVoltage);
 float voltageToSetThresholdPressureConversion(float potVoltage);
@@ -353,7 +353,7 @@ void loop() {
             Serial.println(breathTimer);
 #endif //SERIAL_DEBUG
       
-            pressure = readPressureSensor(pressureSensorPin);
+            pressure = readPressureSensor();
 
             if (breathTimer > acThresholdTime * 1000) {
                 acModeState = ACInhaleCommand;
@@ -387,7 +387,7 @@ void loop() {
 
             //Check motor position********
 
-            pressure = readPressureSensor(pressureSensorPin);
+            pressure = readPressureSensor();
 
             if (pressure > tempPeakPressure) { //Update the peak pressure
                 tempPeakPressure = pressure;
@@ -414,7 +414,7 @@ void loop() {
       
             //Hold motor in position********
 
-            pressure = readPressureSensor(pressureSensorPin);
+            pressure = readPressureSensor();
 
             if (breathTimer > holdTime * 1000) { //******** how and where is hold time defined, currently hard coded
                 acModeState = ACExhale;
@@ -436,7 +436,7 @@ void loop() {
       
             //Send motor to zero position********
   
-            pressure = readPressureSensor(pressureSensorPin);
+            pressure = readPressureSensor();
 
             if (breathTimer > expirationTime * 1000) {
                 acModeState = ACReset;
@@ -449,7 +449,7 @@ void loop() {
             Serial.print("ACReset");
 #endif //SERIAL_DEBUG
 
-            readPressureSensor(pressureSensorPin, pressure);
+            pressure = readPressureSensor();
 
             if (pressure > maxPeepPressure) {
                 errors |= HIGH_PEEP_ALARM;
@@ -495,7 +495,7 @@ void loop() {
 
             //Set motor position and speed
       
-            readPressureSensor(pressureSensorPin,pressure);
+            pressure = readPressureSensor();
 
             if (pressure > tempPeakPressure) {
                 tempPeakPressure = pressure;
@@ -523,7 +523,7 @@ void loop() {
 
             //Hold motor in position********
 
-            readPressureSensor(pressureSensorPin, pressure);
+            pressure = readPressureSensor();
 
             if(breathTimer > holdTime*1000){
                 vcModeState = VCExhale;
@@ -546,7 +546,7 @@ void loop() {
 
             //Set motor vlocity and desired position
 
-            readPressureSensor(pressureSensorPin, pressure);
+            pressure = readPressureSensor();
 
             if (breathTimer > expirationTime) {
                 vcModeState = VCReset;
@@ -574,8 +574,8 @@ void loop() {
     //Error Handling-------------------------------------------------------------------------------------------------------------------
     if(errors & 0xFF){ //There is an unserviced error
         //Control the buzzer
-        if(alarmBuzzerTimer > alarmSOundLength*1000){
-            alarmBuzzerTimerr = 0; //Reset the timer
+        if(alarmBuzzerTimer > alarmSoundLength*1000){
+            alarmBuzzerTimer = 0; //Reset the timer
             digitalWrite(alarmBuzzerPin,!digitalRead(alarmBuzzerPin)); //Toggle the buzzer output pin
         }
 
@@ -701,7 +701,7 @@ float voltageToBPMConversion(const float potVoltage){
   *    -set IE ratio
   */
 float voltageToIERatioConversion(const float potVoltage){
-    return (maxIERatio - minIERatio) / ieRatioPotMaxVoltage * potVoltage + minIERation;
+    return (maxIERatio - minIERatio) / ieRatioPotMaxVoltage * potVoltage + minIERatio;
 }
 
 /*Function to convert tidal volume percentage potentiometer voltage to a desired tidal volume percentage
