@@ -1,6 +1,8 @@
 
 #include <elapsedMillis.h>
 #include "LiquidCrystal.h"
+#include "Wire.h"
+
 
 //Begin User Defined Section---------------------------------------------------------------------------------------------
 
@@ -14,12 +16,16 @@ const char softwareVersion[] = "Version 1.0"; //In case we test a few versions?
 #define limitSwitchPin 23
 #define alarmSwitchPin 24
 #define modeSwitchPin 20
+#define alarmBuzzerPin 21
 #define pressureSensorPin 10
 #define setBPMPotPin 7
 #define setIERatioPotPin 8
 #define setThresholdPressurePotPin 9
 #define setTVPotPin 6
 //-----------------------------------------------------------------------------------------------------------------------
+
+//Alarm Sound definitions-----------------------------------------------------------------------------------------------
+#define alarmSoundLength 0.5 //Seconds
 
 //LCD Denfinitions---------------------------------------------------------------------------------------------------
 #define lcdEnable 7
@@ -87,6 +93,15 @@ float acThresholdTime = 0.5; //Seconds
 #define VCMODE false
 
 #define MotorSerial Serial1
+
+#define HIGH_PRESSURE_ALARM (0x01 << 0)
+#define LOW_PRESSURE_ALARM (0x01 << 1)
+#define HIGH_PEEP_ALARM (0x01 << 2)
+#define LOW_PEEP_ALARM (0x01 << 3)
+#define DISCONNECT_ALARM (0x01 << 4)
+#define HIGH_TEMP_ALARM (0x01 << 5)
+#define APNEA_ALARM (0x01 << 6)
+#define DEVICE_FAILURE_ALARM (0x01 << 7)
 //-----------------------------------------------------------------------------------------------------------------------
 
 //Function Definitions---------------------------------------------------------------------------------------------------
@@ -152,12 +167,24 @@ float peepPressure;
 float singleBreathTime;
 float inspirationTime;
 float expirationTime;
+
+uint16_t errors = 0;
 //-----------------------------------------------------------------------------------------------------------------------
 
 //Timer Variables--------------------------------------------------------------------------------------------------------
 elapsedMillis paramChangeDebounceTimer;
-volatile elapsedMillis otherDebounceTimer;
+elapsedMillis otherDebounceTimer;
 elapsedMillis breathTimer;
+elapsedMillis alarmBuzzerTimer;
+elapsedMillis highPressureAlarmTimer;
+elapsedMillis lowPressureAlarmTimer;
+elapsedMillis highPEEPAlarmTimer;
+elapsedMillis lowPEEPAlarmTimer;
+elapsedMillis disconnectAlarmTimer;
+elapsedMillis highTempAlarmTimer;
+elapsedMillis apneaAlarmTimer;
+elapsedMillis deviceFaiulureAlarmTimer;
+
 //-----------------------------------------------------------------------------------------------------------------------
 
 //Ease of use conversion factor------------------------------------------------------------------------------------------
@@ -194,6 +221,8 @@ void setup() {
 
   //Pressure sensor input pin setup
   pinMode(pressureSensorPin, INPUT);
+
+  pinMode(alarmBuzzerPin,OUTPUT);
 
   //Parameter change interrupt setup
   attachInterrupt(digitalPinToInterrupt(setParameterPin),parameterChangeButtonISR,FALLING);
@@ -291,7 +320,6 @@ void loop() {
     loopTV = internalTV;
     sei();
 
-
     singleBreathTime = 60.0/loopBPM;
     inspirationTime = singleBreathTime / (1 + loopIERatio);
     expirationTime = singleBreathTime - inspirationTime;
@@ -324,7 +352,7 @@ void loop() {
 
       if (breathTimer > acThresholdTime * 1000) {
         acModeState = ACInhaleCommand;
-        //SOUND LOW RR ALARM********
+        errors |= APNEA_ALARM;
         breathTimer = 0;
         tempPeakPressure = 0;
       }
@@ -367,7 +395,7 @@ void loop() {
         //Check that motor made it to the appropriate position********
       }
       else if (pressure > maxPressure) {
-        //SOUND THE PRESSURE ALARM, scream internally because we don't know what to do next
+        errors |= HIGH_PRESSURE_ALARM;
       }
     }//-----------------------------------------------------------------------------------------------------------------------
     else if (acModeState == ACPeak) { //ACPeak-----------------------------------------------------------------------------------------
@@ -389,7 +417,7 @@ void loop() {
         breathTimer = 0;
       }
       else if (pressure > maxPressure) {
-        //SOUND THE PRESURE ALARM, scream inernally because we don't know what to do next
+        errors |= HIGH_PRESSURE_ALARM;
       }
     }//--------------------------------------------------------------------------------------------------------------------------
     else if (acModeState == ACExhale) { //ACExhale---------------------------------------------------------------------------------------
@@ -419,10 +447,10 @@ void loop() {
       readPressureSensor(pressureSensorPin, pressure);
 
       if (pressure > maxPeepPressure) {
-        //SOUND THE ALARM******
+        errors |= HIGH_PEEP_ALARM;
       }
       else if (pressure < minPeepPressure) {
-        //SOUND THE ALARM********
+        errors |= LOW_PEEP_ALARM;
       }
       breathTimer = 0;
 
@@ -476,7 +504,7 @@ void loop() {
       }
 
       if (pressure > maxPressure) {
-        //Scream loudly********
+        errors |= HIGH_PRESSURE_ALARM;
       }
     }//-------------------------------------------------------------------------------------------------------------------------
     else if (vcModeState == VCPeak) { //VCPeak------------------------------------------------------------------------------------------
@@ -499,7 +527,7 @@ void loop() {
       }
 
       if (pressure > maxPressure) {
-        //Scream loudly*******************************
+        errors |= HIGH_PRESSURE_ALARM;
       }
     }//------------------------------------------------------------------------------------------------------------------------
     else if (vcModeState == VCExhale) { //VCExhale-------------------------------------------------------------------------------------
@@ -521,10 +549,10 @@ void loop() {
       }
 
       if (pressure > maxPeepPressure) {
-        //Yell*********
+        errors |= HIGH_PEEP_ALARM;
       }
       else if (pressure < minPeepPressure) {
-        //Yell*********
+        errors |= LOW_PEEP_ALARM;
       }
     }//-------------------------------------------------------------------------------------------------------------------------
     else if(vcModeState == VCReset){ //VCReset-----------------------------------------------------------------------------------
@@ -538,7 +566,48 @@ void loop() {
   
     }
   }// End VCMode----------------------------------------------------------------------------------------------------------------------------
+  //Error Handling-------------------------------------------------------------------------------------------------------------------
+  if(errors & 0xFF){ //There is an unserviced error
+    //Control the buzzer
+    if(alarmBuzzerTimer > alarmSOundLength*1000){
+      alarmBuzzerTimerr = 0; //Reset the timer
+      digitalWrite(alarmBuzzerPin,!digitalRead(alarmBuzzerPin)); //Toggle the buzzer output pin
+    }
 
+    //Provide the appropriate screen for the error, error flags held in a 16 bit unsigned integer
+    if(errors & HIGH_PRESSURE_ALARM){
+      //Display high pressure alarm screen********
+    }
+    else if(errors & LOW_PRESSURE_ALARM){
+      //Display low pressure alarm screen********
+    }
+    else if(errors & HIGH_PEEP_ALARM){
+      //Display high PEEP alarm screen********
+    }
+    else if(errors & LOW_PEEP_ALARM){
+      //Display low PEEP alarm screen********
+    }
+    else if(errors & DISCONNECT_ALARM){
+      //Display disconnect alarm (also a low pressure alarm)
+    }
+    else if(errors & HIGH_TEMP_ALARM){
+      //Display high temp alarm screen********
+    }
+    else if(errors & APNEA_ALARM){
+      //Display the apnea alarm screen********
+    }
+    else if(errors & DEVICE_FAILURE_ALARM){
+      //Display the device failure alarm********
+    }
+    else{
+      errors = 0;
+    }
+  }
+  else{
+    alarmBuzzerTimer = 0;
+    digitalWrite(alarmBuzzerPin,LOW);
+  }
+  //End error Handling-------------------------------------------------------------------------------------------
 
 
 
