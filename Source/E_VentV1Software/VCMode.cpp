@@ -61,7 +61,7 @@ vcModeStates vcInhale(elapsedMillis &breathTimer, const float &inspirationTime, 
     return next_state;
 }
 
-vcModesStates vcInhaleAbort(const elapsedMillis &breathTimer, const float &expirationTime, float &pressure, float &peepPressure, uint16_t &errors) {
+vcModeStates vcInhaleAbort(const elapsedMillis &breathTimer, const float &expirationTime, float &pressure, float &peepPressure, uint16_t &errors) {
 #ifdef SERIAL_DEBUG
     Serial.print("VCInhaleAbort: ");
     Serial.println(breathTimer);
@@ -139,16 +139,16 @@ vcModeStates vcReset() {
     // vcModeState = VCStart;
 }
 
-vcModeStates vc_mode_step(vcModeStates current_state) {
+vcModeStates vc_mode_step(vcModeStates current_state, elapsedMillis &breathTimer, const float &inspirationTime, const float &expirationTime, float &tempPeakPressure, float &peakPressure, float &pressure, float &peepPressure, uint16_t &errors) {
     switch(current_state) {
     case VCStart:
         return vcStart(breathTimer, tempPeakPressure);
     case VCInhaleCommand:
         return vcInhaleCommand();
     case VCInhale:
-        return vcInhale(breathTimer, inspirationTime, tempPeakPressure, peakPreasure, pressure, errors);
+        return vcInhale(breathTimer, inspirationTime, tempPeakPressure, peakPressure, pressure, errors);
     case VCInhaleAbort:
-        return vcInhaleAbort();
+        return vcInhaleAbort(breathTimer, expirationTime, pressure, peepPressure, errors);
     case VCPeak:
         break;
     case VCExhale:
