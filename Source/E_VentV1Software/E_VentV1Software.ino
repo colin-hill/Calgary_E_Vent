@@ -7,6 +7,7 @@
 #include "ACMode.h"
 #include "VCMode.h"
 #include "breathing.h"
+#include "MachineStates.h"
 
 //Begin User Defined Section----------------------------------------------------
 
@@ -57,14 +58,6 @@ float voltageToBPMConversion(float potVoltage);
 float voltageToIERatioConversion(float potVoltage);
 float voltageToTVConversion(float potVoltage);
 void parameterChangeButtonISR();
-
-enum machineStates {
-                    Startup,
-                    MotorZeroing,
-                    BreathLoopStart,
-                    ACMode,
-                    VCMode
-};
 
 // TODO: Nervous about these -- make sure that they are initialized.
 //Global Variables-------------------------------------------------------------------------------------------------------
@@ -389,106 +382,10 @@ void loop() {
             machineState = BreathLoopStart;
         }
     }//End ACMode
-    else if (machineState == VCMode) { //VCMode-------------------------------------------------------------------------------------------
-        if (vcModeState == VCStart) { //VCStart-----------------------------------------------------------------------------------------------
-
-#ifdef SERIAL_DEBUG
-            Serial.print("VCStart");
-#endif //SERIAL_DEBUG
-      
-            breathTimer = 0;
-            vcModeState = VCInhaleCommand;
-            tempPeakPressure = 0;
-        }//----------------------------------------------------------------------------------
-        else if (vcModeState == VCInhaleCommand) { //VCInhaleCommand----------------------------------------------------------------------
-
-#ifdef SERIAL_DEBUG
-            Serial.print("VCInhaleCommand");
-#endif //SERIAL_DEBUG
-
-            //Set motor speed and position
-      
-            vcModeState = VCInhale;
-        }//---------------------------------------------------------------------------------------
-        else if (vcModeState == VCInhale) { //VCInhale---------------------------------------------------------------------------------------------
-
-#ifdef SERIAL_DEBUG
-            Serial.print("VCInhale: ");
-            Serial.println(breathTimer);
-            Serial.print("Desired Inhale Time: ");
-            Serial.println(inspirationTime);
-#endif //SERIAL_DEBUG
-
-            //Set motor position and speed
-      
-            pressure = readPressureSensor();
-
-            if (pressure > tempPeakPressure) {
-                tempPeakPressure = pressure;
-            }
-
-            if(breathTimer > inspirationTime*1000){
-                vcModeState = VCPeak;
-                breathTimer = 0;
-                peakPressure = tempPeakPressure;
-                //Check motor position********
-            }
-
-            if (pressure > MAX_PRESSURE) {
-                errors |= HIGH_PRESSURE_ALARM;
-            }
-        }//--------------------------------------------------------------------------------
-        else if (vcModeState == VCPeak) { //VCPeak------------------------------------------------------------------------------------------
-
-#ifdef SERIAL_DEBUG
-            Serial.print("VCPeak: ");
-            Serial.println(breathTimer);
-            Serial.print("Desired Peak Time: ");
-            Serial.println(inspirationTime);
-#endif //SERIAL_DEBUG
-
-            //Hold motor in position********
-
-            pressure = readPressureSensor();
-
-            if(breathTimer > HOLD_TIME*1000){
-                vcModeState = VCExhale;
-                breathTimer = 0;
-                plateauPressure = pressure;
-            }
-
-            errors |= check_high_pressure(pressure);
-        }//-------------------------------------------------------------------------------
-        else if (vcModeState == VCExhale) { //VCExhale-------------------------------------------------------------------------------------
-
-#ifdef SERIAL_DEBUG
-            Serial.print("VCExhale: ");
-            Serial.println(breathTimer);
-            Serial.print("Desired Exhale Time: ");
-            Serial.println(expirationTime);
-#endif //SERIAL_DEBUG
-
-            //Set motor vlocity and desired position
-
-            pressure = readPressureSensor();
-
-            if (breathTimer > expirationTime) {
-                vcModeState = VCReset;
-                peepPressure = pressure;
-            }
-
-            errors |= check_peep(pressure);
-        }//--------------------------------------------------------------------------------
-        else if(vcModeState == VCReset){ //VCReset-----------------------------------------------------------------------------------
-
-#ifdef SERIAL_DEBUG
-            Serial.print("VCReset");
-#endif //SERIAL_DEBUG
-
-            machineState = BreathLoopStart;
-            vcModeState = VCStart;
-  
-        }
+    else if (machineState == VCMode) {
+        vc_mode_step(vcModeState, breathTimer, inspirationTime, expirationTime,
+                     tempPeakPressure, peakPressure, pressure, peepPressure,
+                     plateauPressure, errors, machineState);
     }// End VCMode----------------------------------------------------------------------------------------------------------------------------
     //Error Handling-------------------------------------------------------------------------------------------------------------------
     if(errors & 0xFF){ //There is an unserviced error

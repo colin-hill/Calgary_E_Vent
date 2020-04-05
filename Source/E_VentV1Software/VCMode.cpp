@@ -84,6 +84,7 @@ vcModeStates vcInhaleAbort(const elapsedMillis &breathTimer, const float &expira
 }
 
 
+// Unused parameter warning is due to inspirationTime only being used for debug information.
 vcModeStates vcPeak(elapsedMillis &breathTimer, const float &inspirationTime, float &pressure, float &plateauPressure, uint16_t &errors) {
 #ifdef SERIAL_DEBUG
     Serial.print("VCPeak: ");
@@ -129,17 +130,16 @@ vcModeStates vcExhale(const elapsedMillis &breathTimer, const float &expirationT
     return next_state;
 }
 
-// TODO: GRRRR
-vcModeStates vcReset() {
+vcModeStates vcReset(machineStates &machineState) {
 #ifdef SERIAL_DEBUG
     Serial.print("VCReset");
 #endif //SERIAL_DEBUG
 
-    // machineState = BreathLoopStart;
-    // vcModeState = VCStart;
+    machineState = BreathLoopStart;
+    return VCStart;
 }
 
-vcModeStates vc_mode_step(vcModeStates current_state, elapsedMillis &breathTimer, const float &inspirationTime, const float &expirationTime, float &tempPeakPressure, float &peakPressure, float &pressure, float &peepPressure, uint16_t &errors) {
+vcModeStates vc_mode_step(vcModeStates current_state, elapsedMillis &breathTimer, const float &inspirationTime, const float &expirationTime, float &tempPeakPressure, float &peakPressure, float &pressure, float &peepPressure, float &plateauPressure, uint16_t &errors, machineStates &machineState) {
     switch(current_state) {
     case VCStart:
         return vcStart(breathTimer, tempPeakPressure);
@@ -150,12 +150,11 @@ vcModeStates vc_mode_step(vcModeStates current_state, elapsedMillis &breathTimer
     case VCInhaleAbort:
         return vcInhaleAbort(breathTimer, expirationTime, pressure, peepPressure, errors);
     case VCPeak:
-        break;
+        return vcPeak(breathTimer, inspirationTime, pressure, plateauPressure, errors);
     case VCExhale:
-        break;
-    case VCExhaleCommand:
-        break;
+        return vcExhale(breathTimer, expirationTime, pressure, peepPressure, errors);
     case VCReset:
+        vcReset(machineState);
         break;
     default:
         // Should not happen

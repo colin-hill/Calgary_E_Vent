@@ -5,6 +5,8 @@
 #define VCMode_h
 
 #include "elapsedMillis.h"
+#include "MachineStates.h"
+
 
 /* States for the VC Mode state machine.
 
@@ -17,7 +19,6 @@ enum vcModeStates {
                    VCInhaleAbort,
                    VCPeak,
                    VCExhale,
-		   VCExhaleCommand,
                    VCReset
 };
 
@@ -33,7 +34,7 @@ enum vcModeStates {
    Output:
    - returns new state.
  */
-vcModeStates vc_mode_step(vcModeStates current_state, elapsedMillis &breathTimer, const float &inspirationTime, float &tempPeakPressure, float &peakPressure, float &pressure, float &peepPressure, uint16_t &errors);
+vcModeStates vc_mode_step(vcModeStates current_state, elapsedMillis &breathTimer, const float &inspirationTime, const float &expirationTime, float &tempPeakPressure, float &peakPressure, float &pressure, float &peepPressure, float &plateauPressure, uint16_t &errors, machineStates &machineState);
 
 
 // ----------------------------------------------------------------------
@@ -53,7 +54,7 @@ vcModeStates vcPeak(elapsedMillis &breathTimer, const float &inspirationTime, fl
 
 vcModeStates vcExhale(const elapsedMillis &breathTimer, const float &expirationTime, float &pressure, float &peepPressure, uint16_t &errors);
 
-vcModeStates vcReset();
+vcModeStates vcReset(machineStates &machineState);
 
 
 #endif
