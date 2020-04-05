@@ -93,10 +93,10 @@ vcModeStates vcExhale(const elapsedMillis &breathTimer, const float &expirationT
 #endif //SERIAL_DEBUG
 
     vcModeStates next_state = VCExhale;
-    //Set motor vlocity and desired position
+
+    // TODO: Set motor vlocity and desired position
 
     pressure = readPressureSensor();
-
     if (breathTimer > expirationTime) {
         next_state = VCReset;
         peepPressure = pressure;
