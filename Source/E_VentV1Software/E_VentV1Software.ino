@@ -4,7 +4,8 @@
 #include "elapsedMillis.h"
 #include "pressure.h"
 #include "alarms.h"
-
+#include "ACMode.h"
+#include "VCMode.h"
 
 //Begin User Defined Section----------------------------------------------------
 
@@ -89,26 +90,6 @@ enum machineStates {
                     VCMode
 };
 
-enum acModeStates {
-                   ACStart,
-                   ACInhaleWait,
-                   ACInhaleCommand,
-                   ACInhale,
-                   ACPeak,
-                   ACExhale,
-                   ACReset
-};
-
-enum vcModeStates {
-                   VCStart,
-                   VCInhale,
-                   VCInhaleCommand,
-                   VCPeak,
-                   VCExhale,
-                   VCReset
-};
-
-
 // TODO: Nervous about these -- make sure that they are initialized.
 //Global Variables-------------------------------------------------------------------------------------------------------
 volatile boolean paramChange = false;
@@ -182,7 +163,7 @@ void setup() {
     MotorSerial.begin(9600); //********
 
     //Potentiometer input pin setup
-    pinMode(setThresholdPressurePotPin , INPUT);
+    pinMode(SET_THRESHOLD_PRESSURE_POT_PIN , INPUT);
     pinMode(setBPMPotPin               , INPUT);
     pinMode(setIERatioPotPin           , INPUT);
     pinMode(setTVPotPin                , INPUT);
@@ -193,7 +174,7 @@ void setup() {
     pinMode(alarmSwitchPin, INPUT);
 
     //Pressure sensor input pin setup
-    pinMode(pressureSensorPin, INPUT);
+    pinMode(PRESSURE_SENSOR_PIN, INPUT);
 
     pinMode(alarmBuzzerPin,OUTPUT);
 
@@ -203,7 +184,7 @@ void setup() {
     //LCD Setup
     //lcd.begin(20, 4); //set number of columns and rows
 
-    readPotentiometers(setThresholdPressurePotPin, setBPMPotPin, setIERatioPotPin, setTVPotPin, internalThresholdPressure, internalBPM, internalIERatio, internalTV);
+    readPotentiometers(SET_THRESHOLD_PRESSURE_POT_PIN, setBPMPotPin, setIERatioPotPin, setTVPotPin, internalThresholdPressure, internalBPM, internalIERatio, internalTV);
 
     //LCD Display Startup Message for two seconds
     //displayStartScreen(softwareVersion);
@@ -227,7 +208,7 @@ void setup() {
 
 
 
-        readPotentiometers(setThresholdPressurePotPin, setBPMPotPin, setIERatioPotPin, setTVPotPin, internalThresholdPressure, internalBPM, internalIERatio, internalTV);
+        readPotentiometers(SET_THRESHOLD_PRESSURE_POT_PIN, setBPMPotPin, setIERatioPotPin, setTVPotPin, internalThresholdPressure, internalBPM, internalIERatio, internalTV);
         cli();
     }
     paramChange = false;
@@ -265,7 +246,7 @@ void loop() {
     cli(); //Prevent interrupts from occuring
     if (paramChange == true) {
         sei();
-        readPotentiometers(setThresholdPressurePotPin, setBPMPotPin, setIERatioPotPin, setTVPotPin, tempThresholdPressure, tempBPM, tempIERatio, tempTV);
+        readPotentiometers(SET_THRESHOLD_PRESSURE_POT_PIN, setBPMPotPin, setIERatioPotPin, setTVPotPin, tempThresholdPressure, tempBPM, tempIERatio, tempTV);
 
         //LCD display temp screen and variables
         //displayParameterScreen(tempTV, tempBPM, tempIERatio, tempThresholdPressure);
@@ -368,7 +349,7 @@ void loop() {
                 peakPressure = tempPeakPressure;
                 //Check that motor made it to the appropriate position********
             }
-            else if (pressure > maxPressure) {
+            else if (pressure > MAX_PRESSURE) {
                 errors |= HIGH_PRESSURE_ALARM;
             }
         }//------------------------------------------------------------------------------
@@ -390,7 +371,7 @@ void loop() {
                 plateauPressure = pressure;
                 breathTimer = 0;
             }
-            else if (pressure > maxPressure) {
+            else if (pressure > MAX_PRESSURE) {
                 errors |= HIGH_PRESSURE_ALARM;
             }
         }//---------------------------------------------------------------------------------
@@ -420,10 +401,10 @@ void loop() {
 
             pressure = readPressureSensor();
 
-            if (pressure > maxPeepPressure) {
+            if (pressure > MAX_PEEP_PRESSURE) {
                 errors |= HIGH_PEEP_ALARM;
             }
-            else if (pressure < minPeepPressure) {
+            else if (pressure < MIN_PEEP_PRESSURE) {
                 errors |= LOW_PEEP_ALARM;
             }
             breathTimer = 0;
@@ -477,7 +458,7 @@ void loop() {
                 //Check motor position********
             }
 
-            if (pressure > maxPressure) {
+            if (pressure > MAX_PRESSURE) {
                 errors |= HIGH_PRESSURE_ALARM;
             }
         }//--------------------------------------------------------------------------------
@@ -536,7 +517,7 @@ void loop() {
     //Error Handling-------------------------------------------------------------------------------------------------------------------
     if(errors & 0xFF){ //There is an unserviced error
         //Control the buzzer
-        if(alarmBuzzerTimer > alarmSoundLength*1000){
+        if(alarmBuzzerTimer > ALARM_SOUND_LENGTH*1000){
             alarmBuzzerTimer = 0; //Reset the timer
             digitalWrite(alarmBuzzerPin,!digitalRead(alarmBuzzerPin)); //Toggle the buzzer output pin
         }

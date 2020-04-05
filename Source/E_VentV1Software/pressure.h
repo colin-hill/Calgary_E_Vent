@@ -17,34 +17,34 @@
 
 
 //Pressure Sensor Definitions---------------------------------------------------
-const float minPressureSensorVoltage = 0.0;
-const float maxPressureSensorVoltage = 5.0; // Assumed 0-5V sensor
+const float MIN_PRESSURE_SENSOR_VOLTAGE = 0.0;
+const float MAX_PRESSURE_SENSOR_VOLTAGE = 5.0; // Assumed 0-5V sensor
 
 // TODO: Double check these constants. I'm unclear on the units.
-const float minPressure = 0.0; //Absolute psi,cmH20?
-const float maxPressure = 3.0; //Absolute psi, cmH20?
+const float MIN_PRESSURE = 0.0; //Absolute psi,cmH20?
+const float MAX_PRESSURE = 3.0; //Absolute psi, cmH20?
 //------------------------------------------------------------------------------
 
 //Threshold Pressure Definitions------------------------------------------------
-const float minThresholdPressure = 1.0;
-const float maxThresholdPressure = 2.0;
+const float MIN_THRESHOLD_PRESSURE = 1.0;
+const float MAX_THRESHOLD_PRESSURE = 2.0;
 //------------------------------------------------------------------------------
 
 //Max & Min Pressures-----------------------------------------------------------
-const float maxPeepPressure = 20.0; //cmH2O
-const float minPeepPressure = 0.0; //cmH2O
+const float MAX_PEEP_PRESSURE = 20.0; //cmH2O
+const float MIN_PEEP_PRESSURE = 0.0; //cmH2O
 //------------------------------------------------------------------------------
 
 // Potentiometer information
-const float setThresholdPressurePotMaxVoltage = 5.0;
+const float SET_THRESHOLD_PRESSURE_POT_MAX_VOLTAGE = 5.0;
 
 // Pressure sensor pins
-const int pressureSensorPin          = 10;
-const int setThresholdPressurePotPin = 9;
+const int PRESSURE_SENSOR_PIN            = 10;
+const int SET_THRESHOLD_PRESSURE_POT_PIN = 9;
 
 // Functions
 
-/* Function to read the pressure sensor on the pressureSensorPin.
+/* Function to read the pressure sensor on the PRESSURE_SENSOR_PIN.
  * Inputs: None.
  * Outputs:
  *  -The pressure is returned in a float

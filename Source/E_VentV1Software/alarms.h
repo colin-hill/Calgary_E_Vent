@@ -13,7 +13,7 @@
 #endif
 
 // Alarm Sound definitions
-const float alarmSoundLength = 0.5; //Seconds
+const float ALARM_SOUND_LENGTH = 0.5; //Seconds
 
 // Alarm flags
 const uint16_t HIGH_PRESSURE_ALARM  = 0x01 << 0;

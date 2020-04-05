@@ -3,7 +3,7 @@
 
 
 uint16_t check_high_pressure(const float pressure) {
-    if (pressure > maxPressure) {
+    if (pressure > MAX_PRESSURE) {
         return HIGH_PRESSURE_ALARM;
     } else {
         return 0;
@@ -12,7 +12,7 @@ uint16_t check_high_pressure(const float pressure) {
 
 
 uint16_t check_low_pressure(const float pressure) {
-    if (pressure < minPressure) {
+    if (pressure < MIN_PRESSURE) {
         return LOW_PRESSURE_ALARM;
     } else {
         return 0;
@@ -26,7 +26,7 @@ uint16_t check_pressure(const float pressure) {
 
 
 uint16_t check_high_peep(const float pressure) {
-    if (pressure > maxPeepPressure) {
+    if (pressure > MAX_PEEP_PRESSURE) {
         return HIGH_PEEP_ALARM;
     } else {
         return 0;
@@ -35,7 +35,7 @@ uint16_t check_high_peep(const float pressure) {
 
 
 uint16_t check_low_peep(const float pressure) {
-    if (pressure < minPeepPressure) {
+    if (pressure < MIN_PEEP_PRESSURE) {
         return LOW_PEEP_ALARM;
     } else {
         return 0;
