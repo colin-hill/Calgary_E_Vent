@@ -1,0 +1,29 @@
+* Build with arduino-cli
+
+** Initial setup
+
+   1. Install arduino-cli: https://arduino.github.io/arduino-cli/installation/
+   2. Make a config
+      #+begin_src bash
+        arduino-cli config init
+      #+end_src
+   3. Download list of platforms
+      #+begin_src bash
+        arduino-cli core update-index
+      #+end_src
+   4. Make sure to install the arduino:avr core:
+      #+begin_src bash
+        arduino-cli core install arduino:avr
+      #+end_src
+   5. Install the LiquidCrystal library
+      #+begin_src 
+        arduino-cli lib install LiquidCrystal
+      #+end_src
+
+** Build
+
+  To compile the project it should be as simple as:
+
+  #+begin_src bash
+    arduino-cli compile --fqbn arduino:avr:mega:cpu=atmega2560
+  #+end_src
