@@ -18,13 +18,13 @@
 const char softwareVersion[] = "Version 1.0"; //In case we test a few versions?
 
 //IO Pin Definintions-----------------------------------------------------------
-const int setParameterPin            = 25; //Pin for the set parameter button
-const int limitSwitchPin             = 23;
-const int alarmSwitchPin             = 24;
-const int modeSwitchPin              = 20;
-const int setBPMPotPin               = 7;
-const int setIERatioPotPin           = 8;
-const int setTVPotPin                = 6;
+const int setParameterPin  = 25; //Pin for the set parameter button
+const int limitSwitchPin   = 23;
+const int alarmSwitchPin   = 24;
+const int modeSwitchPin    = 20;
+const int setBPMPotPin     = 7;
+const int setIERatioPotPin = 8;
+const int setTVPotPin      = 6;
 //------------------------------------------------------------------------------
 
 //LCD Denfinitions--------------------------------------------------------------
