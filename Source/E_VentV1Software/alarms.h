@@ -4,8 +4,6 @@
 #ifndef alarms_h
 #define alarms_h
 
-#include <stdlib.h>
-
 #if ARDUINO >= 100
 #include "Arduino.h"
 #else
@@ -14,6 +12,9 @@
 
 // Alarm Sound definitions
 const float ALARM_SOUND_LENGTH = 0.5; //Seconds
+
+// Alarm pins
+const int ALARM_BUZZER_PIN = 21;
 
 // Alarm flags
 const uint16_t HIGH_PRESSURE_ALARM  = 0x01 << 0;
@@ -96,6 +97,18 @@ uint16_t check_low_peep(const float pressure);
  */
 
 uint16_t check_peep(const float pressure);
+
+
+/* Function to handle alarms
+
+   Input:
+   - Takes in error flags
+
+   Postconditions:
+   - TODO: currently does nothing, should raise alarms (LCD, beeping)
+   - TODO: will reset the errors flag
+ */
+void handle_alarms(uint16_t &errors);
 
 /* TODO: Check alarms more frequently?
 
