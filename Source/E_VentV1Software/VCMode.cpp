@@ -30,7 +30,7 @@ vcModeStates vcInhaleCommand(void) {
     return VCInhale;
 }
 
-vcModeStates vcInhale(elapsedMillis &breathTimer, const float &inspirationTime, float &tempPeakPressure, float &pressure, float &peakPressure, uint16_t &errors) {
+vcModeStates vcInhale(elapsedMillis &breathTimer, const float &inspirationTime, float &tempPeakPressure, float &peakPressure, float &pressure, uint16_t &errors) {
 #ifdef SERIAL_DEBUG
     Serial.print("VCInhale: ");
     Serial.println(breathTimer);
@@ -60,6 +60,29 @@ vcModeStates vcInhale(elapsedMillis &breathTimer, const float &inspirationTime, 
     errors |= check_high_pressure(pressure);
     return next_state;
 }
+
+vcModesStates vcInhaleAbort(const elapsedMillis &breathTimer, const float &expirationTime, float &pressure, float &peepPressure, uint16_t &errors) {
+#ifdef SERIAL_DEBUG
+    Serial.print("VCInhaleAbort: ");
+    Serial.println(breathTimer);
+    Serial.print("Desired Exhale Time: ");
+    Serial.println(expirationTime);
+#endif //SERIAL_DEBUG
+
+    vcModeStates next_state = VCExhale;
+
+    // TODO: Set motor vlocity and desired position
+
+    pressure = readPressureSensor();
+    if (breathTimer > expirationTime) {
+        next_state = VCReset;
+        peepPressure = pressure;
+    }
+
+    errors |= check_peep(pressure);
+    return next_state;
+}
+
 
 vcModeStates vcPeak(elapsedMillis &breathTimer, const float &inspirationTime, float &pressure, float &plateauPressure, uint16_t &errors) {
 #ifdef SERIAL_DEBUG
@@ -94,10 +117,10 @@ vcModeStates vcExhale(const elapsedMillis &breathTimer, const float &expirationT
 
     vcModeStates next_state = VCExhale;
 
-    // TODO: Set motor vlocity and desired position
+    // TODO: Set motor velocity and desired position
 
     pressure = readPressureSensor();
-    if (breathTimer > expirationTime) {
+    if (expirationTime < breathTimer) {
         next_state = VCReset;
         peepPressure = pressure;
     }
@@ -116,21 +139,21 @@ vcModeStates vcReset() {
     // vcModeState = VCStart;
 }
 
-
-void run_vc_mode(vcModeStates current_state) {
-    // TODO: loop
+vcModeStates vc_mode_step(vcModeStates current_state) {
     switch(current_state) {
     case VCStart:
-        break;
+        return vcStart(breathTimer, tempPeakPressure);
     case VCInhaleCommand:
-        break;
+        return vcInhaleCommand();
     case VCInhale:
-        break;
+        return vcInhale(breathTimer, inspirationTime, tempPeakPressure, peakPreasure, pressure, errors);
     case VCInhaleAbort:
-        break;
+        return vcInhaleAbort();
     case VCPeak:
         break;
     case VCExhale:
+        break;
+    case VCExhaleCommand:
         break;
     case VCReset:
         break;
@@ -141,4 +164,6 @@ void run_vc_mode(vcModeStates current_state) {
 #endif //SERIAL_DEBUG
         break;
     }
+
+    return current_state;
 }
