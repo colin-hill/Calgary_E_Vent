@@ -3,14 +3,14 @@
 #include "Wire.h"
 
 
-//Begin User Defined Section---------------------------------------------------------------------------------------------
+//Begin User Defined Section----------------------------------------------------
 
 #define SERIAL_DEBUG //Comment this out if not debugging, used for visual confirmation of state changes
 #define NO_INPUT_DEBUG //Comment this out if not debugging, used to spoof input parameters at startup when no controls are present
 
 const char softwareVersion[] = "Version 1.0"; //In case we test a few versions?
 
-//IO Pin Definintions----------------------------------------------------------------------------------------------------
+//IO Pin Definintions-----------------------------------------------------------
 const int setParameterPin            = 25; //Pin for the set parameter button
 const int limitSwitchPin             = 23;
 const int alarmSwitchPin             = 24;
@@ -21,12 +21,12 @@ const int setBPMPotPin               = 7;
 const int setIERatioPotPin           = 8;
 const int setThresholdPressurePotPin = 9;
 const int setTVPotPin                = 6;
-//-----------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-//Alarm Sound definitions-----------------------------------------------------------------------------------------------
+//Alarm Sound definitions-------------------------------------------------------
 #define alarmSoundLength 0.5 //Seconds
 
-//LCD Denfinitions---------------------------------------------------------------------------------------------------
+//LCD Denfinitions--------------------------------------------------------------
 const int lcdEnable = 7;
 const int lcdRS     = 8;
 const int lcdDB4    = 9;
@@ -36,58 +36,59 @@ const int lcdDB7    = 12;
 
 //LiquidCrystal lcd(lcdRS, lcdEnable, lcdDB4, lcdDB5, lcdDB6, lcdDB7);
 
-//----------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-//ADC Definitions--------------------------------------------------------------------------------------------------------
+//ADC Definitions---------------------------------------------------------------
 const float maxADCVoltage = 5.0;  //ATMega standard max input voltage
 const int maxADCValue     = 1024; //ATMega standard 10-bit ADC
-//-----------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-//Pressure Sensor Definitions--------------------------------------------------------------------------------------------
+//Pressure Sensor Definitions---------------------------------------------------
 const float minPressureSensorVoltage = 0.0;
 const float maxPressureSensorVoltage = 5.0; // Assumed 0-5V sensor
+
 const float minPressure = 0.0; //Absolute psi,cmH20?
 const float maxPressure = 3.0; //Absolute psi, cmH20?
-//-----------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-//Potenitometer Definitions----------------------------------------------------------------------------------------------
+//Potenitometer Definitions-----------------------------------------------------
 const float bpmPotMaxVoltage = 5.0;
 const float ieRatioPotMaxVoltage = 5.0;
 const float tvPotMaxVoltage = 5.0;
 const float setThresholdPressurePotMaxVoltage = 5.0;
-//-----------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-//Breath Per Minute Definitions------------------------------------------------------------------------------------------
+//Breath Per Minute Definitions-------------------------------------------------
 const float minBPM = 10.0; //Breaths per Minute
 const float maxBPM = 40.0; //Breaths per Minute
-//-----------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-//Tidal Volume Definitions-----------------------------------------------------------------------------------------------
+//Tidal Volume Definitions------------------------------------------------------
 const float minTV = 0.0; //Tidal Volume (% of max)
 const float maxTV = 100.0; //Tidal Volume (% of max)
-//-----------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-//Inspiration Expiration Ratio Definitions-------------------------------------------------------------------------------
+//Inspiration Expiration Ratio Definitions--------------------------------------
 const float minIERatio = 1.0; //Inspiration to Expiration ratio 1:1
 const float maxIERatio = 4.0; //Inspiration to Expiration ratio 1:4
-//-----------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-//Threshold Pressure Definitions-----------------------------------------------------------------------------------------
+//Threshold Pressure Definitions------------------------------------------------
 const float minThresholdPressure = 1.0;
 const float maxThresholdPressure = 2.0;
-//-----------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-//Max & Min Pressures---------------------------------------------------------------------------------------------------
+//Max & Min Pressures-----------------------------------------------------------
 const float maxPeepPressure = 20.0; //cmH2O
 const float minPeepPressure = 0.0; //cmH2O
-//-----------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-//Breath hold time-------------------------------------------------------------------------------------------------------
+//Breath hold time--------------------------------------------------------------
 const float holdTime        = 0.25; //Seconds
 const float acThresholdTime = 0.5; //Seconds
 
-//End User Defined Section-----------------------------------------------------------------------------------------------
-//Useful Definitions and Macros------------------------------------------------------------------------------------------
+//End User Defined Section------------------------------------------------------
+//Useful Definitions and Macros-------------------------------------------------
 #define ACMODE true
 #define VCMODE false
 
@@ -102,10 +103,10 @@ const uint16_t DISCONNECT_ALARM     = 0x01 << 4;
 const uint16_t HIGH_TEMP_ALARM      = 0x01 << 5;
 const uint16_t APNEA_ALARM          = 0x01 << 6;
 const uint16_t DEVICE_FAILURE_ALARM = 0x01 << 7;
-//-----------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 //Function Definitions---------------------------------------------------------------------------------------------------
-void readPressureSensor(uint8_t funcPressureSensorPin, float &pressure);
+float readPressureSensor(uint8_t funcPressureSensorPin);
 void readPotentiometers(uint8_t thresholdPressurePotPin, uint8_t bpmPotPin, uint8_t ieRatioPotPin, uint8_t tvPotPin, volatile float &thresholdPressure, volatile float &bpm, volatile float &ieRatio, volatile float &tv);
 float voltageToPressureConversion(float sensorVoltage);
 float voltageToSetThresholdPressureConversion(float potVoltage);
@@ -171,7 +172,7 @@ float inspirationTime;
 float expirationTime;
 
 uint16_t errors = 0;
-//-----------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 //Timer Variables--------------------------------------------------------------------------------------------------------
 elapsedMillis paramChangeDebounceTimer;
@@ -187,34 +188,36 @@ elapsedMillis highTempAlarmTimer;
 elapsedMillis apneaAlarmTimer;
 elapsedMillis deviceFaiulureAlarmTimer;
 
-//-----------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 //Ease of use conversion factor------------------------------------------------------------------------------------------
 float adcReadingToVoltsFactor = maxADCVoltage / ((float)maxADCValue);
-//-----------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 //Enumerators------------------------------------------------------------------------------------------------------------
 machineStates machineState = Startup;
 acModeStates acModeState   = ACStart;
 vcModeStates vcModeState   = VCStart;
-//-----------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 void setup() {
 
 #ifdef SERIAL_DEBUG
     Serial.begin(9600);
-    Serial.println("StartUpInitiated");
 #endif //SERIAL_DEBUG
+
+    Serial.println("StartUpInitiated");
+
 
     //Pin Setup------------------------------------------------------------------------------------------------------------
     //Motor serial communications startup
     MotorSerial.begin(9600); //********
 
     //Potentiometer input pin setup
-    pinMode(setThresholdPressurePotPin, INPUT);
-    pinMode(setBPMPotPin, INPUT);
-    pinMode(setIERatioPotPin, INPUT);
-    pinMode(setTVPotPin, INPUT);
+    pinMode(setThresholdPressurePotPin , INPUT);
+    pinMode(setBPMPotPin               , INPUT);
+    pinMode(setIERatioPotPin           , INPUT);
+    pinMode(setTVPotPin                , INPUT);
 
     //Switch input pin setup
     pinMode(setParameterPin, INPUT);
@@ -350,7 +353,7 @@ void loop() {
             Serial.println(breathTimer);
 #endif //SERIAL_DEBUG
       
-            readPressureSensor(pressureSensorPin, pressure);
+            pressure = readPressureSensor(pressureSensorPin);
 
             if (breathTimer > acThresholdTime * 1000) {
                 acModeState = ACInhaleCommand;
@@ -363,7 +366,7 @@ void loop() {
                 breathTimer = 0;
                 tempPeakPressure = 0;
             }
-        }//-----------------------------------------------------------------------------------------------------------------------
+        }//------------------------------------------------------------------------------
         else if (acModeState == ACInhaleCommand) { //ACInhale Command
       
 #ifdef SERIAL_DEBUG
@@ -372,7 +375,7 @@ void loop() {
       
             //Set motor velocity and position********
             acModeState = ACInhale;
-        }//---------------------------------------------------------------------------------------------------------------------------
+        }//----------------------------------------------------------------------------------
         else if (acModeState == ACInhale) { //ACInhale-------------------------------------------------------------------------------------
 
 #ifdef SERIAL_DEBUG
@@ -384,7 +387,7 @@ void loop() {
 
             //Check motor position********
 
-            readPressureSensor(pressureSensorPin, pressure);
+            pressure = readPressureSensor(pressureSensorPin);
 
             if (pressure > tempPeakPressure) { //Update the peak pressure
                 tempPeakPressure = pressure;
@@ -399,7 +402,7 @@ void loop() {
             else if (pressure > maxPressure) {
                 errors |= HIGH_PRESSURE_ALARM;
             }
-        }//-----------------------------------------------------------------------------------------------------------------------
+        }//------------------------------------------------------------------------------
         else if (acModeState == ACPeak) { //ACPeak-----------------------------------------------------------------------------------------
 
 #ifdef SERIAL_DEBUG
@@ -411,7 +414,7 @@ void loop() {
       
             //Hold motor in position********
 
-            readPressureSensor(pressureSensorPin, pressure);
+            pressure = readPressureSensor(pressureSensorPin);
 
             if (breathTimer > holdTime * 1000) { //******** how and where is hold time defined, currently hard coded
                 acModeState = ACExhale;
@@ -421,7 +424,7 @@ void loop() {
             else if (pressure > maxPressure) {
                 errors |= HIGH_PRESSURE_ALARM;
             }
-        }//--------------------------------------------------------------------------------------------------------------------------
+        }//---------------------------------------------------------------------------------
         else if (acModeState == ACExhale) { //ACExhale---------------------------------------------------------------------------------------
 
 #ifdef SERIAL_DEBUG
@@ -433,13 +436,13 @@ void loop() {
       
             //Send motor to zero position********
   
-            readPressureSensor(pressureSensorPin,pressure);
+            pressure = readPressureSensor(pressureSensorPin);
 
             if (breathTimer > expirationTime * 1000) {
                 acModeState = ACReset;
                 peepPressure = pressure;
             }
-        }//--------------------------------------------------------------------------------------------------------------------------
+        }//---------------------------------------------------------------------------------
         else if (acModeState == ACReset) { //ACReset-----------------------------------------------------------------------------------------
 
 #ifdef SERIAL_DEBUG
@@ -470,7 +473,7 @@ void loop() {
             breathTimer = 0;
             vcModeState = VCInhaleCommand;
             tempPeakPressure = 0;
-        }//---------------------------------------------------------------------------------------------------------------------------
+        }//----------------------------------------------------------------------------------
         else if (vcModeState == VCInhaleCommand) { //VCInhaleCommand----------------------------------------------------------------------
 
 #ifdef SERIAL_DEBUG
@@ -480,7 +483,7 @@ void loop() {
             //Set motor speed and position
       
             vcModeState = VCInhale;
-        }//--------------------------------------------------------------------------------------------------------------------------------
+        }//---------------------------------------------------------------------------------------
         else if (vcModeState == VCInhale) { //VCInhale---------------------------------------------------------------------------------------------
 
 #ifdef SERIAL_DEBUG
@@ -508,7 +511,7 @@ void loop() {
             if (pressure > maxPressure) {
                 errors |= HIGH_PRESSURE_ALARM;
             }
-        }//-------------------------------------------------------------------------------------------------------------------------
+        }//--------------------------------------------------------------------------------
         else if (vcModeState == VCPeak) { //VCPeak------------------------------------------------------------------------------------------
 
 #ifdef SERIAL_DEBUG
@@ -531,7 +534,7 @@ void loop() {
             if (pressure > maxPressure) {
                 errors |= HIGH_PRESSURE_ALARM;
             }
-        }//------------------------------------------------------------------------------------------------------------------------
+        }//-------------------------------------------------------------------------------
         else if (vcModeState == VCExhale) { //VCExhale-------------------------------------------------------------------------------------
 
 #ifdef SERIAL_DEBUG
@@ -556,7 +559,7 @@ void loop() {
             else if (pressure < minPeepPressure) {
                 errors |= LOW_PEEP_ALARM;
             }
-        }//-------------------------------------------------------------------------------------------------------------------------
+        }//--------------------------------------------------------------------------------
         else if(vcModeState == VCReset){ //VCReset-----------------------------------------------------------------------------------
 
 #ifdef SERIAL_DEBUG
@@ -620,21 +623,14 @@ void loop() {
 
 //FUNCTIONS
 
-/*Function to read the pressure sensor
-  * Inputs:
-  *  -The pressure sensor pin
-  * Outputs:
-  *  -The pressure is output pass by reference
-  */
-void readPressureSensor(uint8_t funcPressureSensorPin, float &pressure){
-
-    uint16_t pressurePinADCReading = analogRead(pressureSensorPin);
-
-    float pressureSensorVoltage = pressurePinADCReading;
-
-    pressure = voltageToPressureConversion(pressureSensorVoltage);
-
-    return;
+/* Function to read the pressure sensor on the pressureSensorPin.
+ * Inputs: None.
+ * Outputs:
+ *  -The pressure is returned in a float
+ *    + TODO: Units?
+ */
+float readPressureSensor(){
+    return voltageToPressureConversion(analogRead(pressureSensorPin));
 }
 
 /*Function to read the potentiometer inputs
@@ -645,8 +641,7 @@ void readPressureSensor(uint8_t funcPressureSensorPin, float &pressure){
   *  -The TV potentiometer pin
   *  -Pointers to the threshold pressure, BPM, IERatio and TV variables
   */
-void readPotentiometers(uint8_t thresholdPressurePotPin, uint8_t bpmPotPin, uint8_t ieRatioPotPin, uint8_t tvPotPin, volatile float &thresholdPressure, volatile float &bpm, volatile float &ieRatio, volatile float &tv){
-   
+void readPotentiometers(uint8_t thresholdPressurePotPin, uint8_t bpmPotPin, uint8_t ieRatioPotPin, uint8_t tvPotPin, volatile float &thresholdPressure, volatile float &bpm, volatile float &ieRatio, volatile float &tv) {
     uint16_t setThresholdPressurePotPinADCReading = analogRead(thresholdPressurePotPin);
     uint16_t setBPMPotPinADCReading = analogRead(bpmPotPin);
     uint16_t setIERatioPotPinADCReading = analogRead(ieRatioPotPin);
@@ -672,13 +667,8 @@ void readPotentiometers(uint8_t thresholdPressurePotPin, uint8_t bpmPotPin, uint
   Outputs:
   -pressure in (psi? cmH2O)
 */
-float voltageToPressureConversion(float sensorVoltage) {
-
-    float pressure = (maxPressure - minPressure) / (maxPressureSensorVoltage - minPressureSensorVoltage) * sensorVoltage;
-
-    pressure += minPressure;
-
-    return pressure;
+float voltageToPressureConversion(const float sensorVoltage) {
+    return (maxPressure - minPressure) / (maxPressureSensorVoltage - minPressureSensorVoltage) * sensorVoltage + minPressure;
 }
 
 /*Function to convert the pressure potentiometer voltage to a desired set pressure
@@ -688,14 +678,8 @@ float voltageToPressureConversion(float sensorVoltage) {
   Outputs:
   -setPressure (in psi? cmH2O?)
 */
-float voltageToSetThresholdPressureConversion(float potVoltage) {
-
-    float setPressure = (maxThresholdPressure - minThresholdPressure) / (setThresholdPressurePotMaxVoltage - 0.0) * potVoltage;
-
-    setPressure += minThresholdPressure;
-
-    return setPressure;
-
+float voltageToSetThresholdPressureConversion(const float potVoltage) {
+    return (maxThresholdPressure - minThresholdPressure) / setThresholdPressurePotMaxVoltage * potVoltage + minThresholdPressure;
 }
 
 /*Function to convert the breaths per minute potentiometer voltage to a desired breaths per minute
@@ -705,13 +689,8 @@ float voltageToSetThresholdPressureConversion(float potVoltage) {
   * Outputs:
   *    -set breaths per mintue
   */
-float voltageToBPMConversion(float potVoltage){
-
-    float BPM = (maxBPM - minBPM) / (bpmPotMaxVoltage - 0.0) * potVoltage;
-
-    BPM += minBPM;
-
-    return BPM;
+float voltageToBPMConversion(const float potVoltage){
+    return (maxBPM - minBPM) / bpmPotMaxVoltage * potVoltage + minBPM;
 }
 
 /*Function to convert inspiration - expiration ratio potentiometer voltage to a desired IE ratio
@@ -721,13 +700,8 @@ float voltageToBPMConversion(float potVoltage){
   * Outputs:
   *    -set IE ratio
   */
-float voltageToIERatioConversion(float potVoltage){
-
-    float IERatio = (maxIERatio - minIERatio) / (ieRatioPotMaxVoltage - 0.0) * potVoltage;
-
-    IERatio += minIERatio;
-
-    return IERatio;
+float voltageToIERatioConversion(const float potVoltage){
+    return (maxIERatio - minIERatio) / ieRatioPotMaxVoltage * potVoltage + minIERation;
 }
 
 /*Function to convert tidal volume percentage potentiometer voltage to a desired tidal volume percentage
@@ -737,13 +711,8 @@ float voltageToIERatioConversion(float potVoltage){
   * Outputs:
   *    -set tidal volume percentage
   */
-float voltageToTVConversion(float potVoltage){
-
-    float TV = (maxTV - minTV) / (tvPotMaxVoltage - 0.0) * potVoltage;
-
-    TV += minTV;
-
-    return TV;
+float voltageToTVConversion(const float potVoltage){
+    return (maxTV - minTV) / tvPotMaxVoltage * potVoltage + minTV;
 }
 
 void parameterChangeButtonISR() {
@@ -763,7 +732,7 @@ void parameterChangeButtonISR() {
     }
 }
 
-//------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------
 //LCD Support Functions...here be dragons...
 
 
