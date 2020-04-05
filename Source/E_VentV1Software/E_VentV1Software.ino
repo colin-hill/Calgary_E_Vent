@@ -7,6 +7,7 @@
 #include "ACMode.h"
 #include "VCMode.h"
 #include "breathing.h"
+#include "conversions.h"
 #include "MachineStates.h"
 
 //Begin User Defined Section----------------------------------------------------
@@ -199,10 +200,9 @@ void setup() {
 }
 
 void loop() {
-  
     //Update LCD*********
     cli(); //Prevent interrupts from occuring
-    if (paramChange == true) {
+    if (paramChange) {
         sei();
         readPotentiometers(SET_THRESHOLD_PRESSURE_POT_PIN, setBPMPotPin, setIERatioPotPin, setTVPotPin, tempThresholdPressure, tempBPM, tempIERatio, tempTV);
 
@@ -219,7 +219,7 @@ void loop() {
 
     //Beginning of state machine code
 
-    if (machineState == BreathLoopStart) { //BreathLoopStart---------------------------------------------------------------------------------
+    if (BreathLoopStart == machineState) { //BreathLoopStart---------------------------------------------------------------------------------
     
 #ifdef SERIAL_DEBUG
         Serial.println("Breath Loop Start");
@@ -244,8 +244,8 @@ void loop() {
         }
     }//----------------------------------------------------------------------------------------------------------------------
     //ACMode-----------------------------------------------------------------------------------------------------------------
-    else if (machineState == ACMode) { //Check for ACMode
-        if (acModeState == 0) { //ACStart
+    else if (ACMode == machineState) { //Check for ACMode
+        if (ACStart == acModeState) { //ACStart
 #ifdef SERIAL_DEBUG
             Serial.println("ACStart");
 #endif //SERIAL_DEBUG
@@ -253,7 +253,7 @@ void loop() {
             //Send motor to zero point******* (Consider watchdog timer for each state)
             acModeState = ACInhaleWait;
         }
-        if (acModeState == ACInhaleWait) { //ACInhaleWait-------------------------------------------------------------------------------------
+        if (ACInhaleWait == acModeState) { //ACInhaleWait-------------------------------------------------------------------------------------
       
 #ifdef SERIAL_DEBUG
             Serial.print("ACInhaleWait: ");
@@ -262,7 +262,7 @@ void loop() {
       
             pressure = readPressureSensor();
 
-            if (breathTimer > AC_THRESHOLD_TIME * 1000) {
+            if (breathTimer > (AC_THRESHOLD_TIME * S_TO_MS)) {
                 acModeState = ACInhaleCommand;
                 errors |= APNEA_ALARM;
                 breathTimer = 0;
@@ -274,7 +274,7 @@ void loop() {
                 tempPeakPressure = 0;
             }
         }//------------------------------------------------------------------------------
-        else if (acModeState == ACInhaleCommand) { //ACInhale Command
+        else if (ACInhaleCommand == acModeState) { //ACInhale Command
       
 #ifdef SERIAL_DEBUG
             Serial.print("ACInhaleCommand: ");
@@ -283,7 +283,7 @@ void loop() {
             //Set motor velocity and position********
             acModeState = ACInhale;
         }//----------------------------------------------------------------------------------
-        else if (acModeState == ACInhale) { //ACInhale-------------------------------------------------------------------------------------
+        else if (ACInhale == acModeState) { //ACInhale-------------------------------------------------------------------------------------
 
 #ifdef SERIAL_DEBUG
             Serial.print("ACInhale: ");
@@ -301,7 +301,7 @@ void loop() {
             }
 
             // TODO: nervous about this else if for alarm.
-            if (breathTimer > inspirationTime * 1000) {
+            if (breathTimer > (inspirationTime * S_TO_MS)) {
                 breathTimer = 0;
                 acModeState = ACPeak;
                 peakPressure = tempPeakPressure;
@@ -311,7 +311,7 @@ void loop() {
                 errors |= HIGH_PRESSURE_ALARM;
             }
         }//------------------------------------------------------------------------------
-        else if (acModeState == ACPeak) { //ACPeak-----------------------------------------------------------------------------------------
+        else if (ACPeak == acModeState) { //ACPeak-----------------------------------------------------------------------------------------
 
 #ifdef SERIAL_DEBUG
             Serial.print("ACPeak: ");
@@ -324,7 +324,7 @@ void loop() {
 
             pressure = readPressureSensor();
 
-            if (breathTimer > HOLD_TIME * 1000) { //******** how and where is hold time defined, currently hard coded
+            if (breathTimer > (HOLD_TIME * S_TO_MS)) { //******** how and where is hold time defined, currently hard coded
                 acModeState = ACExhale;
                 plateauPressure = pressure;
                 breathTimer = 0;
@@ -333,7 +333,7 @@ void loop() {
                 errors |= HIGH_PRESSURE_ALARM;
             }
         }//---------------------------------------------------------------------------------
-        else if (acModeState == ACExhale) { //ACExhale---------------------------------------------------------------------------------------
+        else if (ACExhale == acModeState) { //ACExhale---------------------------------------------------------------------------------------
 
 #ifdef SERIAL_DEBUG
             Serial.print("ACExhale: ");
@@ -346,32 +346,26 @@ void loop() {
   
             pressure = readPressureSensor();
 
-            if (breathTimer > expirationTime * 1000) {
+            if (breathTimer > (expirationTime * S_TO_MS)) {
                 acModeState = ACReset;
                 peepPressure = pressure;
             }
         }//---------------------------------------------------------------------------------
-        else if (acModeState == ACReset) { //ACReset-----------------------------------------------------------------------------------------
+        else if (ACReset == acModeState) { //ACReset-----------------------------------------------------------------------------------------
 
 #ifdef SERIAL_DEBUG
             Serial.print("ACReset");
 #endif //SERIAL_DEBUG
 
             pressure = readPressureSensor();
-
-            if (pressure > MAX_PEEP_PRESSURE) {
-                errors |= HIGH_PEEP_ALARM;
-            }
-            else if (pressure < MIN_PEEP_PRESSURE) {
-                errors |= LOW_PEEP_ALARM;
-            }
+            errors |= check_peep(pressure);
             breathTimer = 0;
 
             acModeState = ACStart;
             machineState = BreathLoopStart;
         }
     }//End ACMode
-    else if (machineState == VCMode) {
+    else if (VCMode == machineState) {
         vc_mode_step(vcModeState, breathTimer, inspirationTime, expirationTime,
                      tempPeakPressure, peakPressure, pressure, peepPressure,
                      plateauPressure, errors, machineState);
@@ -413,15 +407,15 @@ void readPotentiometers(uint8_t thresholdPressurePotPin, uint8_t bpmPotPin, uint
 void parameterChangeButtonISR() {
 
     if(paramChangeDebounceTimer > 0.1*1000){
-        if(paramChange == false){
-            paramChange = true;
-        }
-        else {
+        if(paramChange){
             paramChange = false;
             internalThresholdPressure = tempThresholdPressure;
             internalBPM = tempBPM;
             internalIERatio  = tempIERatio;
             internalTV = tempTV;
+        }
+        else {
+            paramChange = true;
         }
         paramChangeDebounceTimer = 0;
     }
