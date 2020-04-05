@@ -25,12 +25,14 @@ vcModeStates vcInhaleCommand(void) {
 #endif //SERIAL_DEBUG
 
     // TODO: Set motor speed and position
-    // TODO: Reset timer
+    // TODO: Reset timer (does this happen here as well as vcStart?)
 
     return VCInhale;
 }
 
-vcModeStates vcInhale(elapsedMillis &breathTimer, const float &inspirationTime, float &tempPeakPressure, float &peakPressure, float &pressure, uint16_t &errors) {
+vcModeStates vcInhale(elapsedMillis &breathTimer, const float &inspirationTime,
+                      float &tempPeakPressure, float &peakPressure,
+                      float &pressure, uint16_t &errors) {
 #ifdef SERIAL_DEBUG
     Serial.print("VCInhale: ");
     Serial.println(breathTimer);
@@ -50,7 +52,7 @@ vcModeStates vcInhale(elapsedMillis &breathTimer, const float &inspirationTime, 
         tempPeakPressure = pressure;
     }
 
-    if(breathTimer > inspirationTime*1000){
+    if(breathTimer > (inspirationTime * S_TO_MS)){
         next_state = VCPeak;
         breathTimer = 0;
         peakPressure = tempPeakPressure;
@@ -58,10 +60,19 @@ vcModeStates vcInhale(elapsedMillis &breathTimer, const float &inspirationTime, 
     }
 
     errors |= check_high_pressure(pressure);
+
+    // If there's high pressure, abort inhale.
+    // TODO: will this state and VCInhaleAbort raise alarm? Is that fine?
+    if (errors & HIGH_PRESSURE_ALARM) {
+        next_state = VCInhaleAbort;
+    }
+
     return next_state;
 }
 
-vcModeStates vcInhaleAbort(const elapsedMillis &breathTimer, const float &expirationTime, float &pressure, float &peepPressure, uint16_t &errors) {
+vcModeStates vcInhaleAbort(const elapsedMillis &breathTimer,
+                           const float &expirationTime, float &pressure,
+                           float &peepPressure, uint16_t &errors) {
 #ifdef SERIAL_DEBUG
     Serial.print("VCInhaleAbort: ");
     Serial.println(breathTimer);
@@ -69,23 +80,19 @@ vcModeStates vcInhaleAbort(const elapsedMillis &breathTimer, const float &expira
     Serial.println(expirationTime);
 #endif //SERIAL_DEBUG
 
-    vcModeStates next_state = VCExhale;
-
-    // TODO: Set motor vlocity and desired position
-
-    pressure = readPressureSensor();
-    if (breathTimer > expirationTime) {
-        next_state = VCReset;
-        peepPressure = pressure;
-    }
-
-    errors |= check_peep(pressure);
-    return next_state;
+    // TODO: Set motor velocity and desired position
+    // TODO: Check if this is what is meant by resetting timer
+    // TODO: Do we need to do this if vcExhale is supposed to reset the timer (but currently doesn't!)
+    breathTimer = 0;
+    errors |= check_high_pressure(pressure);
+    return VCExhale;
 }
 
 
 // Unused parameter warning is due to inspirationTime only being used for debug information.
-vcModeStates vcPeak(elapsedMillis &breathTimer, const float &inspirationTime, float &pressure, float &plateauPressure, uint16_t &errors) {
+vcModeStates vcPeak(elapsedMillis &breathTimer, const float &inspirationTime,
+                    float &pressure, float &plateauPressure,
+                    uint16_t &errors) {
 #ifdef SERIAL_DEBUG
     Serial.print("VCPeak: ");
     Serial.println(breathTimer);
@@ -98,7 +105,7 @@ vcModeStates vcPeak(elapsedMillis &breathTimer, const float &inspirationTime, fl
     // TODO: Hold motor in position********
 
     pressure = readPressureSensor();
-    if(breathTimer > HOLD_TIME*1000){
+    if(breathTimer > (HOLD_TIME * S_TO_MS)){
         next_state  = VCExhale;
         breathTimer = 0;
         plateauPressure = pressure;
@@ -108,7 +115,9 @@ vcModeStates vcPeak(elapsedMillis &breathTimer, const float &inspirationTime, fl
     return next_state;
 }
 
-vcModeStates vcExhale(const elapsedMillis &breathTimer, const float &expirationTime, float &pressure, float &peepPressure, uint16_t &errors) {
+vcModeStates vcExhale(const elapsedMillis &breathTimer,
+                      const float &expirationTime, float &pressure,
+                      float &peepPressure, uint16_t &errors) {
 #ifdef SERIAL_DEBUG
     Serial.print("VCExhale: ");
     Serial.println(breathTimer);
@@ -139,7 +148,13 @@ vcModeStates vcReset(machineStates &machineState) {
     return VCStart;
 }
 
-vcModeStates vc_mode_step(vcModeStates current_state, elapsedMillis &breathTimer, const float &inspirationTime, const float &expirationTime, float &tempPeakPressure, float &peakPressure, float &pressure, float &peepPressure, float &plateauPressure, uint16_t &errors, machineStates &machineState) {
+vcModeStates vc_mode_step(vcModeStates current_state,
+                          elapsedMillis &breathTimer,
+                          const float &inspirationTime,
+                          const float &expirationTime, float &tempPeakPressure,
+                          float &peakPressure, float &pressure,
+                          float &peepPressure, float &plateauPressure,
+                          uint16_t &errors, machineStates &machineState) {
     switch(current_state) {
     case VCStart:
         return vcStart(breathTimer, tempPeakPressure);
