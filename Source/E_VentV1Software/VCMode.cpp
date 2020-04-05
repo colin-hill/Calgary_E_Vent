@@ -3,7 +3,9 @@
 #include "alarms.h"
 #include "pressure.h"
 #include "breathing.h"
+#include "conversions.h"
 #include "elapsedMillis.h"
+
 
 // No globals here. Want these components to be testable in isolation.
 
