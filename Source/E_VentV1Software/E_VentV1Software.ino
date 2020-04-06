@@ -234,10 +234,10 @@ void loop() {
         inspirationTime = singleBreathTime / (1 + loopIERatio);
         expirationTime = singleBreathTime - inspirationTime;
 
-        if(digitalRead(modeSwitchPin) == ACMODE){
+        if (digitalRead(modeSwitchPin) == ACMODE) {
             machineState = ACMode;
         }
-        else{
+        else {
             machineState = VCMode;
         }
     }
