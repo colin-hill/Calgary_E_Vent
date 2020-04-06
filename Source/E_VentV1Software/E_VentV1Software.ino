@@ -4,6 +4,7 @@
 #include <LiquidCrystal.h>
 #include "Wire.h"
 
+#include "adc.h"
 #include "elapsedMillis.h"
 #include "pressure.h"
 #include "alarms.h"
@@ -43,8 +44,6 @@ const int lcdDB7    = 12;
 //------------------------------------------------------------------------------
 
 //ADC Definitions---------------------------------------------------------------
-const float maxADCVoltage = 5.0;  //ATMega standard max input voltage
-const int maxADCValue     = 1024; //ATMega standard 10-bit ADC
 //------------------------------------------------------------------------------
 
 //End User Defined Section------------------------------------------------------
@@ -102,7 +101,7 @@ elapsedMillis breathTimer;
 //------------------------------------------------------------------------------
 
 //Ease of use conversion factor------------------------------------------------------------------------------------------
-const float ADC_READING_TO_VOLTS_FACTOR = maxADCVoltage / ((float)maxADCValue);
+
 //------------------------------------------------------------------------------
 
 //Enumerators------------------------------------------------------------------------------------------------------------
@@ -120,30 +119,30 @@ void setup() {
     Serial.println("StartUpInitiated");
 
 
-    //Pin Setup------------------------------------------------------------------------------------------------------------
-    //Motor serial communications startup
+    // Pin Setup------------------------------------------------------------------------------------------------------------
+    // Motor serial communications startup
     MotorSerial.begin(9600); //********
 
-    //Potentiometer input pin setup
+    // Potentiometer input pin setup
     pinMode(SET_THRESHOLD_PRESSURE_POT_PIN , INPUT);
     pinMode(setBPMPotPin               , INPUT);
     pinMode(setIERatioPotPin           , INPUT);
     pinMode(setTVPotPin                , INPUT);
 
-    //Switch input pin setup
+    // Switch input pin setup
     pinMode(setParameterPin, INPUT);
     pinMode(limitSwitchPin, INPUT);
     pinMode(alarmSwitchPin, INPUT);
 
-    //Pressure sensor input pin setup
+    // Pressure sensor input pin setup
     pinMode(PRESSURE_SENSOR_PIN, INPUT);
 
     pinMode(ALARM_BUZZER_PIN,OUTPUT);
 
-    //Parameter change interrupt setup
+    // Parameter change interrupt setup
     attachInterrupt(digitalPinToInterrupt(setParameterPin),parameterChangeButtonISR,FALLING);
 
-    //LCD Setup
+    // LCD Setup
     //lcd.begin(20, 4); //set number of columns and rows
 
     readPotentiometers(SET_THRESHOLD_PRESSURE_POT_PIN, setBPMPotPin, setIERatioPotPin, setTVPotPin, internalThresholdPressure, internalBPM, internalIERatio, internalTV);
@@ -166,9 +165,6 @@ void setup() {
         sei();
         //LCD Display Internal Variables
         //displayParameterScreen(internalTV, internalBPM, internalIERatio, internalThresholdPressure);
-
-
-
 
         readPotentiometers(SET_THRESHOLD_PRESSURE_POT_PIN, setBPMPotPin, setIERatioPotPin, setTVPotPin, internalThresholdPressure, internalBPM, internalIERatio, internalTV);
         cli();
@@ -245,19 +241,18 @@ void loop() {
         else{
             machineState = VCMode;
         }
-    }//----------------------------------------------------------------------------------------------------------------------
-    //ACMode-----------------------------------------------------------------------------------------------------------------
-    else if (ACMode == machineState) { //Check for ACMode
+    }
+    else if (ACMode == machineState) {
         acModeState = ac_mode_step(acModeState, breathTimer, inspirationTime, expirationTime,
                                    tempPeakPressure, peakPressure, pressure, peepPressure,
                                    plateauPressure, loopThresholdPressure, errors, machineState);
-    }//End ACMode
+    }
     else if (VCMode == machineState) {
         vcModeState = vc_mode_step(vcModeState, breathTimer, inspirationTime, expirationTime,
                                    tempPeakPressure, peakPressure, pressure, peepPressure,
                                    plateauPressure, errors, machineState);
     }
-    
+
     handle_alarms(errors);
 }
 
