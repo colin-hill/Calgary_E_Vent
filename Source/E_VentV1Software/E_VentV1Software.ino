@@ -18,7 +18,7 @@
 //#define SERIAL_DEBUG //Comment this out if not debugging, used for visual confirmation of state changes
 //#define NO_INPUT_DEBUG //Comment this out if not debugging, used to spoof input parameters at startup when no controls are present
 
-const char softwareVersion[] = "Version 1.0"; //In case we test a few versions?
+const char softwareVersion[] = "VERSION 0.1";
 
 //IO Pin Definintions-----------------------------------------------------------
 const int setParameterPin  = 25; //Pin for the set parameter button

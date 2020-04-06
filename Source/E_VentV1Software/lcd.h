@@ -13,59 +13,65 @@
 const int LCD_COLUMNS = 20;
 const int LCD_ROWS = 4;
 
-//TODO: add the rest of the functions
 
+//ALARM DISPLAY FUNCTIONS---------------------------------------------------------------------------------------------------------------------------------------------
 
-//Alarm Display Functions
-void displayNoAlarm(LiquidCrystal &displayName, float highPressure, float lowPressure, float highPEEP, float lowPEEP, float lowPlateau, int lcdColumns);
+//Alarm Display
+void displayNoAlarm(LiquidCrystal &displayName, float highPressure, float lowPressure, float highPEEP, float lowPEEP, float lowPlateau, const int LCD_COLUMNS);
 
-void displayHighPressureAlarm(LiquidCrystal &displayName, float pressureMeasurement, int lcdColumns);
+void displayHighPressureAlarm(LiquidCrystal &displayName, float pressureMeasurement, const int LCD_COLUMNS);
 
-void displayLowPressureAlarm(LiquidCrystal &displayName, float pressureMeasurement, int lcdColumns);
+void displayLowPressureAlarm(LiquidCrystal &displayName, float pressureMeasurement, const int LCD_COLUMNS);
 
-void displayHighPEEPAlarm(LiquidCrystal &displayName, float pressureMeasurement, int lcdColumns);
+void displayHighPEEPAlarm(LiquidCrystal &displayName, float pressureMeasurement, const int LCD_COLUMNS);
 
-void displayLowPEEPAlarm(LiquidCrystal &displayName, float pressureMeasurement, int lcdColumns);
+void displayLowPEEPAlarm(LiquidCrystal &displayName, float pressureMeasurement, const int LCD_COLUMNS);
 
 void displayDisconnectAlarm(LiquidCrystal &displayName);
 
-void displayTemperatureAlarm(LiquidCrystal &displayName, float temperatureMeasurement, int lcdColumns);
+void displayTemperatureAlarm(LiquidCrystal &displayName, float temperatureMeasurement, const int LCD_COLUMNS);
 
 void displayApneaAlarm(LiquidCrystal &displayName); //Currently will not be used
 
 void displayDeviceFailureAlarm(LiquidCrystal &displayName);
 
+//Alarm setpoint change 
+void displayHighPressureChange(LiquidCrystal &displayName, float tempHighPressure, const int LCD_COLUMNS);
 
-//Alarm setpoint change functions
+void displayLowPressureChange(LiquidCrystal &displayName, float tempHighPressure, const int LCD_COLUMNS);
 
-void displayHighPressureChange(LiquidCrystal &displayName, float tempHighPressure, int lcdColumns);
+void displayHighPEEPChange(LiquidCrystal &displayName, float tempHighPressure, const int LCD_COLUMNS);
 
-void displayLowPressureChange(LiquidCrystal &displayName, float tempHighPressure, int lcdColumns);
+void displayLowPEEPChange(LiquidCrystal &displayName, float tempHighPressure, const int LCD_COLUMNS);
 
-void displayHighPEEPChange(LiquidCrystal &displayName, float tempHighPressure, int lcdColumns);
+void dipslayLowPlateauChange(LiquidCrystal &displayName, float tempHighPressure, const int LCD_COLUMNS);
 
-void displayLowPEEPChange(LiquidCrystal &displayName, float tempHighPressure, int lcdColumns);
-
-void dipslayLowPlateauChange(LiquidCrystal &displayName, float tempHighPressure, int lcdColumns);
-
-
-//Parameter Display Functions
-
-//TODO
+//END OF ALARM DISPLAY FUNCTIONS-------------------------------------------------------------------------------------------------------------------------------------------
 
 
 
+//PARAMETER DISPLAY FUNCTIONS----------------------------------------------------------------------------------------------------------------------------------------------
 
-//Parameter Screen change function
-void displayTVChange(LiquidCrystal &displayName, float tempTV, int lcdColumns);
+//Parameter Display
 
-void displayBPMChange(LiquidCrystal &displayName, float tempBPM, int lcdColumns);
+void displayVentilationParameters(LiquidCrystal &displayName, machineStates machineState, vcModeStates vcState , acModeStates acState, float breathsPerMinute, float thresholdPressure, float tidalVolume, float inspirationTime, float inspirationPause, float measuredPIP, float measuredPlateau, const int LCD_COLUMNS);
 
-void displayInspirationTimeChange(LiquidCrystal &displayName, float tempIT, int lcdColumns);
+void displayStartupScreen(LiquidCrystal &displayName, const char softwareVersion[], const int LCD_COLUMNS); //TODO fix warning
 
-void displayPauseTimeChange(LiquidCrystal &displayName, float tempPauseTime, int lcdColumns);
+void displayHomingScreen(LiquidCrystal &displayName);
 
-void displayThresholdPressureChange(LiquidCrystal &displayName, float tempThresholdPressure, int lcdColumns);
+//Parameter setpoint change
+void displayTVChange(LiquidCrystal &displayName, float tempTV, const int LCD_COLUMNS);
+
+void displayBPMChange(LiquidCrystal &displayName, float tempBPM, const int LCD_COLUMNS);
+
+void displayInspirationTimeChange(LiquidCrystal &displayName, float tempIT, const int LCD_COLUMNS);
+
+void displayPauseTimeChange(LiquidCrystal &displayName, float tempPauseTime, const int LCD_COLUMNS);
+
+void displayThresholdPressureChange(LiquidCrystal &displayName, float tempThresholdPressure, const int LCD_COLUMNS);
+
+//END OF PARAMETER DISPLAY FUNCTIONS--------------------------------------------------------------------------------------------------------------------------------------------
 
 
 //Helper Functions
@@ -77,5 +83,9 @@ char machineStateCodeAssignment(machineStates machineState);
 int vcCodeAssignment(vcModeStates vcState);
 
 int acCodeAssignment(acModeStates acState);
+
+int getFirstDigitPastDecimal(float realNumber);
+
+int getSecondDigitPastDecimal(float realNumber);
 
 #endif
