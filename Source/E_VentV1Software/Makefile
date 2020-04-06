@@ -16,3 +16,8 @@ LiquidCrystal: arduino_core_avr
 
 .PHONY: libraries
 libraries: LiquidCrystal
+
+.PHONY: clean
+clean:
+	rm -f *\.hex
+	rm -f *\.elf
