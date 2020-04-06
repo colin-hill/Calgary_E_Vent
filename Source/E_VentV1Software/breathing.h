@@ -4,14 +4,19 @@
 #ifndef breathing_h
 #define breathing_h
 
+// Threshold Pressure Definitions--------------------------------------------------
+const float MIN_THRESHOLD_PRESSURE = 1.0; //cmH2O
+const float MAX_THRESHOLD_PRESSURE = 2.0; //cmH2O
+//-------------------------------------------------------------------------------
+
 // Breath Per Minute Definitions-------------------------------------------------
 const float MIN_BPM = 10.0; //Breaths per Minute
 const float MAX_BPM = 40.0; //Breaths per Minute
 //------------------------------------------------------------------------------
 
 // Tidal Volume Definitions------------------------------------------------------
-const float MIN_TV = 0.0; //Tidal Volume (% of max)
-const float MAX_TV = 100.0; //Tidal Volume (% of max)
+const float MIN_TIDAL_VOLUME = 0.0; //Tidal Volume (% of max)
+const float MAX_TIDAL_VOLUME = 100.0; //Tidal Volume (% of max)
 //------------------------------------------------------------------------------
 
 // Inspiration Expiration Ratio Definitions--------------------------------------

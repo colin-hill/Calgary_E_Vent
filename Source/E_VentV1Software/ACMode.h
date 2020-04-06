@@ -20,6 +20,7 @@ enum acModeStates {
                    ACInhale,
                    ACInhaleAbort,
                    ACPeak,
+                   ACExhaleCommand,
                    ACExhale,
                    ACReset
 };

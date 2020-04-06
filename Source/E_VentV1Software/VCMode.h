@@ -18,6 +18,7 @@ enum vcModeStates {
                    VCInhaleCommand,
                    VCInhaleAbort,
                    VCPeak,
+                   VCExhaleCommand,
                    VCExhale,
                    VCReset
 };
@@ -51,6 +52,8 @@ vcModeStates vcInhale(elapsedMillis &breathTimer, const float &inspirationTime, 
 vcModeStates vcInhaleAbort(elapsedMillis &breathTimer, const float &expirationTime, float &pressure, uint16_t &errors);
 
 vcModeStates vcPeak(elapsedMillis &breathTimer, const float &inspirationTime, float &pressure, float &plateauPressure, uint16_t &errors);
+
+vcModeStates vcExhaleCommand(void);
 
 vcModeStates vcExhale(const elapsedMillis &breathTimer, const float &expirationTime, float &pressure, float &peepPressure, uint16_t &errors);
 
