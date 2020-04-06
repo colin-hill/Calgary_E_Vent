@@ -158,7 +158,7 @@ void setup() {
     internalIERatio = 4;
     internalTV = 100;
 #endif //NO_INPUT_DEBUG
-    
+
     cli(); //Turn off ointerrupts before reading paramChange
     while (paramChange == false) {
 
@@ -219,11 +219,10 @@ void loop() {
     //Beginning of state machine code
 
     if (BreathLoopStart == machineState) { //BreathLoopStart---------------------------------------------------------------------------------
-    
 #ifdef SERIAL_DEBUG
         Serial.println("Breath Loop Start");
 #endif //SERIAL_DEBUG
-    
+
         cli();
         loopThresholdPressure = internalThresholdPressure;
         loopBPM = internalBPM;
@@ -234,7 +233,7 @@ void loop() {
         singleBreathTime = 60.0/loopBPM;
         inspirationTime = singleBreathTime / (1 + loopIERatio);
         expirationTime = singleBreathTime - inspirationTime;
-    
+
         if(digitalRead(modeSwitchPin) == ACMODE){
             machineState = ACMode;
         }
