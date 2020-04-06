@@ -1,4 +1,3 @@
-#define SERIAL_DEBUG
 #include "VCMode.h"
 
 #include "alarms.h"
@@ -21,6 +20,7 @@ vcModeStates vcStart(elapsedMillis &breathTimer, float &tempPeakPressure) {
 
     return VCInhaleCommand;
 }
+
 
 vcModeStates vcInhaleCommand(void) {
 #ifdef SERIAL_DEBUG
@@ -74,6 +74,7 @@ vcModeStates vcInhale(elapsedMillis &breathTimer, const float &inspirationTime,
     return next_state;
 }
 
+
 // Unused parameter warning for expirationTime due to SERIAL_DEBUG
 vcModeStates vcInhaleAbort(elapsedMillis &breathTimer,
                            const float &expirationTime, float &pressure,
@@ -121,6 +122,7 @@ vcModeStates vcPeak(elapsedMillis &breathTimer, const float &inspirationTime,
     return next_state;
 }
 
+
 vcModeStates vcExhale(const elapsedMillis &breathTimer,
                       const float &expirationTime, float &pressure,
                       float &peepPressure, uint16_t &errors) {
@@ -145,6 +147,8 @@ vcModeStates vcExhale(const elapsedMillis &breathTimer,
     return next_state;
 }
 
+
+// TODO: should this reset timers and stuff like acReset?
 vcModeStates vcReset(machineStates &machineState) {
 #ifdef SERIAL_DEBUG
     Serial.println("VCReset");
@@ -153,6 +157,7 @@ vcModeStates vcReset(machineStates &machineState) {
     machineState = BreathLoopStart;
     return VCStart;
 }
+
 
 vcModeStates vc_mode_step(vcModeStates current_state,
                           elapsedMillis &breathTimer,
@@ -176,7 +181,6 @@ vcModeStates vc_mode_step(vcModeStates current_state,
         return vcExhale(breathTimer, expirationTime, pressure, peepPressure, errors);
     case VCReset:
         return vcReset(machineState);
-        break;
     default:
         // Should not happen
 #ifdef SERIAL_DEBUG
