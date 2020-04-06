@@ -121,6 +121,17 @@ vcModeStates vcPeak(elapsedMillis &breathTimer, const float &inspirationTime,
     return next_state;
 }
 
+vcModeStates vcExhaleCommand(void) {
+#ifdef SERIAL_DEBUG
+    Serial.println("VCExhaleCommand");
+#endif //SERIAL_DEBUG
+
+    // TODO: Set motor speed and position
+    // TODO: Reset timer (does this happen here as well as vcStart?)
+
+    return VCInhale;
+}
+
 vcModeStates vcExhale(const elapsedMillis &breathTimer,
                       const float &expirationTime, float &pressure,
                       float &peepPressure, uint16_t &errors) {

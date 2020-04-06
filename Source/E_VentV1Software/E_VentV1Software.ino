@@ -52,7 +52,7 @@ const int maxADCValue     = 1024; //ATMega standard 10-bit ADC
 #define ACMODE true
 #define VCMODE false
 
-#define MotorSerial Serial1
+//#define MotorSerial Serial1
 
 //Function Definitions---------------------------------------------------------------------------------------------------
 void readPotentiometers(uint8_t thresholdPressurePotPin, uint8_t bpmPotPin, uint8_t ieRatioPotPin, uint8_t tvPotPin, volatile float &thresholdPressure, volatile float &bpm, volatile float &ieRatio, volatile float &tv);
@@ -122,7 +122,7 @@ void setup() {
 
     //Pin Setup------------------------------------------------------------------------------------------------------------
     //Motor serial communications startup
-    MotorSerial.begin(9600); //********
+//    MotorSerial.begin(9600); //********
 
     //Potentiometer input pin setup
     pinMode(SET_THRESHOLD_PRESSURE_POT_PIN , INPUT);
