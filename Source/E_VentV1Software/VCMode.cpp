@@ -1,3 +1,4 @@
+#define SERIAL_DEBUG
 #include "VCMode.h"
 
 #include "alarms.h"

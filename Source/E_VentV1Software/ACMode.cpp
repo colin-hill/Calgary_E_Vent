@@ -1,3 +1,4 @@
+#define SERIAL_DEBUG
 #include "ACMode.h"
 
 #include "alarms.h"
