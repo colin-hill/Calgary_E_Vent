@@ -17,18 +17,18 @@ void displayNoAlarm(LiquidCrystal &displayName, float highPressure, float lowPre
 	displayName.write("NO ALARM  SETPOINTS:");
 
         // Second line
-	snprintf(alarmStr, LCD_MAX_STRING, "PIP=%11d-%2dcm", displayLowPressure, displayHighPressure);
+	snprintf(alarmStr, LCD_MAX_STRING, "PIP=%11d-%2dCM", displayLowPressure, displayHighPressure);
 	displayName.setCursor(0,1);
 	displayName.write(alarmStr);
 
         // Third line
-	snprintf(alarmStr, LCD_MAX_STRING, "PEEP=%10d-%2dcm", displayLowPEEP, displayHighPEEP);
+	snprintf(alarmStr, LCD_MAX_STRING, "PEEP=%10d-%2dCM", displayLowPEEP, displayHighPEEP);
 	displayName.setCursor(0,2);
 	displayName.write(alarmStr);
 
         // Fourth line
 	displayName.setCursor(0,3);
-	snprintf(alarmStr, LCD_MAX_STRING, "PLATEAU MIN=%6dcm", displayLowPlateau);
+	snprintf(alarmStr, LCD_MAX_STRING, "PLATEAU MIN=%6dCM", displayLowPlateau);
 	displayName.write(alarmStr);
 }
 
@@ -37,7 +37,7 @@ void displayHighPressureAlarm(LiquidCrystal &displayName, float pressureMeasurem
 	int displayPressure = roundAndCast(pressureMeasurement);
 
 	char alarmDispL4[LCD_MAX_STRING];
-	snprintf(alarmDispL4, LCD_MAX_STRING, "PRESSURE=%3d CM H2O", displayPressure);
+	snprintf(alarmDispL4, LCD_MAX_STRING, "PRESSURE=%3d CM", displayPressure);
 
 	displayName.clear();
 
@@ -59,8 +59,8 @@ void displayLowPressureAlarm(LiquidCrystal &displayName, float pressureMeasureme
 
 	const char alarmDispL1[] = "ALARM CONDITION:";
 	const char alarmDispL3[] = "LOW INSPIRATION";
-	char alarmDispL4[25];
-	snprintf(alarmDispL4, LCD_MAX_STRING, "PRESSURE=%3d CM H2O", displayPressure);
+	char alarmDispL4[LCD_MAX_STRING];
+	snprintf(alarmDispL4, LCD_MAX_STRING, "PRESSURE=%3d CM", displayPressure);
 
 	displayName.clear();
 	displayName.write(alarmDispL1);
@@ -77,8 +77,8 @@ void displayHighPEEPAlarm(LiquidCrystal &displayName, float pressureMeasurement,
 
 	const char alarmDispL1[] = "ALARM CONDITION:";
 	const char alarmDispL3[] = "HIGH PEEP";
-	char alarmDispL4[25];
-	snprintf(alarmDispL4, LCD_MAX_STRING, "PRESSURE=%3d CM H2O", displayPressure);
+	char alarmDispL4[LCD_MAX_STRING];
+	snprintf(alarmDispL4, LCD_MAX_STRING, "PRESSURE=%3d CM", displayPressure);
 
 	displayName.clear();
 	displayName.write(alarmDispL1);
@@ -95,8 +95,8 @@ void displayLowPEEPAlarm(LiquidCrystal &displayName, float pressureMeasurement, 
 
 	const char alarmDispL1[] = "ALARM CONDITION:";
 	const char alarmDispL3[] = "LOW PEEP";
-	char alarmDispL4[25];
-	snprintf(alarmDispL4, LCD_MAX_STRING, "PRESSURE=%3d CM H2O", displayPressure);
+	char alarmDispL4[LCD_MAX_STRING];
+	snprintf(alarmDispL4, LCD_MAX_STRING, "PRESSURE=%3d CM", displayPressure);
 
 	displayName.clear();
 	displayName.write(alarmDispL1);
@@ -133,7 +133,7 @@ void displayTemperatureAlarm(LiquidCrystal &displayName, float temperatureMeasur
 
 	const char alarmDispL1[] = "ALARM CONDITION:";
 	const char alarmDispL3[] = "HIGH CONTROLLER TEMP";
-	char alarmDispL4[25];
+	char alarmDispL4[LCD_MAX_STRING];
 	snprintf(alarmDispL4, LCD_MAX_STRING, "TEMPERATURE=%3d C", displayTemperature);
 
 	displayName.clear();
@@ -183,7 +183,7 @@ void displayHighPressureChange(LiquidCrystal &displayName, float tempHighPressur
 
 	const char alarmDispL1[] = "PRESS TO SET";
 	const char alarmDispL3[] = "HIGH PIP LIMIT";
-	char alarmDispL4[25];
+	char alarmDispL4[LCD_MAX_STRING];
 	snprintf(alarmDispL4, LCD_MAX_STRING, "PRESSURE=%3d CM", displayPressure);
 
 	displayName.clear();
@@ -201,7 +201,7 @@ void displayLowPressureChange(LiquidCrystal &displayName, float tempLowPressure,
 
 	const char alarmDispL1[] = "PRESS TO SET";
 	const char alarmDispL3[] = "LOW PIP LIMIT";
-	char alarmDispL4[25];
+	char alarmDispL4[LCD_MAX_STRING];
 	snprintf(alarmDispL4, LCD_MAX_STRING, "PRESSURE=%3d CM", displayPressure);
 
 	displayName.clear();
@@ -219,7 +219,7 @@ void displayHighPEEPChange(LiquidCrystal &displayName, float tempHighPEEP, const
 
 	const char alarmDispL1[] = "PRESS TO SET";
 	const char alarmDispL3[] = "HIGH PEEP LIMIT";
-	char alarmDispL4[25];
+	char alarmDispL4[LCD_MAX_STRING];
 	snprintf(alarmDispL4, LCD_MAX_STRING, "PRESSURE=%3d CM", displayPressure);
 
 	displayName.clear();
@@ -236,7 +236,7 @@ void displayLowPEEPChange(LiquidCrystal &displayName, float tempLowPEEP, const i
 
 	const char alarmDispL1[] = "PRESS TO SET";
 	const char alarmDispL3[] = "LOW PEEP LIMIT";
-	char alarmDispL4[25];
+	char alarmDispL4[LCD_MAX_STRING];
 	snprintf(alarmDispL4, LCD_MAX_STRING, "PRESSURE=%3d CM", displayPressure);
 
 	displayName.clear();
@@ -253,7 +253,7 @@ void dipslayLowPlateauChange(LiquidCrystal &displayName, float tempLowPlateau, c
 
 	const char alarmDispL1[] = "PRESS TO SET";
 	const char alarmDispL3[] = "LOW PLATEAU PRESSURE";
-	char alarmDispL4[25];
+	char alarmDispL4[LCD_MAX_STRING];
 	snprintf(alarmDispL4, LCD_MAX_STRING, "PRESSURE=%3d CM", displayPressure);
 
 	displayName.clear();
@@ -295,15 +295,15 @@ void displayVentilationParameters(LiquidCrystal &displayName, machineStates mach
 	}
 
 	//TODO
-	char parameterDispL1[25];
-	char parameterDispL2[25];
-	char parameterDispL3[25];
-	char parameterDispL4[25];
+	char parameterDispL1[LCD_MAX_STRING];
+	char parameterDispL2[LCD_MAX_STRING];
+	char parameterDispL3[LCD_MAX_STRING];
+	char parameterDispL4[LCD_MAX_STRING];
 
 	snprintf(parameterDispL1, LCD_MAX_STRING, "MODE:%-3s|BPM=%2d  %1c%1d%1d", displayVentilatorMode, displayBPM, displayMachineStateCode, displayACStateCode, displayVCStateCode);
-	snprintf(parameterDispL2, LCD_MAX_STRING, "TP=%2dcm |TV=%3d%%", displayThresholdPressure, displayTV);
+	snprintf(parameterDispL2, LCD_MAX_STRING, "TP=%2dCM |TV=%3d%%", displayThresholdPressure, displayTV);
 	snprintf(parameterDispL3, LCD_MAX_STRING, "IT=%1d.%1ds |PAUSE 0.%1d%1ds", displayITFirstDigit, displayITSecondDigit, displayIPFirstDigit, displayIPSecondDigit);
-	snprintf(parameterDispL4, LCD_MAX_STRING, "PIP=%2dcm|PLAT=%2dcm", displayPIP, displayPlateau);
+	snprintf(parameterDispL4, LCD_MAX_STRING, "PIP=%2dCM|PLAT=%2dCM", displayPIP, displayPlateau);
 
 	displayName.clear();
 	displayName.write(parameterDispL1);
@@ -319,7 +319,7 @@ void displayVentilationParameters(LiquidCrystal &displayName, machineStates mach
 void displayStartupScreen(LiquidCrystal &displayName, const char softwareVersion[], const int LCD_MAX_STRING) {
 
 	const char parameterDispL1[] = "EMERGENCY VENTILATOR";
-	char parameterDispL3[25];
+	char parameterDispL3[LCD_MAX_STRING];
 
 	snprintf(parameterDispL3, LCD_MAX_STRING, "%s",softwareVersion);
 
@@ -354,7 +354,7 @@ void displayTVChange(LiquidCrystal &displayName, float tempTV, const int LCD_MAX
 
 	const char parameterDispL1[] = "PRESS TO SET";
 	const char parameterDispL3[] = "TIDAL VOLUME SETTING";
-	char parameterDispL4[25];
+	char parameterDispL4[LCD_MAX_STRING];
 	snprintf(parameterDispL4, LCD_MAX_STRING, "=%d%%", displayTV);
 
 	displayName.clear();
@@ -372,7 +372,7 @@ void displayBPMChange(LiquidCrystal &displayName, float tempBPM, const int LCD_M
 
 	const char parameterDispL1[] = "PRESS TO SET";
 	const char parameterDispL3[] = "BREATHS/MIN SETTING";
-	char parameterDispL4[25];
+	char parameterDispL4[LCD_MAX_STRING];
 	snprintf(parameterDispL4, LCD_MAX_STRING, "=%2d/MIN", displayBPM);
 
 	displayName.clear();
@@ -391,7 +391,7 @@ void displayInspirationTimeChange(LiquidCrystal &displayName, float tempIT, cons
 
 	const char parameterDispL1[] = "PRESS TO SET";
 	const char parameterDispL3[] = "INSPIRATION TIME";
-	char parameterDispL4[25];
+	char parameterDispL4[LCD_MAX_STRING];
 	snprintf(parameterDispL4, LCD_MAX_STRING, "=%d.%d SEC", displayITFirstDigit, displayITSecondDigit);
 
 	displayName.clear();
@@ -410,7 +410,7 @@ void displayPauseTimeChange(LiquidCrystal &displayName, float tempPauseTime, con
 
 	const char parameterDispL1[] = "PRESS TO SET";
 	const char parameterDispL3[] = "PLATEAU PAUSE";
-	char parameterDispL4[25];
+	char parameterDispL4[LCD_MAX_STRING];
 	snprintf(parameterDispL4, LCD_MAX_STRING, "=0.%d%d SEC", displayPTLeadDigit, displayPTLastDigit);
 
 	displayName.clear();
@@ -428,7 +428,7 @@ void displayThresholdPressureChange(LiquidCrystal &displayName, float tempThresh
 
 	const char parameterDispL1[] = "PRESS TO SET";
 	const char parameterDispL3[] = "THRESHOLD PRESSURE";
-	char parameterDispL4[25];
+	char parameterDispL4[LCD_MAX_STRING];
 	snprintf(parameterDispL4, LCD_MAX_STRING, "=%d CM", displayThresholdPressure);
 
 	displayName.clear();
