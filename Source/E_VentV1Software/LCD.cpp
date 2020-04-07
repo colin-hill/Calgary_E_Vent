@@ -300,7 +300,7 @@ void displayVentilationParameters(LiquidCrystal &displayName, machineStates mach
 	char parameterDispL3[25];
 	char parameterDispL4[25];
 
-	snprintf(parameterDispL1, LCD_MAX_STRING, "MODE:%-3s|BPM=%2d  %c%1d%1d", displayVentilatorMode, displayBPM, displayMachineStateCode, displayACStateCode, displayVCStateCode);
+	snprintf(parameterDispL1, LCD_MAX_STRING, "MODE:%-3s|BPM=%2d  %1c%1d%1d", displayVentilatorMode, displayBPM, displayMachineStateCode, displayACStateCode, displayVCStateCode);
 	snprintf(parameterDispL2, LCD_MAX_STRING, "TP=%2dcm |TV=%3d%%", displayThresholdPressure, displayTV);
 	snprintf(parameterDispL3, LCD_MAX_STRING, "IT=%1d.%1ds |PAUSE 0.%1d%1ds", displayITFirstDigit, displayITSecondDigit, displayIPFirstDigit, displayIPSecondDigit);
 	snprintf(parameterDispL4, LCD_MAX_STRING, "PIP=%2dcm|PLAT=%2dcm", displayPIP, displayPlateau);
