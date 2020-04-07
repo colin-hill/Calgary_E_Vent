@@ -1,12 +1,9 @@
 #include "LCD.h"
 
-
-
-
-
 //Alarm Display Functions
 
 void displayNoAlarm(LiquidCrystal &displayName, float highPressure, float lowPressure, float highPEEP, float lowPEEP, float lowPlateau, const int LCD_MAX_STRING) {
+        char alarmStr[LCD_MAX_STRING];
 	
 	int displayHighPressure = roundAndCast(highPressure);
 	int displayLowPressure = roundAndCast(lowPressure);
@@ -14,42 +11,46 @@ void displayNoAlarm(LiquidCrystal &displayName, float highPressure, float lowPre
 	int displayLowPEEP = roundAndCast(lowPEEP);
 	int displayLowPlateau = roundAndCast(lowPlateau);
 
-	const char alarmDispL1[] = "NO ALARM  SETPOINTS:";
-	char alarmDispL2[25];
-	char alarmDispL3[25];
-	char alarmDispL4[25];
-	snprintf(alarmDispL2, LCD_MAX_STRING, "PIP=%11d-%2dcm", displayLowPressure, displayHighPressure);
-	snprintf(alarmDispL3, LCD_MAX_STRING, "PEEP=%10d-%2dcm", displayLowPEEP, displayHighPEEP);
-	snprintf(alarmDispL4, LCD_MAX_STRING, "PLATEAU MIN=%6dcm", displayLowPlateau);
-
 	displayName.clear();
-	displayName.write(alarmDispL1);
-	displayName.setCursor(0,1);
-	displayName.write(alarmDispL2);
-	displayName.setCursor(0,2);
-	displayName.write(alarmDispL3);
-	displayName.setCursor(0,3);
-	displayName.write(alarmDispL4);
 
+        // First line
+	displayName.write("NO ALARM  SETPOINTS:");
+
+        // Second line
+	snprintf(alarmStr, LCD_MAX_STRING, "PIP=%11d-%2dcm", displayLowPressure, displayHighPressure);
+	displayName.setCursor(0,1);
+	displayName.write(alarmStr);
+
+        // Third line
+	snprintf(alarmStr, LCD_MAX_STRING, "PEEP=%10d-%2dcm", displayLowPEEP, displayHighPEEP);
+	displayName.setCursor(0,2);
+	displayName.write(alarmStr);
+
+        // Fourth line
+	displayName.setCursor(0,3);
+	snprintf(alarmStr, LCD_MAX_STRING, "PLATEAU MIN=%6dcm", displayLowPlateau);
+	displayName.write(alarmStr);
 }
 
 
 void displayHighPressureAlarm(LiquidCrystal &displayName, float pressureMeasurement, const int LCD_MAX_STRING) {
-	
 	int displayPressure = roundAndCast(pressureMeasurement);
 
-	const char alarmDispL1[] = "ALARM CONDITION:";
-	const char alarmDispL3[] = "HIGH INSPIRATION";
-	char alarmDispL4[25];
+	char alarmDispL4[LCD_MAX_STRING];
 	snprintf(alarmDispL4, LCD_MAX_STRING, "PRESSURE=%3d CM H2O", displayPressure);
 
 	displayName.clear();
-	displayName.write(alarmDispL1);
+
+        // First line
+	displayName.write("ALARM CONDITION:");
+
+        // Third line
 	displayName.setCursor(0,2);
-	displayName.write(alarmDispL3);
+	displayName.write("HIGH INSPIRATION");
+
+        // Fourth line
 	displayName.setCursor(0,3);
 	displayName.write(alarmDispL4);
-
 }
 
 void displayLowPressureAlarm(LiquidCrystal &displayName, float pressureMeasurement, const int LCD_MAX_STRING) {
@@ -277,11 +278,11 @@ void displayVentilationParameters(LiquidCrystal &displayName, machineStates mach
 	int displayIPSecondDigit = getSecondDigitPastDecimal(inspirationPause);
 	int displayPIP = roundAndCast(measuredPIP);
 	int displayPlateau = roundAndCast(measuredPlateau);
-	int  displayVCStateCode = vcCodeAssignment(vcState);
+	int displayVCStateCode = vcCodeAssignment(vcState);
 	int displayACStateCode = acCodeAssignment(acState);
 	char displayMachineStateCode = machineStateCodeAssignment(machineState);
 
-	
+	// TODO: This makes me nervous...
 	char displayVentilatorMode[5];
 	if('A' == displayMachineStateCode){
 		strcpy(displayVentilatorMode,"AC");
@@ -299,7 +300,7 @@ void displayVentilationParameters(LiquidCrystal &displayName, machineStates mach
 	char parameterDispL3[25];
 	char parameterDispL4[25];
 
-	snprintf(parameterDispL1, LCD_MAX_STRING, "MODE:%-3s|BPM=%2d  %1s%1d%1d", displayVentilatorMode, displayBPM, displayMachineStateCode, displayACStateCode, displayVCStateCode);
+	snprintf(parameterDispL1, LCD_MAX_STRING, "MODE:%-3s|BPM=%2d  %c%1d%1d", displayVentilatorMode, displayBPM, displayMachineStateCode, displayACStateCode, displayVCStateCode);
 	snprintf(parameterDispL2, LCD_MAX_STRING, "TP=%2dcm |TV=%3d%%", displayThresholdPressure, displayTV);
 	snprintf(parameterDispL3, LCD_MAX_STRING, "IT=%1d.%1ds |PAUSE 0.%1d%1ds", displayITFirstDigit, displayITSecondDigit, displayIPFirstDigit, displayIPSecondDigit);
 	snprintf(parameterDispL4, LCD_MAX_STRING, "PIP=%2dcm|PLAT=%2dcm", displayPIP, displayPlateau);
@@ -447,97 +448,12 @@ int roundAndCast(float x) {
   	return new_var;
 }
 
-char machineStateCodeAssignment(machineStates machineState) {
-
-	char machineStateCode;
-
-	if(Startup == machineState){
-		machineStateCode = 'S';
-	}
-	else if(MotorZeroing == machineState){
-		machineStateCode = 'Z';
-	}
-	else if(BreathLoopStart == machineState){
-		machineStateCode = 'B';
-	}
-	else if(ACMode == machineState){
-		machineStateCode = 'A';
-	}
-	else if(VCMode == machineState){
-		machineStateCode = 'V';
-	}
-	else{//Machine Failure
-		machineStateCode = 'F';
-	}
-
-	return machineStateCode;
-}
-
 int vcCodeAssignment(vcModeStates vcState) {
-
-	int vcStateCode;
-
-	if(VCStart == vcState){
-		vcStateCode = 1;
-	}
-	else if(VCInhale == vcState){
-		vcStateCode = 2;
-	}
-	else if(VCInhaleCommand == vcState){
-		vcStateCode = 3;
-	}
-	else if(VCPeak == vcState){
-		vcStateCode = 4;
-	}
-	else if(VCExhaleCommand){
-		vcStateCode = 5;
-	}
-	else if(VCExhale == vcState){
-		vcStateCode = 6;
-	}
-	else if(VCReset == vcState){
-		vcStateCode = 7;
-	}
-	else{//VC Inhale abort
-		vcStateCode = 8;
-	}
-
-	return vcStateCode;
+    return (int)vcState+1;
 } 
 
 int acCodeAssignment(acModeStates acState) {
-
-	int acStateCode;
-
-	if(ACStart == acState){
-		acStateCode = 1;
-	}
-	else if(ACInhaleWait == acState){
-		acStateCode = 2;
-	}
-	else if(ACInhaleCommand == acState){
-		acStateCode = 3;
-	}
-	else if(ACInhale == acState){
-		acStateCode = 4;
-	}
-	else if(ACPeak == acState){
-		acStateCode = 5;
-	}
-	else if(ACExhaleCommand == acState){
-		acStateCode = 6;
-	}
-	else if(ACExhale == acState){
-		acStateCode = 7;
-	}
-	else if(ACReset == acState){
-		acStateCode = 8;
-	}
-	else{//AC Inhale abort
-		acStateCode = 9;
-	}
-
-	return acStateCode;
+    return (int)acState + 1;
 }
 
 int getFirstDigitPastDecimal(float realNumber) {
@@ -553,5 +469,3 @@ int getSecondDigitPastDecimal(float realNumber) {
 
 	return secondDigitPastDecimal;
 }
-
-
