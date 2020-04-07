@@ -39,13 +39,13 @@ void displayDeviceFailureAlarm(LiquidCrystal &displayName);
 //Alarm setpoint change
 void displayHighPressureChange(LiquidCrystal &displayName, float tempHighPressure, const int LCD_MAX_STRING);
 
-void displayLowPressureChange(LiquidCrystal &displayName, float tempHighPressure, const int LCD_MAX_STRING);
+void displayLowPressureChange(LiquidCrystal &displayName, float tempLowPressure, const int LCD_MAX_STRING);
 
-void displayHighPEEPChange(LiquidCrystal &displayName, float tempHighPressure, const int LCD_MAX_STRING);
+void displayHighPEEPChange(LiquidCrystal &displayName, float tempHighPEEP, const int LCD_MAX_STRING);
 
-void displayLowPEEPChange(LiquidCrystal &displayName, float tempHighPressure, const int LCD_MAX_STRING);
+void displayLowPEEPChange(LiquidCrystal &displayName, float tempLowPEEP, const int LCD_MAX_STRING);
 
-void dipslayLowPlateauChange(LiquidCrystal &displayName, float tempHighPressure, const int LCD_MAX_STRING);
+void dipslayLowPlateauChange(LiquidCrystal &displayName, float tempLowPlateau, const int LCD_MAX_STRING);
 
 //END OF ALARM DISPLAY FUNCTIONS-------------------------------------------------------------------------------------------------------------------------------------------
 
