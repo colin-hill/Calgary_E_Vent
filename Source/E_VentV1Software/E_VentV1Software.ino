@@ -35,21 +35,21 @@ const int setTVPotPin      = 6;
 //LCD Denfinitions--------------------------------------------------------------
 
 //TDOD: Assign real pins
-const int alarmLCDEnable = 7;
-const int alarmLCDRS     = 8;
-const int alarmLCDDB4    = 9;
-const int alarmLCDDB5    = 10;
-const int alarmLCDDB6    = 11;
-const int alarmLCDDB7    = 12;
+//const int alarmLCDEnable = 11;
+//const int alarmLCDRS     = 12;
+//const int alarmLCDDB4    = 5;
+//const int alarmLCDDB5    = 4;
+//const int alarmLCDDB6    = 3;
+//const int alarmLCDDB7    = 2;
 
-const int ventilatorLCDEnable = 13;
-const int ventilatorLCDRS     = 14;
-const int ventilatorLCDDB4    = 15;
-const int ventilatorLCDDB5    = 16;
-const int ventilatorLCDDB6    = 17;
-const int ventilatorLCDDB7    = 18;
+const int ventilatorLCDEnable = 11;
+const int ventilatorLCDRS     = 12;
+const int ventilatorLCDDB4    = 5;
+const int ventilatorLCDDB5    = 4;
+const int ventilatorLCDDB6    = 3;
+const int ventilatorLCDDB7    = 2;
 
-LiquidCrystal alarmDisplay(alarmLCDRS, alarmLCDEnable, alarmLCDDB4, alarmLCDDB5, alarmLCDDB6, alarmLCDDB7);
+//LiquidCrystal alarmDisplay(alarmLCDRS, alarmLCDEnable, alarmLCDDB4, alarmLCDDB5, alarmLCDDB6, alarmLCDDB7);
 LiquidCrystal ventilatorDisplay(ventilatorLCDRS, ventilatorLCDEnable, ventilatorLCDDB4, ventilatorLCDDB5, ventilatorLCDDB6, ventilatorLCDDB7);
 
 //------------------------------------------------------------------------------
@@ -152,7 +152,7 @@ void setup() {
     attachInterrupt(digitalPinToInterrupt(setParameterPin),parameterChangeButtonISR,FALLING);
 
     //LCD Setup
-    alarmDisplay.begin(LCD_COLUMNS, LCD_ROWS); //set number of columns and rows
+    //alarmDisplay.begin(LCD_COLUMNS, LCD_ROWS); //set number of columns and rows
     ventilatorDisplay.begin(LCD_COLUMNS, LCD_ROWS);
 
     readPotentiometers(SET_THRESHOLD_PRESSURE_POT_PIN, setBPMPotPin, setIERatioPotPin, setTVPotPin, internalThresholdPressure, internalBPM, internalIERatio, internalTV);
@@ -227,6 +227,8 @@ void loop() {
 
         //LCD display internal variables and regular screen
         //displayVentilationScreen(internalTV, internalBPM, internalIERatio, internalThresholdPressure, machineState, peakPressure, plateauPressure, peepPressure);
+        displayVentilationParameters(ventilatorDisplay, machineState, vcModeState , acModeState, internalBPM, internalThresholdPressure, internalTV, internalIERatio, internalIERatio, peakPressure, plateauPressure, LCD_MAX_STRING);
+
     }
 
     //Beginning of state machine code
