@@ -221,3 +221,8 @@ acModeStates ac_mode_step(acModeStates current_state,
 
     return current_state;
 }
+
+
+int acCodeAssignment(acModeStates acState) {
+    return (int)acState + 1;
+}

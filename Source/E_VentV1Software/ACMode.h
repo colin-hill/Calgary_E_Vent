@@ -20,6 +20,7 @@ enum acModeStates {
                    ACInhale,
                    ACInhaleAbort,
                    ACPeak,
+                   ACExhaleCommand,
                    ACExhale,
                    ACReset
 };
@@ -39,6 +40,17 @@ enum acModeStates {
  */
 
 acModeStates acStart(elapsedMillis &breathTimer);
+
+
+/* Get a debug code for the current acModeState.
+
+   Input:
+   - state
+
+   Output:
+   - integer code (1 index of state in enum list)
+ */
+int acCodeAssignment(acModeStates acState);
 
 
 // ----------------------------------------------------------------------

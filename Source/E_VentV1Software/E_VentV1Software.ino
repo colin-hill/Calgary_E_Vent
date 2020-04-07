@@ -13,13 +13,14 @@
 #include "breathing.h"
 #include "conversions.h"
 #include "MachineStates.h"
+#include "LCD.h"
 
 //Begin User Defined Section----------------------------------------------------
 
 //#define SERIAL_DEBUG //Comment this out if not debugging, used for visual confirmation of state changes
 //#define NO_INPUT_DEBUG //Comment this out if not debugging, used to spoof input parameters at startup when no controls are present
 
-const char softwareVersion[] = "Version 1.0"; //In case we test a few versions?
+const char softwareVersion[] = "VERSION 0.1";
 
 //IO Pin Definintions-----------------------------------------------------------
 const int setParameterPin  = 25; //Pin for the set parameter button
@@ -32,14 +33,24 @@ const int setTVPotPin      = 6;
 //------------------------------------------------------------------------------
 
 //LCD Denfinitions--------------------------------------------------------------
-const int lcdEnable = 7;
-const int lcdRS     = 8;
-const int lcdDB4    = 9;
-const int lcdDB5    = 10;
-const int lcdDB6    = 11;
-const int lcdDB7    = 12;
 
-//LiquidCrystal lcd(lcdRS, lcdEnable, lcdDB4, lcdDB5, lcdDB6, lcdDB7);
+//TDOD: Assign real pins
+//const int alarmLCDEnable = 11;
+//const int alarmLCDRS     = 12;
+//const int alarmLCDDB4    = 5;
+//const int alarmLCDDB5    = 4;
+//const int alarmLCDDB6    = 3;
+//const int alarmLCDDB7    = 2;
+
+const int ventilatorLCDEnable = 11;
+const int ventilatorLCDRS     = 12;
+const int ventilatorLCDDB4    = 5;
+const int ventilatorLCDDB5    = 4;
+const int ventilatorLCDDB6    = 3;
+const int ventilatorLCDDB7    = 2;
+
+//LiquidCrystal alarmDisplay(alarmLCDRS, alarmLCDEnable, alarmLCDDB4, alarmLCDDB5, alarmLCDDB6, alarmLCDDB7);
+LiquidCrystal ventilatorDisplay(ventilatorLCDRS, ventilatorLCDEnable, ventilatorLCDDB4, ventilatorLCDDB5, ventilatorLCDDB6, ventilatorLCDDB7);
 
 //------------------------------------------------------------------------------
 
@@ -51,7 +62,7 @@ const int lcdDB7    = 12;
 #define ACMODE true
 #define VCMODE false
 
-#define MotorSerial Serial1
+//#define MotorSerial Serial1
 
 //Function Definitions---------------------------------------------------------------------------------------------------
 void readPotentiometers(uint8_t thresholdPressurePotPin, uint8_t bpmPotPin, uint8_t ieRatioPotPin, uint8_t tvPotPin, volatile float &thresholdPressure, volatile float &bpm, volatile float &ieRatio, volatile float &tv);
@@ -118,10 +129,8 @@ void setup() {
 
     Serial.println("StartUpInitiated");
 
-
-    // Pin Setup------------------------------------------------------------------------------------------------------------
     // Motor serial communications startup
-    MotorSerial.begin(9600); //********
+    // MotorSerial.begin(9600); //********
 
     // Potentiometer input pin setup
     pinMode(SET_THRESHOLD_PRESSURE_POT_PIN , INPUT);
@@ -142,13 +151,17 @@ void setup() {
     // Parameter change interrupt setup
     attachInterrupt(digitalPinToInterrupt(setParameterPin),parameterChangeButtonISR,FALLING);
 
-    // LCD Setup
-    //lcd.begin(20, 4); //set number of columns and rows
+    //LCD Setup
+    //alarmDisplay.begin(LCD_COLUMNS, LCD_ROWS); //set number of columns and rows
+    ventilatorDisplay.begin(LCD_COLUMNS, LCD_ROWS);
 
     readPotentiometers(SET_THRESHOLD_PRESSURE_POT_PIN, setBPMPotPin, setIERatioPotPin, setTVPotPin, internalThresholdPressure, internalBPM, internalIERatio, internalTV);
 
+    
     //LCD Display Startup Message for two seconds
-    //displayStartScreen(softwareVersion);
+    displayStartupScreen(ventilatorDisplay, softwareVersion, LCD_COLUMNS);
+
+
 #ifdef NO_INPUT_DEBUG //Skips parameter input section
     cli();
     paramChange = true;
@@ -214,6 +227,8 @@ void loop() {
 
         //LCD display internal variables and regular screen
         //displayVentilationScreen(internalTV, internalBPM, internalIERatio, internalThresholdPressure, machineState, peakPressure, plateauPressure, peepPressure);
+        displayVentilationParameters(ventilatorDisplay, machineState, vcModeState , acModeState, internalBPM, internalThresholdPressure, internalTV, internalIERatio, internalIERatio, peakPressure, plateauPressure, LCD_MAX_STRING);
+
     }
 
     //Beginning of state machine code
