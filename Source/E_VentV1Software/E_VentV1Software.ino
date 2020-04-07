@@ -12,6 +12,7 @@
 #include "breathing.h"
 #include "conversions.h"
 #include "MachineStates.h"
+#include "LCD.h"
 
 //Begin User Defined Section----------------------------------------------------
 
@@ -31,14 +32,24 @@ const int setTVPotPin      = 6;
 //------------------------------------------------------------------------------
 
 //LCD Denfinitions--------------------------------------------------------------
-const int lcdEnable = 7;
-const int lcdRS     = 8;
-const int lcdDB4    = 9;
-const int lcdDB5    = 10;
-const int lcdDB6    = 11;
-const int lcdDB7    = 12;
 
-//LiquidCrystal lcd(lcdRS, lcdEnable, lcdDB4, lcdDB5, lcdDB6, lcdDB7);
+//TDOD: Assign real pins
+const int alarmLCDEnable = 7;
+const int alarmLCDRS     = 8;
+const int alarmLCDDB4    = 9;
+const int alarmLCDDB5    = 10;
+const int alarmLCDDB6    = 11;
+const int alarmLCDDB7    = 12;
+
+const int ventilatorLCDEnable = 13;
+const int ventilatorLCDRS     = 14;
+const int ventilatorLCDDB4    = 15;
+const int ventilatorLCDDB5    = 16;
+const int ventilatorLCDDB6    = 17;
+const int ventilatorLCDDB7    = 18;
+
+LiquidCrystal alarmDisplay(alarmLCDRS, alarmLCDEnable, alarmLCDDB4, alarmLCDDB5, alarmLCDDB6, alarmLCDDB7);
+LiquidCrystal ventilatorDisplay(ventilatorLCDRS, ventilatorLCDEnable, ventilatorLCDDB4, ventilatorLCDDB5, ventilatorLCDDB6, ventilatorLCDDB7);
 
 //------------------------------------------------------------------------------
 
@@ -144,7 +155,8 @@ void setup() {
     attachInterrupt(digitalPinToInterrupt(setParameterPin),parameterChangeButtonISR,FALLING);
 
     //LCD Setup
-    //lcd.begin(20, 4); //set number of columns and rows
+    alarmDisplay.begin(LCD_COLUMNS, LCD_ROWS); //set number of columns and rows
+    ventilatorDisplay.begin(LCD_COLUMNS, LCD_ROWS);
 
     readPotentiometers(SET_THRESHOLD_PRESSURE_POT_PIN, setBPMPotPin, setIERatioPotPin, setTVPotPin, internalThresholdPressure, internalBPM, internalIERatio, internalTV);
 
