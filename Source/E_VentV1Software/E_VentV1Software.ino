@@ -160,8 +160,11 @@ void setup() {
 
     readPotentiometers(SET_THRESHOLD_PRESSURE_POT_PIN, setBPMPotPin, setIERatioPotPin, setTVPotPin, internalThresholdPressure, internalBPM, internalIERatio, internalTV);
 
+    
     //LCD Display Startup Message for two seconds
-    //displayStartScreen(softwareVersion);
+    displayStartupScreen(ventilatorDisplay, softwareVersion, LCD_COLUMNS);
+
+
 #ifdef NO_INPUT_DEBUG //Skips parameter input section
     cli();
     paramChange = true;
