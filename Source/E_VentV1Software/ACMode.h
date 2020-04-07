@@ -38,8 +38,14 @@ enum acModeStates {
    Output:
    - returns new state.
  */
-
-acModeStates acStart(elapsedMillis &breathTimer);
+acModeStates ac_mode_step(acModeStates current_state,
+                          elapsedMillis &breathTimer,
+                          const float &inspirationTime,
+                          const float &expirationTime, float &tempPeakPressure,
+                          float &peakPressure, float &pressure,
+                          float &peepPressure, float &plateauPressure,
+                          float &loopThresholdPressure,
+                          uint16_t &errors, machineStates &machineState);
 
 
 /* Get a debug code for the current acModeState.
@@ -58,35 +64,23 @@ int acCodeAssignment(acModeStates acState);
 // in the main loop, but should be documented and available for testing.
 // ----------------------------------------------------------------------
 
+acModeStates acStart(elapsedMillis &breathTimer);
 
 acModeStates acInhaleWait(elapsedMillis &breathTimer, float &tempPeakPressure, float &pressure, float &loopThresholdPressure, uint16_t &errors);
 
-acModeStates acInhaleCommand();
+acModeStates acInhaleCommand(void);
 
 acModeStates acInhale(elapsedMillis &breathTimer, float &inspirationTime, float &tempPeakPressure, float &peakPressure, float &pressure, uint16_t &errors);
 
-
 // Unused parameter warning for expirationTime due to SERIAL_DEBUG
-acModeStates acInhaleAbort(elapsedMillis &breathTimer,
-                           const float &expirationTime, float &pressure,
-    uint16_t &errors);
-
+acModeStates acInhaleAbort(elapsedMillis &breathTimer, const float &expirationTime, float &pressure, uint16_t &errors);
 
 acModeStates acPeak(elapsedMillis &breathTimer, float &pressure, float &plateauPressure, uint16_t &errors);
 
+acModeStates acExhaleCommand(uint16_t &errors);
+
 acModeStates acExhale(elapsedMillis &breathTimer, const float &expirationTime, float &pressure, float &peepPressure);
 
-
 acModeStates acReset(machineStates &machineState, elapsedMillis &breathTimer, float &pressure, uint16_t &errors);
-
-
-acModeStates ac_mode_step(acModeStates current_state,
-                          elapsedMillis &breathTimer,
-                          const float &inspirationTime,
-                          const float &expirationTime, float &tempPeakPressure,
-                          float &peakPressure, float &pressure,
-                          float &peepPressure, float &plateauPressure,
-                          float &loopThresholdPressure,
-                          uint16_t &errors, machineStates &machineState);
 
 #endif

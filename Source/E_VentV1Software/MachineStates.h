@@ -11,12 +11,13 @@ enum machineStates {
                     MotorZeroing,
                     BreathLoopStart,
                     ACMode,
-                    VCMode
+                    VCMode,
+                    MechanismFailure
 };
 
 // Make sure there are the same number of characters as machine states!
 // This is necessary for machineStateCodeAssignment
-const char machineStateCodes[] = "SZBAV";
+const char machineStateCodes[] = "SZBAVF";
 
 /* Converts a machine state to a single character to display for
    debug purposes.

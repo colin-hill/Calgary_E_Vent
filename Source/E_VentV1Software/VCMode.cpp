@@ -123,7 +123,7 @@ vcModeStates vcPeak(elapsedMillis &breathTimer, const float &inspirationTime,
     return next_state;
 }
 
-vcModeStates vcExhaleCommand(void) {
+vcModeStates vcExhaleCommand(uint16_t &errors) {
 #ifdef SERIAL_DEBUG
     Serial.println("VCExhaleCommand");
 #endif //SERIAL_DEBUG
@@ -131,12 +131,15 @@ vcModeStates vcExhaleCommand(void) {
     // TODO: Set motor speed and position
     // TODO: Reset timer (does this happen here as well as vcStart?)
 
-    return VCInhale;
+    //Need to check plateau pressure
+    //errors |= check_plateau(pressure);
+
+    return VCExhale;
 }
 
 vcModeStates vcExhale(const elapsedMillis &breathTimer,
                       const float &expirationTime, float &pressure,
-                      float &peepPressure, uint16_t &errors) {
+                      float &peepPressure) {
 #ifdef SERIAL_DEBUG
     Serial.print("VCExhale: ");
     Serial.println(breathTimer);
@@ -154,16 +157,18 @@ vcModeStates vcExhale(const elapsedMillis &breathTimer,
         peepPressure = pressure;
     }
 
-    errors |= check_peep(pressure);
+    
     return next_state;
 }
 
 
 // TODO: should this reset timers and stuff like acReset?
-vcModeStates vcReset(machineStates &machineState) {
+vcModeStates vcReset(machineStates &machineState, float &peepPressure, uint16_t &errors) {
 #ifdef SERIAL_DEBUG
     Serial.println("VCReset");
 #endif //SERIAL_DEBUG
+
+    errors |= check_peep(peepPressure);
 
     machineState = BreathLoopStart;
     return VCStart;
@@ -188,10 +193,12 @@ vcModeStates vc_mode_step(vcModeStates current_state,
         return vcInhaleAbort(breathTimer, expirationTime, pressure, errors);
     case VCPeak:
         return vcPeak(breathTimer, inspirationTime, pressure, plateauPressure, errors);
+    case VCExhaleCommand:
+        return vcExhaleCommand(errors); 
     case VCExhale:
-        return vcExhale(breathTimer, expirationTime, pressure, peepPressure, errors);
+        return vcExhale(breathTimer, expirationTime, pressure, peepPressure);
     case VCReset:
-        return vcReset(machineState);
+        return vcReset(machineState, peepPressure, errors);
     default:
         // Should not happen
 #ifdef SERIAL_DEBUG

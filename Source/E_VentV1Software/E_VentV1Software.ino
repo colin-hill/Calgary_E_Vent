@@ -125,9 +125,10 @@ void setup() {
 
 #ifdef SERIAL_DEBUG
     Serial.begin(9600);
+    Serial.println("StartUpInitiated");
 #endif //SERIAL_DEBUG
 
-    Serial.println("StartUpInitiated");
+    
 
     // Motor serial communications startup
     // MotorSerial.begin(9600); //********
