@@ -12,15 +12,29 @@
 
 #include "breathing.h"
 
-const uint8_t THRESHOLD_PRESSURE_SELECT_PIN = 4;
-const uint8_t BPM_SELECT_PIN = 5;
-const uint8_t IE_RATIO_SELECT_PIN = 6;
-const uint8_t TIDAL_VOLUME_SELECT_PIN = 7;
+const uint8_t NUM_USER_PARAMETERS = 10;
 
-const float THRESHOLD_PRESSURE_INCREMENT = 0.1;
-const float BPM_INCREMENT = 1;
-const float IE_RATIO_INCREMENT = 0.5;
-const float TIDAL_VOLUME_INCREMENT = 5;
+const uint8_t THRESHOLD_PRESSURE_SELECT_PIN = 6;
+const uint8_t BPM_SELECT_PIN = 7;
+const uint8_t INSPIRATION_TIME_SELECT_PIN = 8;
+const uint8_t TIDAL_VOLUME_SELECT_PIN = 9;
+const uint8_t PLATEAU_PAUSE_TIME_SELECT_PIN = 10;
+const uint8_t HIGH_PIP_ALARM_SELECT_PIN = 13;
+const uint8_t LOW_PIP_ALARM_SELECT_PIN = 22;
+const uint8_t HIGH_PEEP_ALARM_SELECT_PIN = 24;
+const uint8_t LOW_PEEP_ALARM_SELECT_PIN = 26;
+const uint8_t LOW_PLATEAU_PRESSURE_ALARM_SELECT_PIN = 28;
+
+const float THRESHOLD_PRESSURE_INCREMENT = 0.1; //cmH2O
+const float BPM_INCREMENT = 1; //Beat per Minute
+const float INSPIRATION_TIME_INCREMENT = 0.5; //Seconds
+const float TIDAL_VOLUME_INCREMENT = 5; //% of bag
+const float PLATEAU_PAUSE_TIME_INCREMENT = 0.05; //Seconds
+const float HIGH_PIP_ALARM_INCREMENT = 1; //cmH2O
+const float LOW_PIP_ALARM_INCREMENT = 1; //cmH2O
+const float HIGH_PEEP_ALARM_INCREMENT = 1; //cmH2O
+const float LOW_PEEP_ALARM_INCREMENT = 1; //cmH2O
+const float LOW_PLATEAU_PRESSURE_ALARM_INCREMENT = 1; //cmH2O
 
 class UserParameter {
 	public:
