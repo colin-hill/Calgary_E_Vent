@@ -12,5 +12,5 @@ float voltageToIERatioConversion(const float potVoltage){
 }
 
 float voltageToTVConversion(const float potVoltage){
-    return (MAX_TV - MIN_TV) / TV_POT_MAX_VOLTAGE * potVoltage + MIN_TV;
+    return (MAX_TIDAL_VOLUME - MIN_TIDAL_VOLUME) / TV_POT_MAX_VOLTAGE * potVoltage + MIN_TIDAL_VOLUME;
 }
