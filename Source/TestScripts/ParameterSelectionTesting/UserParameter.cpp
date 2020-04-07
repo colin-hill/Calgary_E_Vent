@@ -6,6 +6,7 @@ UserParameter::UserParameter(const float minVlaue, const float maxValue, const f
 	this->maxValue = maxValue;
 	this->increment = increment;
 	this->selectPin = pin;
+  this->value = minValue; //TODO: Change this to not be just the min
 	
 	return;
 }

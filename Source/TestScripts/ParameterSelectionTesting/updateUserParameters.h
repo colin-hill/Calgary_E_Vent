@@ -10,10 +10,9 @@
 #include "UserParameter.h"
 #include "Encoder.h"
 
-const uint8_t parameterSelectInterruptPin = 2;
-const uint8_t parameterEncoderPushButtonPin = 20;
-const uint8_t parameterEncoderPin1 = 18;
-const uint8_t parameterEncoderPin2 = 19;
+const uint8_t PARAMETER_ENCODER_PUSH_BUTTON_PIN = 20;
+const uint8_t PARAMETER_ENCODER_PIN_1 = 18;
+const uint8_t PARAMETER_ENCODER_PIN_2 = 19;
 
 //volatile boolean PARAMETER_SELECT = false;
 //volatile boolean PARAMETER_SET = false;
@@ -31,10 +30,9 @@ enum SelectedParameter{
 //SelectedParameter CURRENTLY_SELECTED_PARAMETER = e_None;
 
 void setUpParameterSelectButtons(UserParameter &thresholdPressure, UserParameter &bpm, UserParameter &ieRatio, UserParameter &tidalVolume,
-                                const uint8_t parameterSelectInterrptPin, const uint8_t parameterEncoderPushButtonPin);
+                                const uint8_t parameterEncoderPushButtonPin);
 
 void updateSelectedParameter(SelectedParameter &currentlySelectedParameter, 
-							volatile boolean &parameterSelect, 
 							Encoder &parameterSelectEncoder, UserParameter &thresholdPressure, UserParameter &bpm,
 							UserParameter &ieRatio, UserParameter &tidalVolume);
 							
@@ -42,15 +40,13 @@ void updateParameterValue(SelectedParameter &currentlySelectedParameter,
 						Encoder &parameterSelectEncoder, UserParameter &thresholdPressure, UserParameter &bpm,
 						UserParameter &ieRatio, UserParameter &tidalVolume);
 
-void setParameters(SelectedParameter &currentlySelectedParameter, volatile boolean &parameterSelect,
+void setParameters(SelectedParameter &currentlySelectedParameter,
 				volatile boolean &parameterSet, UserParameter &thresholdPressure, UserParameter &bpm, UserParameter &ieRatio,
 				UserParameter &tidalVolume);
 
-void updateUserParameters(SelectedParameter &currentlySelectedParameter, volatile boolean &parameterSelect, volatile boolean &parameterSet,
+void updateUserParameters(SelectedParameter &currentlySelectedParameter,volatile boolean &parameterSet,
             Encoder &parameterSelectEncoder, UserParameter &thresholdPressure, UserParameter &bpm,
             UserParameter &ieRatio, UserParameter &tidalVolume);
-
-void parameterSelectISR();
 
 void parameterSetISR();
 

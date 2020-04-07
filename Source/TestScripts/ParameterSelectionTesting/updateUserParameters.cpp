@@ -1,7 +1,7 @@
 #include "updateUserParameters.h"
 
 void setUpParameterSelectButtons(UserParameter &thresholdPressure, UserParameter &bpm, UserParameter &ieRatio, UserParameter &tidalVolume,
-                                const uint8_t parameterSelectInterruptPin, const uint8_t parameterEncoderPushButtonPin)
+                                const uint8_t parameterEncoderPushButtonPin)
 {
 	
 	pinMode(thresholdPressure.selectPin,INPUT);
@@ -9,53 +9,47 @@ void setUpParameterSelectButtons(UserParameter &thresholdPressure, UserParameter
 	pinMode(ieRatio.selectPin,INPUT);
 	pinMode(tidalVolume.selectPin,INPUT);
 	
-	pinMode(parameterSelectInterruptPin,INPUT);
 	pinMode(parameterEncoderPushButtonPin,INPUT);
-	
-	attachInterrupt(digitalPinToInterrupt(parameterSelectInterruptPin),parameterSelectISR,FALLING);
-	attachInterrupt(digitalPinToInterrupt(parameterEncoderPushButtonPin),parameterSetISR,FALLING);
+
+	attachInterrupt(digitalPinToInterrupt(parameterEncoderPushButtonPin),parameterSetISR,RISING);
 
 }
 
-void updateUserParameters(SelectedParameter &currentlySelectedParameter, volatile boolean &parameterSelect, volatile boolean &parameterSet,
+void updateUserParameters(SelectedParameter &currentlySelectedParameter, volatile boolean &parameterSet,
             Encoder &parameterSelectEncoder, UserParameter &thresholdPressure, UserParameter &bpm,
             UserParameter &ieRatio, UserParameter &tidalVolume)
 {
-  setParameters(currentlySelectedParameter, parameterSelect, parameterSet, thresholdPressure, bpm, ieRatio, tidalVolume);
+  setParameters(currentlySelectedParameter, parameterSet, thresholdPressure, bpm, ieRatio, tidalVolume);
   updateParameterValue(currentlySelectedParameter, parameterSelectEncoder,thresholdPressure, bpm, ieRatio, tidalVolume);
-  updateSelectedParameter(currentlySelectedParameter, parameterSelect, parameterSelectEncoder,
+  updateSelectedParameter(currentlySelectedParameter, parameterSelectEncoder,
               thresholdPressure, bpm, ieRatio, tidalVolume);
 }
 
 void updateSelectedParameter(SelectedParameter &currentlySelectedParameter, 
-							volatile boolean &parameterSelect, 
 							Encoder &parameterSelectEncoder, UserParameter &thresholdPressure, UserParameter &bpm,
 							UserParameter &ieRatio, UserParameter &tidalVolume)
 {							
-	cli();
-	if(parameterSelect){
-		sei();
-		parameterSelectEncoder.write(0);
-		if(digitalRead(thresholdPressure.selectPin)){
-			currentlySelectedParameter = e_ThresholdPressure;
-		}
-		else if(digitalRead(bpm.selectPin)){
-			currentlySelectedParameter = e_BPM;
-		}
-		else if(digitalRead(ieRatio.selectPin)){
-			currentlySelectedParameter = e_IERatio;
-		}
-		else if(digitalRead(tidalVolume.selectPin)){
-			currentlySelectedParameter = e_TidalVolume; 
-		}
-		else{
-			currentlySelectedParameter = e_None;
-		}
-		cli();
-		parameterSelect = false;
-		sei();
-	}
-	sei();
+  if(e_None == currentlySelectedParameter){
+	  if(digitalRead(thresholdPressure.selectPin)){
+		  currentlySelectedParameter = e_ThresholdPressure;
+		  parameterSelectEncoder.write(0);
+	  }
+	  else if(digitalRead(bpm.selectPin)){
+		  currentlySelectedParameter = e_BPM;
+		  parameterSelectEncoder.write(0);
+	  }
+	  else if(digitalRead(ieRatio.selectPin)){
+		  currentlySelectedParameter = e_IERatio;
+		  parameterSelectEncoder.write(0);
+	  }
+	  else if(digitalRead(tidalVolume.selectPin)){
+		  currentlySelectedParameter = e_TidalVolume;
+		  parameterSelectEncoder.write(0);		
+	  }
+	  else{
+		  currentlySelectedParameter = e_None;
+	  }
+  }
 }
 
 void updateParameterValue(SelectedParameter &currentlySelectedParameter, 
@@ -63,7 +57,6 @@ void updateParameterValue(SelectedParameter &currentlySelectedParameter,
 						UserParameter &ieRatio, UserParameter &tidalVolume)
 {
 	if(e_None != currentlySelectedParameter){
-		
 		int32_t encoderTurns = parameterSelectEncoder.read();
 		parameterSelectEncoder.write(0); //Reset the encoder count in between loops
 
@@ -82,7 +75,7 @@ void updateParameterValue(SelectedParameter &currentlySelectedParameter,
 	}
 }	
 
-void setParameters(SelectedParameter &currentlySelectedParameter, volatile boolean &parameterSelect,
+void setParameters(SelectedParameter &currentlySelectedParameter,
 				volatile boolean &parameterSet, UserParameter &thresholdPressure, UserParameter &bpm, UserParameter &ieRatio,
 				UserParameter &tidalVolume)
 {
@@ -102,7 +95,7 @@ void setParameters(SelectedParameter &currentlySelectedParameter, volatile boole
 		}
     
 		parameterSet = false;
-		parameterSelect = false; //Avoid setting and still changing
+   currentlySelectedParameter = e_None;
 	}
 	sei();
 }
