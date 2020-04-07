@@ -38,6 +38,17 @@ enum vcModeStates {
 vcModeStates vc_mode_step(vcModeStates current_state, elapsedMillis &breathTimer, const float &inspirationTime, const float &expirationTime, float &tempPeakPressure, float &peakPressure, float &pressure, float &peepPressure, float &plateauPressure, uint16_t &errors, machineStates &machineState);
 
 
+/* Get a debug code for the current vcModeState.
+
+   Input:
+   - state
+
+   Output:
+   - integer code (1 index of state in enum list)
+ */
+int vcCodeAssignment(vcModeStates vcState);
+
+
 // ----------------------------------------------------------------------
 // Functions for handling particular states. These should NOT be called
 // in the main loop, but should be documented and available for testing.

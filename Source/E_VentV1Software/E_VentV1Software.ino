@@ -130,7 +130,7 @@ void setup() {
     Serial.println("StartUpInitiated");
 
     // Motor serial communications startup
-    MotorSerial.begin(9600); //********
+    // MotorSerial.begin(9600); //********
 
     // Potentiometer input pin setup
     pinMode(SET_THRESHOLD_PRESSURE_POT_PIN , INPUT);

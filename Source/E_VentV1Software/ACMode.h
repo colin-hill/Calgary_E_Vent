@@ -42,6 +42,17 @@ enum acModeStates {
 acModeStates acStart(elapsedMillis &breathTimer);
 
 
+/* Get a debug code for the current acModeState.
+
+   Input:
+   - state
+
+   Output:
+   - integer code (1 index of state in enum list)
+ */
+int acCodeAssignment(acModeStates acState);
+
+
 // ----------------------------------------------------------------------
 // Functions for handling particular states. These should NOT be called
 // in the main loop, but should be documented and available for testing.

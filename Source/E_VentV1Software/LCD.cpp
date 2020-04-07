@@ -448,13 +448,6 @@ int roundAndCast(float x) {
   	return new_var;
 }
 
-int vcCodeAssignment(vcModeStates vcState) {
-    return (int)vcState+1;
-} 
-
-int acCodeAssignment(acModeStates acState) {
-    return (int)acState + 1;
-}
 
 int getFirstDigitPastDecimal(float realNumber) {
 	int naturalNumber = (int) realNumber;
@@ -462,6 +455,7 @@ int getFirstDigitPastDecimal(float realNumber) {
 
 	return firstDigitPastDecimal;
 }
+
 
 int getSecondDigitPastDecimal(float realNumber) {
 	int naturalNumber = 10*((int) (10*realNumber));

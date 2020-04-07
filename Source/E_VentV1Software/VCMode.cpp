@@ -202,3 +202,8 @@ vcModeStates vc_mode_step(vcModeStates current_state,
 
     return current_state;
 }
+
+
+int vcCodeAssignment(vcModeStates vcState) {
+    return (int)vcState+1;
+}

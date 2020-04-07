@@ -36,7 +36,7 @@ void displayApneaAlarm(LiquidCrystal &displayName); //Currently will not be used
 
 void displayDeviceFailureAlarm(LiquidCrystal &displayName);
 
-//Alarm setpoint change 
+//Alarm setpoint change
 void displayHighPressureChange(LiquidCrystal &displayName, float tempHighPressure, const int LCD_MAX_STRING);
 
 void displayLowPressureChange(LiquidCrystal &displayName, float tempHighPressure, const int LCD_MAX_STRING);
@@ -78,12 +78,6 @@ void displayThresholdPressureChange(LiquidCrystal &displayName, float tempThresh
 //Helper Functions
 
 int roundAndCast(float x);
-
-char machineStateCodeAssignment(machineStates machineState);
-
-int vcCodeAssignment(vcModeStates vcState);
-
-int acCodeAssignment(acModeStates acState);
 
 int getFirstDigitPastDecimal(float realNumber);
 
