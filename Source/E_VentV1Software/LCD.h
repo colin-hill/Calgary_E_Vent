@@ -57,7 +57,9 @@ void dipslayLowPlateauChange(LiquidCrystal &displayName, float tempLowPlateau, c
 
 void displayVentilationParameters(LiquidCrystal &displayName, machineStates machineState, vcModeStates vcState , acModeStates acState, float breathsPerMinute, float thresholdPressure, float tidalVolume, float inspirationTime, float inspirationPause, float measuredPIP, float measuredPlateau, const int LCD_MAX_STRING);
 
-void displayStartupScreen(LiquidCrystal &displayName, const char softwareVersion[], const int LCD_MAX_STRING); //TODO fix warning
+void displayStartupScreen(LiquidCrystal &displayName, const char softwareVersion[], const int LCD_MAX_STRING); 
+
+void displayStartupHoldScreen(LiquidCrystal &displayName);
 
 void displayHomingScreen(LiquidCrystal &displayName);
 
