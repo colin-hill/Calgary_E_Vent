@@ -1,6 +1,8 @@
 #include "alarms.h"
 #include "pressure.h"
 #include "elapsedMillis.h"
+#include "LCD.h"
+
 
 
 // ----------------------------------------------------------------------
@@ -68,38 +70,49 @@ uint16_t check_peep(const float pressure) {
 }
 
 
-void handle_alarms(uint16_t &errors) {
+void handle_alarms(LiquidCrystal &displayName, uint16_t &errors, float peakPressure, float peepPressure, float controllerTemperature) {
     if(errors){ //There is an unserviced error
         //Control the buzzer
         if(alarmBuzzerTimer > ALARM_SOUND_LENGTH*1000){
             alarmBuzzerTimer = 0; //Reset the timer
             digitalWrite(ALARM_BUZZER_PIN,!digitalRead(ALARM_BUZZER_PIN)); //Toggle the buzzer output pin
+            digitalWrite(ALARM_LED_PIN,!digitalRead(ALARM_LED_PIN));
+            digitalWrite(ALARM_RELAY_PIN,!digitalRead(ALARM_RELAY_PIN));
+
         }
 
         //Provide the appropriate screen for the error, error flags held in a 16 bit unsigned integer
         if(errors & HIGH_PRESSURE_ALARM){
-            //Display high pressure alarm screen********
+            //Display high pressure alarm screen
+             displayHighPressureAlarm(displayName, peakPressure, LCD_MAX_STRING);
         }
         else if(errors & LOW_PRESSURE_ALARM){
-            //Display low pressure alarm screen********
+            //Display low pressure alarm screen
+            displayLowPressureAlarm(displayName, peakPressure, LCD_MAX_STRING);
         }
         else if(errors & HIGH_PEEP_ALARM){
-            //Display high PEEP alarm screen********
+            //Display high PEEP alarm screen
+            displayHighPEEPAlarm(displayName, peepPressure, LCD_MAX_STRING);
         }
         else if(errors & LOW_PEEP_ALARM){
-            //Display low PEEP alarm screen********
+            //Display low PEEP alarm screen
+            displayLowPEEPAlarm(displayName, peepPressure, LCD_MAX_STRING);
         }
         else if(errors & DISCONNECT_ALARM){
             //Display disconnect alarm (also a low pressure alarm)
+            displayDisconnectAlarm(displayName);
         }
         else if(errors & HIGH_TEMP_ALARM){
-            //Display high temp alarm screen********
+            //Display high temp alarm screen
+            displayTemperatureAlarm(displayName, controllerTemperature, LCD_MAX_STRING);
         }
         else if(errors & APNEA_ALARM){
-            //Display the apnea alarm screen********
+            //Display the apnea alarm screen
+            displayApneaAlarm(displayName);
         }
         else if(errors & DEVICE_FAILURE_ALARM){
-            //Display the device failure alarm********
+            //Display the device failure alarm
+            displayDeviceFailureAlarm(displayName);
         }
         else{
             errors = 0;
@@ -108,5 +121,7 @@ void handle_alarms(uint16_t &errors) {
     else{
         alarmBuzzerTimer = 0;
         digitalWrite(ALARM_BUZZER_PIN,LOW);
+        digitalWrite(ALARM_LED_PIN,LOW);
+        digitalWrite(ALARM_RELAY_PIN,LOW);
     }
 }

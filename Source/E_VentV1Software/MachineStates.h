@@ -12,7 +12,7 @@ enum machineStates {
                     BreathLoopStart,
                     ACMode,
                     VCMode,
-                    MechanismFailure
+                    FailureMode
 };
 
 // Make sure there are the same number of characters as machine states!

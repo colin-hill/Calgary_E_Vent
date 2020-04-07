@@ -14,6 +14,7 @@
 #include "conversions.h"
 #include "MachineStates.h"
 #include "LCD.h"
+#include "FailureMode.h"
 
 //Begin User Defined Section----------------------------------------------------
 
@@ -34,22 +35,21 @@ const int setTVPotPin      = 6;
 
 //LCD Denfinitions--------------------------------------------------------------
 
-//TDOD: Assign real pins
-//const int alarmLCDEnable = 11;
-//const int alarmLCDRS     = 12;
-//const int alarmLCDDB4    = 5;
-//const int alarmLCDDB5    = 4;
-//const int alarmLCDDB6    = 3;
-//const int alarmLCDDB7    = 2;
+const int alarmLCDEnable = 49;
+const int alarmLCDRS     = 53;
+const int alarmLCDDB4    = 47;
+const int alarmLCDDB5    = 45;
+const int alarmLCDDB6    = 43;
+const int alarmLCDDB7    = 41;
 
-const int ventilatorLCDEnable = 11;
-const int ventilatorLCDRS     = 12;
-const int ventilatorLCDDB4    = 5;
-const int ventilatorLCDDB5    = 4;
-const int ventilatorLCDDB6    = 3;
-const int ventilatorLCDDB7    = 2;
+const int ventilatorLCDEnable = 51;
+const int ventilatorLCDRS     = 53;
+const int ventilatorLCDDB4    = 47;
+const int ventilatorLCDDB5    = 45;
+const int ventilatorLCDDB6    = 43;
+const int ventilatorLCDDB7    = 41;
 
-//LiquidCrystal alarmDisplay(alarmLCDRS, alarmLCDEnable, alarmLCDDB4, alarmLCDDB5, alarmLCDDB6, alarmLCDDB7);
+LiquidCrystal alarmDisplay(alarmLCDRS, alarmLCDEnable, alarmLCDDB4, alarmLCDDB5, alarmLCDDB6, alarmLCDDB7);
 LiquidCrystal ventilatorDisplay(ventilatorLCDRS, ventilatorLCDEnable, ventilatorLCDDB4, ventilatorLCDDB5, ventilatorLCDDB6, ventilatorLCDDB7);
 
 //------------------------------------------------------------------------------
@@ -95,6 +95,7 @@ float tempPeakPressure;
 float peakPressure;
 float plateauPressure;
 float peepPressure;
+float controllerTemperature;
 
 float singleBreathTime;
 float inspirationTime;
@@ -267,8 +268,13 @@ void loop() {
                                    tempPeakPressure, peakPressure, pressure, peepPressure,
                                    plateauPressure, errors, machineState);
     }
+    else if (FailureMode == machineState) {
+        failure_mode(alarmDisplay, errors, peakPressure, peepPressure, controllerTemperature);
+    }
 
-    handle_alarms(errors);
+    //TODO Define controller temperature
+    handle_alarms(alarmDisplay, errors, peakPressure, peepPressure, controllerTemperature);
+    
 }
 
 //FUNCTIONS
