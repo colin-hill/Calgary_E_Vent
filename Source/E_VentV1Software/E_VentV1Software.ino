@@ -205,7 +205,7 @@ void loop() {
         float loopTV = USER_PARAMETERS[4].value;
 
         // TODO: unused?
-        singleBreathTime = 60.0/4.0; //Hardcoded for testing
+        singleBreathTime = 60.0/loopBPM; //Hardcoded for testing
 
         inspiration_time = loopInspirationTime;
         expiration_time = singleBreathTime - inspiration_time;
