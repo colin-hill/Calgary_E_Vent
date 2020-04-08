@@ -18,7 +18,7 @@ void updateUserParameters(SelectedParameter &currentlySelectedParameter, volatil
             Encoder &parameterSelectEncoder, UserParameter *userParameters, const uint8_t NUM_USER_PARAMETERS)
 {
   setParameters(currentlySelectedParameter, parameterSet, userParameters);
-  updateParameterValue(currentlySelectedParameter, parameterSelectEncoder,userParameters);
+  updateParameterTempValue(currentlySelectedParameter, parameterSelectEncoder,userParameters);
   updateSelectedParameter(currentlySelectedParameter, parameterSelectEncoder,
               userParameters, NUM_USER_PARAMETERS);
 }
@@ -77,7 +77,7 @@ void updateSelectedParameter(SelectedParameter &currentlySelectedParameter,
   }
 }
 
-void updateParameterValue(SelectedParameter &currentlySelectedParameter, 
+void updateParameterTempValue(SelectedParameter &currentlySelectedParameter, 
 						Encoder &parameterSelectEncoder, UserParameter *userParameters)
 {
 	if(e_None != currentlySelectedParameter){

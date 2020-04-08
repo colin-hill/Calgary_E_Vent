@@ -20,6 +20,7 @@
 #include "LCD.h"
 #include "FailureMode.h"
 #include "MotorZeroing.h"
+#include "PinAssignments.h"
 
 //Begin User Defined Section----------------------------------------------------
 
@@ -55,11 +56,11 @@ LiquidCrystal ventilatorDisplay(ventilatorLCDRS, ventilatorLCDEnable, ventilator
 
 // TODO: Nervous about these -- make sure that they are initialized.
 //Global Variables-------------------------------------------------------------------------------------------------------
-volatile boolean PARAMETER_SET = false;
-SelectedParameter CURRENTLY_SELECTED_PARAMETER = e_None;
-Encoder PARAMETER_SELECT_ENCODER(PARAMETER_ENCODER_PIN_1, PARAMETER_ENCODER_PIN_2);
+volatile boolean parameterSet = false;
+SelectedParameter currentlySelectedParameter = e_None;
+Encoder parameterSelectEncoder(PARAMETER_ENCODER_PIN_1, PARAMETER_ENCODER_PIN_2);
 
-UserParameter USER_PARAMETERS[NUM_USER_PARAMETERS] = {UserParameter(MIN_THRESHOLD_PRESSURE, MAX_THRESHOLD_PRESSURE, THRESHOLD_PRESSURE_INCREMENT, THRESHOLD_PRESSURE_SELECT_PIN),
+UserParameter userParameters[NUM_USER_PARAMETERS] = {UserParameter(MIN_THRESHOLD_PRESSURE, MAX_THRESHOLD_PRESSURE, THRESHOLD_PRESSURE_INCREMENT, THRESHOLD_PRESSURE_SELECT_PIN),
                                                       UserParameter(MIN_BPM, MAX_BPM, BPM_INCREMENT, BPM_SELECT_PIN),
                                                       UserParameter(MIN_INSPIRATION_TIME, MAX_INSPIRATION_TIME, INSPIRATION_TIME_INCREMENT, INSPIRATION_TIME_SELECT_PIN),
                                                       UserParameter(MIN_TIDAL_VOLUME, MAX_TIDAL_VOLUME, TIDAL_VOLUME_INCREMENT, TIDAL_VOLUME_SELECT_PIN),
@@ -140,7 +141,7 @@ void setup() {
     // MotorSerial.begin(9600); //********
 
     //Parameter Input Pin Set Up
-    setUpParameterSelectButtons(USER_PARAMETERS, NUM_USER_PARAMETERS, PARAMETER_ENCODER_PUSH_BUTTON_PIN);
+    setUpParameterSelectButtons(userParameters, NUM_USER_PARAMETERS, PARAMETER_ENCODER_PUSH_BUTTON_PIN);
 
     //Mode Switch Pin input setup
     pinMode(MODE_SWITCH_PIN, INPUT);
@@ -186,8 +187,8 @@ void loop() {
 
 
     //Update the user input parameters
-    updateUserParameters(CURRENTLY_SELECTED_PARAMETER, PARAMETER_SET, PARAMETER_SELECT_ENCODER,
-                       USER_PARAMETERS, NUM_USER_PARAMETERS);
+    updateUserParameters(currentlySelectedParameter, parameterSet, parameterSelectEncoder,
+                       userParameters, NUM_USER_PARAMETERS);
 
     //LCD display temp screen and variables
     //displayParameterScreen(tempTV, tempBPM, tempIERatio, tempThresholdPressure);
@@ -195,7 +196,7 @@ void loop() {
 
     //LCD display internal variables and regular screen
     //displayVentilationScreen(internalTV, internalBPM, internalIERatio, internalThresholdPressure, machineState, peakPressure, plateauPressure, peepPressure);
-    displayUserParameters(CURRENTLY_SELECTED_PARAMETER, ventilatorDisplay, state.machine_state, state.vc_state, state.ac_state, measuredPIP, measuredPlateau, LCD_MAX_STRING, USER_PARAMETERS);
+    displayUserParameters(currentlySelectedParameter, ventilatorDisplay, state.machine_state, state.vc_state, state.ac_state, measuredPIP, measuredPlateau, LCD_MAX_STRING, userParameters);
 
     // Read in values for state
     update_state(state);
@@ -262,6 +263,6 @@ void parameterSetISR() {
 
     if(parameterSetDebounceTimer > (0.25*S_TO_MS)){
         parameterSetDebounceTimer = 0;
-        PARAMETER_SET = true;
+        parameterSet = true;
     }
 }
