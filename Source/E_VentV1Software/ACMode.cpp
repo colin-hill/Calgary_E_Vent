@@ -6,9 +6,13 @@
 #include "conversions.h"
 #include "elapsedMillis.h"
 
+#include <assert.h>
+
 // No globals here. Want these components to be testable in isolation.
 
 VentilatorState acStart(VentilatorState state) {
+    assert(state.ac_state == ACStart);
+
 #ifdef SERIAL_DEBUG
     Serial.println("ACStart");
 #endif //SERIAL_DEBUG
@@ -29,6 +33,8 @@ VentilatorState acStart(VentilatorState state) {
 
 
 VentilatorState acInhaleWait(VentilatorState state) {
+    assert(state.ac_state == ACInhaleWait);
+
 #ifdef SERIAL_DEBUG
     Serial.print("ACInhaleWait: ");
     Serial.println(elapsed_time(state));
@@ -54,6 +60,8 @@ VentilatorState acInhaleWait(VentilatorState state) {
 
 
 VentilatorState acInhaleCommand(VentilatorState state) {
+    assert(state.ac_state == ACInhaleCommand);
+
 #ifdef SERIAL_DEBUG
     Serial.println("ACInhaleCommand");
 #endif //SERIAL_DEBUG
@@ -66,6 +74,8 @@ VentilatorState acInhaleCommand(VentilatorState state) {
 
 
 VentilatorState acInhale(VentilatorState state, const float inspiration_time) {
+    assert(state.ac_state == ACInhale);
+
 #ifdef SERIAL_DEBUG
     Serial.print("ACInhale: ");
     Serial.println(elapsed_time(state));
@@ -100,6 +110,8 @@ VentilatorState acInhale(VentilatorState state, const float inspiration_time) {
 // Unused parameter warning for expiration_time due to SERIAL_DEBUG
 // TODO: Do we really want to print exhalation time in debug here?
 VentilatorState acInhaleAbort(VentilatorState state, const float expiration_time) {
+    assert(state.ac_state == ACInhaleAbort);
+
 #ifdef SERIAL_DEBUG
     Serial.print("ACInhaleAbort: ");
     Serial.println(elapsed_time(state));
@@ -119,6 +131,8 @@ VentilatorState acInhaleAbort(VentilatorState state, const float expiration_time
 
 
 VentilatorState acPeak(VentilatorState state) {
+    assert(state.ac_state == ACPeak);
+
 #ifdef SERIAL_DEBUG
     Serial.print("ACPeak: ");
     Serial.println(elapsed_time(state));
@@ -144,6 +158,8 @@ VentilatorState acPeak(VentilatorState state) {
 
 
 VentilatorState acExhale(VentilatorState state, const float expiration_time) {
+    assert(state.ac_state == ACExhale);
+
 #ifdef SERIAL_DEBUG
     Serial.print("ACExhale: ");
     Serial.println(elapsed_time(state));
@@ -163,6 +179,8 @@ VentilatorState acExhale(VentilatorState state, const float expiration_time) {
 
 
 VentilatorState acReset(VentilatorState state) {
+    assert(state.ac_state == ACReset);
+
 #ifdef SERIAL_DEBUG
     Serial.println("ACReset");
 #endif //SERIAL_DEBUG
