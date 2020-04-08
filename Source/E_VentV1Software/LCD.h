@@ -14,6 +14,13 @@ const int LCD_COLUMNS    = 20;
 const int LCD_ROWS       = 4;
 const int LCD_MAX_STRING = 21;
 
+const int VENTILATOR_LCD_ENABLE = 11;
+const int VENTILATOR_LCD_RS     = 12;
+const int VENTILATOR_LCD_DB4    = 5;
+const int VENTILATOR_LCD_DB5    = 4;
+const int VENTILATOR_LCD_DB6    = 3;
+const int VENTILATOR_LCD_DB7    = 2;
+
 
 //ALARM DISPLAY FUNCTIONS---------------------------------------------------------------------------------------------------------------------------------------------
 

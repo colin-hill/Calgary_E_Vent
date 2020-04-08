@@ -83,6 +83,12 @@ struct VentilatorState {
     uint16_t errors;
 };
 
+
+// Bools for mode
+const bool ACMODE = true;
+const bool VCMODE = false;
+
+
 // Make sure there are the same number of characters as machine states!
 // This is necessary for machineStateCodeAssignment
 const char machineStateCodes[] = "SZBAV";
