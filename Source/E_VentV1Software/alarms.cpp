@@ -2,6 +2,7 @@
 #include "pressure.h"
 #include "elapsedMillis.h"
 #include "LCD.h"
+#include "breathing.h"
 
 
 
