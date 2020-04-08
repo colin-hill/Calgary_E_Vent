@@ -24,9 +24,9 @@
    Output:
    - returns new state.
  */
+<<<<<<< HEAD
 
 VentilatorState vc_mode_step(VentilatorState state, const float inspiration_time, const float expiration_time);
-
 
 
 /* Get a debug code for the current vcModeState.

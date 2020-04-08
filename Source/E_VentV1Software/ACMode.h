@@ -45,8 +45,8 @@ int acCodeAssignment(acModeStates acState);
 
 VentilatorState acStart(VentilatorState state);
 
-
 VentilatorState acInhaleWait(VentilatorState state);
+
 
 
 VentilatorState acInhaleCommand(VentilatorState state);
@@ -56,6 +56,7 @@ VentilatorState acInhale(VentilatorState state, const float inspiration_time);
 // Unused parameter warning for expirationTime due to SERIAL_DEBUG
 // TODO: should this be inspiration time?
 VentilatorState acInhaleAbort(VentilatorState state, const float expiration_time);
+
 
 
 VentilatorState acPeak(VentilatorState state);

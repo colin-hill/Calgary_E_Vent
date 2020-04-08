@@ -25,9 +25,9 @@ const uint8_t HIGH_PEEP_ALARM_SELECT_PIN = 24;
 const uint8_t LOW_PEEP_ALARM_SELECT_PIN = 26;
 const uint8_t LOW_PLATEAU_PRESSURE_ALARM_SELECT_PIN = 28;
 
-const float THRESHOLD_PRESSURE_INCREMENT = 0.1; //cmH2O
-const float BPM_INCREMENT = 1; //Beat per Minute
-const float INSPIRATION_TIME_INCREMENT = 0.5; //Seconds
+const float THRESHOLD_PRESSURE_INCREMENT = 1; //cmH2O
+const float BPM_INCREMENT = 1; //Breath per Minute
+const float INSPIRATION_TIME_INCREMENT = 0.1; //Seconds
 const float TIDAL_VOLUME_INCREMENT = 5; //% of bag
 const float PLATEAU_PAUSE_TIME_INCREMENT = 0.05; //Seconds
 const float HIGH_PIP_ALARM_INCREMENT = 1; //cmH2O

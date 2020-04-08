@@ -139,7 +139,7 @@ VentilatorState acPeak(VentilatorState state) {
     Serial.print("ACPeak: ");
     Serial.println(elapsed_time(state));
     Serial.print("Desired Peak Time: ");
-    Serial.println(HOLD_TIME);
+    Serial.println(loopPlateauPause);
 #endif //SERIAL_DEBUG
 
     // TODO: Hold motor in position********
@@ -158,29 +158,10 @@ VentilatorState acPeak(VentilatorState state) {
     return state;
 }
 
-<<<<<<< HEAD
-acModeStates acExhaleCommand(uint16_t &errors) {
-#ifdef SERIAL_DEBUG
-    Serial.println("ACExhaleCommand");
-#endif //SERIAL_DEBUG
-
-    // TODO: Set motor speed and position
-    // TODO: Reset timer 
-
-    //Need to check plateau pressure
-    //errors |= check_plateau(pressure);
-
-    return ACExhale;
-
-}
-
-acModeStates acExhale(elapsedMillis &breathTimer, const float &expirationTime, float &pressure, float &peepPressure) {
-=======
 
 VentilatorState acExhale(VentilatorState state, const float expiration_time) {
     assert(state.ac_state == ACExhale);
 
->>>>>>> master
 #ifdef SERIAL_DEBUG
     Serial.print("ACExhale: ");
     Serial.println(elapsed_time(state));
@@ -230,18 +211,12 @@ VentilatorState ac_mode_step(VentilatorState state,
     case ACInhaleAbort:
         return acInhaleAbort(state, expiration_time);
     case ACPeak:
-<<<<<<< HEAD
         return acPeak(breathTimer, pressure, plateauPressure, errors);
     case ACExhaleCommand:
         return acExhaleCommand(errors);
     case ACExhale:
         return acExhale(breathTimer, expirationTime, pressure, peepPressure);
-=======
-        return acPeak(state);
-    case ACExhale:
-        // TODO: VC version has errors here, why?
-        return acExhale(state, expiration_time);
->>>>>>> master
+
     case ACReset:
         return acReset(state);
     default:

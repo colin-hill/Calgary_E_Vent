@@ -113,7 +113,7 @@ VentilatorState vcPeak(VentilatorState state) {
     Serial.print("VCPeak: ");
     Serial.println(elapsed_time(state));
     Serial.print("Desired Peak Time: ");
-    Serial.println(HOLD_TIME);
+    Serial.println(loopPlateauPause);
 #endif //SERIAL_DEBUG
     // TODO: Hold motor in position********
 
@@ -139,7 +139,6 @@ VentilatorState vcExhaleCommand(VentilatorState state) {
     // TODO: Set motor speed and position
     // TODO: Reset timer (does this happen here as well as vcStart?)
 
-=======
     state.vc_state = VCInhale;
     return state;
 }
@@ -148,7 +147,6 @@ VentilatorState vcExhaleCommand(VentilatorState state) {
 VentilatorState vcExhale(VentilatorState state, const float expiration_time) {
     assert(state.vc_state == VCExhale);
 
->>>>>>> master
 #ifdef SERIAL_DEBUG
     Serial.print("VCExhale: ");
     Serial.println(elapsed_time(state));
@@ -171,7 +169,6 @@ VentilatorState vcExhale(VentilatorState state, const float expiration_time) {
 VentilatorState vcReset(VentilatorState state) {
     assert(state.vc_state == VCReset);
 
->>>>>>> master
 #ifdef SERIAL_DEBUG
     Serial.println("VCReset");
 #endif //SERIAL_DEBUG

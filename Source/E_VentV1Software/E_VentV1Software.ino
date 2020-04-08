@@ -89,19 +89,20 @@ float loopThresholdPressure;
 float loopBPM;
 float loopInspirationTime;
 float loopTV;
+float loopPlateauPause;
+float acThresholdTime;
 
 float pressure;
 float tempPeakPressure;
 float peakPressure;
 
 float peepPressure;
-<<<<<<< HEAD
+
 
 float controllerTemperature;
 
 float measuredPIP; 
-=======
->>>>>>> master
+
 float plateauPressure;
 */
 
@@ -110,6 +111,11 @@ float plateauPressure;
 float measuredPIP;
 float measuredPlateau;
 float singleBreathTime;
+
+float inspirationTime;
+float expirationTime;
+float motorReturnTime;
+
 
 // TODO: Make these static variables in loop instead?
 float inspiration_time;
@@ -176,6 +182,8 @@ void setup() {
 
     machineState = StartupHold; 
 
+
+
     while(StartupHold == machineState) {
     //Wait for interupt routine triggered by user
         delay(250);
@@ -183,6 +191,7 @@ void setup() {
 
     // Set up ventilator state.
     state = get_init_state();
+
 }
 
 void loop() {
@@ -220,12 +229,19 @@ void loop() {
         float loopInspirationTime = USER_PARAMETERS[2].value;
         float loopTV = USER_PARAMETERS[4].value;
 
-        // TODO: unused?
-        singleBreathTime = 60.0/loopBPM; //Hardcoded for testing
+        loopThresholdPressure = USER_PARAMETERS[0].value; //TODO: not hardcoded numbers here
+        loopBPM = USER_PARAMETERS[1].value;
+        loopInspirationTime = USER_PARAMETERS[2].value;
+        loopTV = USER_PARAMETERS[4].value;
+        loopPlateauPause = 0.15;// TODO replace with user parameter value
 
-        inspiration_time = loopInspirationTime;
-        expiration_time = singleBreathTime - inspiration_time;
-
+        singleBreathTime = 60.0/4.0; //Hardcoded for testing
+        //singleBreathTime = 60.0/loopBPM;
+        motorReturnTime = 4.0; // TODO; talk to Colin. the MIT control logic is flawed
+        inspirationTime = loopInspirationTime;
+        expirationTime = singleBreathTime - inspirationTime;
+        acThresholdTime = expirationTime - motorReturnTime;
+        
         if (digitalRead(modeSwitchPin) == ACMODE) {
             state.machine_state = ACMode;
         }
@@ -233,6 +249,7 @@ void loop() {
             state.machine_state = VCMode;
         }
     }
+
     else if (ACMode == state.machine_state) {
         state = ac_mode_step(state, inspiration_time, expiration_time);
     }

@@ -26,11 +26,8 @@ const float MAX_INSPIRATION_TIME = 3.0; //Seconds
 //------------------------------------------------------------------------------
 
 //Breath hold time--------------------------------------------------------------
-const float HOLD_TIME              = 0.25; //should not be hardcoded; leaving for now
 const float MIN_PLATEAU_PAUSE_TIME = 0.1;
 const float MAX_PLATEAU_PAUSE_TIME = 0.5;
-const float AC_THRESHOLD_TIME      = 0.5; //Seconds
-
 
 //Max & Min PIP Pressures--------------------------------------------------------
 const float MAX_PRESSURE = 40.0; //cmH2O
