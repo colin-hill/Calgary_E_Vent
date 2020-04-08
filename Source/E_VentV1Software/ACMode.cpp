@@ -60,6 +60,7 @@ acModeStates acInhaleCommand() {
 #endif //SERIAL_DEBUG
       
     // TODO: Set motor velocity and position********
+    // TODO: set timer
 
     return ACInhale;
 }
@@ -91,6 +92,7 @@ acModeStates acInhale(elapsedMillis &breathTimer, const float &inspirationTime, 
         peakPressure = tempPeakPressure;
 
         // TODO: Check that motor made it to the appropriate position********
+        //Need a tolerance on this
     }
     else if (pressure > MAX_PRESSURE) {
         errors |= HIGH_PRESSURE_ALARM;
@@ -146,6 +148,21 @@ acModeStates acPeak(elapsedMillis &breathTimer, float &pressure, float &plateauP
     }
 
     return next_state;
+}
+
+acModeStates acExhaleCommand(uint16_t &errors) {
+#ifdef SERIAL_DEBUG
+    Serial.println("ACExhaleCommand");
+#endif //SERIAL_DEBUG
+
+    // TODO: Set motor speed and position
+    // TODO: Reset timer 
+
+    //Need to check plateau pressure
+    //errors |= check_plateau(pressure);
+
+    return ACExhale;
+
 }
 
 acModeStates acExhale(elapsedMillis &breathTimer, const float &expirationTime, float &pressure, float &peepPressure) {
@@ -206,8 +223,9 @@ acModeStates ac_mode_step(acModeStates current_state,
         return acInhaleAbort(breathTimer, expirationTime, pressure, errors);
     case ACPeak:
         return acPeak(breathTimer, pressure, plateauPressure, errors);
+    case ACExhaleCommand:
+        return acExhaleCommand(errors);
     case ACExhale:
-        // TODO: VC version has errors here, why?
         return acExhale(breathTimer, expirationTime, pressure, peepPressure);
     case ACReset:
         return acReset(machineState, breathTimer, pressure, errors);
@@ -220,4 +238,9 @@ acModeStates ac_mode_step(acModeStates current_state,
     }
 
     return current_state;
+}
+
+
+int acCodeAssignment(acModeStates acState) {
+    return (int)acState + 1;
 }

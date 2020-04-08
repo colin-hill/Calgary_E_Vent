@@ -4,6 +4,9 @@
 #ifndef alarms_h
 #define alarms_h
 
+#include <LiquidCrystal.h>
+#include "MachineStates.h"
+
 #if ARDUINO >= 100
 #include "Arduino.h"
 #else
@@ -14,17 +17,20 @@
 const float ALARM_SOUND_LENGTH = 0.5; //Seconds
 
 // Alarm pins
-const int ALARM_BUZZER_PIN = 21;
+const int ALARM_BUZZER_PIN = 11;
+const int ALARM_LED_PIN    = 12;
+const int ALARM_RELAY_PIN  = 13;
 
 // Alarm flags
-const uint16_t HIGH_PRESSURE_ALARM  = 0x01 << 0;
-const uint16_t LOW_PRESSURE_ALARM   = 0x01 << 1;
-const uint16_t HIGH_PEEP_ALARM      = 0x01 << 2;
-const uint16_t LOW_PEEP_ALARM       = 0x01 << 3;
-const uint16_t DISCONNECT_ALARM     = 0x01 << 4;
-const uint16_t HIGH_TEMP_ALARM      = 0x01 << 5;
-const uint16_t APNEA_ALARM          = 0x01 << 6;
-const uint16_t DEVICE_FAILURE_ALARM = 0x01 << 7;
+const uint16_t HIGH_PRESSURE_ALARM   = 0x01 << 0;
+const uint16_t LOW_PRESSURE_ALARM    = 0x01 << 1;
+const uint16_t HIGH_PEEP_ALARM       = 0x01 << 2;
+const uint16_t LOW_PEEP_ALARM        = 0x01 << 3;
+const uint16_t DISCONNECT_ALARM      = 0x01 << 4;
+const uint16_t HIGH_TEMP_ALARM       = 0x01 << 5;
+const uint16_t APNEA_ALARM           = 0x01 << 6;
+const uint16_t DEVICE_FAILURE_ALARM  = 0x01 << 7;
+//const uint16_t PRESSURE_SENSOR_ALARM = 0x01 << 8;
 
 // Functions for triggering alarms.
 
@@ -108,7 +114,10 @@ uint16_t check_peep(const float pressure);
    - TODO: currently does nothing, should raise alarms (LCD, beeping)
    - TODO: will reset the errors flag
  */
-void handle_alarms(uint16_t &errors);
+machineStates handle_alarms(machineStates machineState,
+                   LiquidCrystal &displayName, 
+                   uint16_t &errors, float peakPressure, 
+                   float peepPressure, float controllerTemperature);
 
 /* TODO: Check alarms more frequently?
 

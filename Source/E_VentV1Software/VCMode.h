@@ -35,7 +35,24 @@ enum vcModeStates {
    Output:
    - returns new state.
  */
-vcModeStates vc_mode_step(vcModeStates current_state, elapsedMillis &breathTimer, const float &inspirationTime, const float &expirationTime, float &tempPeakPressure, float &peakPressure, float &pressure, float &peepPressure, float &plateauPressure, uint16_t &errors, machineStates &machineState);
+vcModeStates vc_mode_step(vcModeStates current_state,
+                          elapsedMillis &breathTimer, 
+                          const float &inspirationTime,
+                          const float &expirationTime, float &tempPeakPressure, 
+                          float &peakPressure, float &pressure, 
+                          float &peepPressure, float &plateauPressure,
+                          uint16_t &errors, machineStates &machineState);
+
+
+/* Get a debug code for the current vcModeState.
+
+   Input:
+   - state
+
+   Output:
+   - integer code (1 index of state in enum list)
+ */
+int vcCodeAssignment(vcModeStates vcState);
 
 
 // ----------------------------------------------------------------------
@@ -53,11 +70,11 @@ vcModeStates vcInhaleAbort(elapsedMillis &breathTimer, const float &expirationTi
 
 vcModeStates vcPeak(elapsedMillis &breathTimer, const float &inspirationTime, float &pressure, float &plateauPressure, uint16_t &errors);
 
-vcModeStates vcExhaleCommand(void);
+vcModeStates vcExhaleCommand(uint16_t &errors);
 
-vcModeStates vcExhale(const elapsedMillis &breathTimer, const float &expirationTime, float &pressure, float &peepPressure, uint16_t &errors);
+vcModeStates vcExhale(const elapsedMillis &breathTimer, const float &expirationTime, float &pressure, float &peepPressure);
 
-vcModeStates vcReset(machineStates &machineState);
+vcModeStates vcReset(machineStates &machineState, float &peepPressure, uint16_t &errors);
 
 
 #endif

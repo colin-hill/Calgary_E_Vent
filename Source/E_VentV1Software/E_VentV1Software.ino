@@ -13,6 +13,9 @@
 #include "breathing.h"
 #include "conversions.h"
 #include "MachineStates.h"
+#include "LCD.h"
+#include "FailureMode.h"
+#include "MotorZeroing.h"
 
 //Begin User Defined Section----------------------------------------------------
 
@@ -23,23 +26,33 @@ const char softwareVersion[] = "VERSION 0.1";
 
 //IO Pin Definintions-----------------------------------------------------------
 const int setParameterPin  = 25; //Pin for the set parameter button
-const int limitSwitchPin   = 23;
+
 const int alarmSwitchPin   = 24;
 const int modeSwitchPin    = 20;
 const int setBPMPotPin     = 7;
 const int setIERatioPotPin = 8;
 const int setTVPotPin      = 6;
+
 //------------------------------------------------------------------------------
 
 //LCD Denfinitions--------------------------------------------------------------
-const int lcdEnable = 7;
-const int lcdRS     = 8;
-const int lcdDB4    = 9;
-const int lcdDB5    = 10;
-const int lcdDB6    = 11;
-const int lcdDB7    = 12;
 
-//LiquidCrystal lcd(lcdRS, lcdEnable, lcdDB4, lcdDB5, lcdDB6, lcdDB7);
+const int alarmLCDEnable = 49;
+const int alarmLCDRS     = 53;
+const int alarmLCDDB4    = 47;
+const int alarmLCDDB5    = 45;
+const int alarmLCDDB6    = 43;
+const int alarmLCDDB7    = 41;
+
+const int ventilatorLCDEnable = 51;
+const int ventilatorLCDRS     = 53;
+const int ventilatorLCDDB4    = 47;
+const int ventilatorLCDDB5    = 45;
+const int ventilatorLCDDB6    = 43;
+const int ventilatorLCDDB7    = 41;
+
+LiquidCrystal alarmDisplay(alarmLCDRS, alarmLCDEnable, alarmLCDDB4, alarmLCDDB5, alarmLCDDB6, alarmLCDDB7);
+LiquidCrystal ventilatorDisplay(ventilatorLCDRS, ventilatorLCDEnable, ventilatorLCDDB4, ventilatorLCDDB5, ventilatorLCDDB6, ventilatorLCDDB7);
 
 //------------------------------------------------------------------------------
 
@@ -84,6 +97,7 @@ float tempPeakPressure;
 float peakPressure;
 float plateauPressure;
 float peepPressure;
+float controllerTemperature;
 
 float singleBreathTime;
 float inspirationTime;
@@ -96,6 +110,7 @@ uint16_t errors = 0;
 elapsedMillis paramChangeDebounceTimer;
 elapsedMillis otherDebounceTimer;
 elapsedMillis breathTimer;
+elapsedMillis homingTimer;
 
 // TODO: move these to alarms.h?
 //------------------------------------------------------------------------------
@@ -106,6 +121,7 @@ elapsedMillis breathTimer;
 
 //Enumerators------------------------------------------------------------------------------------------------------------
 machineStates machineState = Startup;
+zeroingStates zeroingState = CommandHome;
 acModeStates acModeState   = ACStart;
 vcModeStates vcModeState   = VCStart;
 //------------------------------------------------------------------------------
@@ -114,15 +130,13 @@ void setup() {
 
 #ifdef SERIAL_DEBUG
     Serial.begin(9600);
+    Serial.println("Startup");
 #endif //SERIAL_DEBUG
 
-    Serial.println("StartUpInitiated");
+    setupLimitSwitch();
 
-
-    // Pin Setup------------------------------------------------------------------------------------------------------------
     // Motor serial communications startup
-    MotorSerial.begin(9600); //********
-
+    // MotorSerial.begin(9600); //********
 
     // Potentiometer input pin setup
     pinMode(SET_THRESHOLD_PRESSURE_POT_PIN , INPUT);
@@ -132,7 +146,7 @@ void setup() {
 
     // Switch input pin setup
     pinMode(setParameterPin, INPUT);
-    pinMode(limitSwitchPin, INPUT);
+
     pinMode(alarmSwitchPin, INPUT);
 
     // Pressure sensor input pin setup
@@ -143,13 +157,17 @@ void setup() {
     // Parameter change interrupt setup
     attachInterrupt(digitalPinToInterrupt(setParameterPin),parameterChangeButtonISR,FALLING);
 
-    // LCD Setup
-    //lcd.begin(20, 4); //set number of columns and rows
+    //LCD Setup
+    //alarmDisplay.begin(LCD_COLUMNS, LCD_ROWS); //set number of columns and rows
+    ventilatorDisplay.begin(LCD_COLUMNS, LCD_ROWS);
 
     readPotentiometers(SET_THRESHOLD_PRESSURE_POT_PIN, setBPMPotPin, setIERatioPotPin, setTVPotPin, internalThresholdPressure, internalBPM, internalIERatio, internalTV);
 
+    
     //LCD Display Startup Message for two seconds
-    //displayStartScreen(softwareVersion);
+    displayStartupScreen(ventilatorDisplay, softwareVersion, LCD_COLUMNS);
+
+
 #ifdef NO_INPUT_DEBUG //Skips parameter input section
     cli();
     paramChange = true;
@@ -173,30 +191,22 @@ void setup() {
     paramChange = false;
     sei();
 
-    //LCD Display Homing Message
-    //displayHomingScreen();
 
 #ifdef SERIAL_DEBUG
-    Serial.println("Homing Motor");
+    Serial.begin(9600);
+    Serial.println("StartupHold");
 #endif //SERIAL_DEBUG
 
-    //Motor Homing Sequence
-#ifndef NO_INPUT_DEBUG
-    while (digitalRead(limitSwitchPin) == 0) {
-        //Move motor at Vhome********
+    machineState = StartupHold; 
+
+    while(StartupHold == machineState) {
+    //Wait for interupt routine triggered by user
+        delay(250);
     }
 
-    while (digitalRead(limitSwitchPin) == 1) {
-        //Move motor at Vzero********
-    }
+    machineState = MotorZeroing;
 
-    //Hardcoded motor bag limit find sequence
-    //Move motor x degrees inward********
-
-    //Zero the encoder********
-#endif //NO_INPUT_DEBUG
-
-    machineState = BreathLoopStart;
+    
 }
 
 void loop() {
@@ -215,11 +225,26 @@ void loop() {
 
         //LCD display internal variables and regular screen
         //displayVentilationScreen(internalTV, internalBPM, internalIERatio, internalThresholdPressure, machineState, peakPressure, plateauPressure, peepPressure);
+        displayVentilationParameters(ventilatorDisplay, machineState, vcModeState , acModeState, internalBPM, internalThresholdPressure, internalTV, internalIERatio, internalIERatio, peakPressure, plateauPressure, LCD_MAX_STRING);
+
     }
 
     //Beginning of state machine code
 
-    if (BreathLoopStart == machineState) { //BreathLoopStart---------------------------------------------------------------------------------
+    
+
+    if (MotorZeroing == machineState) {
+
+#ifdef SERIAL_DEBUG
+    Serial.println("Homing Motor");
+#endif //SERIAL_DEBUG
+
+        displayHomingScreen(ventilatorDisplay);
+        displayHomingScreen(alarmDisplay);
+
+        zeroingState = motor_zeroing_step(zeroingState, homingTimer, errors, machineState);;
+    }
+    else if (BreathLoopStart == machineState) { //BreathLoopStart---------------------------------------------------------------------------------
 #ifdef SERIAL_DEBUG
         Serial.println("Breath Loop Start");
 #endif //SERIAL_DEBUG
@@ -252,8 +277,13 @@ void loop() {
                                    tempPeakPressure, peakPressure, pressure, peepPressure,
                                    plateauPressure, errors, machineState);
     }
+    else if (FailureMode == machineState) {
+        failure_mode(errors);
+    }
 
-    handle_alarms(errors);
+    //TODO Define controller temperature
+    machineState = handle_alarms(machineState, alarmDisplay, errors, peakPressure, peepPressure, controllerTemperature);
+    
 }
 
 //FUNCTIONS
