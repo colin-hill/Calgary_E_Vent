@@ -36,17 +36,16 @@ const float MAX_SENSOR_PRESSURE = 1.0; //PSI Differential
 // Functions
 /*
 	Function to initialize the pressure sensor into the desired configuration
-	
+
 */
 void setUpPressureSensor(const uint32_t PRESSURE_SENSOR_BAUD_RATE);
+
 
 /* Function to read the pressure sensor on the PRESSURE_SENSOR_PIN.
  * Inputs: None.
  * Outputs:
  *  -The pressure is returned in a float in cmH2O
  */
-
 float readPressureSensor();
-
 
 #endif // pressure_h

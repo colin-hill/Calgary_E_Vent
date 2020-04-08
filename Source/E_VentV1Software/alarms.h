@@ -45,7 +45,7 @@ const float MIN_LOW_PEEP_ALARM = 0; //cmH2O
 const float MAX_LOW_PLATEAU_PRESSURE_ALARM = 40; //cmH2O
 const float MIN_LOW_PLATEAU_PRESSURE_ALARM = 1; //cmH2O
 //------------------------------------------
- 
+
 // Alarm flags
 const uint16_t HIGH_PRESSURE_ALARM   = 0x01 << 0;
 const uint16_t LOW_PRESSURE_ALARM    = 0x01 << 1;

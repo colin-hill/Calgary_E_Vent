@@ -32,8 +32,6 @@ void updateSelectedParameter(SelectedParameter &currentlySelectedParameter,
 
     while(selectedArrayIndex < NUM_USER_PARAMETERS){
       if(digitalRead(userParameters[selectedArrayIndex].selectPin)){
-         Serial.print("Found a Pin: ");
-         Serial.print(userParameters[selectedArrayIndex].selectPin);
          break;
       }
       else{
@@ -83,7 +81,6 @@ void updateParameterValue(SelectedParameter &currentlySelectedParameter,
 						Encoder &parameterSelectEncoder, UserParameter *userParameters)
 {
 	if(e_None != currentlySelectedParameter){
-    Serial.println("Updating Tmp Value");
 		int32_t encoderTurns = parameterSelectEncoder.read();
 		parameterSelectEncoder.write(0); //Reset the encoder count in between loops
 
@@ -97,7 +94,6 @@ void setParameters(SelectedParameter &currentlySelectedParameter,
 	cli();
 	if(parameterSet){
     if(e_None != currentlySelectedParameter){
-      Serial.println("Parameter Set");
       userParameters[(int)currentlySelectedParameter].updateValue();
     }
 		parameterSet = false;
