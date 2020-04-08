@@ -339,6 +339,24 @@ void displayStartupScreen(LiquidCrystal &displayName, const char softwareVersion
 
 }
 
+void displayStartupHoldScreen(LiquidCrystal &displayName) {
+
+	const char parameterDispL1[] = "ENSURE PERSONNEL ARE";
+	const char parameterDispL2[] = "CLEAR OF VENTILATOR";
+	const char parameterDispL3[] = "PRESS ALARM DISMISS";
+	const char parameterDispL4[] = "TO CONFIRM...";
+
+	displayName.clear();
+	displayName.write(parameterDispL1);
+	displayName.setCursor(0,1);
+	displayName.write(parameterDispL2);
+	displayName.setCursor(0,2);
+	displayName.write(parameterDispL3);
+	displayName.setCursor(0,3);
+	displayName.write(parameterDispL4);
+
+}
+
 void displayHomingScreen(LiquidCrystal &displayName) {
 
 	const char parameterDispL1[] = "CALIBRATION";

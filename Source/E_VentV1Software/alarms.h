@@ -21,6 +21,31 @@ const int ALARM_BUZZER_PIN = 11;
 const int ALARM_LED_PIN    = 12;
 const int ALARM_RELAY_PIN  = 13;
 
+//High PIP Alarm Definitions----------------
+const float MAX_HIGH_PIP_ALARM = 40; //cmH2O
+const float MIN_HIGH_PIP_ALARM = 10; //cmH2O
+//------------------------------------------
+
+//Low PIP Alarm Definitions-----------------
+const float MAX_LOW_PIP_ALARM = 40; //cmH2O
+const float MIN_LOW_PIP_ALARM = 0; //cmH2O
+//------------------------------------------
+
+//High PEEP Alarm Definitions---------------
+const float MAX_HIGH_PEEP_ALARM = 30; //cmH2O
+const float MIN_HIGH_PEEP_ALARM = 1; //cmH2O
+//------------------------------------------
+
+//Low PEEP Alarm Definitions----------------
+const float MAX_LOW_PEEP_ALARM = 30; //cmH2O
+const float MIN_LOW_PEEP_ALARM = 0; //cmH2O
+//------------------------------------------
+
+//Low Plateau Pressure Alarm Defintions-----
+const float MAX_LOW_PLATEAU_PRESSURE_ALARM = 40; //cmH2O
+const float MIN_LOW_PLATEAU_PRESSURE_ALARM = 1; //cmH2O
+//------------------------------------------
+ 
 // Alarm flags
 const uint16_t HIGH_PRESSURE_ALARM   = 0x01 << 0;
 const uint16_t LOW_PRESSURE_ALARM    = 0x01 << 1;

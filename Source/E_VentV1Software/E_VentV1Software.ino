@@ -13,6 +13,10 @@
 #include "breathing.h"
 #include "conversions.h"
 #include "MachineStates.h"
+
+#include "Encoder.h"
+#include "UserParameter.h"
+#include "updateUserParameters.h"
 #include "LCD.h"
 #include "FailureMode.h"
 #include "MotorZeroing.h"
@@ -24,16 +28,13 @@
 
 const char softwareVersion[] = "VERSION 0.1";
 
+<<<<<<< HEAD
 //IO Pin Definintions-----------------------------------------------------------
-const int setParameterPin  = 25; //Pin for the set parameter button
+
 
 const int alarmSwitchPin   = 24;
-const int modeSwitchPin    = 20;
-const int setBPMPotPin     = 7;
-const int setIERatioPotPin = 8;
-const int setTVPotPin      = 6;
+const int modeSwitchPin    = 40;
 
-//------------------------------------------------------------------------------
 
 //LCD Denfinitions--------------------------------------------------------------
 
@@ -56,9 +57,6 @@ LiquidCrystal ventilatorDisplay(ventilatorLCDRS, ventilatorLCDEnable, ventilator
 
 //------------------------------------------------------------------------------
 
-//ADC Definitions---------------------------------------------------------------
-//------------------------------------------------------------------------------
-
 //End User Defined Section------------------------------------------------------
 //Useful Definitions and Macros-------------------------------------------------
 #define ACMODE true
@@ -67,57 +65,53 @@ LiquidCrystal ventilatorDisplay(ventilatorLCDRS, ventilatorLCDEnable, ventilator
 //#define MotorSerial Serial1
 
 //Function Definitions---------------------------------------------------------------------------------------------------
-void readPotentiometers(uint8_t thresholdPressurePotPin, uint8_t bpmPotPin, uint8_t ieRatioPotPin, uint8_t tvPotPin, volatile float &thresholdPressure, volatile float &bpm, volatile float &ieRatio, volatile float &tv);
-
-float voltageToBPMConversion(float potVoltage);
-float voltageToIERatioConversion(float potVoltage);
-float voltageToTVConversion(float potVoltage);
-void parameterChangeButtonISR();
 
 // TODO: Nervous about these -- make sure that they are initialized.
 //Global Variables-------------------------------------------------------------------------------------------------------
-volatile boolean paramChange = false;
-volatile float internalThresholdPressure; //Threshold pressure to be used on the next breath cycle
-volatile float internalBPM; //Breaths per Minute to be used on next breath cycle
-volatile float internalIERatio; //I:E ratio to be used on the next breath cycle
-volatile float internalTV; //Tidal Volume to be used on next breath cycle
+volatile boolean PARAMETER_SET = false;
+SelectedParameter CURRENTLY_SELECTED_PARAMETER = e_None;
+Encoder PARAMETER_SELECT_ENCODER(PARAMETER_ENCODER_PIN_1, PARAMETER_ENCODER_PIN_2);
 
-volatile float tempThresholdPressure;
-volatile float tempBPM;
-volatile float tempIERatio;
-volatile float tempTV;
+UserParameter USER_PARAMETERS[NUM_USER_PARAMETERS] = {UserParameter(MIN_THRESHOLD_PRESSURE, MAX_THRESHOLD_PRESSURE, THRESHOLD_PRESSURE_INCREMENT, THRESHOLD_PRESSURE_SELECT_PIN),
+                                                      UserParameter(MIN_BPM, MAX_BPM, BPM_INCREMENT, BPM_SELECT_PIN),
+                                                      UserParameter(MIN_INSPIRATION_TIME, MAX_INSPIRATION_TIME, INSPIRATION_TIME_INCREMENT, INSPIRATION_TIME_SELECT_PIN),
+                                                      UserParameter(MIN_TIDAL_VOLUME, MAX_TIDAL_VOLUME, TIDAL_VOLUME_INCREMENT, TIDAL_VOLUME_SELECT_PIN),
+                                                      UserParameter(MIN_PLATEAU_PAUSE_TIME, MAX_PLATEAU_PAUSE_TIME, PLATEAU_PAUSE_TIME_INCREMENT, PLATEAU_PAUSE_TIME_SELECT_PIN),
+                                                      UserParameter(MIN_HIGH_PIP_ALARM, MAX_HIGH_PIP_ALARM, HIGH_PIP_ALARM_INCREMENT, HIGH_PIP_ALARM_SELECT_PIN),
+                                                      UserParameter(MIN_LOW_PIP_ALARM, MAX_LOW_PIP_ALARM, LOW_PIP_ALARM_INCREMENT, LOW_PIP_ALARM_SELECT_PIN),
+                                                      UserParameter(MIN_HIGH_PEEP_ALARM, MAX_HIGH_PEEP_ALARM, HIGH_PEEP_ALARM_INCREMENT, HIGH_PEEP_ALARM_SELECT_PIN),
+                                                      UserParameter(MIN_LOW_PEEP_ALARM, MAX_LOW_PEEP_ALARM, LOW_PEEP_ALARM_INCREMENT, LOW_PEEP_ALARM_SELECT_PIN),
+                                                      UserParameter(MIN_LOW_PLATEAU_PRESSURE_ALARM, MAX_LOW_PLATEAU_PRESSURE_ALARM, LOW_PLATEAU_PRESSURE_ALARM_INCREMENT, LOW_PLATEAU_PRESSURE_ALARM_SELECT_PIN)};
+
 
 float loopThresholdPressure;
 float loopBPM;
-float loopIERatio;
+float loopInspirationTime;
 float loopTV;
 
 float pressure;
 float tempPeakPressure;
 float peakPressure;
-float plateauPressure;
+float measuredPlateau;
 float peepPressure;
+
 float controllerTemperature;
+
+float measuredPIP; 
+float plateauPressure;
 
 float singleBreathTime;
 float inspirationTime;
 float expirationTime;
 
+
 uint16_t errors = 0;
 //------------------------------------------------------------------------------
 
 //Timer Variables--------------------------------------------------------------------------------------------------------
-elapsedMillis paramChangeDebounceTimer;
-elapsedMillis otherDebounceTimer;
+elapsedMillis parameterSetDebounceTimer;
 elapsedMillis breathTimer;
 elapsedMillis homingTimer;
-
-// TODO: move these to alarms.h?
-//------------------------------------------------------------------------------
-
-//Ease of use conversion factor------------------------------------------------------------------------------------------
-
-//------------------------------------------------------------------------------
 
 //Enumerators------------------------------------------------------------------------------------------------------------
 machineStates machineState = Startup;
@@ -129,39 +123,31 @@ vcModeStates vcModeState   = VCStart;
 void setup() {
 
 #ifdef SERIAL_DEBUG
+
     Serial.begin(9600);
     Serial.println("Startup");
 #endif //SERIAL_DEBUG
 
     setupLimitSwitch();
 
+
+
     // Motor serial communications startup
     // MotorSerial.begin(9600); //********
 
-    // Potentiometer input pin setup
-    pinMode(SET_THRESHOLD_PRESSURE_POT_PIN , INPUT);
-    pinMode(setBPMPotPin               , INPUT);
-    pinMode(setIERatioPotPin           , INPUT);
-    pinMode(setTVPotPin                , INPUT);
+    //Parameter Input Pin Set Up
+    setUpParameterSelectButtons(USER_PARAMETERS, NUM_USER_PARAMETERS, PARAMETER_ENCODER_PUSH_BUTTON_PIN);
 
-    // Switch input pin setup
-    pinMode(setParameterPin, INPUT);
 
-    pinMode(alarmSwitchPin, INPUT);
-
-    // Pressure sensor input pin setup
-    pinMode(PRESSURE_SENSOR_PIN, INPUT);
-
-    pinMode(ALARM_BUZZER_PIN,OUTPUT);
+    //modeSwitchPin input setup
+    pinMode(modeSwitchPin, INPUT);
 
     // Parameter change interrupt setup
-    attachInterrupt(digitalPinToInterrupt(setParameterPin),parameterChangeButtonISR,FALLING);
 
     //LCD Setup
     //alarmDisplay.begin(LCD_COLUMNS, LCD_ROWS); //set number of columns and rows
     ventilatorDisplay.begin(LCD_COLUMNS, LCD_ROWS);
 
-    readPotentiometers(SET_THRESHOLD_PRESSURE_POT_PIN, setBPMPotPin, setIERatioPotPin, setTVPotPin, internalThresholdPressure, internalBPM, internalIERatio, internalTV);
 
     
     //LCD Display Startup Message for two seconds
@@ -169,27 +155,10 @@ void setup() {
 
 
 #ifdef NO_INPUT_DEBUG //Skips parameter input section
-    cli();
-    paramChange = true;
-    sei();
-    internalThresholdPressure = 5;
-    internalBPM = 10;
-    internalIERatio = 4;
-    internalTV = 100;
+    
 #endif //NO_INPUT_DEBUG
 
-    cli(); //Turn off ointerrupts before reading paramChange
-    while (paramChange == false) {
-
-        sei();
-        //LCD Display Internal Variables
-        //displayParameterScreen(internalTV, internalBPM, internalIERatio, internalThresholdPressure);
-
-        readPotentiometers(SET_THRESHOLD_PRESSURE_POT_PIN, setBPMPotPin, setIERatioPotPin, setTVPotPin, internalThresholdPressure, internalBPM, internalIERatio, internalTV);
-        cli();
-    }
-    paramChange = false;
-    sei();
+    //Some kind of parameter start up code here, requires RT input?
 
 
 #ifdef SERIAL_DEBUG
@@ -204,6 +173,7 @@ void setup() {
         delay(250);
     }
 
+
     machineState = MotorZeroing;
 
     
@@ -211,23 +181,19 @@ void setup() {
 
 void loop() {
     //Update LCD*********
-    cli(); //Prevent interrupts from occuring
-    if (paramChange) {
-        sei();
-        readPotentiometers(SET_THRESHOLD_PRESSURE_POT_PIN, setBPMPotPin, setIERatioPotPin, setTVPotPin, tempThresholdPressure, tempBPM, tempIERatio, tempTV);
 
-        //LCD display temp screen and variables
-        //displayParameterScreen(tempTV, tempBPM, tempIERatio, tempThresholdPressure);
+    
+    //Update the user input parameters
+    updateUserParameters(CURRENTLY_SELECTED_PARAMETER, PARAMETER_SET, PARAMETER_SELECT_ENCODER,
+                       USER_PARAMETERS, NUM_USER_PARAMETERS); 
+    
+    //LCD display temp screen and variables
+    //displayParameterScreen(tempTV, tempBPM, tempIERatio, tempThresholdPressure);
 
-    }
-    else {
-        sei();
 
-        //LCD display internal variables and regular screen
-        //displayVentilationScreen(internalTV, internalBPM, internalIERatio, internalThresholdPressure, machineState, peakPressure, plateauPressure, peepPressure);
-        displayVentilationParameters(ventilatorDisplay, machineState, vcModeState , acModeState, internalBPM, internalThresholdPressure, internalTV, internalIERatio, internalIERatio, peakPressure, plateauPressure, LCD_MAX_STRING);
-
-    }
+    //LCD display internal variables and regular screen
+    //displayVentilationScreen(internalTV, internalBPM, internalIERatio, internalThresholdPressure, machineState, peakPressure, plateauPressure, peepPressure);
+    displayUserParameters(CURRENTLY_SELECTED_PARAMETER, ventilatorDisplay, machineState, vcModeState, acModeState, measuredPIP, measuredPlateau, LCD_MAX_STRING, USER_PARAMETERS);
 
     //Beginning of state machine code
 
@@ -249,15 +215,13 @@ void loop() {
         Serial.println("Breath Loop Start");
 #endif //SERIAL_DEBUG
 
-        cli();
-        loopThresholdPressure = internalThresholdPressure;
-        loopBPM = internalBPM;
-        loopIERatio = internalIERatio;
-        loopTV = internalTV;
-        sei();
+        loopThresholdPressure = USER_PARAMETERS[0].value;
+        loopBPM = USER_PARAMETERS[1].value;
+        loopInspirationTime = USER_PARAMETERS[2].value;
+        loopTV = USER_PARAMETERS[4].value;
 
-        singleBreathTime = 60.0/loopBPM;
-        inspirationTime = singleBreathTime / (1 + loopIERatio);
+        singleBreathTime = 60.0/4.0; //Hardcoded for testing
+        inspirationTime = loopInspirationTime;
         expirationTime = singleBreathTime - inspirationTime;
 
         if (digitalRead(modeSwitchPin) == ACMODE) {
@@ -288,47 +252,10 @@ void loop() {
 
 //FUNCTIONS
 
+void parameterSetISR() {
 
-/*Function to read the potentiometer inputs
-  * Inputs:
-  *  -The Threshold pressure potentiometer pin
-  *  -The BPM potentiometer pin
-  *  -The IERatio potentiometer pin
-  *  -The TV potentiometer pin
-  *  -Pointers to the threshold pressure, BPM, IERatio and TV variables
-  */
-void readPotentiometers(uint8_t thresholdPressurePotPin, uint8_t bpmPotPin, uint8_t ieRatioPotPin, uint8_t tvPotPin, volatile float &thresholdPressure, volatile float &bpm, volatile float &ieRatio, volatile float &tv) {
-    uint16_t setThresholdPressurePotPinADCReading = analogRead(thresholdPressurePotPin);
-    uint16_t setBPMPotPinADCReading = analogRead(bpmPotPin);
-    uint16_t setIERatioPotPinADCReading = analogRead(ieRatioPotPin);
-    uint16_t setTVPotPinADCReading = analogRead(tvPotPin);
-
-    float setThresholdPressurePotVoltage = setThresholdPressurePotPinADCReading * ADC_READING_TO_VOLTS_FACTOR;
-    float setBPMPotVoltage = setBPMPotPinADCReading * ADC_READING_TO_VOLTS_FACTOR;
-    float setIERatioPotVoltage = setIERatioPotPinADCReading * ADC_READING_TO_VOLTS_FACTOR;
-    float setTVPotVoltage = setTVPotPinADCReading * ADC_READING_TO_VOLTS_FACTOR;
-
-    thresholdPressure = voltageToSetThresholdPressureConversion(setThresholdPressurePotVoltage);
-    bpm = voltageToBPMConversion(setBPMPotVoltage);
-    ieRatio = voltageToIERatioConversion(setIERatioPotVoltage);
-    tv = voltageToTVConversion(setTVPotVoltage);
-
-    return;
-}
-
-void parameterChangeButtonISR() {
-
-    if(paramChangeDebounceTimer > 0.1*1000){
-        if(paramChange){
-            paramChange = false;
-            internalThresholdPressure = tempThresholdPressure;
-            internalBPM = tempBPM;
-            internalIERatio  = tempIERatio;
-            internalTV = tempTV;
-        }
-        else {
-            paramChange = true;
-        }
-        paramChangeDebounceTimer = 0;
+    if(parameterSetDebounceTimer > (0.25*S_TO_MS)){
+        parameterSetDebounceTimer = 0;
+        PARAMETER_SET = true;
     }
 }

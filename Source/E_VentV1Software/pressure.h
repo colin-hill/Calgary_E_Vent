@@ -15,59 +15,51 @@
 #include "WProgram.h"
 #endif
 
+#include "Wire.h"
 
 //Pressure Sensor Definitions---------------------------------------------------
-const float MIN_PRESSURE_SENSOR_VOLTAGE = 0.0;
-const float MAX_PRESSURE_SENSOR_VOLTAGE = 5.0; // Assumed 0-5V sensor
+#define PRESSURE_SENSOR_I2C Wire
+const float PSI_TO_CMH2O = 70.307;
+const uint32_t PRESSURE_SENSOR_BAUD_RATE = 9600;
+const uint8_t PRESSURE_SENSOR_ADDRESS = 40; //Honeywell documentation
+
+const uint32_t MAX_DIGITAL_OUTPUT = 14745; //Honeywell I2C comms documentation
+const uint32_t MIN_DIGITAL_OUTPUT = 1638; //Honeywell I2C comms documentation
 
 // TODO: Double check these constants. I'm unclear on the units.
-const float MIN_PRESSURE = 0.0; //Absolute psi,cmH20?
-const float MAX_PRESSURE = 10.0; //Absolute psi, cmH20?
+const float MIN_SENSOR_PRESSURE = -1.0; //PSI Differential
+const float MAX_SENSOR_PRESSURE = 1.0; //PSI Differential
 //------------------------------------------------------------------------------
+
+const float MAX_PRESSURE = 40.0; //cmH2O
+const float MIN_PRESSURE = 0.0; //cmH2O
+
+//Threshold Pressure Definitions------------------------------------------------
+const float MIN_THRESHOLD_PRESSURE = 1.0;
+const float MAX_THRESHOLD_PRESSURE = 2.0;
+//------------------------------------------------------------------------------
+
 
 //Max & Min Pressures-----------------------------------------------------------
 const float MAX_PEEP_PRESSURE = 20.0; //cmH2O
 const float MIN_PEEP_PRESSURE = 0.0; //cmH2O
 //------------------------------------------------------------------------------
 
-// Potentiometer information
-const float SET_THRESHOLD_PRESSURE_POT_MAX_VOLTAGE = 5.0;
-
-// Pressure sensor pins
-const int PRESSURE_SENSOR_PIN            = 10;
-const int SET_THRESHOLD_PRESSURE_POT_PIN = 9;
 
 // Functions
+/*
+	Function to initialize the pressure sensor into the desired configuration
+	
+*/
+void setUpPressureSensor(const uint32_t PRESSURE_SENSOR_BAUD_RATE);
 
 /* Function to read the pressure sensor on the PRESSURE_SENSOR_PIN.
  * Inputs: None.
  * Outputs:
- *  -The pressure is returned in a float
- *    + TODO: Units?
+ *  -The pressure is returned in a float in cmH2O
  */
 
-float readPressureSensor(void);
+float readPressureSensor();
 
-
-/*Function to convert the pressure potentiometer voltage to a desired set pressure
-  Inputs:
-  -potVoltage: The voltage output of the potentiometer, must be converted to volts from adc reading prior to use of function
-
-  Outputs:
-  -setPressure (in psi? cmH2O?)
-*/
-
-float voltageToSetThresholdPressureConversion(const float potVoltage);
-
-
-/*Function to convert pressure sensor voltage to usable pressure value
-  Inputs:
-  -sensorVoltage: The voltage output by the sesnor, must be converted to volts from adc reading prior to use of function
-
-  Outputs:
-  -pressure in (psi? cmH2O)
-*/
-
-float voltageToPressureConversion(const float sensorVoltage);
 
 #endif // pressure_h
