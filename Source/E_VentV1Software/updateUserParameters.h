@@ -10,6 +10,7 @@
 #include "UserParameter.h"
 #include "Encoder.h"
 #include "LCD.h"
+#include "MachineStates.h"
 
 //volatile boolean PARAMETER_SELECT = false;
 //volatile boolean PARAMETER_SET = false;
@@ -43,11 +44,13 @@ void updateParameterTempValue(SelectedParameter &currentlySelectedParameter,
 void setParameters(SelectedParameter &currentlySelectedParameter,
 				volatile boolean &parameterSet, UserParameter *userParamter);
 
-void updateUserParameters(SelectedParameter &currentlySelectedParameter,volatile boolean &parameterSet,
+VentilatorState updateStateUserParameters(VentilatorState &state, SelectedParameter &currentlySelectedParameter,volatile boolean &parameterSet,
             Encoder &parameterSelectEncoder, UserParameter *userParameters, const uint8_t NUM_USER_PARAMETERS);
 
 void displayUserParameters(SelectedParameter &currentlySelectedParameter, LiquidCrystal &displayName, machineStates machineState, vcModeStates vcState, acModeStates acState, 
                           float measuredPIP, float measuredPlateau, const int LCD_MAX_STRING, UserParameter *userParameters);
+
+VentilatorState setStateParameters(VentilatorState &state, UserParameter *userParameters);
 
 void parameterSetISR();
 

@@ -146,8 +146,8 @@ void loop() {
     //Update LCD*********
 
 
-    //Update the user input parameters
-    updateUserParameters(currentlySelectedParameter, parameterSet, parameterSelectEncoder,
+    //Update the state user input parameters
+    state = updateStateUserParameters(state, currentlySelectedParameter, parameterSet, parameterSelectEncoder,
                        userParameters, NUM_USER_PARAMETERS);
 
     //LCD display internal variables and regular screen
@@ -171,23 +171,9 @@ void loop() {
 #ifdef SERIAL_DEBUG
         Serial.println("Breath Loop Start");
 #endif //SERIAL_DEBUG
-        state.loop_threshold_pressure = USER_PARAMETERS[0].value;
         // TODO: Some of these are not used.
-        float loopBPM = USER_PARAMETERS[1].value;
-        float loopInspirationTime = USER_PARAMETERS[2].value;
-        float loopTV = USER_PARAMETERS[4].value;
 
-        state.loop_threshold_pressure = USER_PARAMETERS[0].value; //TODO: not hardcoded numbers here
-        loopBPM = USER_PARAMETERS[1].value;
-        loopInspirationTime = USER_PARAMETERS[2].value;
-        loopTV = USER_PARAMETERS[4].value;
-
-        singleBreathTime = 60.0/4.0; //Hardcoded for testing
-        //singleBreathTime = 60.0/loopBPM;
         motorReturnTime = 4.0; // TODO; talk to Colin. the MIT control logic is flawed
-        inspirationTime = loopInspirationTime;
-        expirationTime = singleBreathTime - inspirationTime;
-        state.ac_threshold_time = expirationTime - motorReturnTime;
         
         if (digitalRead(MODE_SWITCH_PIN) == ACMODE) {
             state.machine_state = ACMode;

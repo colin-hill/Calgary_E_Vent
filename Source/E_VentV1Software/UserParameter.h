@@ -14,17 +14,6 @@
 
 const uint8_t NUM_USER_PARAMETERS = 10;
 
-const uint8_t THRESHOLD_PRESSURE_SELECT_PIN = 6;
-const uint8_t BPM_SELECT_PIN = 7;
-const uint8_t INSPIRATION_TIME_SELECT_PIN = 8;
-const uint8_t TIDAL_VOLUME_SELECT_PIN = 9;
-const uint8_t PLATEAU_PAUSE_TIME_SELECT_PIN = 10;
-const uint8_t HIGH_PIP_ALARM_SELECT_PIN = 13;
-const uint8_t LOW_PIP_ALARM_SELECT_PIN = 22;
-const uint8_t HIGH_PEEP_ALARM_SELECT_PIN = 24;
-const uint8_t LOW_PEEP_ALARM_SELECT_PIN = 26;
-const uint8_t LOW_PLATEAU_PRESSURE_ALARM_SELECT_PIN = 28;
-
 const float THRESHOLD_PRESSURE_INCREMENT = 1; //cmH2O
 const float BPM_INCREMENT = 1; //Breath per Minute
 const float INSPIRATION_TIME_INCREMENT = 0.1; //Seconds

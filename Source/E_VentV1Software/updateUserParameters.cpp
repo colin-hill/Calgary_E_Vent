@@ -14,13 +14,14 @@ void setUpParameterSelectButtons(UserParameter *userParameters, const uint8_t NU
 
 }
 
-void updateUserParameters(SelectedParameter &currentlySelectedParameter, volatile boolean &parameterSet,
+VentilatorState updateStateUserParameters(VentilatorState &state, SelectedParameter &currentlySelectedParameter, volatile boolean &parameterSet,
             Encoder &parameterSelectEncoder, UserParameter *userParameters, const uint8_t NUM_USER_PARAMETERS)
 {
-  setParameters(currentlySelectedParameter, parameterSet, userParameters);
-  updateParameterTempValue(currentlySelectedParameter, parameterSelectEncoder,userParameters);
-  updateSelectedParameter(currentlySelectedParameter, parameterSelectEncoder,
-              userParameters, NUM_USER_PARAMETERS);
+	setParameters(currentlySelectedParameter, parameterSet, userParameters);
+	updateParameterTempValue(currentlySelectedParameter, parameterSelectEncoder,userParameters);
+	updateSelectedParameter(currentlySelectedParameter, parameterSelectEncoder,
+							userParameters, NUM_USER_PARAMETERS);
+	return setStateParameters(state, userParameters);
 }
 
 void updateSelectedParameter(SelectedParameter &currentlySelectedParameter, 
@@ -151,6 +152,20 @@ void displayUserParameters(SelectedParameter &currentlySelectedParameter, Liquid
                                   bpm, thresholdPressure, tidalVolume, inspirationTime, plateauPauseTime, 
                                   measuredPIP, measuredPlateau, LCD_MAX_STRING);
   }
+}
+
+VentilatorState setStateParameters(VentilatorState &state, UserParameter *userParameters){
+	
+	SelectedParameter selectedParameter = e_ThresholdPressure; //TODO: Find a better way to access the array
+	state.loop_threshold_pressure = userParameters[(int)selectedParameter].value;
+	selectedParameter = e_BPM;
+	state.breaths_per_minute = userParameters[(int)selectedParameter].value;
+	selectedParameter = e_PlateauPauseTime;
+	state.plateau_pause_time = userParameters[(int)selectedParameter].value;
+	selectedParameter = e_TidalVolume;
+	state.tidal_volume = userParameters[(int)selectedParameter].value;
+	
+	return state;
 }
 
 /*

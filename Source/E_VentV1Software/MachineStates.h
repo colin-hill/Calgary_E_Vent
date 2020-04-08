@@ -102,6 +102,12 @@ struct VentilatorState {
     float ac_threshold_time;
 
     float plateau_pause_time;
+	
+	float inspiration_time;
+	
+	float breaths_per_minute;
+	
+	float tidal_volume;
 
     uint16_t errors;
 };

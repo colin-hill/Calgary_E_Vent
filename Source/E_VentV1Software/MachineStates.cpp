@@ -1,6 +1,7 @@
 #include "MachineStates.h"
 #include "pressure.h"
 #include "breathing.h"
+#include "UserParameter.h"
 
 
 char machineStateCodeAssignment(machineStates machineState) {
