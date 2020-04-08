@@ -40,7 +40,7 @@ vcModeStates vc_mode_step(vcModeStates current_state,
                           const float &inspirationTime,
                           const float &expirationTime, float &tempPeakPressure, 
                           float &peakPressure, float &pressure, 
-                          float &peepPressure, float &plateauPressure,
+                          float &peepPressure, float &plateauPressure, float &loopPlateauPause,
                           uint16_t &errors, machineStates &machineState);
 
 
@@ -68,7 +68,7 @@ vcModeStates vcInhale(elapsedMillis &breathTimer, const float &inspirationTime, 
 
 vcModeStates vcInhaleAbort(elapsedMillis &breathTimer, const float &expirationTime, float &pressure, uint16_t &errors);
 
-vcModeStates vcPeak(elapsedMillis &breathTimer, const float &inspirationTime, float &pressure, float &plateauPressure, uint16_t &errors);
+vcModeStates vcPeak(elapsedMillis &breathTimer, const float &inspirationTime, float &pressure, float &plateauPressure, float &loopPlateauPause, uint16_t &errors);
 
 vcModeStates vcExhaleCommand(uint16_t &errors);
 

@@ -26,7 +26,7 @@ acModeStates acStart(elapsedMillis &breathTimer) {
     return ACInhaleWait;
 }
 
-acModeStates acInhaleWait(elapsedMillis &breathTimer, float &tempPeakPressure, float &pressure, float &loopThresholdPressure, uint16_t &errors) {
+acModeStates acInhaleWait(elapsedMillis &breathTimer, float &tempPeakPressure, float &pressure, float &loopThresholdPressure, float &acThresholdTime, uint16_t &errors) {
 #ifdef SERIAL_DEBUG
     Serial.print("ACInhaleWait: ");
     Serial.println(breathTimer);
@@ -36,10 +36,11 @@ acModeStates acInhaleWait(elapsedMillis &breathTimer, float &tempPeakPressure, f
 
     pressure = readPressureSensor();
 
-    if (breathTimer > (AC_THRESHOLD_TIME * S_TO_MS)) {
+    if (breathTimer > (acThresholdTime * S_TO_MS)) {
         next_state = ACInhaleCommand;
 
-        errors |= APNEA_ALARM;
+        //Removing the functionality of the Apnea alarm for now, but let's not delete the code
+        //errors |= APNEA_ALARM; 
 
         breathTimer = 0;
         tempPeakPressure = 0;
@@ -122,12 +123,12 @@ acModeStates acInhaleAbort(elapsedMillis &breathTimer,
 }
 
 
-acModeStates acPeak(elapsedMillis &breathTimer, float &pressure, float &plateauPressure, uint16_t &errors) {
+acModeStates acPeak(elapsedMillis &breathTimer, float &pressure, float &plateauPressure, float &loopPlateauPause, uint16_t &errors) {
 #ifdef SERIAL_DEBUG
     Serial.print("ACPeak: ");
     Serial.println(breathTimer);
     Serial.print("Desired Peak Time: ");
-    Serial.println(HOLD_TIME);
+    Serial.println(loopPlateauPause);
 #endif //SERIAL_DEBUG
 
     acModeStates next_state = ACPeak;
@@ -137,7 +138,7 @@ acModeStates acPeak(elapsedMillis &breathTimer, float &pressure, float &plateauP
     pressure = readPressureSensor();
 
     // TODO: nervous about else if for alarm
-    if (breathTimer > (HOLD_TIME * S_TO_MS)) { //******** how and where is hold time defined, currently hard coded
+    if (breathTimer > (loopPlateauPause * S_TO_MS)) { //******** how and where is hold time defined, currently hard coded
         next_state = ACExhale;
 
         breathTimer = 0;
@@ -207,14 +208,14 @@ acModeStates ac_mode_step(acModeStates current_state,
                           const float &inspirationTime,
                           const float &expirationTime, float &tempPeakPressure,
                           float &peakPressure, float &pressure,
-                          float &peepPressure, float &plateauPressure,
-                          float &loopThresholdPressure,
+                          float &peepPressure, float &plateauPressure, float &loopPlateauPause,
+                          float &loopThresholdPressure, float &acThresholdTime,
                           uint16_t &errors, machineStates &machineState) {
     switch(current_state) {
     case ACStart:
         return acStart(breathTimer);
     case ACInhaleWait:
-        return acInhaleWait(breathTimer, tempPeakPressure, pressure, loopThresholdPressure, errors);
+        return acInhaleWait(breathTimer, tempPeakPressure, pressure, loopThresholdPressure, acThresholdTime, errors);
     case ACInhaleCommand:
         return acInhaleCommand();
     case ACInhale:
@@ -222,7 +223,7 @@ acModeStates ac_mode_step(acModeStates current_state,
     case ACInhaleAbort:
         return acInhaleAbort(breathTimer, expirationTime, pressure, errors);
     case ACPeak:
-        return acPeak(breathTimer, pressure, plateauPressure, errors);
+        return acPeak(breathTimer, pressure, plateauPressure, loopPlateauPause, errors);
     case ACExhaleCommand:
         return acExhaleCommand(errors);
     case ACExhale:

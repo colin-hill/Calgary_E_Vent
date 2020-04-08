@@ -99,13 +99,13 @@ vcModeStates vcInhaleAbort(elapsedMillis &breathTimer,
 // Unused parameter warning is due to inspirationTime only being used for debug information.
 // The debug information should be displayingthe hold tim, this has been altered
 vcModeStates vcPeak(elapsedMillis &breathTimer, const float &inspirationTime,
-                    float &pressure, float &plateauPressure,
+                    float &pressure, float &plateauPressure, float &loopPlateauPause,
                     uint16_t &errors) {
 #ifdef SERIAL_DEBUG
     Serial.print("VCPeak: ");
     Serial.println(breathTimer);
     Serial.print("Desired Peak Time: ");
-    Serial.println(HOLD_TIME);
+    Serial.println(loopPlateauPause);
 #endif //SERIAL_DEBUG
 
     vcModeStates next_state = VCPeak;
@@ -113,7 +113,7 @@ vcModeStates vcPeak(elapsedMillis &breathTimer, const float &inspirationTime,
     // TODO: Hold motor in position********
 
     pressure = readPressureSensor();
-    if(breathTimer > (HOLD_TIME * S_TO_MS)){
+    if(breathTimer > (loopPlateauPause * S_TO_MS)){
         next_state  = VCExhale;
         breathTimer = 0;
         plateauPressure = pressure;
@@ -181,7 +181,7 @@ vcModeStates vc_mode_step(vcModeStates current_state,
                           const float &inspirationTime,
                           const float &expirationTime, float &tempPeakPressure,
                           float &peakPressure, float &pressure,
-                          float &peepPressure, float &plateauPressure,
+                          float &peepPressure, float &plateauPressure, float &loopPlateauPause,
                           uint16_t &errors, machineStates &machineState) {
     switch(current_state) {
     case VCStart:
@@ -193,7 +193,7 @@ vcModeStates vc_mode_step(vcModeStates current_state,
     case VCInhaleAbort:
         return vcInhaleAbort(breathTimer, expirationTime, pressure, errors);
     case VCPeak:
-        return vcPeak(breathTimer, inspirationTime, pressure, plateauPressure, errors);
+        return vcPeak(breathTimer, inspirationTime, pressure, plateauPressure, loopPlateauPause, errors);
     case VCExhaleCommand:
         return vcExhaleCommand(errors); 
     case VCExhale:

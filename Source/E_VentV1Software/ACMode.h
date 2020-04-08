@@ -43,8 +43,8 @@ acModeStates ac_mode_step(acModeStates current_state,
                           const float &inspirationTime,
                           const float &expirationTime, float &tempPeakPressure,
                           float &peakPressure, float &pressure,
-                          float &peepPressure, float &plateauPressure,
-                          float &loopThresholdPressure,
+                          float &peepPressure, float &plateauPressure, float &loopPlateauPause,
+                          float &loopThresholdPressure, float &acThresholdTime,
                           uint16_t &errors, machineStates &machineState);
 
 
@@ -66,7 +66,7 @@ int acCodeAssignment(acModeStates acState);
 
 acModeStates acStart(elapsedMillis &breathTimer);
 
-acModeStates acInhaleWait(elapsedMillis &breathTimer, float &tempPeakPressure, float &pressure, float &loopThresholdPressure, uint16_t &errors);
+acModeStates acInhaleWait(elapsedMillis &breathTimer, float &tempPeakPressure, float &pressure, float &acThresholdPressure, float &loopThresholdTime, uint16_t &errors);
 
 acModeStates acInhaleCommand(void);
 
@@ -75,7 +75,7 @@ acModeStates acInhale(elapsedMillis &breathTimer, float &inspirationTime, float 
 // Unused parameter warning for expirationTime due to SERIAL_DEBUG
 acModeStates acInhaleAbort(elapsedMillis &breathTimer, const float &expirationTime, float &pressure, uint16_t &errors);
 
-acModeStates acPeak(elapsedMillis &breathTimer, float &pressure, float &plateauPressure, uint16_t &errors);
+acModeStates acPeak(elapsedMillis &breathTimer, float &pressure, float &plateauPressure, float &loopPlateauPause, uint16_t &errors);
 
 acModeStates acExhaleCommand(uint16_t &errors);
 

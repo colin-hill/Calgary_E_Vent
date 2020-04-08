@@ -88,6 +88,8 @@ float loopThresholdPressure;
 float loopBPM;
 float loopInspirationTime;
 float loopTV;
+float loopPlateauPause;
+float acThresholdTime;
 
 float pressure;
 float tempPeakPressure;
@@ -103,6 +105,7 @@ float plateauPressure;
 float singleBreathTime;
 float inspirationTime;
 float expirationTime;
+float motorReturnTime;
 
 
 uint16_t errors = 0;
@@ -162,10 +165,14 @@ void setup() {
 
     machineState = StartupHold; 
 
+#ifndef NO_INPUT_DEBUG
+
     while(StartupHold == machineState) {
     //Wait for interupt routine triggered by user
         delay(250);
     }
+
+#endif
 
     machineState = MotorZeroing;
    
@@ -211,10 +218,14 @@ void loop() {
         loopBPM = USER_PARAMETERS[1].value;
         loopInspirationTime = USER_PARAMETERS[2].value;
         loopTV = USER_PARAMETERS[4].value;
+        loopPlateauPause = 0.15;// TODO replace with user parameter value
 
         singleBreathTime = 60.0/4.0; //Hardcoded for testing
+        //singleBreathTime = 60.0/loopBPM;
+        motorReturnTime = 4.0; // TODO; talk to Colin. the MIT control logic is flawed
         inspirationTime = loopInspirationTime;
         expirationTime = singleBreathTime - inspirationTime;
+        acThresholdTime = expirationTime - motorReturnTime;
 
         if (digitalRead(MODE_SWITCH_PIN) == ACMODE) {
             machineState = ACMode;
@@ -226,12 +237,12 @@ void loop() {
     else if (ACMode == machineState) {
         acModeState = ac_mode_step(acModeState, breathTimer, inspirationTime, expirationTime,
                                    tempPeakPressure, peakPressure, pressure, peepPressure,
-                                   plateauPressure, loopThresholdPressure, errors, machineState);
+                                   plateauPressure, loopPlateauPause, loopThresholdPressure, acThresholdTime, errors, machineState);
     }
     else if (VCMode == machineState) {
         vcModeState = vc_mode_step(vcModeState, breathTimer, inspirationTime, expirationTime,
                                    tempPeakPressure, peakPressure, pressure, peepPressure,
-                                   plateauPressure, errors, machineState);
+                                   plateauPressure, loopPlateauPause, errors, machineState);
     }
     else if (FailureMode == machineState) {
         failure_mode(errors);
