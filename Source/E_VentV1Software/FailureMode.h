@@ -4,6 +4,8 @@
 #include <Arduino.h>
 #include <LiquidCrystal.h>
 
+#include "MachineStates.h"
+
 /* Displays mechanism failure alarm and stops all motion
 
    Input:
@@ -13,7 +15,7 @@
    Output:
    - none
  */
-void failure_mode(uint16_t &errors);
+VentilatorState failure_mode(VentilatorState state);
 
 
 #endif

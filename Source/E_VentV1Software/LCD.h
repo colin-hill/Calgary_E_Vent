@@ -8,6 +8,7 @@
 #include "MachineStates.h"
 #include "VCMode.h"
 #include "ACMode.h"
+#include "PinAssignments.h"
 
 //LCD Constants
 const int LCD_COLUMNS    = 20;

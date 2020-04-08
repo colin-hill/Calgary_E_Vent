@@ -139,10 +139,7 @@ uint16_t check_peep(const float pressure);
    - TODO: currently does nothing, should raise alarms (LCD, beeping)
    - TODO: will reset the errors flag
  */
-machineStates handle_alarms(machineStates machineState,
-                   LiquidCrystal &displayName, 
-                   uint16_t &errors, float peakPressure, 
-                   float peepPressure, float controllerTemperature);
+VentilatorState handle_alarms(VentilatorState state, LiquidCrystal &displayName);
 
 /* TODO: Check alarms more frequently?
 

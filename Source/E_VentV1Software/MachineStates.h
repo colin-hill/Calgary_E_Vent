@@ -10,6 +10,7 @@
 #include "WProgram.h"
 #endif
 
+
 // Make sure each state has a character in machineStatesCodes
 // This is for debug information.
 enum machineStates {
@@ -90,10 +91,17 @@ struct VentilatorState {
     float temp_peak_pressure;
     float peak_pressure;
 
+    float controller_temperature;
+
     float peep_pressure;
+
     float plateau_pressure;
 
     float loop_threshold_pressure;
+
+    float ac_threshold_time;
+
+    float plateau_pause_time;
 
     uint16_t errors;
 };

@@ -13,22 +13,6 @@ const float ZEROING_TIME = 5.0;
 const int ZERO_POINT_TICKS = 1000;
 const int MOTOR_HOME_SPEED = 20; //Out of 127
 
-const int LIMIT_SWITCH_PIN;
-
-
-
-
-/* States for the Motor Zeroing Mode state machine.
-
-   TODO: directions to state machine diagram.
- */
-enum zeroingStates {
-                    CommandHome,
-                    MotorHomingWait,
-                    CommandZero,
-                    MotorZeroingWait,
-                    MotorZero
-};
 
 // ----------------------------------------------------------------------
 // Functions for handling the Motor Zeroing state machine
@@ -37,17 +21,17 @@ enum zeroingStates {
 
 void setupLimitSwitch(void);
 
-zeroingStates commandHome(elapsedMillis &homingTimer);
+VentilatorState commandHome(VentilatorState state);
 
-zeroingStates motorHomingWait(elapsedMillis &homingTimer);
+VentilatorState motorHomingWait(VentilatorState state);
 
-zeroingStates commandZero(elapsedMillis &homingTimer);
+VentilatorState commandZero(VentilatorState state);
 
-zeroingStates motorZeroingWait(elapsedMillis &homingTimer);
+VentilatorState motorZeroingWait(VentilatorState state);
 
-zeroingStates motorZero(uint16_t &errors, machineStates &machineState);
+VentilatorState motorZero(VentilatorState state);
 
-zeroingStates motor_zeroing_step(zeroingStates currentState, elapsedMillis &homingTimer, uint16_t &errors, machineStates &machineState);
+VentilatorState motor_zeroing_step(VentilatorState state);
 
 
 

@@ -40,7 +40,7 @@ VentilatorState acInhaleWait(VentilatorState state) {
     Serial.println(elapsed_time(state));
 #endif //SERIAL_DEBUG
 
-    if (elapsed_time(state) > (AC_THRESHOLD_TIME * S_TO_MS)) {
+    if (elapsed_time(state) > (state.ac_threshold_time * S_TO_MS)) {
         state.ac_state = ACInhaleCommand;
 
         state.errors |= APNEA_ALARM;
@@ -139,37 +139,47 @@ VentilatorState acPeak(VentilatorState state) {
     Serial.print("ACPeak: ");
     Serial.println(elapsed_time(state));
     Serial.print("Desired Peak Time: ");
-    Serial.println(loopPlateauPause);
+    Serial.println(state.plateau_pause_time);
 #endif //SERIAL_DEBUG
 
     // TODO: Hold motor in position********
 
-    // TODO: nervous about else if for alarm
-    if (elapsed_time(state) > (HOLD_TIME * S_TO_MS)) { //******** how and where is hold time defined, currently hard coded
-        state.ac_state = ACExhale;
 
-        reset_timer(state);
+    if (elapsed_time(state) > (state.plateau_pause_time * S_TO_MS)) { //******** how and where is hold time defined, currently hard coded
+        state.ac_state = ACExhaleCommand;
         state.plateau_pressure = state.pressure;
     }
-    else if (state.pressure > MAX_PRESSURE) {
+    
+
+    if (state.pressure > MAX_PRESSURE) {
         state.errors |= HIGH_PRESSURE_ALARM;
     }
 
     return state;
 }
 
+VentilatorState acExhaleCommand(VentilatorState state) {
+    assert(state.ac_state == ACExhaleCommand);
+#ifdef SERIAL_DEBUG
+    Serial.println("ACExhaleCommand");
+#endif //SERIAL_DEBUG
 
-VentilatorState acExhale(VentilatorState state, const float expiration_time) {
+    reset_timer(state);
+
+    state.ac_state = ACExhale;
+
+    // TODO: Send motor to zero position********
+
+}
+
+VentilatorState acExhale(VentilatorState state, float expiration_time) {
     assert(state.ac_state == ACExhale);
-
 #ifdef SERIAL_DEBUG
     Serial.print("ACExhale: ");
     Serial.println(elapsed_time(state));
     Serial.print("Desired Exhale Time: ");
     Serial.println(expiration_time);
 #endif //SERIAL_DEBUG
-
-    // TODO: Send motor to zero position********
 
     if (elapsed_time(state) > (expiration_time * S_TO_MS)) {
         state.ac_state      = ACReset;
@@ -211,12 +221,11 @@ VentilatorState ac_mode_step(VentilatorState state,
     case ACInhaleAbort:
         return acInhaleAbort(state, expiration_time);
     case ACPeak:
-        return acPeak(breathTimer, pressure, plateauPressure, errors);
+        return acPeak(state);
     case ACExhaleCommand:
-        return acExhaleCommand(errors);
+        return acExhaleCommand(state);
     case ACExhale:
-        return acExhale(breathTimer, expirationTime, pressure, peepPressure);
-
+        return acExhale(state, expiration_time);
     case ACReset:
         return acReset(state);
     default:

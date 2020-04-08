@@ -3,19 +3,23 @@
 #include "FailureMode.h"
 
 
-void failure_mode(uint16_t &errors) {
+
+
+VentilatorState failure_mode(VentilatorState state) {
+
+    //TODO: Set motor velocity to zero
+
+    //TODO: Set errors to critcal failure
+
+
 #ifdef SERIAL_DEBUG
     Serial.println("Failure Mode");
     Serial.println("Error Code:");
-    Serial.println(errors);
+    Serial.println(state.errors);
+    Serial.println("AC Mode State:");
+    Serial.println(state.ac_state);
+    Serial.println("VC Mode State:");
+    Serial.println(state.vc_state);
 #endif //SERIAL_DEBUG
-
-    //TODO: Set motor velocity to zero
-    
-
-    while(1) {
-    	//Infinite loop
-    	//Requires power cycle of full system to exit
-    }	
 
 }
