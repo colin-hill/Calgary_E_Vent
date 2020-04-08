@@ -22,9 +22,8 @@
    Output:
    - returns new state.
  */
-
-acModeStates acStart(elapsedMillis &breathTimer);
-
+VentilatorState ac_mode_step(VentilatorState state,
+    const float inspiration_time, const float expiration_time);
 
 /* Get a debug code for the current acModeState.
 
@@ -42,35 +41,22 @@ int acCodeAssignment(acModeStates acState);
 // in the main loop, but should be documented and available for testing.
 // ----------------------------------------------------------------------
 
+VentilatorState acStart(VentilatorState state);
 
-acModeStates acInhaleWait(elapsedMillis &breathTimer, float &tempPeakPressure, float &pressure, float &loopThresholdPressure, uint16_t &errors);
+VentilatorState acInhaleWait(VentilatorState state);
 
-acModeStates acInhaleCommand();
+VentilatorState acInhaleCommand(VentilatorState state);
 
-acModeStates acInhale(elapsedMillis &breathTimer, float &inspirationTime, float &tempPeakPressure, float &peakPressure, float &pressure, uint16_t &errors);
-
+VentilatorState acInhale(VentilatorState state, const float inspiration_time);
 
 // Unused parameter warning for expirationTime due to SERIAL_DEBUG
-acModeStates acInhaleAbort(elapsedMillis &breathTimer,
-                           const float &expirationTime, float &pressure,
-    uint16_t &errors);
+// TODO: should this be inspiration time?
+VentilatorState acInhaleAbort(VentilatorState state, const float expiration_time);
 
+VentilatorState acPeak(VentilatorState state);
 
-acModeStates acPeak(elapsedMillis &breathTimer, float &pressure, float &plateauPressure, uint16_t &errors);
+VentilatorState acExhale(VentilatorState state, const float expiration_time);
 
-acModeStates acExhale(elapsedMillis &breathTimer, const float &expirationTime, float &pressure, float &peepPressure);
-
-
-acModeStates acReset(machineStates &machineState, elapsedMillis &breathTimer, float &pressure, uint16_t &errors);
-
-
-acModeStates ac_mode_step(acModeStates current_state,
-                          elapsedMillis &breathTimer,
-                          const float &inspirationTime,
-                          const float &expirationTime, float &tempPeakPressure,
-                          float &peakPressure, float &pressure,
-                          float &peepPressure, float &plateauPressure,
-                          float &loopThresholdPressure,
-                          uint16_t &errors, machineStates &machineState);
+VentilatorState acReset(VentilatorState state);
 
 #endif

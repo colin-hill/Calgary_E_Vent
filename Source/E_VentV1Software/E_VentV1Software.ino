@@ -218,10 +218,7 @@ void loop() {
         }
     }
     else if (ACMode == state.machine_state) {
-        state.ac_state = ac_mode_step(state.ac_state, breathTimer, inspiration_time, expiration_time,
-                                   state.temp_peak_pressure, state.peak_pressure, state.pressure,
-                                   state.peep_pressure, state.plateau_pressure,
-                                   state.loop_threshold_pressure, state.errors, state.machine_state);
+        state = ac_mode_step(state, inspiration_time, expiration_time);
     }
     else if (VCMode == state.machine_state) {
         state = vc_mode_step(state, inspiration_time, expiration_time);

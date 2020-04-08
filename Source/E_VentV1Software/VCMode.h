@@ -43,6 +43,8 @@ int vcCodeAssignment(vcModeStates vcState);
 // in the main loop, but should be documented and available for testing.
 // ----------------------------------------------------------------------
 
+// TODO: These need to be documented with pre and postconditions.
+// These pre/post conditions currently exist in a spreadsheet.
 VentilatorState vcStart(VentilatorState state);
 
 VentilatorState vcInhaleCommand(VentilatorState state);
