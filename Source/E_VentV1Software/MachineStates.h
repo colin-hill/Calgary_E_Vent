@@ -65,7 +65,9 @@ struct VentilatorState {
     acModeStates ac_state;
 
     // Parameters
-    unsigned long breath_time;
+    // TODO: should we worry about overflow for these?
+    unsigned long breath_time_start; // When timer was started (ms).
+    unsigned long current_time;      // Current time (ms).
 
     float pressure;
 
@@ -96,5 +98,24 @@ const char machineStateCodes[] = "SZBAV";
    - Character representing the machine state based on machineStateCodes.
  */
 char machineStateCodeAssignment(machineStates machineState);
+
+
+/* Get initial state.
+ */
+VentilatorState get_init_state(void);
+
+/* Update state with current time + pressure readings.
+ */
+void update_state(VentilatorState &state);
+
+
+/* Reset timer.
+ */
+void reset_timer(VentilatorState &state);
+
+
+/* Get elapsed time in ms.
+ */
+unsigned long elapsed_time(const VentilatorState &state);
 
 #endif

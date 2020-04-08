@@ -16,10 +16,15 @@
 
 /* Step the VC state machine.
 
+   Input:
+   - ventilator state
+   - inspiration time
+   - expiration time.
+
    Output:
    - returns new state.
  */
-vcModeStates vc_mode_step(vcModeStates current_state, elapsedMillis &breathTimer, const float &inspirationTime, const float &expirationTime, float &tempPeakPressure, float &peakPressure, float &pressure, float &peepPressure, float &plateauPressure, uint16_t &errors, machineStates &machineState);
+VentilatorState vc_mode_step(VentilatorState state, const float inspiration_time, const float expiration_time);
 
 
 /* Get a debug code for the current vcModeState.
@@ -38,21 +43,20 @@ int vcCodeAssignment(vcModeStates vcState);
 // in the main loop, but should be documented and available for testing.
 // ----------------------------------------------------------------------
 
-vcModeStates vcStart(elapsedMillis &breathTimer, float &tempPeakPressure);
+VentilatorState vcStart(VentilatorState state);
 
-vcModeStates vcInhaleCommand(void);
+VentilatorState vcInhaleCommand(VentilatorState state);
 
-vcModeStates vcInhale(elapsedMillis &breathTimer, const float &inspirationTime, float &tempPeakPressure, float &peakPressure, float &pressure, uint16_t &errors);
+VentilatorState vcInhale(VentilatorState state, const float inspiration_time);
 
-vcModeStates vcInhaleAbort(elapsedMillis &breathTimer, const float &expirationTime, float &pressure, uint16_t &errors);
+VentilatorState vcInhaleAbort(VentilatorState state, const float expiration_time);
 
-vcModeStates vcPeak(elapsedMillis &breathTimer, const float &inspirationTime, float &pressure, float &plateauPressure, uint16_t &errors);
+VentilatorState vcPeak(VentilatorState state);
 
-vcModeStates vcExhaleCommand(void);
+VentilatorState vcExhaleCommand(VentilatorState state);
 
-vcModeStates vcExhale(const elapsedMillis &breathTimer, const float &expirationTime, float &pressure, float &peepPressure, uint16_t &errors);
+VentilatorState vcExhale(VentilatorState state, const float expiration_time);
 
-vcModeStates vcReset(machineStates &machineState);
-
+VentilatorState vcReset(VentilatorState state);
 
 #endif

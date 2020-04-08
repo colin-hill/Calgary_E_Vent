@@ -78,6 +78,7 @@ UserParameter USER_PARAMETERS[NUM_USER_PARAMETERS] = {UserParameter(MIN_THRESHOL
                                                       UserParameter(MIN_LOW_PLATEAU_PRESSURE_ALARM, MAX_LOW_PLATEAU_PRESSURE_ALARM, LOW_PLATEAU_PRESSURE_ALARM_INCREMENT, LOW_PLATEAU_PRESSURE_ALARM_SELECT_PIN)};
 
 
+/*
 float loopThresholdPressure;
 float loopBPM;
 float loopInspirationTime;
@@ -86,28 +87,28 @@ float loopTV;
 float pressure;
 float tempPeakPressure;
 float peakPressure;
-float measuredPlateau;
+
 float peepPressure;
-float measuredPIP; 
 float plateauPressure;
+*/
 
+// TODO: These are never set?
+// TODO: Do these really have to be globals?
+float measuredPIP;
+float measuredPlateau;
 float singleBreathTime;
-float inspirationTime;
-float expirationTime;
 
+// TODO: Make these static variables in loop instead?
+float inspiration_time;
+float expiration_time;
 
-uint16_t errors = 0;
 //------------------------------------------------------------------------------
 
 //Timer Variables--------------------------------------------------------------------------------------------------------
 elapsedMillis parameterSetDebounceTimer;
 elapsedMillis breathTimer;
 
-//Enumerators------------------------------------------------------------------------------------------------------------
-machineStates machineState = Startup;
-acModeStates acModeState   = ACStart;
-vcModeStates vcModeState   = VCStart;
-//------------------------------------------------------------------------------
+VentilatorState state;
 
 void setup() {
 
@@ -133,13 +134,13 @@ void setup() {
     ventilatorDisplay.begin(LCD_COLUMNS, LCD_ROWS);
 
 
-    
+
     //LCD Display Startup Message for two seconds
     displayStartupScreen(ventilatorDisplay, softwareVersion, LCD_COLUMNS);
 
 
 #ifdef NO_INPUT_DEBUG //Skips parameter input section
-    
+
 #endif //NO_INPUT_DEBUG
 
     //Some kind of parameter start up code here, requires RT input?
@@ -167,60 +168,68 @@ void setup() {
     //Zero the encoder********
 #endif //NO_INPUT_DEBUG
 
-    machineState = BreathLoopStart;
+    // Set up ventilator state.
+    state = get_init_state();
 }
 
 void loop() {
     //Update LCD*********
 
-    
+
     //Update the user input parameters
     updateUserParameters(CURRENTLY_SELECTED_PARAMETER, PARAMETER_SET, PARAMETER_SELECT_ENCODER,
-                       USER_PARAMETERS, NUM_USER_PARAMETERS); 
-    
+                       USER_PARAMETERS, NUM_USER_PARAMETERS);
+
     //LCD display temp screen and variables
     //displayParameterScreen(tempTV, tempBPM, tempIERatio, tempThresholdPressure);
 
 
     //LCD display internal variables and regular screen
     //displayVentilationScreen(internalTV, internalBPM, internalIERatio, internalThresholdPressure, machineState, peakPressure, plateauPressure, peepPressure);
-    displayUserParameters(CURRENTLY_SELECTED_PARAMETER, ventilatorDisplay, machineState, vcModeState, acModeState, measuredPIP, measuredPlateau, LCD_MAX_STRING, USER_PARAMETERS);
+    displayUserParameters(CURRENTLY_SELECTED_PARAMETER, ventilatorDisplay, state.machine_state, state.vc_state, state.ac_state, measuredPIP, measuredPlateau, LCD_MAX_STRING, USER_PARAMETERS);
+
+    // Read in values for state
+    update_state(state);
 
     //Beginning of state machine code
-
-    if (BreathLoopStart == machineState) { //BreathLoopStart---------------------------------------------------------------------------------
+    // TODO: factor out into a function and turn into switch statement.
+    if (BreathLoopStart == state.machine_state) { // BreathLoopStart
 #ifdef SERIAL_DEBUG
         Serial.println("Breath Loop Start");
 #endif //SERIAL_DEBUG
 
-        loopThresholdPressure = USER_PARAMETERS[0].value;
-        loopBPM = USER_PARAMETERS[1].value;
-        loopInspirationTime = USER_PARAMETERS[2].value;
-        loopTV = USER_PARAMETERS[4].value;
+        state.loop_threshold_pressure = USER_PARAMETERS[0].value;
+        // TODO: Some of these are not used.
+        float loopBPM = USER_PARAMETERS[1].value;
+        float loopInspirationTime = USER_PARAMETERS[2].value;
+        float loopTV = USER_PARAMETERS[4].value;
 
+        // TODO: unused?
         singleBreathTime = 60.0/4.0; //Hardcoded for testing
-        inspirationTime = loopInspirationTime;
-        expirationTime = singleBreathTime - inspirationTime;
+
+        inspiration_time = loopInspirationTime;
+        expiration_time = singleBreathTime - inspiration_time;
 
         if (digitalRead(modeSwitchPin) == ACMODE) {
-            machineState = ACMode;
+            state.machine_state = ACMode;
         }
         else {
-            machineState = VCMode;
+            state.machine_state = VCMode;
         }
     }
-    else if (ACMode == machineState) {
-        acModeState = ac_mode_step(acModeState, breathTimer, inspirationTime, expirationTime,
-                                   tempPeakPressure, peakPressure, pressure, peepPressure,
-                                   plateauPressure, loopThresholdPressure, errors, machineState);
+    else if (ACMode == state.machine_state) {
+        state.ac_state = ac_mode_step(state.ac_state, breathTimer, inspiration_time, expiration_time,
+                                   state.temp_peak_pressure, state.peak_pressure, state.pressure,
+                                   state.peep_pressure, state.plateau_pressure,
+                                   state.loop_threshold_pressure, state.errors, state.machine_state);
     }
-    else if (VCMode == machineState) {
-        vcModeState = vc_mode_step(vcModeState, breathTimer, inspirationTime, expirationTime,
-                                   tempPeakPressure, peakPressure, pressure, peepPressure,
-                                   plateauPressure, errors, machineState);
+    else if (VCMode == state.machine_state) {
+        state = vc_mode_step(state, inspiration_time, expiration_time);
     }
 
-    handle_alarms(errors);
+    // TODO: Move motor
+
+    handle_alarms(state.errors);
 }
 
 //FUNCTIONS

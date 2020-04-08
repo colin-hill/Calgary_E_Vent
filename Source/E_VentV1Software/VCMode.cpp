@@ -10,20 +10,23 @@
 
 // No globals here. Want these components to be testable in isolation.
 
-vcModeStates vcStart(elapsedMillis &breathTimer, float &tempPeakPressure) {
+VentilatorState vcStart(VentilatorState state) {
 #ifdef SERIAL_DEBUG
     Serial.println("VCStart");
 #endif //SERIAL_DEBUG
 
     // Reset timer and peak pressure reading.
-    breathTimer = 0;
-    tempPeakPressure = 0;
+    reset_timer(state);
+    state.temp_peak_pressure = 0;
 
-    return VCInhaleCommand;
+    // Set next state.
+    state.vc_state = VCInhaleCommand;
+
+    return state;
 }
 
 
-vcModeStates vcInhaleCommand(void) {
+VentilatorState vcInhaleCommand(VentilatorState state) {
 #ifdef SERIAL_DEBUG
     Serial.println("VCInhaleCommand");
 #endif //SERIAL_DEBUG
@@ -31,99 +34,89 @@ vcModeStates vcInhaleCommand(void) {
     // TODO: Set motor speed and position
     // TODO: Reset timer (does this happen here as well as vcStart?)
 
-    return VCInhale;
+    state.vc_state = VCInhale;
+    return state;
 }
 
-vcModeStates vcInhale(elapsedMillis &breathTimer, const float &inspirationTime,
-                      float &tempPeakPressure, float &peakPressure,
-                      float &pressure, uint16_t &errors) {
+
+VentilatorState vcInhale(VentilatorState state, const float inspiration_time) {
 #ifdef SERIAL_DEBUG
     Serial.print("VCInhale: ");
-    Serial.println(breathTimer);
+    Serial.println(elapsed_time(state));
     Serial.print("Desired Inhale Time: ");
-    Serial.println(inspirationTime);
+    Serial.println(inspiration_time);
 #endif //SERIAL_DEBUG
-
-    // Default to inhaling.
-    vcModeStates next_state = VCInhale;
 
     // TODO: Set motor position and speed
     // CB: Does this happen here, or is this what vcInhaleCommand does?
 
     // Monitor pressure.
-    pressure = readPressureSensor();
-    if (pressure > tempPeakPressure) {
-        tempPeakPressure = pressure;
+    if (state.pressure > state.temp_peak_pressure) {
+        state.temp_peak_pressure = state.pressure;
     }
 
-    if(breathTimer > (inspirationTime * S_TO_MS)){
-        next_state = VCPeak;
-        breathTimer = 0;
-        peakPressure = tempPeakPressure;
+    if(elapsed_time(state) > (inspiration_time * S_TO_MS)){
+        state.vc_state = VCPeak;
+        reset_timer(state);
+        state.peak_pressure = state.temp_peak_pressure;
         // TODO: Check motor position********
     }
 
-    errors |= check_high_pressure(pressure);
-    //Serial.println(pressure);
+    state.errors |= check_high_pressure(state.pressure);
 
     // If there's high pressure, abort inhale.
-    // TODO: will this state and VCInhaleAbort raise alarm? Is that fine?
-    if (errors & HIGH_PRESSURE_ALARM) {
-        next_state = VCInhaleAbort;
+    // TODO: will this state and VCInhaleAbort both raise alarm? Is that fine?
+    if (state.errors & HIGH_PRESSURE_ALARM) {
+        state.vc_state = VCInhaleAbort;
     }
 
-    return next_state;
+    return state;
 }
 
 
-// Unused parameter warning for expirationTime due to SERIAL_DEBUG
-vcModeStates vcInhaleAbort(elapsedMillis &breathTimer,
-                           const float &expirationTime, float &pressure,
-                           uint16_t &errors) {
+// Unused parameter warning for expiration_time due to SERIAL_DEBUG
+VentilatorState vcInhaleAbort(VentilatorState state, const float expiration_time) {
 #ifdef SERIAL_DEBUG
     Serial.print("VCInhaleAbort: ");
-    Serial.println(breathTimer);
+    Serial.println(elapsed_time(state));
+    // TODO: should this really be expiration time?
+    // Seems like this should be inspiration time?
     Serial.print("Desired Exhale Time: ");
-    Serial.println(expirationTime);
+    Serial.println(expiration_time);
 #endif //SERIAL_DEBUG
 
     // TODO: Set motor velocity and desired position
     // TODO: Check if this is what is meant by resetting timer
     // TODO: Do we need to do this if vcExhale is supposed to reset the timer (but currently doesn't!)
-    breathTimer = 0;
-    errors |= check_high_pressure(pressure);
-    return VCExhale;
+    reset_timer(state);
+    state.errors |= check_high_pressure(state.pressure);
+    state.vc_state = VCExhale;
+
+    return state;
 }
 
 
-// Unused parameter warning is due to inspirationTime only being used for debug information.
-// The debug information should be displayingthe hold tim, this has been altered
-vcModeStates vcPeak(elapsedMillis &breathTimer, const float &inspirationTime,
-                    float &pressure, float &plateauPressure,
-                    uint16_t &errors) {
+VentilatorState vcPeak(VentilatorState state) {
 #ifdef SERIAL_DEBUG
     Serial.print("VCPeak: ");
-    Serial.println(breathTimer);
+    Serial.println(elapsed_time(state));
     Serial.print("Desired Peak Time: ");
     Serial.println(HOLD_TIME);
 #endif //SERIAL_DEBUG
-
-    vcModeStates next_state = VCPeak;
-
     // TODO: Hold motor in position********
 
-    pressure = readPressureSensor();
-    if(breathTimer > (HOLD_TIME * S_TO_MS)){
-        next_state  = VCExhale;
-        breathTimer = 0;
-        plateauPressure = pressure;
+    if(elapsed_time(state) > (HOLD_TIME * S_TO_MS)){
+        state.vc_state = VCExhale;
+        reset_timer(state);
+        state.plateau_pressure = state.pressure;
     }
 
-    errors |= check_high_pressure(pressure);
-    return next_state;
+    state.errors |= check_high_pressure(state.pressure);
+    return state;
 }
 
-vcModeStates vcExhaleCommand(void) {
+
+VentilatorState vcExhaleCommand(VentilatorState state) {
 #ifdef SERIAL_DEBUG
     Serial.println("VCExhaleCommand");
 #endif //SERIAL_DEBUG
@@ -131,67 +124,59 @@ vcModeStates vcExhaleCommand(void) {
     // TODO: Set motor speed and position
     // TODO: Reset timer (does this happen here as well as vcStart?)
 
-    return VCInhale;
+    state.vc_state = VCInhale;
+    return state;
 }
 
-vcModeStates vcExhale(const elapsedMillis &breathTimer,
-                      const float &expirationTime, float &pressure,
-                      float &peepPressure, uint16_t &errors) {
+
+VentilatorState vcExhale(VentilatorState state, const float expiration_time) {
 #ifdef SERIAL_DEBUG
     Serial.print("VCExhale: ");
-    Serial.println(breathTimer);
+    Serial.println(elapsed_time(state));
     Serial.print("Desired Exhale Time: ");
-    Serial.println(expirationTime);
+    Serial.println(expiration_time);
 #endif //SERIAL_DEBUG
-
-    vcModeStates next_state = VCExhale;
-
     // TODO: Set motor velocity and desired position
 
-    pressure = readPressureSensor();
-    if (breathTimer > (expirationTime * S_TO_MS)) {
-        next_state = VCReset;
-        peepPressure = pressure;
+    if (elapsed_time(state) > (expiration_time * S_TO_MS)) {
+        state.vc_state = VCReset;
+        state.peep_pressure = state.pressure;
     }
 
-    errors |= check_peep(pressure);
-    return next_state;
+    state.errors |= check_peep(state.pressure);
+    return state;
 }
 
 
 // TODO: should this reset timers and stuff like acReset?
-vcModeStates vcReset(machineStates &machineState) {
+VentilatorState vcReset(VentilatorState state) {
 #ifdef SERIAL_DEBUG
     Serial.println("VCReset");
 #endif //SERIAL_DEBUG
 
-    machineState = BreathLoopStart;
-    return VCStart;
+    state.machine_state = BreathLoopStart;
+    return state;
 }
 
 
-vcModeStates vc_mode_step(vcModeStates current_state,
-                          elapsedMillis &breathTimer,
-                          const float &inspirationTime,
-                          const float &expirationTime, float &tempPeakPressure,
-                          float &peakPressure, float &pressure,
-                          float &peepPressure, float &plateauPressure,
-                          uint16_t &errors, machineStates &machineState) {
-    switch(current_state) {
+VentilatorState vc_mode_step(VentilatorState state, const float inspiration_time, const float expiration_time) {
+    switch(state.vc_state) {
     case VCStart:
-        return vcStart(breathTimer, tempPeakPressure);
+        return vcStart(state);
     case VCInhaleCommand:
-        return vcInhaleCommand();
+        return vcInhaleCommand(state);
     case VCInhale:
-        return vcInhale(breathTimer, inspirationTime, tempPeakPressure, peakPressure, pressure, errors);
+        return vcInhale(state, inspiration_time);
     case VCInhaleAbort:
-        return vcInhaleAbort(breathTimer, expirationTime, pressure, errors);
+        return vcInhaleAbort(state, expiration_time);
     case VCPeak:
-        return vcPeak(breathTimer, inspirationTime, pressure, plateauPressure, errors);
+        return vcPeak(state);
+    case VCExhaleCommand:
+        return vcExhaleCommand(state);
     case VCExhale:
-        return vcExhale(breathTimer, expirationTime, pressure, peepPressure, errors);
+        return vcExhale(state, expiration_time);
     case VCReset:
-        return vcReset(machineState);
+        return vcReset(state);
     default:
         // Should not happen
 #ifdef SERIAL_DEBUG
@@ -200,7 +185,7 @@ vcModeStates vc_mode_step(vcModeStates current_state,
         break;
     }
 
-    return current_state;
+    return state;
 }
 
 
