@@ -8,22 +8,6 @@
 #include "MachineStates.h"
 
 
-/* States for the VC Mode state machine.
-
-   TODO: directions to state machine diagram.
- */
-enum vcModeStates {
-                   VCStart,
-                   VCInhale,
-                   VCInhaleCommand,
-                   VCInhaleAbort,
-                   VCPeak,
-                   VCExhaleCommand,
-                   VCExhale,
-                   VCReset
-};
-
-
 // ----------------------------------------------------------------------
 // Functions for handling the VC state machine.
 //

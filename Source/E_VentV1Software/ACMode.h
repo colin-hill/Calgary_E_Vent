@@ -9,22 +9,6 @@
 #include "elapsedMillis.h"
 #include "MachineStates.h"
 
-/* States for the AC Mode state machine.
-
-   TODO: directions to state machine diagram.
- */
-enum acModeStates {
-                   ACStart,
-                   ACInhaleWait,
-                   ACInhaleCommand,
-                   ACInhale,
-                   ACInhaleAbort,
-                   ACPeak,
-                   ACExhaleCommand,
-                   ACExhale,
-                   ACReset
-};
-
 
 // ----------------------------------------------------------------------
 // Functions for handling the AC state machine.
