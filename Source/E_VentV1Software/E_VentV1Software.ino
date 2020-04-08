@@ -32,25 +32,12 @@ const char softwareVersion[] = "VERSION 0.1";
 //IO Pin Definintions-----------------------------------------------------------
 
 
-const int ALARM_SWITCH_PIN   = 24;
-const int MODE_SWITCH_PIN    = 40;
+
 
 
 //LCD Denfinitions--------------------------------------------------------------
 
-const int alarmLCDEnable      = 49;
-const int alarmLCDRS          = 53;
-const int alarmLCDDB4         = 47;
-const int alarmLCDDB5         = 45;
-const int alarmLCDDB6         = 43;
-const int alarmLCDDB7         = 41;
 
-const int ventilatorLCDEnable = 51;
-const int ventilatorLCDRS     = 53;
-const int ventilatorLCDDB4    = 47;
-const int ventilatorLCDDB5    = 45;
-const int ventilatorLCDDB6    = 43;
-const int ventilatorLCDDB7    = 41;
 
 LiquidCrystal alarmDisplay(alarmLCDRS, alarmLCDEnable, alarmLCDDB4, alarmLCDDB5, alarmLCDDB6, alarmLCDDB7);
 LiquidCrystal ventilatorDisplay(ventilatorLCDRS, ventilatorLCDEnable, ventilatorLCDDB4, ventilatorLCDDB5, ventilatorLCDDB6, ventilatorLCDDB7);
@@ -216,8 +203,12 @@ void loop() {
 
     //Beginning of state machine code
     // TODO: factor out into a function and turn into switch statement.
-    if (BreathLoopStart == state.machine_state) { // BreathLoopStart
+    if (MotorZeroing == state.machine_state){
+        //Do the motor zeroing
+    }
 
+
+    else if (BreathLoopStart == state.machine_state) { // BreathLoopStart
 #ifdef SERIAL_DEBUG
         Serial.println("Breath Loop Start");
 #endif //SERIAL_DEBUG

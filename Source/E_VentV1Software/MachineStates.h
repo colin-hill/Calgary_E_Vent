@@ -55,6 +55,18 @@ enum vcModeStates {
                    VCReset
 };
 
+/* States for the VC Mode state machine.
+
+   TODO: directions to state machine diagram.
+ */
+enum zeroingStates {
+                    CommandHome,
+                    MotorHomingWait,
+                    CommandZero,
+                    MotorZeroingWait,
+                    MotorZero
+};
+
 
 // Structure containing the full state of the ventilator.
 struct VentilatorState {
@@ -65,6 +77,7 @@ struct VentilatorState {
     // Just need to be careful resetting them.
     vcModeStates vc_state;
     acModeStates ac_state;
+    zeroingStates zeroing_state;
 
     // Parameters
     // TODO: should we worry about overflow for these?
