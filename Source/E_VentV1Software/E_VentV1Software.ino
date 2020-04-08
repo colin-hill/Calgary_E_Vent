@@ -160,6 +160,7 @@ void loop() {
         inspiration_time = loopInspirationTime;
         expiration_time = singleBreathTime - inspiration_time;
 
+        // Switch between AC Mode and VC Mode based on MODE_SWITCH_PIN.
         state.machine_state = check_mode();
     }
     else if (ACMode == state.machine_state) {
