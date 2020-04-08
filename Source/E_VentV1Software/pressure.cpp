@@ -6,12 +6,12 @@ void setUpPressureSensor(uint32_t pressureSensorBaudRate){
 	PRESSURE_SENSOR_I2C.begin(pressureSensorBaudRate);
 	
 }
-float readPressureSensor(uint8_t pressureSensorAddress, const float MAX_SENSOR_PRESSURE, const float MIN_SENSOR_PRESSURE, const uint16_t MAX_DIGITAL_OUTPUT, const uint16_t MIN_DIGITAL_OUTPUT){
+float readPressureSensor(){
 	
 	uint8_t numberOfBytesToRequest = 2;
 	uint8_t msbStatusBitMask = 0b00111111;
 	
-	PRESSURE_SENSOR_I2C.requestFrom(pressureSensorAddresss, numberOfBytesToRequest);
+	PRESSURE_SENSOR_I2C.requestFrom(PRESSURE_SENSOR_ADDRESS, numberOfBytesToRequest);
 	
 	delay(5);
 	uint8_t MSB = PRESSURE_SENSOR_I2C.read();
