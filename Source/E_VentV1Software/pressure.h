@@ -55,7 +55,7 @@ void setUpPressureSensor(const uint32_t PRESSURE_SENSOR_BAUD_RATE);
  *  -The pressure is returned in a float in cmH2O
  */
 
-float readPressureSensor(uint8_t pressureSensorAddress, const float MAX_SENSOR_PRESSURE, const float MIN_SENSOR_PRESSURE, const uint16_t MAX_DIGITAL_OUTPUT, const uint16_t MIN_DIGITAL_OUTPUT);
+float readPressureSensor();
 
 
 #endif // pressure_h
