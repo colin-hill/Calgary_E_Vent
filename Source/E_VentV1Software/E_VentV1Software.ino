@@ -28,21 +28,22 @@
 
 const char softwareVersion[] = "VERSION 0.1";
 
+
 //IO Pin Definintions-----------------------------------------------------------
 
 
-const int alarmSwitchPin   = 24;
-const int modeSwitchPin    = 40;
+const int ALARM_SWITCH_PIN   = 24;
+const int MODE_SWITCH_PIN    = 40;
 
 
 //LCD Denfinitions--------------------------------------------------------------
 
-const int alarmLCDEnable = 49;
-const int alarmLCDRS     = 53;
-const int alarmLCDDB4    = 47;
-const int alarmLCDDB5    = 45;
-const int alarmLCDDB6    = 43;
-const int alarmLCDDB7    = 41;
+const int alarmLCDEnable      = 49;
+const int alarmLCDRS          = 53;
+const int alarmLCDDB4         = 47;
+const int alarmLCDDB5         = 45;
+const int alarmLCDDB6         = 43;
+const int alarmLCDDB7         = 41;
 
 const int ventilatorLCDEnable = 51;
 const int ventilatorLCDRS     = 53;
@@ -129,26 +130,20 @@ void setup() {
 
     setupLimitSwitch();
 
-
-
     // Motor serial communications startup
     // MotorSerial.begin(9600); //********
 
     //Parameter Input Pin Set Up
     setUpParameterSelectButtons(USER_PARAMETERS, NUM_USER_PARAMETERS, PARAMETER_ENCODER_PUSH_BUTTON_PIN);
 
-
-    //modeSwitchPin input setup
-    pinMode(modeSwitchPin, INPUT);
+    //Mode Switch Pin input setup
+    pinMode(MODE_SWITCH_PIN, INPUT);
 
     // Parameter change interrupt setup
 
     //LCD Setup
-    //alarmDisplay.begin(LCD_COLUMNS, LCD_ROWS); //set number of columns and rows
+    alarmDisplay.begin(LCD_COLUMNS, LCD_ROWS); 
     ventilatorDisplay.begin(LCD_COLUMNS, LCD_ROWS);
-
-
-    
     //LCD Display Startup Message for two seconds
     displayStartupScreen(ventilatorDisplay, softwareVersion, LCD_COLUMNS);
 
@@ -172,10 +167,8 @@ void setup() {
         delay(250);
     }
 
-
     machineState = MotorZeroing;
-
-    
+   
 }
 
 void loop() {
@@ -223,7 +216,7 @@ void loop() {
         inspirationTime = loopInspirationTime;
         expirationTime = singleBreathTime - inspirationTime;
 
-        if (digitalRead(modeSwitchPin) == ACMODE) {
+        if (digitalRead(MODE_SWITCH_PIN) == ACMODE) {
             machineState = ACMode;
         }
         else {

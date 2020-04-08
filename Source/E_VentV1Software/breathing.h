@@ -5,8 +5,9 @@
 #define breathing_h
 
 // Threshold Pressure Definitions--------------------------------------------------
-//const float MIN_THRESHOLD_PRESSURE = 1.0; //cmH2O
-//const float MAX_THRESHOLD_PRESSURE = 2.0; //cmH2O
+
+const float MIN_THRESHOLD_PRESSURE = 1.0; //cmH2O
+const float MAX_THRESHOLD_PRESSURE = 5.0; //cmH2O
 //-------------------------------------------------------------------------------
 
 // Breath Per Minute Definitions-------------------------------------------------
@@ -15,21 +16,30 @@ const float MAX_BPM = 40.0; //Breaths per Minute
 //------------------------------------------------------------------------------
 
 // Tidal Volume Definitions------------------------------------------------------
-const float MIN_TIDAL_VOLUME = 0.0; //Tidal Volume (% of max)
+const float MIN_TIDAL_VOLUME = 5.0; //Tidal Volume (% of max)
 const float MAX_TIDAL_VOLUME = 100.0; //Tidal Volume (% of max)
 //------------------------------------------------------------------------------
 
 // Inspiration Expiration Ratio Definitions--------------------------------------
 const float MIN_INSPIRATION_TIME = 0.2; //Seconds
-const float MAX_INSPIRATION_TIME = 3; //Seconds
+const float MAX_INSPIRATION_TIME = 3.0; //Seconds
 //------------------------------------------------------------------------------
 
 //Breath hold time--------------------------------------------------------------
-const float HOLD_TIME         = 0.25; //Seconds
+const float HOLD_TIME              = 0.25; //should not be hardcoded; leaving for now
 const float MIN_PLATEAU_PAUSE_TIME = 0.1;
 const float MAX_PLATEAU_PAUSE_TIME = 0.5;
-const float AC_THRESHOLD_TIME = 0.5; //Seconds
+const float AC_THRESHOLD_TIME      = 0.5; //Seconds
 
+
+//Max & Min PIP Pressures--------------------------------------------------------
+const float MAX_PRESSURE = 40.0; //cmH2O
+const float MIN_PRESSURE = 0.0; //cmH2O
+
+//Max & Min PEEP Pressures-----------------------------------------------------------
+const float MAX_PEEP_PRESSURE = 30.0; //cmH2O
+const float MIN_PEEP_PRESSURE = 0.0; //cmH2O
+//------------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------
 // Constants for taking measurements.

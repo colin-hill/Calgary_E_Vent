@@ -31,19 +31,6 @@ const float MIN_SENSOR_PRESSURE = -1.0; //PSI Differential
 const float MAX_SENSOR_PRESSURE = 1.0; //PSI Differential
 //------------------------------------------------------------------------------
 
-const float MAX_PRESSURE = 40.0; //cmH2O
-const float MIN_PRESSURE = 0.0; //cmH2O
-
-//Threshold Pressure Definitions------------------------------------------------
-const float MIN_THRESHOLD_PRESSURE = 1.0;
-const float MAX_THRESHOLD_PRESSURE = 2.0;
-//------------------------------------------------------------------------------
-
-
-//Max & Min Pressures-----------------------------------------------------------
-const float MAX_PEEP_PRESSURE = 20.0; //cmH2O
-const float MIN_PEEP_PRESSURE = 0.0; //cmH2O
-//------------------------------------------------------------------------------
 
 
 // Functions
