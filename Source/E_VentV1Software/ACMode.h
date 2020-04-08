@@ -62,5 +62,5 @@ VentilatorState acPeak(VentilatorState state);
 
 VentilatorState acExhale(VentilatorState state, const float expiration_time);
 
-VentilatorState acReset(VentilatorState state);
+VentilatorState acReset(VentilatorState state);git add E_VentV1Software
 #endif
