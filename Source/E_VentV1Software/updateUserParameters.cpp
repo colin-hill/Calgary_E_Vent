@@ -157,7 +157,7 @@ void displayUserParameters(SelectedParameter &currentlySelectedParameter, Liquid
 VentilatorState setStateParameters(VentilatorState &state, UserParameter *userParameters){
 	
 	SelectedParameter selectedParameter = e_ThresholdPressure; //TODO: Find a better way to access the array
-	state.loop_threshold_pressure = userParameters[(int)selectedParameter].value;
+	state.ac_threshold_pressure = userParameters[(int)selectedParameter].value;
 	selectedParameter = e_BPM;
 	state.breaths_per_minute = userParameters[(int)selectedParameter].value;
 	selectedParameter = e_PlateauPauseTime;

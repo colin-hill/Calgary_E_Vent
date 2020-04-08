@@ -24,7 +24,7 @@
    Output:
    - returns new state.
  */
-VentilatorState vc_mode_step(VentilatorState state, const float inspiration_time, const float expiration_time);
+VentilatorState vc_mode_step(VentilatorState state);
 
 
 /* Get a debug code for the current vcModeState.
@@ -49,15 +49,15 @@ VentilatorState vcStart(VentilatorState state);
 
 VentilatorState vcInhaleCommand(VentilatorState state);
 
-VentilatorState vcInhale(VentilatorState state, const float inspiration_time);
+VentilatorState vcInhale(VentilatorState state);
 
-VentilatorState vcInhaleAbort(VentilatorState state, const float expiration_time);
+VentilatorState vcInhaleAbort(VentilatorState state);
 
 VentilatorState vcPeak(VentilatorState state);
 
 VentilatorState vcExhaleCommand(VentilatorState state);
 
-VentilatorState vcExhale(VentilatorState state, const float expiration_time);
+VentilatorState vcExhale(VentilatorState state);
 
 VentilatorState vcReset(VentilatorState state);
 

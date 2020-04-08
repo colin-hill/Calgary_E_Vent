@@ -73,9 +73,6 @@ float expirationTime;
 float motorReturnTime;
 
 
-// TODO: Make these static variables in loop instead?
-float inspiration_time;
-float expiration_time;
 
 //------------------------------------------------------------------------------
 
@@ -131,6 +128,7 @@ void setup() {
     Serial.println(state.machine_state);
 #endif //SERIAL_DEBUG
 
+#ifndef NO_INPUT_DEBUG
     while(StartupHold == state.machine_state) {
     //Wait for interupt routine triggered by user
 
@@ -138,7 +136,11 @@ void setup() {
 
         delay(250);
     }
- 
+#endif //Skip hardware lockout for debug
+
+#ifdef NO_INPUT_DEBUG
+    state.machine_state = MotorZeroing;
+#endif
 
 }
 
@@ -171,9 +173,6 @@ void loop() {
 #ifdef SERIAL_DEBUG
         Serial.println("Breath Loop Start");
 #endif //SERIAL_DEBUG
-        // TODO: Some of these are not used.
-
-        motorReturnTime = 4.0; // TODO; talk to Colin. the MIT control logic is flawed
         
         if (digitalRead(MODE_SWITCH_PIN) == ACMODE) {
             state.machine_state = ACMode;
@@ -184,17 +183,17 @@ void loop() {
     }
 
     else if (ACMode == state.machine_state) {
-        state = ac_mode_step(state, inspiration_time, expiration_time);
+        state = ac_mode_step(state);
     }
     else if (VCMode == state.machine_state) {
-        state = vc_mode_step(state, inspiration_time, expiration_time);
+        state = vc_mode_step(state);
     }
     else if (FailureMode == state.machine_state) {
         state = failure_mode(state);
     }
 
-    // TODO: Move motor
-    //operate_motor(state)
+    // TODO: Move motor, check position, etc.
+    //state = operate_motor(state)
 
     state = handle_alarms(state, alarmDisplay);
 }

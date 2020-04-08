@@ -17,15 +17,11 @@ VentilatorState acStart(VentilatorState state) {
     Serial.println("ACStart");
 #endif //SERIAL_DEBUG
 
-    // Reset
+    //TODO: Reset alarms as outlined on state machine
+
+    // Reset timer and peak pressure reading
     reset_timer(state);
-
-    // TODO: CRUCIAL, double check that this makes sense. State
-    // diagram mentions that peak pressure should be reset here
-    // And alarms should be reset here.
-    // Code does not do this, though.
-
-    // Send motor to zero point******* (Consider watchdog timer for each state)
+    state.current_loop_peak_pressure = 0;
 
     state.ac_state = ACInhaleWait;
     return state;
@@ -43,16 +39,11 @@ VentilatorState acInhaleWait(VentilatorState state) {
     if (elapsed_time(state) > (state.ac_threshold_time * S_TO_MS)) {
         state.ac_state = ACInhaleCommand;
 
-        state.errors |= APNEA_ALARM;
-
-        reset_timer(state);
-        state.temp_peak_pressure = 0;
+        //Removing APNEA_ALARM for the time being based on feedback from RT
+        //state.errors |= APNEA_ALARM;
     }
-    else if(state.pressure < state.loop_threshold_pressure){
+    else if(state.pressure < (state.peep_pressure - state.ac_threshold_pressure)){
         state.ac_state = ACInhaleCommand;
-
-        reset_timer(state);
-        state.temp_peak_pressure = 0;
     }
 
     return state;
@@ -65,44 +56,41 @@ VentilatorState acInhaleCommand(VentilatorState state) {
 #ifdef SERIAL_DEBUG
     Serial.println("ACInhaleCommand");
 #endif //SERIAL_DEBUG
-      
-    // TODO: Set motor velocity and position********
-    // TODO: set timer
+
+    reset_timer(state);
 
     state.ac_state = ACInhale;
     return state;
 }
 
 
-VentilatorState acInhale(VentilatorState state, const float inspiration_time) {
+VentilatorState acInhale(VentilatorState state) {
     assert(state.ac_state == ACInhale);
 
 #ifdef SERIAL_DEBUG
     Serial.print("ACInhale: ");
     Serial.println(elapsed_time(state));
     Serial.print("Desired Inhale Time: ");
-    Serial.println(inspiration_time);
+    Serial.println(state.inspiration_time);
 #endif //SERIAL_DEBUG
 
-    // TODO: Check motor position********
-
-    if (state.pressure > state.temp_peak_pressure) {
+    if (state.pressure > state.current_loop_peak_pressure) {
         // Update the peak pressure
-        state.temp_peak_pressure = state.pressure;
+        state.current_loop_peak_pressure = state.pressure;
     }
 
     // TODO: nervous about this else if for alarm.
-    if (elapsed_time(state) > (inspiration_time * S_TO_MS)) {
+    if (elapsed_time(state) > (state.inspiration_time * S_TO_MS)) {
         state.ac_state = ACPeak;
-
         reset_timer(state);
-        state.peak_pressure = state.temp_peak_pressure;
+        state.peak_pressure = state.current_loop_peak_pressure;
 
-        // TODO: Check that motor made it to the appropriate position********
-        //Need a tolerance on this
     }
-    else if (state.pressure > MAX_PRESSURE) {
-        state.errors |= HIGH_PRESSURE_ALARM;
+
+    state.errors |= check_high_pressure(state.pressure);
+
+    if (state.errors & HIGH_PRESSURE_ALARM) {
+        state.ac_state = ACInhaleAbort;
     }
 
     return state;
@@ -111,23 +99,20 @@ VentilatorState acInhale(VentilatorState state, const float inspiration_time) {
 
 // Unused parameter warning for expiration_time due to SERIAL_DEBUG
 // TODO: Do we really want to print exhalation time in debug here?
-VentilatorState acInhaleAbort(VentilatorState state, const float expiration_time) {
+VentilatorState acInhaleAbort(VentilatorState state) {
     assert(state.ac_state == ACInhaleAbort);
 
 #ifdef SERIAL_DEBUG
     Serial.print("ACInhaleAbort: ");
     Serial.println(elapsed_time(state));
     Serial.print("Desired Exhale Time: ");
-    Serial.println(expiration_time);
+    //Serial.println(expiration_time);
 #endif //SERIAL_DEBUG
 
-    // TODO: Set motor velocity and desired position
-    // TODO: Check if this is what is meant by resetting timer
-    // TODO: Do we need to do this if acExhale is supposed to reset the timer (but currently doesn't!)
     reset_timer(state);
     state.errors |= check_high_pressure(state.pressure);
-
     state.ac_state = ACExhale;
+
     return state;
 }
 
@@ -142,18 +127,11 @@ VentilatorState acPeak(VentilatorState state) {
     Serial.println(state.plateau_pause_time);
 #endif //SERIAL_DEBUG
 
-    // TODO: Hold motor in position********
-
-
-    if (elapsed_time(state) > (state.plateau_pause_time * S_TO_MS)) { //******** how and where is hold time defined, currently hard coded
+    if (elapsed_time(state) > (state.plateau_pause_time * S_TO_MS)) { 
         state.ac_state = ACExhaleCommand;
-        state.plateau_pressure = state.pressure;
     }
     
-
-    if (state.pressure > MAX_PRESSURE) {
-        state.errors |= HIGH_PRESSURE_ALARM;
-    }
+    state.errors |= check_high_pressure(state.pressure);
 
     return state;
 }
@@ -165,25 +143,23 @@ VentilatorState acExhaleCommand(VentilatorState state) {
 #endif //SERIAL_DEBUG
 
     reset_timer(state);
-
+    state.plateau_pressure = state.pressure;
     state.ac_state = ACExhale;
 
-    // TODO: Send motor to zero position********
-
+    return state;
 }
 
-VentilatorState acExhale(VentilatorState state, float expiration_time) {
+VentilatorState acExhale(VentilatorState state) {
     assert(state.ac_state == ACExhale);
 #ifdef SERIAL_DEBUG
     Serial.print("ACExhale: ");
     Serial.println(elapsed_time(state));
     Serial.print("Desired Exhale Time: ");
-    Serial.println(expiration_time);
+    //Serial.println(expiration_time);
 #endif //SERIAL_DEBUG
 
-    if (elapsed_time(state) > (expiration_time * S_TO_MS)) {
+    if (elapsed_time(state) > (state.motor_return_time * S_TO_MS)) {
         state.ac_state      = ACReset;
-        state.peep_pressure = state.pressure;
     }
 
     return state;
@@ -192,13 +168,13 @@ VentilatorState acExhale(VentilatorState state, float expiration_time) {
 
 VentilatorState acReset(VentilatorState state) {
     assert(state.ac_state == ACReset);
-
 #ifdef SERIAL_DEBUG
     Serial.println("ACReset");
 #endif //SERIAL_DEBUG
 
-    state.errors |= check_peep(state.pressure); // TODO: should this be peep_pressure?
-    reset_timer(state);
+    //Update and check PEEP
+    state.peep_pressure = state.pressure;
+    state.errors |= check_peep(state.peep_pressure); // TODO: should this be peep_pressure?
 
     state.machine_state = BreathLoopStart;
     state.ac_state = ACStart;
@@ -206,9 +182,7 @@ VentilatorState acReset(VentilatorState state) {
 }
 
 
-VentilatorState ac_mode_step(VentilatorState state,
-                             const float inspiration_time,
-                             const float expiration_time) {
+VentilatorState ac_mode_step(VentilatorState state) {
     switch(state.ac_state) {
     case ACStart:
         return acStart(state);
@@ -217,15 +191,15 @@ VentilatorState ac_mode_step(VentilatorState state,
     case ACInhaleCommand:
         return acInhaleCommand(state);
     case ACInhale:
-        return acInhale(state, inspiration_time);
+        return acInhale(state);
     case ACInhaleAbort:
-        return acInhaleAbort(state, expiration_time);
+        return acInhaleAbort(state);
     case ACPeak:
         return acPeak(state);
     case ACExhaleCommand:
         return acExhaleCommand(state);
     case ACExhale:
-        return acExhale(state, expiration_time);
+        return acExhale(state);
     case ACReset:
         return acReset(state);
     default:

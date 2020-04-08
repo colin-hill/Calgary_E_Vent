@@ -23,8 +23,7 @@
    - returns new state.
  */
 
-VentilatorState ac_mode_step(VentilatorState state,
-    const float inspiration_time, const float expiration_time);
+VentilatorState ac_mode_step(VentilatorState state);
 
 /* Get a debug code for the current acModeState.
 
@@ -51,17 +50,17 @@ VentilatorState acInhaleWait(VentilatorState state);
 
 VentilatorState acInhaleCommand(VentilatorState state);
 
-VentilatorState acInhale(VentilatorState state, const float inspiration_time);
+VentilatorState acInhale(VentilatorState state);
 
 // Unused parameter warning for expirationTime due to SERIAL_DEBUG
 // TODO: should this be inspiration time?
-VentilatorState acInhaleAbort(VentilatorState state, const float expiration_time);
+VentilatorState acInhaleAbort(VentilatorState state);
 
 VentilatorState acPeak(VentilatorState state);
 
 VentilatorState acExhaleCommand(VentilatorState state);
 
-VentilatorState acExhale(VentilatorState state, const float expiration_time);
+VentilatorState acExhale(VentilatorState state);
 
 VentilatorState acReset(VentilatorState state);
 #endif
