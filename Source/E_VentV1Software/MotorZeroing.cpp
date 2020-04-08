@@ -4,82 +4,89 @@
 #include "MotorZeroing.h"
 
 #include "alarms.h"
+#include "PinAssignments.h"
+
+#include <assert.h>
 
 void setupLimitSwitch(void){
 	pinMode(LIMIT_SWITCH_PIN, INPUT_PULLUP);
 }
 
 
-zeroingStates commandHome(elapsedMillis &homingTimer) {
+VentilatorState commandHome(VentilatorState state) {
+    assert(state.zeroing_state == CommandHome);
 #ifdef SERIAL_DEBUG
     Serial.println("CommandHome");
 #endif //SERIAL_DEBUG
 
-    zeroingStates next_state = MotorHomingWait;
+    state.zeroing_state = MotorHomingWait;
+    reset_timer(state);
 
-    //TODO: Add in motor command to move outwards at MOTOR_HOME_SPEED
-
-    homingTimer = 0;
-
-    return next_state;
+    return state;
 }
 
-zeroingStates motorHomingWait(elapsedMillis &homingTimer, uint16_t &errors) {
+VentilatorState motorHomingWait(VentilatorState state) {
+    assert(state.zeroing_state == MotorHomingWait);
+
 #ifdef SERIAL_DEBUG
     Serial.println("motorHomingWait");
     Serial.print("Elaspsed time: ");
-    Serial.println(homingTimer);
+    Serial.println(elapsed_time(state));
 #endif //SERIAL_DEBUG
 
-    zeroingStates next_state = MotorHomingWait;
 
     if (digitalRead(LIMIT_SWITCH_PIN)) {
-    	next_state = CommandZero;
+    	state.zeroing_state = CommandZero;
     }
-    else if (homingTimer > HOMING_TIMEOUT) {
+    else if (elapsed_time(state) > HOMING_TIMEOUT) {
     	//TODO: Add error
     }
 
 #ifdef NO_INPUT_DEBUG
-    next_state = CommandZero;
+    state.zeroing_state = CommandZero;
 #endif //Skip limit switch check
 
-    return next_state;
+    return state;
 }
 
-zeroingStates commandZero(elapsedMillis &homingTimer) {
+VentilatorState commandZero(VentilatorState state) {
+    assert(state.zeroing_state == CommandZero);
+
 #ifdef SERIAL_DEBUG
     Serial.println("CommandZero");
 #endif //SERIAL_DEBUG
 
-    zeroingStates next_state = MotorZeroingWait;
+    state.zeroing_state = MotorZeroingWait;
+    reset_timer(state);
 
     //TODO: Add in motor command to move inwards ZERO_POINT_TICKS at MOTOR_HOME_SPEED
 
-    homingTimer = 0;
-
-    return next_state;
+    return state;
 }
 
-zeroingStates motorZeroingWait(elapsedMillis &homingTimer) {
+VentilatorState motorZeroingWait(VentilatorState state) {
+    assert(state.zeroing_state == MotorZeroingWait);
+
 #ifdef SERIAL_DEBUG
     Serial.println("MotorZeroingWait");
     Serial.print("Elaspsed time: ");
-    Serial.println(homingTimer);
+    Serial.println(elapsed_time(state));
 #endif //SERIAL_DEBUG
 
-    zeroingStates next_state = MotorZeroingWait;
+    
 
-    if (homingTimer > ZEROING_TIME) {
+    if (elapsed_time(state) > ZEROING_TIME) {
 
-       	next_state = MotorZero;
+       	state.zeroing_state = MotorZero;
     }
 
-    return next_state;
+    return state;
 }
 
-zeroingStates motorZero(uint16_t &errors, machineStates &machineState) {
-#ifdef SERIAL_DEBUG
+VentilatorState motorZero(VentilatorState state) {
+    assert(state.zeroing_state == MotorZero);
+
+#ifdef SERIAL_DEBUG    
     Serial.println("motorZero");
 #endif //SERIAL_DEBUG
 
@@ -87,29 +94,30 @@ zeroingStates motorZero(uint16_t &errors, machineStates &machineState) {
 
 	//TODO: Add error if the motor controller is too hot
 
-    zeroingStates next_state = CommandHome;
-	machineState = BreathLoopStart;
+    state.zeroing_state = CommandHome;
 
-	return next_state;
+	state.machine_state = BreathLoopStart;
+
+	return state;
 }
 
- zeroingStates motor_zeroing_step(zeroingStates currentState, elapsedMillis &homingTimer,uint16_t &errors, machineStates &machineState) {
+VentilatorState motor_zeroing_step(VentilatorState state) {
 
-	switch(currentState) {
+	switch(state.zeroing_state) {
 	case CommandHome:
-		return commandHome(homingTimer);
+		return commandHome(state);
 	case MotorHomingWait:
-		return motorHomingWait(homingTimer, errors);
+		return motorHomingWait(state);
 	case CommandZero:
-		return commandZero(homingTimer);
+		return commandZero(state);
 	case MotorZeroingWait:
-		return motorZeroingWait(homingTimer);
+		return motorZeroingWait(state);
 	case MotorZero:
-		return motorZero(errors, machineState);
+		return motorZero(state);
 	default:
 		//Should not occur
 		break;
 	}
 
-	return currentState;
+	return state;
 }

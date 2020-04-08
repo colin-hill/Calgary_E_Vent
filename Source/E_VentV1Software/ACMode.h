@@ -57,11 +57,11 @@ VentilatorState acInhale(VentilatorState state, const float inspiration_time);
 // TODO: should this be inspiration time?
 VentilatorState acInhaleAbort(VentilatorState state, const float expiration_time);
 
-
-
 VentilatorState acPeak(VentilatorState state);
+
+VentilatorState acExhaleCommand(VentilatorState state);
 
 VentilatorState acExhale(VentilatorState state, const float expiration_time);
 
-VentilatorState acReset(VentilatorState state);git add E_VentV1Software
+VentilatorState acReset(VentilatorState state);
 #endif

@@ -1,5 +1,6 @@
 #include "MachineStates.h"
 #include "pressure.h"
+#include "breathing.h"
 
 
 char machineStateCodeAssignment(machineStates machineState) {
@@ -19,6 +20,7 @@ VentilatorState get_init_state(void) {
 
     state.vc_state = VCStart;
     state.ac_state = ACStart;
+    state.zeroing_state = CommandHome;
 
     state.breath_time_start = millis();
     state.current_time = state.breath_time_start;
@@ -29,9 +31,17 @@ VentilatorState get_init_state(void) {
     state.peak_pressure = 0;
 
     state.peep_pressure = 0;
+
+    state.controller_temperature = 0;
+
+
     state.plateau_pressure = 0;
 
     state.loop_threshold_pressure = 0;
+
+    state.ac_threshold_time = 0;
+
+    state.plateau_pause_time = DEFAULT_PLATEAU_PAUSE_TIME;
 
     state.errors = 0;
 
