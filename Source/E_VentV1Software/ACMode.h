@@ -41,6 +41,8 @@ int acCodeAssignment(acModeStates acState);
 // in the main loop, but should be documented and available for testing.
 // ----------------------------------------------------------------------
 
+// TODO: THESE MUST BE DOCUMENTED!
+
 VentilatorState acStart(VentilatorState state);
 
 VentilatorState acInhaleWait(VentilatorState state);
