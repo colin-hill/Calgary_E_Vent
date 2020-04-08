@@ -5,8 +5,8 @@
 #define breathing_h
 
 // Threshold Pressure Definitions--------------------------------------------------
-const float MIN_THRESHOLD_PRESSURE = 1.0; //cmH2O
-const float MAX_THRESHOLD_PRESSURE = 2.0; //cmH2O
+//const float MIN_THRESHOLD_PRESSURE = 1.0; //cmH2O
+//const float MAX_THRESHOLD_PRESSURE = 2.0; //cmH2O
 //-------------------------------------------------------------------------------
 
 // Breath Per Minute Definitions-------------------------------------------------

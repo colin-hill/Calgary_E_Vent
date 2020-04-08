@@ -28,7 +28,6 @@
 
 const char softwareVersion[] = "VERSION 0.1";
 
-<<<<<<< HEAD
 //IO Pin Definintions-----------------------------------------------------------
 
 
@@ -215,7 +214,7 @@ void loop() {
         Serial.println("Breath Loop Start");
 #endif //SERIAL_DEBUG
 
-        loopThresholdPressure = USER_PARAMETERS[0].value;
+        loopThresholdPressure = USER_PARAMETERS[0].value; //TODO: not hardcoded numbers here
         loopBPM = USER_PARAMETERS[1].value;
         loopInspirationTime = USER_PARAMETERS[2].value;
         loopTV = USER_PARAMETERS[4].value;

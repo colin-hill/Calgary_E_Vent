@@ -3,7 +3,7 @@
 
 void setUpPressureSensor(uint32_t pressureSensorBaudRate){
 	
-	Wire.begin(19200); //Change hardcoded values
+	Wire.begin(19200); //TODO: Fix so that this isn't a magic number
 	
 }
 float readPressureSensor(){
