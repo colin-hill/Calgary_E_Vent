@@ -8,6 +8,7 @@
 // This is for debug information.
 enum machineStates {
                     Startup,
+                    StartupHold,
                     MotorZeroing,
                     BreathLoopStart,
                     ACMode,
@@ -17,7 +18,7 @@ enum machineStates {
 
 // Make sure there are the same number of characters as machine states!
 // This is necessary for machineStateCodeAssignment
-const char machineStateCodes[] = "SZBAVF";
+const char machineStateCodes[] = "SHZBAVF";
 
 /* Converts a machine state to a single character to display for
    debug purposes.

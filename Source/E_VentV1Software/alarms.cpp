@@ -5,6 +5,7 @@
 
 
 
+
 // ----------------------------------------------------------------------
 // Timers for alarms
 // ----------------------------------------------------------------------
@@ -70,8 +71,17 @@ uint16_t check_peep(const float pressure) {
 }
 
 
-void handle_alarms(LiquidCrystal &displayName, uint16_t &errors, float peakPressure, float peepPressure, float controllerTemperature) {
+machineStates handle_alarms(machineStates machineState,
+                            LiquidCrystal &displayName, 
+                            uint16_t &errors, float peakPressure, 
+                            float peepPressure, float controllerTemperature) {
+    
+     machineStates next_state = machineState;
+
     if(errors){ //There is an unserviced error
+
+       
+
         //Control the buzzer
         if(alarmBuzzerTimer > ALARM_SOUND_LENGTH*1000){
             alarmBuzzerTimer = 0; //Reset the timer
@@ -113,6 +123,8 @@ void handle_alarms(LiquidCrystal &displayName, uint16_t &errors, float peakPress
         else if(errors & DEVICE_FAILURE_ALARM){
             //Display the device failure alarm
             displayDeviceFailureAlarm(displayName);
+            next_state = FailureMode;
+
         }
         else{
             errors = 0;
@@ -124,4 +136,6 @@ void handle_alarms(LiquidCrystal &displayName, uint16_t &errors, float peakPress
         digitalWrite(ALARM_LED_PIN,LOW);
         digitalWrite(ALARM_RELAY_PIN,LOW);
     }
+
+    return next_state;
 }

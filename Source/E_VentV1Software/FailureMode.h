@@ -13,7 +13,7 @@
    Output:
    - none
  */
-void failure_mode(LiquidCrystal &displayName, uint16_t &errors, float peakPressure, float peepPressure, float controllerTemperature);
+void failure_mode(uint16_t &errors);
 
 
 #endif

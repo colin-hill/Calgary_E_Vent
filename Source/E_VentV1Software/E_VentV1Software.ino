@@ -15,6 +15,7 @@
 #include "MachineStates.h"
 #include "LCD.h"
 #include "FailureMode.h"
+#include "MotorZeroing.h"
 
 //Begin User Defined Section----------------------------------------------------
 
@@ -25,12 +26,13 @@ const char softwareVersion[] = "VERSION 0.1";
 
 //IO Pin Definintions-----------------------------------------------------------
 const int setParameterPin  = 25; //Pin for the set parameter button
-const int limitSwitchPin   = 23;
+
 const int alarmSwitchPin   = 24;
 const int modeSwitchPin    = 20;
 const int setBPMPotPin     = 7;
 const int setIERatioPotPin = 8;
 const int setTVPotPin      = 6;
+
 //------------------------------------------------------------------------------
 
 //LCD Denfinitions--------------------------------------------------------------
@@ -108,6 +110,7 @@ uint16_t errors = 0;
 elapsedMillis paramChangeDebounceTimer;
 elapsedMillis otherDebounceTimer;
 elapsedMillis breathTimer;
+elapsedMillis homingTimer;
 
 // TODO: move these to alarms.h?
 //------------------------------------------------------------------------------
@@ -118,6 +121,7 @@ elapsedMillis breathTimer;
 
 //Enumerators------------------------------------------------------------------------------------------------------------
 machineStates machineState = Startup;
+zeroingStates zeroingState = CommandHome;
 acModeStates acModeState   = ACStart;
 vcModeStates vcModeState   = VCStart;
 //------------------------------------------------------------------------------
@@ -126,10 +130,10 @@ void setup() {
 
 #ifdef SERIAL_DEBUG
     Serial.begin(9600);
-    Serial.println("StartUpInitiated");
+    Serial.println("Startup");
 #endif //SERIAL_DEBUG
 
-    
+    setupLimitSwitch();
 
     // Motor serial communications startup
     // MotorSerial.begin(9600); //********
@@ -142,7 +146,7 @@ void setup() {
 
     // Switch input pin setup
     pinMode(setParameterPin, INPUT);
-    pinMode(limitSwitchPin, INPUT);
+
     pinMode(alarmSwitchPin, INPUT);
 
     // Pressure sensor input pin setup
@@ -187,30 +191,22 @@ void setup() {
     paramChange = false;
     sei();
 
-    //LCD Display Homing Message
-    //displayHomingScreen();
 
 #ifdef SERIAL_DEBUG
-    Serial.println("Homing Motor");
+    Serial.begin(9600);
+    Serial.println("StartupHold");
 #endif //SERIAL_DEBUG
 
-    //Motor Homing Sequence
-#ifndef NO_INPUT_DEBUG
-    while (digitalRead(limitSwitchPin) == 0) {
-        //Move motor at Vhome********
+    machineState = StartupHold; 
+
+    while(StartupHold == machineState) {
+    //Wait for interupt routine triggered by user
+        delay(250);
     }
 
-    while (digitalRead(limitSwitchPin) == 1) {
-        //Move motor at Vzero********
-    }
+    machineState = MotorZeroing;
 
-    //Hardcoded motor bag limit find sequence
-    //Move motor x degrees inward********
-
-    //Zero the encoder********
-#endif //NO_INPUT_DEBUG
-
-    machineState = BreathLoopStart;
+    
 }
 
 void loop() {
@@ -235,7 +231,20 @@ void loop() {
 
     //Beginning of state machine code
 
-    if (BreathLoopStart == machineState) { //BreathLoopStart---------------------------------------------------------------------------------
+    
+
+    if (MotorZeroing == machineState) {
+
+#ifdef SERIAL_DEBUG
+    Serial.println("Homing Motor");
+#endif //SERIAL_DEBUG
+
+        displayHomingScreen(ventilatorDisplay);
+        displayHomingScreen(alarmDisplay);
+
+        zeroingState = motor_zeroing_step(zeroingState, homingTimer, errors, machineState);;
+    }
+    else if (BreathLoopStart == machineState) { //BreathLoopStart---------------------------------------------------------------------------------
 #ifdef SERIAL_DEBUG
         Serial.println("Breath Loop Start");
 #endif //SERIAL_DEBUG
@@ -269,11 +278,11 @@ void loop() {
                                    plateauPressure, errors, machineState);
     }
     else if (FailureMode == machineState) {
-        failure_mode(alarmDisplay, errors, peakPressure, peepPressure, controllerTemperature);
+        failure_mode(errors);
     }
 
     //TODO Define controller temperature
-    handle_alarms(alarmDisplay, errors, peakPressure, peepPressure, controllerTemperature);
+    machineState = handle_alarms(machineState, alarmDisplay, errors, peakPressure, peepPressure, controllerTemperature);
     
 }
 
