@@ -3,7 +3,7 @@
 
 void setUpPressureSensor(uint32_t pressureSensorBaudRate){
 	
-	PRESSURE_SENSOR_I2C.begin(pressureSensorBaudRate);
+	Wire.begin(19200); //Change hardcoded values
 	
 }
 float readPressureSensor(){
@@ -20,7 +20,7 @@ float readPressureSensor(){
 	MSB &= msbStatusBitMask; //Remove first two bits as per documentation
 	uint16_t output = (MSB<<8) | LSB;
 	
-	pressure = (((output - MIN_DIGITAL_OUTPUT) * (MAX_SENSOR_PRESURE - MIN_SENSOR_PRESSURE)) / (MAX_DIGITAL_OUTPUT - MIN_DIGITAL_OUTPUT)) - MIN_SENSOR_PRESSURE;
+	float pressure = (((output - MIN_DIGITAL_OUTPUT) * (MAX_SENSOR_PRESSURE - MIN_SENSOR_PRESSURE)) / (MAX_DIGITAL_OUTPUT - MIN_DIGITAL_OUTPUT)) - MIN_SENSOR_PRESSURE;
 	
 	pressure = pressure*PSI_TO_CMH2O;
 	
