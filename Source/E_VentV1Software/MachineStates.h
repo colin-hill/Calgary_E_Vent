@@ -84,10 +84,12 @@ struct VentilatorState {
 };
 
 
-// Bools for mode
+// Bools for mode.
 const bool ACMODE = true;
 const bool VCMODE = false;
 
+// Pin for reading machine mode switch.
+const uint8_t MODE_SWITCH_PIN = 40;
 
 // Make sure there are the same number of characters as machine states!
 // This is necessary for machineStateCodeAssignment
@@ -109,6 +111,12 @@ char machineStateCodeAssignment(machineStates machineState);
 /* Get initial state.
  */
 VentilatorState get_init_state(void);
+
+
+/* Get machine state from mode switch pin.
+ */
+machineStates check_mode(void);
+
 
 /* Update state with current time + pressure readings.
  */

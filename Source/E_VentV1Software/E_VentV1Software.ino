@@ -21,9 +21,6 @@
 
 const char softwareVersion[] = "VERSION 0.1";
 
-//Pin Definition
-const uint8_t modeSwitchPin = 40;
-
 // TODO: Nervous about these -- make sure that they are initialized.
 //Global Variables-------------------------------------------------------------------------------------------------------
 
@@ -95,8 +92,8 @@ void setup() {
     // Parameter Input Pin Set Up
     setUpParameterSelectButtons(USER_PARAMETERS, NUM_USER_PARAMETERS, PARAMETER_ENCODER_PUSH_BUTTON_PIN);
 
-    // modeSwitchPin input setup
-    pinMode(modeSwitchPin, INPUT);
+    // MODE_SWITCH_PIN input setup
+    pinMode(MODE_SWITCH_PIN, INPUT);
 
     // LCD Setup
     ventilatorDisplay.begin(LCD_COLUMNS, LCD_ROWS);
@@ -163,12 +160,7 @@ void loop() {
         inspiration_time = loopInspirationTime;
         expiration_time = singleBreathTime - inspiration_time;
 
-        if (digitalRead(modeSwitchPin) == ACMODE) {
-            state.machine_state = ACMode;
-        }
-        else {
-            state.machine_state = VCMode;
-        }
+        state.machine_state = check_mode();
     }
     else if (ACMode == state.machine_state) {
         state = ac_mode_step(state, inspiration_time, expiration_time);

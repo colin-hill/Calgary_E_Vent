@@ -38,6 +38,15 @@ VentilatorState get_init_state(void) {
     return state;
 }
 
+machineStates check_mode(void) {
+    if (digitalRead(MODE_SWITCH_PIN) == ACMODE) {
+        return ACMode;
+    }
+    else {
+        return VCMode;
+    }
+}
+
 void update_state(VentilatorState &state) {
     state.pressure     = readPressureSensor();
     state.current_time = millis();
