@@ -1,12 +1,13 @@
 #include "UserParameter.h"
 
-UserParameter::UserParameter(const float minVlaue, const float maxValue, const float increment, const uint8_t pin){
+UserParameter::UserParameter(const float minValue, const float maxValue, const float increment, const uint8_t pin, const float defaultValue){
 	
 	this->minValue = minValue;
 	this->maxValue = maxValue;
 	this->increment = increment;
 	this->selectPin = pin;
-  this->value = minValue; //TODO: Change this to not be just the min
+	this->value = defaultValue; //TODO: Change this to not be just the min
+  this->tmpValue = defaultValue;
 	
 	return;
 }
@@ -23,12 +24,12 @@ void UserParameter::updateTmpValue(int32_t numEncoderSteps){
 	
 	if(funcValue > this->maxValue){
 		
-		funcValue = maxValue;
+		funcValue = this->maxValue;
 		
 	}
 	else if(funcValue < this->minValue){
 		
-		funcValue = minValue;
+		funcValue = this->minValue;
 		
 	}
 	
