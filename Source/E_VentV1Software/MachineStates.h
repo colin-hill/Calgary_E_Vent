@@ -126,9 +126,6 @@ struct VentilatorState {
 const bool ACMODE = true;
 const bool VCMODE = false;
 
-// Pin for reading machine mode switch.
-const uint8_t MODE_SWITCH_PIN = 40;
-
 // Make sure there are the same number of characters as machine states!
 // This is necessary for machineStateCodeAssignment
 const char machineStateCodes[] = "SHZBAVF";

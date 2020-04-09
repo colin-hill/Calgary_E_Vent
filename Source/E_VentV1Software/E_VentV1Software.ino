@@ -61,6 +61,7 @@ UserParameter userParameters[NUM_USER_PARAMETERS] = {UserParameter(MIN_THRESHOLD
                                                       UserParameter(MIN_LOW_PLATEAU_PRESSURE_ALARM, MAX_LOW_PLATEAU_PRESSURE_ALARM, LOW_PLATEAU_PRESSURE_ALARM_INCREMENT, LOW_PLATEAU_PRESSURE_ALARM_SELECT_PIN, LOW_PLATEAU_PRESSURE_ALARM_DEFAULT)};
 
 
+volatile boolean alarmReset = false;
 // TODO: These are never set?
 // TODO: Do these really have to be globals?
 float measuredPIP;
@@ -77,6 +78,7 @@ float motorReturnTime;
 
 //Timer Variables--------------------------------------------------------------------------------------------------------
 elapsedMillis parameterSetDebounceTimer;
+elapsedMillis alarmResetDebounceTimer;
 elapsedMillis breathTimer;
 
 //Enumerators------------------------------------------------------------------------------------------------------------
@@ -97,6 +99,7 @@ void setup() {
 #endif //SERIAL_DEBUG
 
     setupLimitSwitch();
+    setUpAlarmSwitch();
     setUpPressureSensor(9600);
 
     // Motor serial communications startup
@@ -190,7 +193,7 @@ void loop() {
     // TODO: Move motor, check position, etc.
     //state = operate_motor(state)
 
-    state = handle_alarms(state, alarmDisplay, userParameters, currentlySelectedParameter);
+    state = handle_alarms(alarmReset, state, alarmDisplay, userParameters, currentlySelectedParameter);
 }
 
 //FUNCTIONS
@@ -201,4 +204,12 @@ void parameterSetISR() {
         parameterSetDebounceTimer = 0;
         parameterSet = true;
     }
+}
+
+void alarmResetISR(){
+
+  if(alarmResetDebounceTimer > (0.25*S_TO_MS)){
+    alarmResetDebounceTimer = 0;
+    alarmReset = true;
+  }
 }

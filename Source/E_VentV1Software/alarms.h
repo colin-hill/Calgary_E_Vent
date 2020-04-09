@@ -8,6 +8,7 @@
 #include "MachineStates.h"
 #include "updateUserParameters.h"
 #include "UserParameter.h"
+#include <assert.h>
 
 #if ARDUINO >= 100
 #include "Arduino.h"
@@ -142,7 +143,7 @@ uint16_t check_peep(const float pressure);
    - TODO: will reset the errors flag --- only in certain conditions.
    - TODO: can resent machine state!!!
  */
-VentilatorState handle_alarms(VentilatorState state, LiquidCrystal &displayName, UserParameter *userParameters, SelectedParameter &currentlySelectedParameter);
+VentilatorState handle_alarms(volatile boolean &alarmReset, VentilatorState &state, LiquidCrystal &displayName, UserParameter *userParameters, SelectedParameter &currentlySelectedParameter);
 
 /* TODO: Check alarms more frequently?
 
@@ -153,4 +154,9 @@ raised, right? Like in VCPeak or any of the other states you also shouldn't have
 low pressure...?
 */
 
+void reset_alarms(VentilatorState &state);
+
+void setUpAlarmSwitch();
+
+void alarmResetISR();
 #endif // alarms_h

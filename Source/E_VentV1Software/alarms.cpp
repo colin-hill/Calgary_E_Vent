@@ -73,7 +73,7 @@ uint16_t check_peep(const float pressure) {
 
 
 
-VentilatorState handle_alarms(VentilatorState state, LiquidCrystal &displayName) {
+VentilatorState handle_alarms(volatile boolean &alarmReset, VentilatorState &state, LiquidCrystal &displayName, UserParameter *userParameters, SelectedParameter &currentlySelectedParameter) {
     if (state.errors) { // There is an unserviced error
         // Control the buzzer
         if (alarmBuzzerTimer > (ALARM_SOUND_LENGTH*1000)) {
@@ -125,6 +125,13 @@ VentilatorState handle_alarms(VentilatorState state, LiquidCrystal &displayName)
             assert(false);  // This should NOT happen.
             state.errors = 0;
         }
+        cli();
+        if(alarmReset){
+          alarmReset = false;
+          sei();
+          reset_alarms(state);
+        }
+        sei();
     }
     else{
 
@@ -137,4 +144,48 @@ VentilatorState handle_alarms(VentilatorState state, LiquidCrystal &displayName)
     }
 
     return state;
+}
+
+void reset_alarms(VentilatorState &state)
+{
+  if (state.errors & HIGH_PRESSURE_ALARM) {
+       // Reset the high pressure alarm error
+       state.errors &= (~HIGH_PRESSURE_ALARM);
+  }
+  else if (state.errors & LOW_PRESSURE_ALARM) {
+       // Reset the low pressure alarm error
+       state.errors &= (~LOW_PRESSURE_ALARM);
+  }
+  else if (state.errors & HIGH_PEEP_ALARM) {
+      // Reset the high PEEP alarm
+      state.errors &= (~HIGH_PEEP_ALARM);
+  }
+  else if (state.errors & LOW_PEEP_ALARM) {
+      // Reset the low PEEP alarm
+      state.errors &= (~LOW_PEEP_ALARM);
+  }
+  else if (state.errors & DISCONNECT_ALARM) {
+      // Rese the low pressure/disconnect alarm
+      state.errors &= (~DISCONNECT_ALARM);
+  }
+  else if (state.errors & HIGH_TEMP_ALARM) {
+      // Reset high temp alarm
+      state.errors &= (~HIGH_TEMP_ALARM);
+  }
+  else if (state.errors & APNEA_ALARM) {
+      // Reset the apnea alarm
+      state.errors &= (~APNEA_ALARM);
+  }
+  else if (state.errors & DEVICE_FAILURE_ALARM) {
+      //No point in resetting this alarm since we are going to a fault state
+      //state.machine_state = FailureMode; this is handled before 
+  }
+}
+
+void setUpAlarmSwitch()
+{
+  pinMode(ALARM_SWITCH_PIN,OUTPUT);
+  attachInterrupt(digitalPinToInterrupt(ALARM_SWITCH_PIN),alarmResetISR,FALLING);
+
+  return;
 }

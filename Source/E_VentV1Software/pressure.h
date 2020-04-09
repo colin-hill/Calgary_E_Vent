@@ -17,7 +17,7 @@
 #include "WProgram.h"
 #endif
 
-#include "SBWire.h"
+//#include "SBWire.h"
 
 //Pressure Sensor Definitions---------------------------------------------------
 #define PRESSURE_SENSOR_I2C Wire
