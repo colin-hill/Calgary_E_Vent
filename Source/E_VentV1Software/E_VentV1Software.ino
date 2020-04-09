@@ -21,12 +21,17 @@
 #include "FailureMode.h"
 #include "MotorZeroing.h"
 #include "PinAssignments.h"
+#include "Motor.h"
+#include "RoboClaw.h"
 
 //Begin User Defined Section----------------------------------------------------
 
 //Define LCD displays
 LiquidCrystal alarmDisplay(ALARM_LCD_RS, ALARM_LCD_ENABLE, ALARM_LCD_DB4, ALARM_LCD_DB5, ALARM_LCD_DB6, ALARM_LCD_DB7);
 LiquidCrystal ventilatorDisplay(VENT_LCD_RS, VENT_LCD_ENABLE, VENT_LCD_DB4, VENT_LCD_DB5, VENT_LCD_DB6, VENT_LCD_DB7);
+
+//Define Motor Controller
+RoboClaw motorController(&Serial2, MOTOR_CONTROLLER_TIMEOUT);
 
 //#define SERIAL_DEBUG //Comment this out if not debugging, used for visual confirmation of state changes
 //#define NO_INPUT_DEBUG //Comment this out if not debugging, used to spoof input parameters at startup when no controls are present
@@ -190,8 +195,8 @@ void loop() {
         state = failure_mode(state);
     }
 
-    // TODO: Move motor, check position, etc.
-    //state = operate_motor(state)
+
+    state = handle_motor(motorController, state);
 
     state = handle_alarms(alarmReset, state, alarmDisplay, userParameters, currentlySelectedParameter);
 }

@@ -3,6 +3,7 @@
 #include "breathing.h"
 #include "UserParameter.h"
 #include "pinAssignments.h"
+#include "Motor.h"
 
 
 char machineStateCodeAssignment(machineStates machineState) {
@@ -52,12 +53,26 @@ VentilatorState get_init_state(void) {
      state.plateau_pause_time = DEFAULT_PLATEAU_PAUSE_TIME; //seconds;
         //Inspiration Time
      state.inspiration_time = DEFAULT_INSPIRATION_TIME;
-        //Motor Return Time
-     state.motor_return_time = 1.0; //seconds;
+        //Nominal expiration time
+     state.expiration_time = SECONDS_PER_MINUTE/state.breaths_per_minute - state.inspiration_time;
+     
 
     //Mechanism Values -----------------------------------------------------------------------------------------
+        //Controller temperature
     state.controller_temperature = 0; //C?
+        //Distance of motor travel during inhale
+    state.motor_inhale_pulses = 0.01*DEFAULT_TIDAL_VOLUME*QP_AT_FULL_STROKE;
+        //Speed of motor during inhale
+    state.motor_inhale_speed = state.motor_inhale_pulses/state.inspiration_time; //QPPS
+       //Motor Return Time
+    state.motor_return_time = state.expiration_time*MOTOR_RETURN_FACTOR; //seconds;
 
+    state.motor_return_speed = state.motor_inhale_pulses/state.motor_return_time; //QPPS
+
+    state.future_motor_position = 0;
+    state.current_motor_position = 0;
+
+    //Errors
     state.errors = 0;
 
     return state;
@@ -79,6 +94,15 @@ void update_state(VentilatorState &state) {
 
 void reset_timer(VentilatorState &state) {
     state.breath_time_start = state.current_time;
+}
+
+void update_motor_settings(VentilatorState &state) {
+    state.motor_inhale_pulses = 0.01*state.tidal_volume*QP_AT_FULL_STROKE;
+    state.motor_inhale_speed = state.motor_inhale_pulses/state.inspiration_time;
+    state.expiration_time = SECONDS_PER_MINUTE/state.breaths_per_minute - state.inspiration_time;
+    state.motor_return_time = state.expiration_time*MOTOR_RETURN_FACTOR;
+    state.motor_return_speed = state.motor_inhale_pulses/state.motor_return_time;
+
 }
 
 unsigned long elapsed_time(const VentilatorState &state) {

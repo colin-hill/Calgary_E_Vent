@@ -4,6 +4,11 @@
 #ifndef breathing_h
 #define breathing_h
 
+
+
+
+const float SECONDS_PER_MINUTE = 60.0;
+
 // Threshold Pressure Definitions--------------------------------------------------
 
 const float MIN_THRESHOLD_PRESSURE     = 1.0; //cmH2O
