@@ -4,6 +4,8 @@
 #include "LCD.h"
 #include "breathing.h"
 
+#include <assert.h>
+
 
 
 

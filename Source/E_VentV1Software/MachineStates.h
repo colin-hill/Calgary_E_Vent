@@ -112,11 +112,24 @@ struct VentilatorState {
      float plateau_pause_time; //seconds;
         //Inspiration Time
      float inspiration_time;
-          //Motor Return Time
-     float motor_return_time; //seconds;
+        //Nominal expiration time
+     float expiration_time;
+     
 
     //Mechanism Values -----------------------------------------------------------------------------------------
     float controller_temperature; //C?
+
+    float motor_inhale_pulses;
+
+    float motor_inhale_speed;
+         //Motor Return Time
+    float motor_return_time; //seconds;
+
+    float motor_return_speed;
+
+    long int future_motor_position;
+
+    long int current_motor_position;
 
     uint16_t errors;
 };
@@ -151,6 +164,8 @@ void update_state(VentilatorState &state);
 /* Reset timer.
  */
 void reset_timer(VentilatorState &state);
+
+void update_motor_settings(VentilatorState &state);
 
 
 /* Get elapsed time in ms.
