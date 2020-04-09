@@ -76,11 +76,13 @@ VentilatorState handle_alarms(VentilatorState state, LiquidCrystal &displayName)
     if (state.errors) { // There is an unserviced error
         // Control the buzzer
         if (alarmBuzzerTimer > (ALARM_SOUND_LENGTH*1000)) {
-            alarmBuzzerTimer = 0; //Reset the timer
-            digitalWrite(ALARM_BUZZER_PIN,!digitalRead(ALARM_BUZZER_PIN)); //Toggle the buzzer output pin
+            // Reset the timer
+            alarmBuzzerTimer = 0;
+
+            // Toggle the buzzer output pins
+            digitalWrite(ALARM_BUZZER_PIN,!digitalRead(ALARM_BUZZER_PIN));
             digitalWrite(ALARM_LED_PIN,!digitalRead(ALARM_LED_PIN));
             digitalWrite(ALARM_RELAY_PIN,!digitalRead(ALARM_RELAY_PIN));
-
         }
 
         // Provide the appropriate screen for the error, error flags held in a 16 bit unsigned integer
