@@ -3,7 +3,6 @@
 #define NO_LIMIT_SWITCH_DEBUG
 
 #include <LiquidCrystal.h>
-#include "Wire.h"
 
 #include "adc.h"
 #include "elapsedMillis.h"
