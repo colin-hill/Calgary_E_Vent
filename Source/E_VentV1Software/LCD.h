@@ -46,7 +46,7 @@ void displayHighPEEPChange(LiquidCrystal &displayName, float tempHighPEEP, const
 
 void displayLowPEEPChange(LiquidCrystal &displayName, float tempLowPEEP, const int LCD_MAX_STRING);
 
-void dipslayLowPlateauChange(LiquidCrystal &displayName, float tempLowPlateau, const int LCD_MAX_STRING);
+void displayLowPlateauChange(LiquidCrystal &displayName, float tempLowPlateau, const int LCD_MAX_STRING);
 
 //END OF ALARM DISPLAY FUNCTIONS-------------------------------------------------------------------------------------------------------------------------------------------
 

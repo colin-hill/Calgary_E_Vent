@@ -9,6 +9,8 @@
 #ifndef pressure_h
 #define pressure_h
 
+#define NO_SENSOR_DEBUG
+
 #if ARDUINO >= 100
 #include "Arduino.h"
 #else

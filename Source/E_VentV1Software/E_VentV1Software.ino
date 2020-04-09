@@ -1,5 +1,6 @@
 #define SERIAL_DEBUG //Comment this out if not debugging, used for visual confirmation of state changes
 #define NO_INPUT_DEBUG //Comment this out if not debugging, used to spoof input parameters at startup when no controls are present
+#define NO_LIMIT_SWITCH_DEBUG
 
 #include <LiquidCrystal.h>
 #include "Wire.h"
@@ -50,11 +51,11 @@ volatile boolean parameterSet = false;
 SelectedParameter currentlySelectedParameter = e_None;
 Encoder parameterSelectEncoder(PARAMETER_ENCODER_PIN_1, PARAMETER_ENCODER_PIN_2);
 
-UserParameter userParameters[NUM_USER_PARAMETERS] = {UserParameter(MIN_THRESHOLD_PRESSURE, MAX_THRESHOLD_PRESSURE, THRESHOLD_PRESSURE_INCREMENT, THRESHOLD_PRESSURE_SELECT_PIN, THRESHOLD_PRESSURE_DEFAULT),
+UserParameter userParameters[NUM_USER_PARAMETERS] = {UserParameter(MIN_THRESHOLD_PRESSURE, MAX_THRESHOLD_PRESSURE, THRESHOLD_PRESSURE_INCREMENT, THRESHOLD_PRESSURE_SELECT_PIN, DEFAULT_THRESHOLD_PRESSURE),
                                                       UserParameter(MIN_BPM, MAX_BPM, BPM_INCREMENT, BPM_SELECT_PIN, BPM_DEFAULT),
-                                                      UserParameter(MIN_INSPIRATION_TIME, MAX_INSPIRATION_TIME, INSPIRATION_TIME_INCREMENT, INSPIRATION_TIME_SELECT_PIN, INSPIRATION_TIME_DEFAULT),
+                                                      UserParameter(MIN_INSPIRATION_TIME, MAX_INSPIRATION_TIME, INSPIRATION_TIME_INCREMENT, INSPIRATION_TIME_SELECT_PIN, DEFAULT_INSPIRATION_TIME),
                                                       UserParameter(MIN_TIDAL_VOLUME, MAX_TIDAL_VOLUME, TIDAL_VOLUME_INCREMENT, TIDAL_VOLUME_SELECT_PIN, TIDAL_VOLUME_DEFAULT),
-                                                      UserParameter(MIN_PLATEAU_PAUSE_TIME, MAX_PLATEAU_PAUSE_TIME, PLATEAU_PAUSE_TIME_INCREMENT, PLATEAU_PAUSE_TIME_SELECT_PIN, PLATEAU_PAUSE_TIME_DEFAULT),
+                                                      UserParameter(MIN_PLATEAU_PAUSE_TIME, MAX_PLATEAU_PAUSE_TIME, PLATEAU_PAUSE_TIME_INCREMENT, PLATEAU_PAUSE_TIME_SELECT_PIN, DEFAULT_PLATEAU_PAUSE_TIME),
                                                       UserParameter(MIN_HIGH_PIP_ALARM, MAX_HIGH_PIP_ALARM, HIGH_PIP_ALARM_INCREMENT, HIGH_PIP_ALARM_SELECT_PIN, HIGH_PIP_ALARM_DEFAULT),
                                                       UserParameter(MIN_LOW_PIP_ALARM, MAX_LOW_PIP_ALARM, LOW_PIP_ALARM_INCREMENT, LOW_PIP_ALARM_SELECT_PIN, LOW_PIP_ALARM_DEFAULT),
                                                       UserParameter(MIN_HIGH_PEEP_ALARM, MAX_HIGH_PEEP_ALARM, HIGH_PEEP_ALARM_INCREMENT, HIGH_PEEP_ALARM_SELECT_PIN, HIGH_PEEP_ALARM_DEFAULT),
@@ -98,6 +99,7 @@ void setup() {
 #endif //SERIAL_DEBUG
 
     setupLimitSwitch();
+    setUpPressureSensor(9600);
 
     // Motor serial communications startup
     // MotorSerial.begin(9600); //********
@@ -106,7 +108,7 @@ void setup() {
     setUpParameterSelectButtons(userParameters, NUM_USER_PARAMETERS, PARAMETER_ENCODER_PUSH_BUTTON_PIN);
 
     //Mode Switch Pin input setup
-    pinMode(MODE_SWITCH_PIN, INPUT);
+    pinMode(MODE_SWITCH_PIN, INPUT_PULLUP);
 
     //LCD Setup
     alarmDisplay.begin(LCD_COLUMNS, LCD_ROWS); 
@@ -138,7 +140,7 @@ void setup() {
     }
 #endif //Skip hardware lockout for debug
 
-#ifdef NO_INPUT_DEBUG
+#ifdef NO_LIMIT_SWITCH_DEBUG
     state.machine_state = MotorZeroing;
 #endif
 
@@ -195,7 +197,7 @@ void loop() {
     // TODO: Move motor, check position, etc.
     //state = operate_motor(state)
 
-    state = handle_alarms(state, alarmDisplay);
+    state = handle_alarms(state, alarmDisplay, userParameters, currentlySelectedParameter);
 }
 
 //FUNCTIONS

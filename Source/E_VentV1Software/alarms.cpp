@@ -72,7 +72,7 @@ uint16_t check_peep(const float pressure) {
 }
 
 
-VentilatorState handle_alarms(VentilatorState state, LiquidCrystal &displayName) {
+VentilatorState handle_alarms(VentilatorState state, LiquidCrystal &displayName, UserParameter *userParameters, SelectedParameter &currentlySelectedParameter) {
 
     if(state.errors){ //There is an unserviced error
 
@@ -126,6 +126,8 @@ VentilatorState handle_alarms(VentilatorState state, LiquidCrystal &displayName)
         }
     }
     else{
+
+        displayAlarmParameters(currentlySelectedParameter, displayName, userParameters);
         alarmBuzzerTimer = 0;
         digitalWrite(ALARM_BUZZER_PIN,LOW);
         digitalWrite(ALARM_LED_PIN,LOW);

@@ -247,7 +247,7 @@ void displayLowPEEPChange(LiquidCrystal &displayName, float tempLowPEEP, const i
 	displayName.write(alarmDispL4); 
 }
 
-void dipslayLowPlateauChange(LiquidCrystal &displayName, float tempLowPlateau, const int LCD_MAX_STRING) {
+void displayLowPlateauChange(LiquidCrystal &displayName, float tempLowPlateau, const int LCD_MAX_STRING) {
 
 	int displayPressure = roundAndCast(tempLowPlateau);
 

@@ -28,36 +28,36 @@ VentilatorState get_init_state(void) {
 
     //Ventilation Primary Values -----------------------------------------------------------------------------
         //BPM
-    float breaths_per_minute = DEFAULT_BPM; //1/MIN
+    state.breaths_per_minute = DEFAULT_BPM; //1/MIN
         //Tidal Volume
-    float tidal_volume = DEFAULT_TIDAL_VOLUME; //percentage (out of 100)
+    state.tidal_volume = DEFAULT_TIDAL_VOLUME; //percentage (out of 100)
 
     //Pressure Values -----------------------------------------------------------------------------------------
-    float pressure = 0; //CM H2O; pressure sensing reading
+    state.pressure = 0; //CM H2O; pressure sensing reading
         //PIP Pressure
-    float current_loop_peak_pressure = 0; //CM H2O; peak pressure of the current loop, running value
-    float peak_pressure = 0; //CM H2O; measured PIP value
+    state.current_loop_peak_pressure = 0; //CM H2O; peak pressure of the current loop, running value
+    state.peak_pressure = 0; //CM H2O; measured PIP value
         //PEEP Pressure
-    float peep_pressure = 0; //CM H2O; measured PEEP value
+    state.peep_pressure = 0; //CM H2O; measured PEEP value
         //Plateau Pressure
-    float plateau_pressure = 0; //CM H2O; measured plateau pressure value
+    state.plateau_pressure = 0; //CM H2O; measured plateau pressure value
         //AC Mode Threshold Pressure
-    float ac_threshold_pressure = DEFAULT_THRESHOLD_PRESSURE; //CM H2O; value below PEEP required to trigger a breath
+    state.ac_threshold_pressure = DEFAULT_THRESHOLD_PRESSURE; //CM H2O; value below PEEP required to trigger a breath
 
     //Timing Values--------------------------------------------------------------------------------------------
         //AC Mode Threshold Time
-     float ac_threshold_time = 0; //seconds;
+     state.ac_threshold_time = 0; //seconds;
         //Plateau Pause Time
-     float plateau_pause_time = DEFAULT_PLATEAU_PAUSE_TIME; //seconds;
+     state.plateau_pause_time = DEFAULT_PLATEAU_PAUSE_TIME; //seconds;
         //Inspiration Time
-     float inspiration_time = DEFAULT_INSPIRATION_TIME;
+     state.inspiration_time = DEFAULT_INSPIRATION_TIME;
         //Motor Return Time
-     float motor_return_time = 0; //seconds;
+     state.motor_return_time = 1.0; //seconds;
 
     //Mechanism Values -----------------------------------------------------------------------------------------
-    float controller_temperature = 0; //C?
+    state.controller_temperature = 0; //C?
 
-    uint16_t errors = 0;
+    state.errors = 0;
 
     return state;
 }

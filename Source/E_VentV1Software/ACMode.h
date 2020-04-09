@@ -8,7 +8,7 @@
 
 #include "elapsedMillis.h"
 #include "MachineStates.h"
-
+#define SERIAL_DEBUG
 
 // ----------------------------------------------------------------------
 // Functions for handling the AC state machine.

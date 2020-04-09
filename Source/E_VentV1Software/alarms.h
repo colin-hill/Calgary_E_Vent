@@ -6,6 +6,8 @@
 
 #include <LiquidCrystal.h>
 #include "MachineStates.h"
+#include "updateUserParameters.h"
+#include "UserParameter.h"
 
 #if ARDUINO >= 100
 #include "Arduino.h"
@@ -139,7 +141,7 @@ uint16_t check_peep(const float pressure);
    - TODO: currently does nothing, should raise alarms (LCD, beeping)
    - TODO: will reset the errors flag
  */
-VentilatorState handle_alarms(VentilatorState state, LiquidCrystal &displayName);
+VentilatorState handle_alarms(VentilatorState state, LiquidCrystal &displayName, UserParameter *userParameters, SelectedParameter &currentlySelectedParameter);
 
 /* TODO: Check alarms more frequently?
 

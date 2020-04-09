@@ -147,7 +147,7 @@ VentilatorState vcExhale(VentilatorState state) {
     Serial.print("VCExhale: ");
     Serial.println(elapsed_time(state));
     Serial.print("Desired Exhale Time: ");
-    //Serial.println(expiration_time);
+    Serial.println(state.motor_return_time);
 #endif //SERIAL_DEBUG
     // TODO: Set motor velocity and desired position
 

@@ -48,10 +48,9 @@ class UserParameter {
 		void readFromNV();
 		
 	private:
-	
-	float minValue;
-	float maxValue;
-	float increment;
+	  float minValue;
+	  float maxValue;
+	  float increment;
 };
 
 //UserParameter THRESHOLD_PRESSURE(MIN_THRESHOLD_PRESSURE,MAX_THRESHOLD_PRESSURE,thresholdPressureIncrement, thresholdPressureSelectPin);
