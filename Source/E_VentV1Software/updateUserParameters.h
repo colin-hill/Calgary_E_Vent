@@ -10,10 +10,9 @@
 #include "UserParameter.h"
 #include "Encoder.h"
 #include "LCD.h"
+#include "MachineStates.h"
 
-const uint8_t PARAMETER_ENCODER_PUSH_BUTTON_PIN = 20;
-const uint8_t PARAMETER_ENCODER_PIN_1 = 18;
-const uint8_t PARAMETER_ENCODER_PIN_2 = 19;
+#define SWITCH_PRESS LOW
 
 //volatile boolean PARAMETER_SELECT = false;
 //volatile boolean PARAMETER_SET = false;
@@ -25,13 +24,13 @@ enum SelectedParameter{
 	e_BPM,
 	e_InspirationTime,
 	e_TidalVolume,
-  e_PlateauPauseTime,
-  e_HighPIPAlarm,
-  e_LowPIPAlarm,
-  e_HighPEEPAlarm,
-  e_LowPEEPAlarm,
-  e_LowPlateauPressureAlarm,
-  e_None
+	e_PlateauPauseTime,
+	e_HighPIPAlarm,
+	e_LowPIPAlarm,
+	e_HighPEEPAlarm,
+	e_LowPEEPAlarm,
+	e_LowPlateauPressureAlarm,
+	e_None
 };
 
 //SelectedParameter CURRENTLY_SELECTED_PARAMETER = e_None;
@@ -41,17 +40,21 @@ void setUpParameterSelectButtons(UserParameter *userParameters, const uint8_t NU
 void updateSelectedParameter(SelectedParameter &currentlySelectedParameter, 
 							Encoder &parameterSelectEncoder, UserParameter *userParameters, const uint8_t NUM_USER_PARAMETERS);
 							
-void updateParameterValue(SelectedParameter &currentlySelectedParameter, 
+void updateParameterTempValue(SelectedParameter &currentlySelectedParameter, 
 						Encoder &parameterSelectEncoder, UserParameter *userParameter);
 
 void setParameters(SelectedParameter &currentlySelectedParameter,
 				volatile boolean &parameterSet, UserParameter *userParamter);
 
-void updateUserParameters(SelectedParameter &currentlySelectedParameter,volatile boolean &parameterSet,
+VentilatorState updateStateUserParameters(VentilatorState &state, SelectedParameter &currentlySelectedParameter,volatile boolean &parameterSet,
             Encoder &parameterSelectEncoder, UserParameter *userParameters, const uint8_t NUM_USER_PARAMETERS);
 
 void displayUserParameters(SelectedParameter &currentlySelectedParameter, LiquidCrystal &displayName, machineStates machineState, vcModeStates vcState, acModeStates acState, 
                           float measuredPIP, float measuredPlateau, const int LCD_MAX_STRING, UserParameter *userParameters);
+
+void displayAlarmParameters(SelectedParameter &currentlySelectedParameter, LiquidCrystal &displayName,UserParameter *userParamters);
+
+VentilatorState setStateParameters(VentilatorState &state, UserParameter *userParameters);
 
 void parameterSetISR();
 

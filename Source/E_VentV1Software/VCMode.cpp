@@ -19,9 +19,11 @@ VentilatorState vcStart(VentilatorState state) {
     Serial.println("VCStart");
 #endif //SERIAL_DEBUG
 
+    //TODO: Reset alarms as outlined on state machine
+
     // Reset timer and peak pressure reading.
     reset_timer(state);
-    state.temp_peak_pressure = 0;
+    state.current_loop_peak_pressure = 0;
 
     // Set next state.
     state.vc_state = VCInhaleCommand;
@@ -38,42 +40,40 @@ VentilatorState vcInhaleCommand(VentilatorState state) {
 #endif //SERIAL_DEBUG
 
     // TODO: Set motor speed and position
-    // TODO: Reset timer (does this happen here as well as vcStart?)
 
     state.vc_state = VCInhale;
     return state;
 }
 
 
-VentilatorState vcInhale(VentilatorState state, const float inspiration_time) {
+VentilatorState vcInhale(VentilatorState state) {
     assert(state.vc_state == VCInhale);
 
 #ifdef SERIAL_DEBUG
     Serial.print("VCInhale: ");
     Serial.println(elapsed_time(state));
     Serial.print("Desired Inhale Time: ");
-    Serial.println(inspiration_time);
+    Serial.println(state.inspiration_time);
 #endif //SERIAL_DEBUG
 
-    // TODO: Set motor position and speed
-    // CB: Does this happen here, or is this what vcInhaleCommand does?
 
     // Monitor pressure.
-    if (state.pressure > state.temp_peak_pressure) {
-        state.temp_peak_pressure = state.pressure;
+    if (state.pressure > state.current_loop_peak_pressure) {
+        state.current_loop_peak_pressure = state.pressure;
     }
 
-    if(elapsed_time(state) > (inspiration_time * S_TO_MS)){
+    // Check time
+    if(elapsed_time(state) > (state.inspiration_time * S_TO_MS)){
         state.vc_state = VCPeak;
+        state.peak_pressure = state.current_loop_peak_pressure;
         reset_timer(state);
-        state.peak_pressure = state.temp_peak_pressure;
-        // TODO: Check motor position********
     }
 
     state.errors |= check_high_pressure(state.pressure);
 
     // If there's high pressure, abort inhale.
     // TODO: will this state and VCInhaleAbort both raise alarm? Is that fine?
+    // CH: Yes, I think that is fine. Basically anytime the motor is moving we want to know if the pressue is too high
     if (state.errors & HIGH_PRESSURE_ALARM) {
         state.vc_state = VCInhaleAbort;
     }
@@ -83,7 +83,7 @@ VentilatorState vcInhale(VentilatorState state, const float inspiration_time) {
 
 
 // Unused parameter warning for expiration_time due to SERIAL_DEBUG
-VentilatorState vcInhaleAbort(VentilatorState state, const float expiration_time) {
+VentilatorState vcInhaleAbort(VentilatorState state) {
     assert(state.vc_state == VCInhaleAbort);
 
 #ifdef SERIAL_DEBUG
@@ -92,12 +92,9 @@ VentilatorState vcInhaleAbort(VentilatorState state, const float expiration_time
     // TODO: should this really be expiration time?
     // Seems like this should be inspiration time?
     Serial.print("Desired Exhale Time: ");
-    Serial.println(expiration_time);
+    //Serial.println(expiration_time);
 #endif //SERIAL_DEBUG
 
-    // TODO: Set motor velocity and desired position
-    // TODO: Check if this is what is meant by resetting timer
-    // TODO: Do we need to do this if vcExhale is supposed to reset the timer (but currently doesn't!)
     reset_timer(state);
     state.errors |= check_high_pressure(state.pressure);
     state.vc_state = VCExhale;
@@ -113,19 +110,18 @@ VentilatorState vcPeak(VentilatorState state) {
     Serial.print("VCPeak: ");
     Serial.println(elapsed_time(state));
     Serial.print("Desired Peak Time: ");
-    Serial.println(HOLD_TIME);
+    Serial.println(state.plateau_pause_time);
 #endif //SERIAL_DEBUG
     // TODO: Hold motor in position********
 
-    if(elapsed_time(state) > (HOLD_TIME * S_TO_MS)){
-        state.vc_state = VCExhale;
-        reset_timer(state);
-        state.plateau_pressure = state.pressure;
+    if(elapsed_time(state) > (state.plateau_pause_time * S_TO_MS)){
+        state.vc_state = VCExhaleCommand;        
     }
 
     state.errors |= check_high_pressure(state.pressure);
     return state;
 }
+
 
 
 VentilatorState vcExhaleCommand(VentilatorState state) {
@@ -136,30 +132,29 @@ VentilatorState vcExhaleCommand(VentilatorState state) {
 #endif //SERIAL_DEBUG
 
     // TODO: Set motor speed and position
-    // TODO: Reset timer (does this happen here as well as vcStart?)
+    reset_timer(state);
+    state.plateau_pressure = state.pressure;
+    state.vc_state = VCExhale;
 
-    state.vc_state = VCInhale;
     return state;
 }
 
 
-VentilatorState vcExhale(VentilatorState state, const float expiration_time) {
+VentilatorState vcExhale(VentilatorState state) {
     assert(state.vc_state == VCExhale);
 
 #ifdef SERIAL_DEBUG
     Serial.print("VCExhale: ");
     Serial.println(elapsed_time(state));
     Serial.print("Desired Exhale Time: ");
-    Serial.println(expiration_time);
+    Serial.println(state.motor_return_time);
 #endif //SERIAL_DEBUG
     // TODO: Set motor velocity and desired position
 
-    if (elapsed_time(state) > (expiration_time * S_TO_MS)) {
+    if (elapsed_time(state) > (state.motor_return_time * S_TO_MS)) {
         state.vc_state = VCReset;
-        state.peep_pressure = state.pressure;
     }
 
-    state.errors |= check_peep(state.pressure);
     return state;
 }
 
@@ -172,27 +167,33 @@ VentilatorState vcReset(VentilatorState state) {
     Serial.println("VCReset");
 #endif //SERIAL_DEBUG
 
+    //Update and check PEEP
+    state.peep_pressure = state.pressure;
+    state.errors |= check_peep(state.peep_pressure);
+
     state.machine_state = BreathLoopStart;
+    state.vc_state = VCStart;
+
     return state;
 }
 
 
-VentilatorState vc_mode_step(VentilatorState state, const float inspiration_time, const float expiration_time) {
+VentilatorState vc_mode_step(VentilatorState state) {
     switch(state.vc_state) {
     case VCStart:
         return vcStart(state);
     case VCInhaleCommand:
         return vcInhaleCommand(state);
     case VCInhale:
-        return vcInhale(state, inspiration_time);
+        return vcInhale(state);
     case VCInhaleAbort:
-        return vcInhaleAbort(state, expiration_time);
+        return vcInhaleAbort(state);
     case VCPeak:
         return vcPeak(state);
     case VCExhaleCommand:
         return vcExhaleCommand(state);
     case VCExhale:
-        return vcExhale(state, expiration_time);
+        return vcExhale(state);
     case VCReset:
         return vcReset(state);
     default:

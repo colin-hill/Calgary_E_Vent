@@ -4,6 +4,11 @@
 #ifndef alarms_h
 #define alarms_h
 
+#include <LiquidCrystal.h>
+#include "MachineStates.h"
+#include "updateUserParameters.h"
+#include "UserParameter.h"
+
 #if ARDUINO >= 100
 #include "Arduino.h"
 #else
@@ -14,42 +19,45 @@
 const float ALARM_SOUND_LENGTH = 0.5; //Seconds
 
 // Alarm pins
-const int ALARM_BUZZER_PIN = 21;
+const int ALARM_BUZZER_PIN = 11;
+const int ALARM_LED_PIN    = 12;
+const int ALARM_RELAY_PIN  = 13;
 
-//High PIP Alarm Definitions----------------
+// High PIP Alarm Definitions----------------
 const float MAX_HIGH_PIP_ALARM = 40; //cmH2O
 const float MIN_HIGH_PIP_ALARM = 10; //cmH2O
 //------------------------------------------
 
-//Low PIP Alarm Definitions-----------------
+// Low PIP Alarm Definitions-----------------
 const float MAX_LOW_PIP_ALARM = 40; //cmH2O
 const float MIN_LOW_PIP_ALARM = 0; //cmH2O
 //------------------------------------------
 
-//High PEEP Alarm Definitions---------------
+// High PEEP Alarm Definitions---------------
 const float MAX_HIGH_PEEP_ALARM = 30; //cmH2O
 const float MIN_HIGH_PEEP_ALARM = 1; //cmH2O
 //------------------------------------------
 
-//Low PEEP Alarm Definitions----------------
+// Low PEEP Alarm Definitions----------------
 const float MAX_LOW_PEEP_ALARM = 30; //cmH2O
 const float MIN_LOW_PEEP_ALARM = 0; //cmH2O
 //------------------------------------------
 
-//Low Plateau Pressure Alarm Defintions-----
+// Low Plateau Pressure Alarm Defintions-----
 const float MAX_LOW_PLATEAU_PRESSURE_ALARM = 40; //cmH2O
 const float MIN_LOW_PLATEAU_PRESSURE_ALARM = 1; //cmH2O
 //------------------------------------------
 
 // Alarm flags
-const uint16_t HIGH_PRESSURE_ALARM  = 0x01 << 0;
-const uint16_t LOW_PRESSURE_ALARM   = 0x01 << 1;
-const uint16_t HIGH_PEEP_ALARM      = 0x01 << 2;
-const uint16_t LOW_PEEP_ALARM       = 0x01 << 3;
-const uint16_t DISCONNECT_ALARM     = 0x01 << 4;
-const uint16_t HIGH_TEMP_ALARM      = 0x01 << 5;
-const uint16_t APNEA_ALARM          = 0x01 << 6;
-const uint16_t DEVICE_FAILURE_ALARM = 0x01 << 7;
+const uint16_t HIGH_PRESSURE_ALARM   = 0x01 << 0;
+const uint16_t LOW_PRESSURE_ALARM    = 0x01 << 1;
+const uint16_t HIGH_PEEP_ALARM       = 0x01 << 2;
+const uint16_t LOW_PEEP_ALARM        = 0x01 << 3;
+const uint16_t DISCONNECT_ALARM      = 0x01 << 4;
+const uint16_t HIGH_TEMP_ALARM       = 0x01 << 5;
+const uint16_t APNEA_ALARM           = 0x01 << 6;
+const uint16_t DEVICE_FAILURE_ALARM  = 0x01 << 7;
+//const uint16_t PRESSURE_SENSOR_ALARM = 0x01 << 8;
 
 // Functions for triggering alarms.
 
@@ -131,9 +139,10 @@ uint16_t check_peep(const float pressure);
 
    Postconditions:
    - TODO: currently does nothing, should raise alarms (LCD, beeping)
-   - TODO: will reset the errors flag
+   - TODO: will reset the errors flag --- only in certain conditions.
+   - TODO: can resent machine state!!!
  */
-void handle_alarms(uint16_t &errors);
+VentilatorState handle_alarms(VentilatorState state, LiquidCrystal &displayName, UserParameter *userParameters, SelectedParameter &currentlySelectedParameter);
 
 /* TODO: Check alarms more frequently?
 

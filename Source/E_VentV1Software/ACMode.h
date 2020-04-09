@@ -8,7 +8,7 @@
 
 #include "elapsedMillis.h"
 #include "MachineStates.h"
-
+#define SERIAL_DEBUG
 
 // ----------------------------------------------------------------------
 // Functions for handling the AC state machine.
@@ -22,8 +22,8 @@
    Output:
    - returns new state.
  */
-VentilatorState ac_mode_step(VentilatorState state,
-    const float inspiration_time, const float expiration_time);
+
+VentilatorState ac_mode_step(VentilatorState state);
 
 /* Get a debug code for the current acModeState.
 
@@ -41,24 +41,28 @@ int acCodeAssignment(acModeStates acState);
 // in the main loop, but should be documented and available for testing.
 // ----------------------------------------------------------------------
 
+
 // TODO: THESE MUST BE DOCUMENTED!
 
 VentilatorState acStart(VentilatorState state);
 
 VentilatorState acInhaleWait(VentilatorState state);
 
+
+
 VentilatorState acInhaleCommand(VentilatorState state);
 
-VentilatorState acInhale(VentilatorState state, const float inspiration_time);
+VentilatorState acInhale(VentilatorState state);
 
 // Unused parameter warning for expirationTime due to SERIAL_DEBUG
 // TODO: should this be inspiration time?
-VentilatorState acInhaleAbort(VentilatorState state, const float expiration_time);
+VentilatorState acInhaleAbort(VentilatorState state);
 
 VentilatorState acPeak(VentilatorState state);
 
-VentilatorState acExhale(VentilatorState state, const float expiration_time);
+VentilatorState acExhaleCommand(VentilatorState state);
+
+VentilatorState acExhale(VentilatorState state);
 
 VentilatorState acReset(VentilatorState state);
-
 #endif

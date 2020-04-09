@@ -5,22 +5,23 @@ void setUpParameterSelectButtons(UserParameter *userParameters, const uint8_t NU
 {
 
   for(uint8_t i = 0; i < NUM_USER_PARAMETERS; i++){
-    pinMode(userParameters[i].selectPin,INPUT);
+    pinMode(userParameters[i].selectPin,INPUT_PULLUP); //Active LOW
   }
 	
-	pinMode(parameterEncoderPushButtonPin,INPUT);
+	pinMode(parameterEncoderPushButtonPin,INPUT_PULLUP); //Active LOW
 
-	attachInterrupt(digitalPinToInterrupt(parameterEncoderPushButtonPin),parameterSetISR,RISING);
+	attachInterrupt(digitalPinToInterrupt(parameterEncoderPushButtonPin),parameterSetISR,FALLING); //Active LOW
 
 }
 
-void updateUserParameters(SelectedParameter &currentlySelectedParameter, volatile boolean &parameterSet,
+VentilatorState updateStateUserParameters(VentilatorState &state, SelectedParameter &currentlySelectedParameter, volatile boolean &parameterSet,
             Encoder &parameterSelectEncoder, UserParameter *userParameters, const uint8_t NUM_USER_PARAMETERS)
 {
-  setParameters(currentlySelectedParameter, parameterSet, userParameters);
-  updateParameterValue(currentlySelectedParameter, parameterSelectEncoder,userParameters);
-  updateSelectedParameter(currentlySelectedParameter, parameterSelectEncoder,
-              userParameters, NUM_USER_PARAMETERS);
+	setParameters(currentlySelectedParameter, parameterSet, userParameters);
+	updateParameterTempValue(currentlySelectedParameter, parameterSelectEncoder,userParameters);
+	updateSelectedParameter(currentlySelectedParameter, parameterSelectEncoder,
+							userParameters, NUM_USER_PARAMETERS);
+	return setStateParameters(state, userParameters);
 }
 
 void updateSelectedParameter(SelectedParameter &currentlySelectedParameter, 
@@ -31,7 +32,7 @@ void updateSelectedParameter(SelectedParameter &currentlySelectedParameter,
 	  uint8_t selectedArrayIndex = 0;
 
     while(selectedArrayIndex < NUM_USER_PARAMETERS){
-      if(digitalRead(userParameters[selectedArrayIndex].selectPin)){
+      if(SWITCH_PRESS == digitalRead(userParameters[selectedArrayIndex].selectPin)){
          break;
       }
       else{
@@ -77,7 +78,7 @@ void updateSelectedParameter(SelectedParameter &currentlySelectedParameter,
   }
 }
 
-void updateParameterValue(SelectedParameter &currentlySelectedParameter, 
+void updateParameterTempValue(SelectedParameter &currentlySelectedParameter, 
 						Encoder &parameterSelectEncoder, UserParameter *userParameters)
 {
 	if(e_None != currentlySelectedParameter){
@@ -151,6 +152,72 @@ void displayUserParameters(SelectedParameter &currentlySelectedParameter, Liquid
                                   bpm, thresholdPressure, tidalVolume, inspirationTime, plateauPauseTime, 
                                   measuredPIP, measuredPlateau, LCD_MAX_STRING);
   }
+}
+
+void displayAlarmParameters(SelectedParameter &currentlySelectedParameter, LiquidCrystal &displayName,UserParameter *userParameters)
+{
+  SelectedParameter currentParameter = e_HighPIPAlarm;
+  float maxPIP = userParameters[(int)currentParameter].value;
+  float tempMaxPIP = userParameters[(int)currentParameter].tmpValue;
+  
+  currentParameter = e_LowPIPAlarm;
+  float minPIP = userParameters[(int)currentParameter].value;
+  float tempMinPIP = userParameters[(int)currentParameter].tmpValue;
+  
+  currentParameter = e_HighPEEPAlarm;
+  float maxPEEP = userParameters[(int)currentParameter].value;
+  float tempMaxPEEP = userParameters[(int)currentParameter].tmpValue;
+  
+  currentParameter = e_LowPEEPAlarm;
+  float minPEEP = userParameters[(int)currentParameter].value;
+  float tempMinPEEP = userParameters[(int)currentParameter].tmpValue;
+  
+  currentParameter = e_LowPlateauPressureAlarm;
+  float lowPlateauPressure = userParameters[(int)currentParameter].value;
+  float tempLowPlateauPressure = userParameters[(int)currentParameter].tmpValue;
+
+  switch(currentlySelectedParameter){
+    case e_HighPIPAlarm:
+      displayHighPressureChange(displayName, tempMaxPIP, LCD_MAX_STRING);
+      break;
+
+    case e_LowPIPAlarm:
+      displayLowPressureChange(displayName, tempMinPIP, LCD_MAX_STRING);
+      break;
+
+    case e_HighPEEPAlarm:
+      displayHighPEEPChange(displayName, tempMaxPEEP, LCD_MAX_STRING);
+      break;
+
+    case e_LowPEEPAlarm:
+      displayLowPEEPChange(displayName, tempMinPEEP, LCD_MAX_STRING);
+      break;
+
+    case e_LowPlateauPressureAlarm:
+      displayLowPlateauChange(displayName, tempLowPlateauPressure, LCD_MAX_STRING);
+      break;
+
+    default:
+      displayNoAlarm(displayName, maxPIP, minPIP, maxPEEP, minPEEP, lowPlateauPressure, LCD_MAX_STRING);
+      break;
+  }
+}
+
+VentilatorState setStateParameters(VentilatorState &state, UserParameter *userParameters){
+	
+	SelectedParameter selectedParameter = e_ThresholdPressure; //TODO: Find a better way to access the array
+	state.ac_threshold_pressure = userParameters[(int)selectedParameter].value;
+	selectedParameter = e_BPM;
+	state.breaths_per_minute = userParameters[(int)selectedParameter].value;
+	selectedParameter = e_PlateauPauseTime;
+	state.plateau_pause_time = userParameters[(int)selectedParameter].value;
+	selectedParameter = e_TidalVolume;
+	state.tidal_volume = userParameters[(int)selectedParameter].value;
+  selectedParameter = e_InspirationTime;
+  state.inspiration_time = userParameters[(int)selectedParameter].value;
+
+  
+	return state;
 }
 
 /*

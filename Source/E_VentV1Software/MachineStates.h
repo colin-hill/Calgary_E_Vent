@@ -10,14 +10,17 @@
 #include "WProgram.h"
 #endif
 
+
 // Make sure each state has a character in machineStatesCodes
 // This is for debug information.
 enum machineStates {
                     Startup,
+                    StartupHold,
                     MotorZeroing,
                     BreathLoopStart,
                     ACMode,
-                    VCMode
+                    VCMode,
+                    FailureMode
 };
 
 
@@ -53,6 +56,18 @@ enum vcModeStates {
                    VCReset
 };
 
+/* States for the VC Mode state machine.
+
+   TODO: directions to state machine diagram.
+ */
+enum zeroingStates {
+                    CommandHome,
+                    MotorHomingWait,
+                    CommandZero,
+                    MotorZeroingWait,
+                    MotorZero
+};
+
 
 // Structure containing the full state of the ventilator.
 struct VentilatorState {
@@ -63,22 +78,45 @@ struct VentilatorState {
     // Just need to be careful resetting them.
     vcModeStates vc_state;
     acModeStates ac_state;
+    zeroingStates zeroing_state;
 
     // Parameters
     // TODO: should we worry about overflow for these?
     unsigned long breath_time_start; // When timer was started (ms).
     unsigned long current_time;      // Current time (ms).
 
-    float pressure;
+    //TODO: consider naming
 
-    // TODO: is there a better name for this?
-    float temp_peak_pressure;
-    float peak_pressure;
+    //Ventilation Primary Values -----------------------------------------------------------------------------
+        //BPM
+    float breaths_per_minute; //1/MIN
+        //Tidal Volume
+    float tidal_volume; //percentage (out of 100)
 
-    float peep_pressure;
-    float plateau_pressure;
+    //Pressure Values -----------------------------------------------------------------------------------------
+    float pressure; //CM H2O; pressure sensing reading
+        //PIP Pressure
+    float current_loop_peak_pressure; //CM H2O; peak pressure of the current loop, running value
+    float peak_pressure; //CM H2O; measured PIP value
+        //PEEP Pressure
+    float peep_pressure; //CM H2O; measured PEEP value
+        //Plateau Pressure
+    float plateau_pressure; //CM H2O; measured plateau pressure value
+        //AC Mode Threshold Pressure
+    float ac_threshold_pressure; //CM H2O; value below PEEP required to trigger a breath
 
-    float loop_threshold_pressure;
+    //Timing Values--------------------------------------------------------------------------------------------
+        //AC Mode Threshold Time
+     float ac_threshold_time; //seconds;
+        //Plateau Pause Time
+     float plateau_pause_time; //seconds;
+        //Inspiration Time
+     float inspiration_time;
+          //Motor Return Time
+     float motor_return_time; //seconds;
+
+    //Mechanism Values -----------------------------------------------------------------------------------------
+    float controller_temperature; //C?
 
     uint16_t errors;
 };
@@ -93,7 +131,7 @@ const uint8_t MODE_SWITCH_PIN = 40;
 
 // Make sure there are the same number of characters as machine states!
 // This is necessary for machineStateCodeAssignment
-const char machineStateCodes[] = "SZBAV";
+const char machineStateCodes[] = "SHZBAVF";
 
 
 /* Converts a machine state to a single character to display for

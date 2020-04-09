@@ -247,7 +247,7 @@ void displayLowPEEPChange(LiquidCrystal &displayName, float tempLowPEEP, const i
 	displayName.write(alarmDispL4); 
 }
 
-void dipslayLowPlateauChange(LiquidCrystal &displayName, float tempLowPlateau, const int LCD_MAX_STRING) {
+void displayLowPlateauChange(LiquidCrystal &displayName, float tempLowPlateau, const int LCD_MAX_STRING) {
 
 	int displayPressure = roundAndCast(tempLowPlateau);
 
@@ -267,7 +267,14 @@ void dipslayLowPlateauChange(LiquidCrystal &displayName, float tempLowPlateau, c
 
 //Parameter display functions
 
-void displayVentilationParameters(LiquidCrystal &displayName, machineStates machineState, vcModeStates vcState , acModeStates acState, float breathsPerMinute, float thresholdPressure, float tidalVolume, float inspirationTime, float inspirationPause, float measuredPIP, float measuredPlateau, const int LCD_MAX_STRING) {
+void displayVentilationParameters(LiquidCrystal &displayName,
+								  machineStates machineState,
+								  vcModeStates vcState, 
+								  acModeStates acState, 
+								  float breathsPerMinute, float thresholdPressure, 
+								  float tidalVolume, float inspirationTime, 
+								  float inspirationPause, float measuredPIP, 
+								  float measuredPlateau, const int LCD_MAX_STRING) {
 
 	int displayBPM = roundAndCast(breathsPerMinute);
 	int displayThresholdPressure = roundAndCast(thresholdPressure);
