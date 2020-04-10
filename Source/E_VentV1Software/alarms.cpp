@@ -3,6 +3,7 @@
 #include "elapsedMillis.h"
 #include "LCD.h"
 #include "breathing.h"
+#include "Motor.h"
 
 #include <assert.h>
 
@@ -71,6 +72,22 @@ uint16_t check_low_peep(const float pressure) {
 
 uint16_t check_peep(const float pressure) {
     return check_high_peep(pressure) | check_low_peep(pressure);
+}
+
+uint16_t check_controller_temperature(const uint16_t temperature){
+    if (temperature > MAX_CONTROLLER_TEMPERATURE) {
+        return HIGH_TEMP_ALARM;
+    } else {
+        return 0;
+    }
+}
+
+uint16_t check_motor_position(const long int current_position, const long int expected_position) {
+    if (current_position != expected_position) {
+        return DEVICE_FAILURE_ALARM;
+    } else {
+        return 0;
+    }
 }
 
 

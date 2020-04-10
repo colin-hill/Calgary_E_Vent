@@ -133,6 +133,11 @@ uint16_t check_low_peep(const float pressure);
 uint16_t check_peep(const float pressure);
 
 
+uint16_t check_controller_temperature(const uint16_t temperature);
+
+uint16_t check_motor_position(const long int current_position, const long int expected_position);
+
+
 /* Function to handle alarms
 
    Input:

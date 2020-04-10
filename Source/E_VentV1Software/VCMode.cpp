@@ -6,6 +6,7 @@
 #include "breathing.h"
 #include "conversions.h"
 #include "elapsedMillis.h"
+#include "Motor.h"
 
 #include <assert.h>
 
@@ -63,7 +64,7 @@ VentilatorState vcInhale(VentilatorState state) {
     }
 
     // Check time
-    if(elapsed_time(state) > ((state.inspiration_time + 0.025) * S_TO_MS)){
+    if(elapsed_time(state) > ((state.inspiration_time + INERTIA_BUFFER) * S_TO_MS)){
         state.vc_state = VCPeak;
         state.peak_pressure = state.current_loop_peak_pressure;
         reset_timer(state);
@@ -151,7 +152,7 @@ VentilatorState vcExhale(VentilatorState state) {
 #endif //SERIAL_DEBUG
     // TODO: Set motor velocity and desired position
 
-    if (elapsed_time(state) > ((state.expiration_time + 0.025) * S_TO_MS)) {
+    if (elapsed_time(state) > ((state.expiration_time + INERTIA_BUFFER) * S_TO_MS)) {
         state.vc_state = VCReset;
     }
 

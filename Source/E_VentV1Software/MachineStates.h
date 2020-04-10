@@ -117,7 +117,7 @@ struct VentilatorState {
      
 
     //Mechanism Values -----------------------------------------------------------------------------------------
-    float controller_temperature; //C?
+    uint16_t controller_temperature;
 
     float motor_inhale_pulses;
 

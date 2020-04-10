@@ -1,6 +1,10 @@
 #include "Motor.h"
 
 
+#include "alarms.h"
+#include "conversions.h"
+
+
 //Helper Functions
 
 void setMotorZero(RoboClaw &controller_name) {
@@ -33,6 +37,9 @@ VentilatorState commandMotorZero(RoboClaw &controller_name, VentilatorState stat
 	//Stop motion
 	commandStop(controller_name);
 
+	//Make sure the motor has come to a stop
+	delay((HOMING_BUFFER*S_TO_MS));
+
 	state.current_motor_position = readPosition(controller_name);
 	state.future_motor_position = state.current_motor_position + QP_TO_ZEROPOINT;
 	//Move to zeropoint
@@ -49,9 +56,9 @@ VentilatorState commandInhale(RoboClaw &controller_name, VentilatorState state) 
 	long int desired_position = (long int) state.motor_inhale_pulses;
 	long int desired_speed = (long int) desired_position/state.inspiration_time;
 
-
 	//Update expected location
 	state.future_motor_position = desired_position;
+
 	controller_name.SpeedAccelDeccelPositionM1(MOTOR_ADDRESS, ACCEL, desired_speed, DECCEL, desired_position, 1);
 
 	return state;
@@ -61,8 +68,7 @@ VentilatorState commandExhale(RoboClaw &controller_name, VentilatorState state) 
   #ifdef SERIAL_DEBUG
     Serial.println("Motor Exhale Command");
   #endif
-	//We are returning from a completed inhale stroke
-	state.current_motor_position = readPosition(controller_name);
+
 	long int desired_position = 0;
 	long int desired_speed = (long int) state.motor_return_speed;
 
@@ -97,18 +103,12 @@ VentilatorState checkMotorStatus(RoboClaw &controller_name, VentilatorState stat
 	//Check current position
 	state.current_motor_position = readPosition(controller_name);
 
-	if(state.current_motor_position > (state.future_motor_position + POSITION_TOLERANCE)){
-		// TODO: throw position alarm
-	}
-	else if(state.current_motor_position < (state.future_motor_position - POSITION_TOLERANCE)){
-		// TODO: throw position alarm
-	}
+	state.errors |= check_motor_position(state.current_motor_position, state.future_motor_position);
+ 
+	controller_name.ReadTemp(MOTOR_ADDRESS, state.controller_temperature);
+	state.errors |= check_controller_temperature(state.controller_temperature);	
 
-	// TODO: Add in controller temperature check
-	//state.controller_temperature = readTemperature();
-	//if(state.controller_temperature > MAX_CONTROLLER_TEMPERATURE) {
-	//	// TODO: throw temprerature alarm
-	//}
+	
   Serial.println("exit check motor status");
 	return state;
 }

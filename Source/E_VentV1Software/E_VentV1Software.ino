@@ -150,12 +150,15 @@ void setup() {
     }
 #endif //Skip hardware lockout for debug
 
-#ifdef NO_LIMIT_SWITCH_DEBUG
+#ifndef NO_LIMIT_SWITCH_DEBUG
     state.machine_state = MotorZeroing;
 #endif
 
-
+#ifdef NO_LIMIT_SWITCH_DEBUG
+    state.machine_state = BreathLoopStart;
     motorController.SetEncM1(MOTOR_ADDRESS, 0);
+#endif //Set the startup position as zero
+
 
 }
 
@@ -181,8 +184,7 @@ void loop() {
 
     // TODO: factor out into a function and turn into switch statement.
     if (MotorZeroing == state.machine_state){
-        //state = motor_zeroing_step(state);
-        state.machine_state = BreathLoopStart;
+        state = motor_zeroing_step(state);
     }
     else if (BreathLoopStart == state.machine_state) { // BreathLoopStart
 
