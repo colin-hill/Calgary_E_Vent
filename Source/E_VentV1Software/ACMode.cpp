@@ -5,6 +5,7 @@
 #include "breathing.h"
 #include "conversions.h"
 #include "elapsedMillis.h"
+#include "Motor.h"
 
 #include <assert.h>
 
@@ -80,7 +81,7 @@ VentilatorState acInhale(VentilatorState state) {
     }
 
     // TODO: nervous about this else if for alarm.
-    if (elapsed_time(state) > (state.inspiration_time * S_TO_MS)) {
+    if (elapsed_time(state) > ((state.inspiration_time + INERTIA_BUFFER) * S_TO_MS)) {
         state.ac_state = ACPeak;
         reset_timer(state);
         state.peak_pressure = state.current_loop_peak_pressure;
@@ -158,7 +159,7 @@ VentilatorState acExhale(VentilatorState state) {
     //Serial.println(expiration_time);
 #endif //SERIAL_DEBUG
 
-    if (elapsed_time(state) > (state.expiration_time * S_TO_MS)) {
+    if (elapsed_time(state) > ((state.expiration_time + INERTIA_BUFFER) * S_TO_MS)) {
         state.ac_state      = ACReset;
     }
 
@@ -174,7 +175,7 @@ VentilatorState acReset(VentilatorState state) {
 
     //Update and check PEEP
     state.peep_pressure = state.pressure;
-    state.errors |= check_peep(state.peep_pressure); // TODO: should this be peep_pressure?
+    state.errors |= check_peep(state.peep_pressure); 
 
     state.machine_state = BreathLoopStart;
     state.ac_state = ACStart;

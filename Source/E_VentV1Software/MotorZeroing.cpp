@@ -39,12 +39,8 @@ VentilatorState motorHomingWait(VentilatorState state) {
     	state.zeroing_state = CommandZero;
     }
     else if (elapsed_time(state) > HOMING_TIMEOUT) {
-    	//TODO: Add error
+    	//TODO: Add time out error
     }
-
-#ifdef NO_INPUT_DEBUG
-    state.zeroing_state = CommandZero;
-#endif //Skip limit switch check
 
     return state;
 }
