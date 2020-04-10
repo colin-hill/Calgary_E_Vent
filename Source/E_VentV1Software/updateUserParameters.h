@@ -8,7 +8,7 @@
 #endif
 
 #include "UserParameter.h"
-#include "Encoder.h"
+#include "src/Encoder/Encoder.h"
 #include "LCD.h"
 #include "MachineStates.h"
 
@@ -18,20 +18,6 @@
 //volatile boolean PARAMETER_SET = false;
 
 //Encoder PARAMETER_SELECT_ENCODER(parameterEncoderPin1, parameterEncoderPin2);
-
-enum SelectedParameter{
-	e_ThresholdPressure,
-	e_BPM,
-	e_InspirationTime,
-	e_TidalVolume,
-	e_PlateauPauseTime,
-	e_HighPIPAlarm,
-	e_LowPIPAlarm,
-	e_HighPEEPAlarm,
-	e_LowPEEPAlarm,
-	e_LowPlateauPressureAlarm,
-	e_None
-};
 
 //SelectedParameter CURRENTLY_SELECTED_PARAMETER = e_None;
 

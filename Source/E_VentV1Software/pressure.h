@@ -17,7 +17,7 @@
 #include "WProgram.h"
 #endif
 
-//#include "SBWire.h"
+#include "src/SBWire/SBWire.h"
 
 //Pressure Sensor Definitions---------------------------------------------------
 #define PRESSURE_SENSOR_I2C Wire
@@ -25,8 +25,8 @@ const float PSI_TO_CMH2O = 70.307;
 const uint32_t PRESSURE_SENSOR_BAUD_RATE = 9600;
 const uint8_t PRESSURE_SENSOR_ADDRESS = 40; //Honeywell documentation
 
-const uint32_t MAX_DIGITAL_OUTPUT = 14745; //Honeywell I2C comms documentation
-const uint32_t MIN_DIGITAL_OUTPUT = 1638; //Honeywell I2C comms documentation
+const uint16_t MAX_DIGITAL_OUTPUT = 14745; //Honeywell I2C comms documentation
+const uint16_t MIN_DIGITAL_OUTPUT = 1638; //Honeywell I2C comms documentation
 
 // TODO: Double check these constants. I'm unclear on the units.
 const float MIN_SENSOR_PRESSURE = -1.0; //PSI Differential

@@ -14,7 +14,7 @@
 #include "conversions.h"
 #include "MachineStates.h"
 
-#include "Encoder.h"
+#include "src/Encoder/Encoder.h"
 #include "UserParameter.h"
 #include "updateUserParameters.h"
 #include "LCD.h"
@@ -54,17 +54,20 @@ volatile boolean parameterSet = false;
 SelectedParameter currentlySelectedParameter = e_None;
 Encoder parameterSelectEncoder(PARAMETER_ENCODER_PIN_1, PARAMETER_ENCODER_PIN_2);
 
-UserParameter userParameters[NUM_USER_PARAMETERS] = {UserParameter(MIN_THRESHOLD_PRESSURE, MAX_THRESHOLD_PRESSURE, THRESHOLD_PRESSURE_INCREMENT, THRESHOLD_PRESSURE_SELECT_PIN, DEFAULT_THRESHOLD_PRESSURE),
-                                                      UserParameter(MIN_BPM, MAX_BPM, BPM_INCREMENT, BPM_SELECT_PIN, BPM_DEFAULT),
-                                                      UserParameter(MIN_INSPIRATION_TIME, MAX_INSPIRATION_TIME, INSPIRATION_TIME_INCREMENT, INSPIRATION_TIME_SELECT_PIN, DEFAULT_INSPIRATION_TIME),
-                                                      UserParameter(MIN_TIDAL_VOLUME, MAX_TIDAL_VOLUME, TIDAL_VOLUME_INCREMENT, TIDAL_VOLUME_SELECT_PIN, TIDAL_VOLUME_DEFAULT),
-                                                      UserParameter(MIN_PLATEAU_PAUSE_TIME, MAX_PLATEAU_PAUSE_TIME, PLATEAU_PAUSE_TIME_INCREMENT, PLATEAU_PAUSE_TIME_SELECT_PIN, DEFAULT_PLATEAU_PAUSE_TIME),
-                                                      UserParameter(MIN_HIGH_PIP_ALARM, MAX_HIGH_PIP_ALARM, HIGH_PIP_ALARM_INCREMENT, HIGH_PIP_ALARM_SELECT_PIN, HIGH_PIP_ALARM_DEFAULT),
-                                                      UserParameter(MIN_LOW_PIP_ALARM, MAX_LOW_PIP_ALARM, LOW_PIP_ALARM_INCREMENT, LOW_PIP_ALARM_SELECT_PIN, LOW_PIP_ALARM_DEFAULT),
-                                                      UserParameter(MIN_HIGH_PEEP_ALARM, MAX_HIGH_PEEP_ALARM, HIGH_PEEP_ALARM_INCREMENT, HIGH_PEEP_ALARM_SELECT_PIN, HIGH_PEEP_ALARM_DEFAULT),
-                                                      UserParameter(MIN_LOW_PEEP_ALARM, MAX_LOW_PEEP_ALARM, LOW_PEEP_ALARM_INCREMENT, LOW_PEEP_ALARM_SELECT_PIN, LOW_PEEP_ALARM_DEFAULT),
-                                                      UserParameter(MIN_LOW_PLATEAU_PRESSURE_ALARM, MAX_LOW_PLATEAU_PRESSURE_ALARM, LOW_PLATEAU_PRESSURE_ALARM_INCREMENT, LOW_PLATEAU_PRESSURE_ALARM_SELECT_PIN, LOW_PLATEAU_PRESSURE_ALARM_DEFAULT)};
+float UserParameter::currentBPM = DEFAULT_BPM; //Declaration of user parameter static variables for dynamic changing allowable bpm, inspiration time,
+float UserParameter::currentInspirationTime = DEFAULT_INSPIRATION_TIME; // and plateau pause time
+float UserParameter::currentPlateauPauseTime = DEFAULT_PLATEAU_PAUSE_TIME;
 
+UserParameter userParameters[NUM_USER_PARAMETERS] = {UserParameter(MIN_THRESHOLD_PRESSURE, MAX_THRESHOLD_PRESSURE, THRESHOLD_PRESSURE_INCREMENT, THRESHOLD_PRESSURE_SELECT_PIN, DEFAULT_THRESHOLD_PRESSURE, e_ThresholdPressure),
+                                                      UserParameter(MIN_BPM, MAX_BPM, BPM_INCREMENT, BPM_SELECT_PIN, BPM_DEFAULT, e_BPM),
+                                                      UserParameter(MIN_INSPIRATION_TIME, MAX_INSPIRATION_TIME, INSPIRATION_TIME_INCREMENT, INSPIRATION_TIME_SELECT_PIN, DEFAULT_INSPIRATION_TIME,e_InspirationTime),
+                                                      UserParameter(MIN_TIDAL_VOLUME, MAX_TIDAL_VOLUME, TIDAL_VOLUME_INCREMENT, TIDAL_VOLUME_SELECT_PIN, TIDAL_VOLUME_DEFAULT,e_TidalVolume),
+                                                      UserParameter(MIN_PLATEAU_PAUSE_TIME, MAX_PLATEAU_PAUSE_TIME, PLATEAU_PAUSE_TIME_INCREMENT, PLATEAU_PAUSE_TIME_SELECT_PIN, DEFAULT_PLATEAU_PAUSE_TIME,e_PlateauPauseTime),
+                                                      UserParameter(MIN_HIGH_PIP_ALARM, MAX_HIGH_PIP_ALARM, HIGH_PIP_ALARM_INCREMENT, HIGH_PIP_ALARM_SELECT_PIN, HIGH_PIP_ALARM_DEFAULT, e_HighPIPAlarm),
+                                                      UserParameter(MIN_LOW_PIP_ALARM, MAX_LOW_PIP_ALARM, LOW_PIP_ALARM_INCREMENT, LOW_PIP_ALARM_SELECT_PIN, LOW_PIP_ALARM_DEFAULT, e_LowPIPAlarm),
+                                                      UserParameter(MIN_HIGH_PEEP_ALARM, MAX_HIGH_PEEP_ALARM, HIGH_PEEP_ALARM_INCREMENT, HIGH_PEEP_ALARM_SELECT_PIN, HIGH_PEEP_ALARM_DEFAULT, e_HighPEEPAlarm),
+                                                      UserParameter(MIN_LOW_PEEP_ALARM, MAX_LOW_PEEP_ALARM, LOW_PEEP_ALARM_INCREMENT, LOW_PEEP_ALARM_SELECT_PIN, LOW_PEEP_ALARM_DEFAULT, e_LowPEEPAlarm),
+                                                      UserParameter(MIN_LOW_PLATEAU_PRESSURE_ALARM, MAX_LOW_PLATEAU_PRESSURE_ALARM, LOW_PLATEAU_PRESSURE_ALARM_INCREMENT, LOW_PLATEAU_PRESSURE_ALARM_SELECT_PIN, LOW_PLATEAU_PRESSURE_ALARM_DEFAULT, e_LowPlateauPressureAlarm)};
 
 volatile boolean alarmReset = false;
 // TODO: These are never set?

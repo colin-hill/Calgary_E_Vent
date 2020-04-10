@@ -12,6 +12,20 @@
 
 #include "breathing.h"
 
+enum SelectedParameter{
+  e_ThresholdPressure,
+  e_BPM,
+  e_InspirationTime,
+  e_TidalVolume,
+  e_PlateauPauseTime,
+  e_HighPIPAlarm,
+  e_LowPIPAlarm,
+  e_HighPEEPAlarm,
+  e_LowPEEPAlarm,
+  e_LowPlateauPressureAlarm,
+  e_None
+};
+
 const uint8_t NUM_USER_PARAMETERS = 10;
 
 const float THRESHOLD_PRESSURE_INCREMENT = 1; //cmH2O
@@ -41,16 +55,21 @@ class UserParameter {
 		float tmpValue;
 		uint8_t selectPin;
    
-		UserParameter(const float minValue, const float maxValue, const float increment, const uint8_t pin, const float defaultValue);
+		UserParameter(const float minValue, const float maxValue, const float increment, const uint8_t pin, const float defaultValue, SelectedParameter name);
 		void updateValue();
 		void updateTmpValue(int32_t numEncoderSteps);
 		void writeToNV();
 		void readFromNV();
+
+    static float currentInspirationTime;
+    static float currentBPM;
+    static float currentPlateauPauseTime;
 		
 	private:
 	  float minValue;
 	  float maxValue;
 	  float increment;
+    SelectedParameter name;
 };
 
 //UserParameter THRESHOLD_PRESSURE(MIN_THRESHOLD_PRESSURE,MAX_THRESHOLD_PRESSURE,thresholdPressureIncrement, thresholdPressureSelectPin);
