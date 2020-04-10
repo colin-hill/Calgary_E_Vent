@@ -120,6 +120,9 @@ void setup() {
     alarmDisplay.begin(LCD_COLUMNS, LCD_ROWS); 
     ventilatorDisplay.begin(LCD_COLUMNS, LCD_ROWS);
 
+    //Motor Controller Start
+    motorController.begin(38400);
+
     //LCD Display Startup Message for two seconds
     displayStartupScreen(ventilatorDisplay, softwareVersion, LCD_COLUMNS);
 
@@ -151,6 +154,9 @@ void setup() {
     state.machine_state = MotorZeroing;
 #endif
 
+
+    motorController.SetEncM1(MOTOR_ADDRESS, 0);
+
 }
 
 void loop() {
@@ -166,6 +172,7 @@ void loop() {
     displayUserParameters(currentlySelectedParameter, ventilatorDisplay, state.machine_state, state.vc_state, state.ac_state, measuredPIP, measuredPlateau, LCD_MAX_STRING, userParameters);
 
     //TODO: Add in alarm display
+    update_motor_settings(state);
 
     // Read in values for state
     update_state(state);
@@ -174,7 +181,8 @@ void loop() {
 
     // TODO: factor out into a function and turn into switch statement.
     if (MotorZeroing == state.machine_state){
-        state = motor_zeroing_step(state);
+        //state = motor_zeroing_step(state);
+        state.machine_state = BreathLoopStart;
     }
     else if (BreathLoopStart == state.machine_state) { // BreathLoopStart
 
@@ -199,6 +207,8 @@ void loop() {
     state = handle_motor(motorController, state);
 
     state = handle_alarms(alarmReset, state, alarmDisplay, userParameters, currentlySelectedParameter);
+
+    //delay(1000);
 }
 
 //FUNCTIONS

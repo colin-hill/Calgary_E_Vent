@@ -158,7 +158,7 @@ VentilatorState acExhale(VentilatorState state) {
     //Serial.println(expiration_time);
 #endif //SERIAL_DEBUG
 
-    if (elapsed_time(state) > (state.motor_return_time * S_TO_MS)) {
+    if (elapsed_time(state) > (state.expiration_time * S_TO_MS)) {
         state.ac_state      = ACReset;
     }
 

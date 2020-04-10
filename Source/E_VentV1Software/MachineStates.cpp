@@ -54,7 +54,7 @@ VentilatorState get_init_state(void) {
         //Inspiration Time
      state.inspiration_time = DEFAULT_INSPIRATION_TIME;
         //Nominal expiration time
-     state.expiration_time = SECONDS_PER_MINUTE/state.breaths_per_minute - state.inspiration_time;
+     state.expiration_time = SECONDS_PER_MINUTE/state.breaths_per_minute - state.inspiration_time - state.plateau_pause_time;
      
 
     //Mechanism Values -----------------------------------------------------------------------------------------

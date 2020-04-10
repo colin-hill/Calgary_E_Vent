@@ -8,7 +8,10 @@ void setMotorZero(RoboClaw &controller_name) {
 }
 
 long int readPosition(RoboClaw &controller_name) {
-	return controller_name.ReadEncM1(MOTOR_ADDRESS); 
+  Serial.println("read position");
+	long int pos = controller_name.ReadEncM1(MOTOR_ADDRESS);
+  Serial.println(pos);
+  return pos;
 }
 
 
@@ -33,35 +36,41 @@ VentilatorState commandMotorZero(RoboClaw &controller_name, VentilatorState stat
 	state.current_motor_position = readPosition(controller_name);
 	state.future_motor_position = state.current_motor_position + QP_TO_ZEROPOINT;
 	//Move to zeropoint
-	controller_name.SpeedDistanceM1(MOTOR_ADDRESS, MOTOR_ZEROING_SPEED, QP_TO_ZEROPOINT, 1);
+	controller_name.SpeedAccelDeccelPositionM1(MOTOR_ADDRESS, ACCEL, MOTOR_ZEROING_SPEED, DECCEL, QP_TO_ZEROPOINT, 1);
 
 	return state;
 }
 
 VentilatorState commandInhale(RoboClaw &controller_name, VentilatorState state) { 
+  #ifdef SERIAL_DEBUG
+    Serial.println("Motor Inhale Command");
+  #endif
 
 	long int desired_position = (long int) state.motor_inhale_pulses;
-	long int desired_speed = (long int) state.motor_inhale_speed;
+	long int desired_speed = (long int) desired_position/state.inspiration_time;
+
 
 	//Update expected location
 	state.future_motor_position = desired_position;
-
-	controller_name.SpeedDistanceM1(MOTOR_ADDRESS, desired_speed, desired_position, 1);
+	controller_name.SpeedAccelDeccelPositionM1(MOTOR_ADDRESS, ACCEL, desired_speed, DECCEL, desired_position, 1);
 
 	return state;
 }
 
 VentilatorState commandExhale(RoboClaw &controller_name, VentilatorState state) {
-
+  #ifdef SERIAL_DEBUG
+    Serial.println("Motor Exhale Command");
+  #endif
 	//We are returning from a completed inhale stroke
-	long int desired_position = (long int) state.motor_inhale_pulses;
+	state.current_motor_position = readPosition(controller_name);
+	long int desired_position = 0;
 	long int desired_speed = (long int) state.motor_return_speed;
 
 	//Update expected location
 	state.future_motor_position = 0;
 
 	//Change sign of speed to travel backwards
-	controller_name.SpeedDistanceM1(MOTOR_ADDRESS, -1*desired_speed, desired_position, 1);
+	controller_name.SpeedAccelDeccelPositionM1(MOTOR_ADDRESS, ACCEL, desired_speed, DECCEL, desired_position, 1);
 
 	return state;
 }
@@ -72,16 +81,18 @@ VentilatorState commandInhaleAbort(RoboClaw &controller_name, VentilatorState st
 	//Stop Motion
 	commandStop(controller_name);
 	//Read Current Location
-	long int desired_position = readPosition(controller_name);
+	long int desired_position = 0;
 	state.future_motor_position = 0;
 
 	//Command a return to zero
-	controller_name.SpeedDistanceM1(MOTOR_ADDRESS, -1*desired_speed, desired_position, 1);
+	controller_name.SpeedAccelDeccelPositionM1(MOTOR_ADDRESS, ACCEL, desired_speed, DECCEL, desired_position, 1);
 
 	return state;
 }
 
 VentilatorState checkMotorStatus(RoboClaw &controller_name, VentilatorState state) {
+
+  Serial.println("check motor status");
 
 	//Check current position
 	state.current_motor_position = readPosition(controller_name);
@@ -98,7 +109,7 @@ VentilatorState checkMotorStatus(RoboClaw &controller_name, VentilatorState stat
 	//if(state.controller_temperature > MAX_CONTROLLER_TEMPERATURE) {
 	//	// TODO: throw temprerature alarm
 	//}
-
+  Serial.println("exit check motor status");
 	return state;
 }
 
@@ -107,6 +118,8 @@ VentilatorState checkMotorStatus(RoboClaw &controller_name, VentilatorState stat
 //State Machine Functions
 
 VentilatorState handle_ACMode(RoboClaw &controller_name, VentilatorState state) {
+
+  Serial.println("Motor ac mode handle");
 	
 	switch(state.ac_state) {
 	case ACStart:
@@ -139,6 +152,8 @@ VentilatorState handle_ACMode(RoboClaw &controller_name, VentilatorState state) 
 
 VentilatorState handle_VCMode(RoboClaw &controller_name, VentilatorState state) {
 
+  Serial.println("Motor vc mode handle");
+
 		switch(state.vc_state) {
 	case VCStart:
 		//no action required
@@ -167,6 +182,7 @@ VentilatorState handle_VCMode(RoboClaw &controller_name, VentilatorState state) 
 }
 
 VentilatorState handle_MotorZeroing(RoboClaw &controller_name, VentilatorState state) {
+  Serial.println("Motor zeroing handle");
 
 	switch(state.zeroing_state) {
 	case CommandHome:
@@ -195,6 +211,7 @@ VentilatorState handle_MotorZeroing(RoboClaw &controller_name, VentilatorState s
 
 
 VentilatorState handle_motor(RoboClaw &controller_name, VentilatorState state) {
+  Serial.println("Motor handle");
 
 	switch(state.machine_state) {
 	case Startup:
