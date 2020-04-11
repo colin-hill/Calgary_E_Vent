@@ -67,7 +67,7 @@ const uint16_t DEVICE_FAILURE_ALARM  = 0x01 << 7;
    - Returns error code for HIGH_PRESSURE_ALARM if there is high
      pressure, and 0 otherwise.
  */
-uint16_t check_high_pressure(const float pressure);
+uint16_t check_high_pressure(const float pressure, UserParameter *userParameters);
 
 
 /* Function to check for low pressure.
@@ -79,7 +79,7 @@ uint16_t check_high_pressure(const float pressure);
      pressure, and 0 otherwise.
  */
 // TODO we NEVER check for low pressure anywhere!!!!
-uint16_t check_low_pressure(const float pressure);
+uint16_t check_low_pressure(const float pressure, UserParameter *userParameters);
 
 /* Function to check for both high / low pressure.
 
@@ -90,7 +90,7 @@ uint16_t check_low_pressure(const float pressure);
      pressure, LOW_PRESSURE_ALARM set if there is low pressure, and
      0 otherwise.
  */
-uint16_t check_pressure(const float pressure);
+uint16_t check_pressure(const float pressure, UserParameter *userParameters);
 
 
 /* Function to check for high peep pressure.

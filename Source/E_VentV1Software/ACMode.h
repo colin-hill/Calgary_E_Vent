@@ -53,13 +53,13 @@ VentilatorState acInhaleWait(VentilatorState state);
 
 VentilatorState acInhaleCommand(VentilatorState state);
 
-VentilatorState acInhale(VentilatorState state);
+VentilatorState acInhale(VentilatorState state, UserParameter *userParameters);
 
 // Unused parameter warning for expirationTime due to SERIAL_DEBUG
 // TODO: should this be inspiration time?
-VentilatorState acInhaleAbort(VentilatorState state);
+VentilatorState acInhaleAbort(VentilatorState state, UserParameter *userParameters);
 
-VentilatorState acPeak(VentilatorState state);
+VentilatorState acPeak(VentilatorState state, UserParameter *userParameters);
 
 VentilatorState acExhaleCommand(VentilatorState state);
 

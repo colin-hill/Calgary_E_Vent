@@ -67,7 +67,7 @@ VentilatorState acInhaleCommand(VentilatorState state) {
 }
 
 
-VentilatorState acInhale(VentilatorState state) {
+VentilatorState acInhale(VentilatorState state, UserParameter *userParameters) {
     assert(state.ac_state == ACInhale);
 
 #ifdef SERIAL_DEBUG
@@ -90,7 +90,7 @@ VentilatorState acInhale(VentilatorState state) {
 
     }
 
-    state.errors |= check_high_pressure(state.pressure);
+    state.errors |= check_high_pressure(state.pressure, userParameters);
 
     if (state.errors & HIGH_PRESSURE_ALARM) {
         state.ac_state = ACInhaleAbort;
@@ -102,7 +102,7 @@ VentilatorState acInhale(VentilatorState state) {
 
 // Unused parameter warning for expiration_time due to SERIAL_DEBUG
 // TODO: Do we really want to print exhalation time in debug here?
-VentilatorState acInhaleAbort(VentilatorState state) {
+VentilatorState acInhaleAbort(VentilatorState state, UserParameter *userParameters) {
     assert(state.ac_state == ACInhaleAbort);
 
 #ifdef SERIAL_DEBUG
@@ -113,14 +113,14 @@ VentilatorState acInhaleAbort(VentilatorState state) {
 #endif //SERIAL_DEBUG
 
     reset_timer(state);
-    state.errors |= check_high_pressure(state.pressure);
+    state.errors |= check_high_pressure(state.pressure,userParameters);
     state.ac_state = ACExhale;
 
     return state;
 }
 
 
-VentilatorState acPeak(VentilatorState state) {
+VentilatorState acPeak(VentilatorState state,UserParameter *userParameters) {
     assert(state.ac_state == ACPeak);
 
 #ifdef SERIAL_DEBUG
@@ -134,7 +134,7 @@ VentilatorState acPeak(VentilatorState state) {
         state.ac_state = ACExhaleCommand;
     }
     
-    state.errors |= check_high_pressure(state.pressure);
+    state.errors |= check_high_pressure(state.pressure, userParameters);
 
     return state;
 }
@@ -194,11 +194,11 @@ VentilatorState ac_mode_step(VentilatorState state, UserParameter *userParameter
     case ACInhaleCommand:
         return acInhaleCommand(state);
     case ACInhale:
-        return acInhale(state);
+        return acInhale(state, userParameters);
     case ACInhaleAbort:
-        return acInhaleAbort(state);
+        return acInhaleAbort(state, userParameters);
     case ACPeak:
-        return acPeak(state);
+        return acPeak(state, userParameters);
     case ACExhaleCommand:
         return acExhaleCommand(state);
     case ACExhale:
