@@ -2,7 +2,7 @@
 #include "pressure.h"
 #include "breathing.h"
 #include "UserParameter.h"
-#include "pinAssignments.h"
+#include "PinAssignments.h"
 #include "Motor.h"
 
 
