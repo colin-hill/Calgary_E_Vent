@@ -1,6 +1,6 @@
 #define SERIAL_DEBUG //Comment this out if not debugging, used for visual confirmation of state changes
 #define NO_INPUT_DEBUG //Comment this out if not debugging, used to spoof input parameters at startup when no controls are present
-#define NO_LIMIT_SWITCH_DEBUG
+//#define NO_LIMIT_SWITCH_DEBUG
 
 #include <LiquidCrystal.h>
 
@@ -168,6 +168,8 @@ void setup() {
 void loop() {
     //Update LCD*********
 
+    state = handle_motor(motorController, state);
+    //state = handle_motor(motorController, state);
 
     //Update the state user input parameters
     state = updateStateUserParameters(state, currentlySelectedParameter, parameterSet, parameterSelectEncoder,
@@ -175,8 +177,15 @@ void loop() {
 
     //LCD display internal variables and regular screen
     //displayVentilationScreen(internalTV, internalBPM, internalIERatio, internalThresholdPressure, machineState, peakPressure, plateauPressure, peepPressure);
-    displayUserParameters(currentlySelectedParameter, ventilatorDisplay, state.machine_state, state.vc_state, state.ac_state, measuredPIP, measuredPlateau, LCD_MAX_STRING, userParameters);
+    if (MotorZeroing == state.machine_state) {
 
+        displayHomingScreen(ventilatorDisplay);
+        //displayHomingScreen(alarmDisplay);
+    }
+    else {
+
+        displayUserParameters(currentlySelectedParameter, ventilatorDisplay, state.machine_state, state.vc_state, state.ac_state, state.peep_pressure, state.pressure, LCD_MAX_STRING, userParameters);
+    }
     //TODO: Add in alarm display
     update_motor_settings(state);
 
@@ -188,6 +197,7 @@ void loop() {
     // TODO: factor out into a function and turn into switch statement.
     if (MotorZeroing == state.machine_state){
         state = motor_zeroing_step(state);
+
     }
     else if (BreathLoopStart == state.machine_state) { // BreathLoopStart
 
@@ -209,7 +219,7 @@ void loop() {
     }
 
 
-    state = handle_motor(motorController, state);
+    
 
     state = handle_alarms(alarmReset, state, alarmDisplay, userParameters, currentlySelectedParameter);
 
