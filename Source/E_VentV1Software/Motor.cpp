@@ -19,6 +19,7 @@ long int readPosition(RoboClaw &controller_name) {
 }
 
 
+
 void commandStop(RoboClaw &controller_name) {
 	controller_name.SpeedDistanceM1(MOTOR_ADDRESS, 0, 0, 1); //Stop motion
 }
@@ -55,7 +56,7 @@ VentilatorState commandMotorZero(RoboClaw &controller_name, VentilatorState stat
 	//Move to zeropoint
 	controller_name.SpeedAccelDeccelPositionM1(MOTOR_ADDRESS, ACCEL, MOTOR_ZEROING_SPEED, DECCEL, QP_TO_ZEROPOINT, 1);
 
-	delay(8000); //TODO fix this timing
+	delay(4000); //TODO fix this timing
 
 	return state;
 }
@@ -112,8 +113,11 @@ VentilatorState checkMotorStatus(RoboClaw &controller_name, VentilatorState stat
 
   Serial.println("check motor status");
 
+
 	//Check current position
 	state.current_motor_position = readPosition(controller_name);
+	Serial.print("Expected: ");
+	Serial.println(state.future_motor_position);
 
 	state.errors |= check_motor_position(state.current_motor_position, state.future_motor_position); 
  
@@ -133,10 +137,11 @@ VentilatorState checkMotorStatus(RoboClaw &controller_name, VentilatorState stat
 VentilatorState handle_ACMode(RoboClaw &controller_name, VentilatorState state) {
 
   Serial.println("Motor ac mode handle");
+  Serial.print("AC State: ");
+  Serial.println(state.ac_state);
 	
 	switch(state.ac_state) {
 	case ACStart:
-		//no action required
 		break;
 	case ACInhaleWait:
 		//no action required
@@ -149,12 +154,15 @@ VentilatorState handle_ACMode(RoboClaw &controller_name, VentilatorState state) 
 	case ACInhaleAbort:
 		return commandInhaleAbort(controller_name, state);
 	case ACPeak:
-		break;
-		//return checkMotorStatus(controller_name, state);
+		return checkMotorStatus(controller_name, state);
+		//long int pos = readPosition(controller_name);
+		//break;
 	case ACExhaleCommand:
+		//state = checkMotorStatus(controller_name, state);
 		return commandExhale(controller_name, state);
 	case ACExhale:
 		//no action required
+		break;
 	case ACReset:
 		return checkMotorStatus(controller_name, state);
 	default:
@@ -170,7 +178,6 @@ VentilatorState handle_VCMode(RoboClaw &controller_name, VentilatorState state) 
 
 		switch(state.vc_state) {
 	case VCStart:
-		//no action required
 		break;
 	case VCInhaleCommand:
 		return commandInhale(controller_name, state);
@@ -180,12 +187,14 @@ VentilatorState handle_VCMode(RoboClaw &controller_name, VentilatorState state) 
 	case VCInhaleAbort:
 		return commandInhaleAbort(controller_name, state);
 	case VCPeak:
-		//return checkMotorStatus(controller_name, state); /?TODO is this taking too long?
+		//return checkMotorStatus(controller_name, state); //TODO is this taking too long?
 		break;
 	case VCExhaleCommand:
+		//state = checkMotorStatus(controller_name, state);
 		return commandExhale(controller_name, state);
 	case VCExhale:
 		//no action required
+		break;
 	case VCReset:
 		return checkMotorStatus(controller_name, state);
 	default:

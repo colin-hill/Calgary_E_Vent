@@ -217,7 +217,8 @@ void loop() {
     else if (FailureMode == state.machine_state) {
         state = failure_mode(state);
     }
-
+    Serial.print("AC State: ");
+    Serial.println(state.ac_state);
     state = handle_alarms(alarmReset, state, alarmDisplay, userParameters, currentlySelectedParameter);
 }
 
