@@ -201,10 +201,17 @@ void reset_alarms(VentilatorState &state)
   }
 }
 
-void setUpAlarmSwitch()
+void setUpAlarmPIns()
 {
   pinMode(ALARM_SWITCH_PIN,INPUT_PULLUP);
+
+  pinMode(ALARM_LED_PIN,OUTPUT);
+  pinMode(ALARM_BUZZER_PIN,OUTPUT);
+  pinMode(ALARM_RELAY_PIN,OUTPUT);
+
   attachInterrupt(digitalPinToInterrupt(ALARM_SWITCH_PIN),alarmResetISR,FALLING);
 
   return;
 }
+
+void alarmResetISR(); //ISR declaration
