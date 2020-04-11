@@ -87,7 +87,12 @@ uint16_t check_controller_temperature(const uint16_t temperature){
 }
 
 uint16_t check_motor_position(const long int current_position, const long int expected_position) {
-    if (current_position != expected_position) {
+    if (current_position > expected_position + POSITION_TOLERANCE) {
+        Serial.println("Out of tolerance");
+        return DEVICE_FAILURE_ALARM;
+    }
+    else if (current_position < expected_position - POSITION_TOLERANCE) {
+        Serial.println("Out of tolerance");
         return DEVICE_FAILURE_ALARM;
     } else {
         return 0;

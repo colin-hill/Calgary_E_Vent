@@ -115,11 +115,11 @@ VentilatorState checkMotorStatus(RoboClaw &controller_name, VentilatorState stat
 	//Check current position
 	state.current_motor_position = readPosition(controller_name);
 
-	//state.errors |= check_motor_position(state.current_motor_position, state.future_motor_position); //todo CHECK POISTION
+	state.errors |= check_motor_position(state.current_motor_position, state.future_motor_position); 
  
 	//controller_name.ReadTemp(MOTOR_ADDRESS, state.controller_temperature);
 	//state.controller_temperature = state.controller_temperature*0.1; //TODO magic number
-	state.errors |= check_controller_temperature(state.controller_temperature);	
+	//state.errors |= check_controller_temperature(state.controller_temperature);	
 
 	
   Serial.println("exit check motor status");
@@ -149,7 +149,8 @@ VentilatorState handle_ACMode(RoboClaw &controller_name, VentilatorState state) 
 	case ACInhaleAbort:
 		return commandInhaleAbort(controller_name, state);
 	case ACPeak:
-		return checkMotorStatus(controller_name, state);
+		break;
+		//return checkMotorStatus(controller_name, state);
 	case ACExhaleCommand:
 		return commandExhale(controller_name, state);
 	case ACExhale:
@@ -179,7 +180,8 @@ VentilatorState handle_VCMode(RoboClaw &controller_name, VentilatorState state) 
 	case VCInhaleAbort:
 		return commandInhaleAbort(controller_name, state);
 	case VCPeak:
-		return checkMotorStatus(controller_name, state);
+		//return checkMotorStatus(controller_name, state); /?TODO is this taking too long?
+		break;
 	case VCExhaleCommand:
 		return commandExhale(controller_name, state);
 	case VCExhale:
