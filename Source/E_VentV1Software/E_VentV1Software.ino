@@ -99,7 +99,7 @@ vcModeStates vcModeState   = VCStart;
 VentilatorState state;
 
 
-void setup() {  
+void setup() {
 
 #ifdef SERIAL_DEBUG
     Serial.begin(9600);
@@ -108,7 +108,7 @@ void setup() {
 
     setupLimitSwitch();
     setUpAlarmSwitch();
-    setUpPressureSensor(9600);
+    setUpPressureSensor();
 
     // Motor serial communications startup
     // MotorSerial.begin(9600); //********
@@ -120,7 +120,7 @@ void setup() {
     pinMode(MODE_SWITCH_PIN, INPUT_PULLUP);
 
     //LCD Setup
-    alarmDisplay.begin(LCD_COLUMNS, LCD_ROWS); 
+    alarmDisplay.begin(LCD_COLUMNS, LCD_ROWS);
     ventilatorDisplay.begin(LCD_COLUMNS, LCD_ROWS);
 
     //Motor Controller Start
@@ -194,7 +194,7 @@ void loop() {
 #ifdef SERIAL_DEBUG
         Serial.println("Breath Loop Start");
 #endif //SERIAL_DEBUG
-        
+
         state.machine_state = check_mode();
     }
 
