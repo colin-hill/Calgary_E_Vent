@@ -184,7 +184,7 @@ void loop() {
     }
     else {
 
-        displayUserParameters(currentlySelectedParameter, ventilatorDisplay, state.machine_state, state.vc_state, state.ac_state, state.peep_pressure, state.pressure, LCD_MAX_STRING, userParameters);
+        displayUserParameters(currentlySelectedParameter, ventilatorDisplay, state.machine_state, state.vc_state, state.ac_state, state.peak_pressure, state.plateau_pressure, LCD_MAX_STRING, userParameters);
     }
     //TODO: Add in alarm display
     update_motor_settings(state);
@@ -234,6 +234,7 @@ void parameterSetISR() {
 void alarmResetISR(){
 
   if(alarmResetDebounceTimer > (0.25*S_TO_MS)){
+    digitalWrite(ALARM_LED_PIN,!digitalRead(ALARM_LED_PIN));
     alarmResetDebounceTimer = 0;
     alarmReset = true;
   }

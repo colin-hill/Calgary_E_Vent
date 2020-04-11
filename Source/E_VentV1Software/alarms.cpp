@@ -101,7 +101,7 @@ VentilatorState handle_alarms(volatile boolean &alarmReset, VentilatorState &sta
 
             // Toggle the buzzer output pins
             digitalWrite(ALARM_BUZZER_PIN,!digitalRead(ALARM_BUZZER_PIN));
-            digitalWrite(ALARM_LED_PIN,!digitalRead(ALARM_LED_PIN));
+            //digitalWrite(ALARM_LED_PIN,!digitalRead(ALARM_LED_PIN));
             digitalWrite(ALARM_RELAY_PIN,!digitalRead(ALARM_RELAY_PIN));
         }
 
@@ -158,7 +158,7 @@ VentilatorState handle_alarms(volatile boolean &alarmReset, VentilatorState &sta
 
         alarmBuzzerTimer = 0;
         digitalWrite(ALARM_BUZZER_PIN,LOW);
-        digitalWrite(ALARM_LED_PIN,LOW);
+        //digitalWrite(ALARM_LED_PIN,LOW);
         digitalWrite(ALARM_RELAY_PIN,LOW);
     }
 
