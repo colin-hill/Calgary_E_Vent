@@ -218,12 +218,7 @@ void loop() {
         state = failure_mode(state);
     }
 
-
-    
-
     state = handle_alarms(alarmReset, state, alarmDisplay, userParameters, currentlySelectedParameter);
-
-    //delay(1000);
 }
 
 //FUNCTIONS
