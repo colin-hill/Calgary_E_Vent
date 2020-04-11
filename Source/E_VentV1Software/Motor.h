@@ -10,12 +10,15 @@
 //Motor Constants specific to the motor
 //const float QPPR = 17700.6; //Quadrature pulses per revolution
 
-const long int QP_TO_ZEROPOINT = 50; //Quadrature pulses from limit switch to bag edge
+const long int QP_TO_ZEROPOINT = 450; //Quadrature pulses from limit switch to bag edge
 //const long int POSITION_TOLERANCE = 2; //Removing this for the time being
 const float QP_AT_FULL_STROKE = 500; //Quadrature pulses at 100% TV that occurs from zeropoint
 const float MOTOR_RETURN_FACTOR = 0.25; // Percent of nominal exalation time used to return the motor to zeropoint
-const int MOTOR_ZEROING_SPEED = 50;
-const int MOTOR_HOMING_SPEED = -1*MOTOR_ZEROING_SPEED; //QPPS for homing
+const long int MOTOR_ZEROING_SPEED = 100;
+const long int MOTOR_HOMING_SPEED = MOTOR_ZEROING_SPEED; //QPPS for homing
+const float ZEROING_TIME = 5.0; // TODO set real time
+const float HOMING_TIMEOUT = 10.0;//
+
 const long int ACCEL = 500000;
 const long int DECCEL = 500000;
 

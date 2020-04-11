@@ -28,7 +28,10 @@ void commandStop(RoboClaw &controller_name) {
 
 void commandMotorHoming(RoboClaw &controller_name) {
 	//command motor to move outwards
-	controller_name.SpeedM1(MOTOR_ADDRESS, MOTOR_HOMING_SPEED);
+	Serial.println("Motor home start");
+
+	controller_name.SetEncM1(MOTOR_ADDRESS, 0);
+	controller_name.SpeedAccelDeccelPositionM1(MOTOR_ADDRESS, ACCEL, MOTOR_ZEROING_SPEED, DECCEL, -1000, 1); //TODO could we set a hard limit?
 }
 
 
@@ -40,10 +43,19 @@ VentilatorState commandMotorZero(RoboClaw &controller_name, VentilatorState stat
 	//Make sure the motor has come to a stop
 	delay((HOMING_BUFFER*S_TO_MS));
 
+
+
 	state.current_motor_position = readPosition(controller_name);
-	state.future_motor_position = state.current_motor_position + QP_TO_ZEROPOINT;
+	Serial.println("Location at zero command");
+	Serial.println(state.current_motor_position);
+
+	controller_name.SetEncM1(MOTOR_ADDRESS, 0);
+
+	state.future_motor_position = QP_TO_ZEROPOINT;
 	//Move to zeropoint
 	controller_name.SpeedAccelDeccelPositionM1(MOTOR_ADDRESS, ACCEL, MOTOR_ZEROING_SPEED, DECCEL, QP_TO_ZEROPOINT, 1);
+
+	delay(8000); //TODO get rid of this
 
 	return state;
 }
