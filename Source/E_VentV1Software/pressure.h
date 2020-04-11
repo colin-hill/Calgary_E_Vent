@@ -22,7 +22,8 @@
 //Pressure Sensor Definitions---------------------------------------------------
 #define PRESSURE_SENSOR_I2C Wire
 const float PSI_TO_CMH2O = 70.307;
-const uint32_t PRESSURE_SENSOR_BAUD_RATE = 9600;
+
+const int PRESSURE_SENSOR_BAUD_RATE   = 9600;
 const uint8_t PRESSURE_SENSOR_ADDRESS = 40; //Honeywell documentation
 
 const uint16_t MAX_DIGITAL_OUTPUT = 14745; //Honeywell I2C comms documentation
@@ -40,7 +41,7 @@ const float MAX_SENSOR_PRESSURE = 1.0; //PSI Differential
 	Function to initialize the pressure sensor into the desired configuration
 
 */
-void setUpPressureSensor(const uint32_t PRESSURE_SENSOR_BAUD_RATE);
+void setUpPressureSensor(void);
 
 
 /* Function to read the pressure sensor on the PRESSURE_SENSOR_PIN.

@@ -5,6 +5,8 @@
 
 #include "alarms.h"
 #include "PinAssignments.h"
+#include "Motor.h"
+#include "conversions.h"
 
 #include <assert.h>
 
@@ -35,10 +37,10 @@ VentilatorState motorHomingWait(VentilatorState state) {
 #endif //SERIAL_DEBUG
 
 
-    if (digitalRead(LIMIT_SWITCH_PIN)) {
+    if (LOW == digitalRead(LIMIT_SWITCH_PIN)) {
     	state.zeroing_state = CommandZero;
     }
-    else if (elapsed_time(state) > HOMING_TIMEOUT) {
+    else if (elapsed_time(state) > (HOMING_TIMEOUT*S_TO_MS)) {
     	//TODO: Add time out error
     }
 
@@ -90,7 +92,7 @@ VentilatorState motorZero(VentilatorState state) {
 
 	//TODO: Add error if the motor controller is too hot
 
-    state.zeroing_state = CommandHome;
+    //state.zeroing_state = CommandHome;
 
 	state.machine_state = BreathLoopStart;
 

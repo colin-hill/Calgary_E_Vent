@@ -22,4 +22,7 @@ VentilatorState failure_mode(VentilatorState state) {
     Serial.println(state.vc_state);
 #endif //SERIAL_DEBUG
 
+    // TODO: THIS SHOULD RETURN SOMETHING IF IT HAS THIS TYPE!
+    // IT MIGHT NOT BE THIS, THOUGH.
+    return state;
 }

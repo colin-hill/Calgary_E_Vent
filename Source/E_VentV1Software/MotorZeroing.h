@@ -7,11 +7,6 @@
 #include "MachineStates.h"
 
 
-//TODO: Add actual values/figure this out with the motor controller library
-const float HOMING_TIMEOUT = 10.0;
-const float ZEROING_TIME = 5.0;
-const int ZERO_POINT_TICKS = 1000;
-const int MOTOR_HOME_SPEED = 20; //Out of 127
 
 
 // ----------------------------------------------------------------------
