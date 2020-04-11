@@ -115,7 +115,7 @@ VentilatorState checkMotorStatus(RoboClaw &controller_name, VentilatorState stat
 	//Check current position
 	state.current_motor_position = readPosition(controller_name);
 
-	state.errors |= check_motor_position(state.current_motor_position, state.future_motor_position);
+	//state.errors |= check_motor_position(state.current_motor_position, state.future_motor_position);
  
 	//controller_name.ReadTemp(MOTOR_ADDRESS, state.controller_temperature);
 	//state.controller_temperature = state.controller_temperature*0.1; //TODO magic number

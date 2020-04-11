@@ -203,7 +203,7 @@ void reset_alarms(VentilatorState &state)
 
 void setUpAlarmSwitch()
 {
-  pinMode(ALARM_SWITCH_PIN,OUTPUT);
+  pinMode(ALARM_SWITCH_PIN,INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(ALARM_SWITCH_PIN),alarmResetISR,FALLING);
 
   return;
