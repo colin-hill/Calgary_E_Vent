@@ -155,8 +155,6 @@ VentilatorState handle_ACMode(RoboClaw &controller_name, VentilatorState state) 
 		return commandInhaleAbort(controller_name, state);
 	case ACPeak:
 		return checkMotorStatus(controller_name, state);
-		//long int pos = readPosition(controller_name);
-		//break;
 	case ACExhaleCommand:
 		//state = checkMotorStatus(controller_name, state);
 		return commandExhale(controller_name, state);
@@ -187,10 +185,8 @@ VentilatorState handle_VCMode(RoboClaw &controller_name, VentilatorState state) 
 	case VCInhaleAbort:
 		return commandInhaleAbort(controller_name, state);
 	case VCPeak:
-		//return checkMotorStatus(controller_name, state); //TODO is this taking too long?
-		break;
+		return checkMotorStatus(controller_name, state); //TODO is this taking too long?
 	case VCExhaleCommand:
-		//state = checkMotorStatus(controller_name, state);
 		return commandExhale(controller_name, state);
 	case VCExhale:
 		//no action required

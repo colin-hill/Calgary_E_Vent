@@ -40,11 +40,11 @@ const float MAX_PLATEAU_PAUSE_TIME     = 0.50; //Seconds
 const float DEFAULT_PLATEAU_PAUSE_TIME = 0.15; //Seconds
 //Max & Min PIP Pressures--------------------------------------------------------
 const float MAX_PRESSURE = 50.0; //cmH2O
-const float MIN_PRESSURE = 0.0; //cmH2O
+const float MIN_PRESSURE = 10.0; //cmH2O
 
 //Max & Min PEEP Pressures-----------------------------------------------------------
 const float MAX_PEEP_PRESSURE = 20.0; //cmH2O
-const float MIN_PEEP_PRESSURE = 0.0; //cmH2O
+const float MIN_PEEP_PRESSURE = 3.0; //cmH2O
 //------------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------

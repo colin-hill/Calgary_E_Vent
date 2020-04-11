@@ -41,6 +41,8 @@ uint16_t check_high_pressure(const float pressure, UserParameter *userParameters
 
 uint16_t check_low_pressure(const float pressure, UserParameter *userParameters) {
 	SelectedParameter selectedParameter = e_LowPIPAlarm;
+  Serial.print("Low PEEP Setting: ");
+    Serial.println(userParameters[selectedParameter].value);
     if (pressure < userParameters[selectedParameter].value) {
         return LOW_PRESSURE_ALARM;
     } else {
@@ -66,6 +68,8 @@ uint16_t check_high_peep(const float pressure, UserParameter *userParameters) {
 
 uint16_t check_low_peep(const float pressure, UserParameter *userParameters) {
     SelectedParameter selectedParameter = e_LowPEEPAlarm;
+    //Serial.print("Low PEEP Setting: ");
+    //Serial.println(userParameters[selectedParameter].value);
     if (pressure < userParameters[selectedParameter].value) {
         return LOW_PEEP_ALARM;
     } else {

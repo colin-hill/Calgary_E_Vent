@@ -30,13 +30,13 @@ const float MIN_LOW_PIP_ALARM = 0; //cmH2O
 //------------------------------------------
 
 // High PEEP Alarm Definitions---------------
-const float MAX_HIGH_PEEP_ALARM = 30; //cmH2O
-const float MIN_HIGH_PEEP_ALARM = 1; //cmH2O
+const float MAX_HIGH_PEEP_ALARM = 20; //cmH2O
+const float MIN_HIGH_PEEP_ALARM = 5; //cmH2O
 //------------------------------------------
 
 // Low PEEP Alarm Definitions----------------
-const float MAX_LOW_PEEP_ALARM = 30; //cmH2O
-const float MIN_LOW_PEEP_ALARM = 0; //cmH2O
+const float MAX_LOW_PEEP_ALARM = 15; //cmH2O
+const float MIN_LOW_PEEP_ALARM = 1; //cmH2O
 //------------------------------------------
 
 // Low Plateau Pressure Alarm Defintions-----

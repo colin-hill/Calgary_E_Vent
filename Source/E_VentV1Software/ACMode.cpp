@@ -90,7 +90,7 @@ VentilatorState acInhale(VentilatorState state, UserParameter *userParameters) {
 
     }
 
-    state.errors |= check_pressure(state.pressure, userParameters);
+    state.errors |= check_high_pressure(state.pressure, userParameters);
 
     if (state.pressure > userParameters[e_HighPIPAlarm].value) {
         state.peak_pressure = state.current_loop_peak_pressure;
@@ -114,7 +114,7 @@ VentilatorState acInhaleAbort(VentilatorState state, UserParameter *userParamete
 #endif //SERIAL_DEBUG
 
     reset_timer(state);
-    state.errors |= check_pressure(state.pressure,userParameters);
+    state.errors |= check_high_pressure(state.pressure,userParameters);
     state.ac_state = ACExhale;
 
     return state;
