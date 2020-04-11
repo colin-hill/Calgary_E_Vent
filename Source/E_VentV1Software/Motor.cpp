@@ -55,7 +55,7 @@ VentilatorState commandMotorZero(RoboClaw &controller_name, VentilatorState stat
 	//Move to zeropoint
 	controller_name.SpeedAccelDeccelPositionM1(MOTOR_ADDRESS, ACCEL, MOTOR_ZEROING_SPEED, DECCEL, QP_TO_ZEROPOINT, 1);
 
-	delay(8000); //TODO get rid of this
+	delay((ZEROING_BUFFER*S_TO_MS)); 
 
 	return state;
 }

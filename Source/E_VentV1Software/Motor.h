@@ -27,7 +27,8 @@ const uint16_t MAX_CONTROLLER_TEMPERATURE = 60;//Set to 50C
 const int MOTOR_CONTROLLER_TIMEOUT = 10000;
 
 const float INERTIA_BUFFER = 0.02; //Seconds; The motor has inertia, we allow extra time for it too start and stop
-const float HOMING_BUFFER = 1.0; //Seconds
+const float HOMING_BUFFER = 0.25; //Seconds
+const float ZEROING_BUFFER = QP_TO_ZEROPOINT/MOTOR_ZEROING_SPEED + INERTIA_BUFFER; //Wait time to reach zero point
 
 
 #define MOTOR_ADDRESS 0x80 //Set on the RoboClaw controller via Basic Micro Motion Studio
