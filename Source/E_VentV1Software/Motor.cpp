@@ -55,7 +55,7 @@ VentilatorState commandMotorZero(RoboClaw &controller_name, VentilatorState stat
 	//Move to zeropoint
 	controller_name.SpeedAccelDeccelPositionM1(MOTOR_ADDRESS, ACCEL, MOTOR_ZEROING_SPEED, DECCEL, QP_TO_ZEROPOINT, 1);
 
-	delay((ZEROING_BUFFER*S_TO_MS)); 
+	delay(8000); //TODO fix this timing
 
 	return state;
 }
@@ -117,7 +117,8 @@ VentilatorState checkMotorStatus(RoboClaw &controller_name, VentilatorState stat
 
 	state.errors |= check_motor_position(state.current_motor_position, state.future_motor_position);
  
-	controller_name.ReadTemp(MOTOR_ADDRESS, state.controller_temperature);
+	//controller_name.ReadTemp(MOTOR_ADDRESS, state.controller_temperature);
+	//state.controller_temperature = state.controller_temperature*0.1; //TODO magic number
 	state.errors |= check_controller_temperature(state.controller_temperature);	
 
 	
