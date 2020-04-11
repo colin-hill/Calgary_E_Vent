@@ -50,11 +50,11 @@ VentilatorState vcStart(VentilatorState state);
 
 VentilatorState vcInhaleCommand(VentilatorState state);
 
-VentilatorState vcInhale(VentilatorState state);
+VentilatorState vcInhale(VentilatorState state,UserParameter *userParameters);
 
-VentilatorState vcInhaleAbort(VentilatorState state);
+VentilatorState vcInhaleAbort(VentilatorState state, UserParameter *userParameters);
 
-VentilatorState vcPeak(VentilatorState state);
+VentilatorState vcPeak(VentilatorState state, UserParameter *userParameters);
 
 VentilatorState vcExhaleCommand(VentilatorState state);
 

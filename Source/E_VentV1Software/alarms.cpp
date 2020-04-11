@@ -29,8 +29,9 @@ elapsedMillis deviceFaiulureAlarmTimer;
 // Function definitions
 // ----------------------------------------------------------------------
 
-uint16_t check_high_pressure(const float pressure) {
-    if (pressure > MAX_PRESSURE) {
+uint16_t check_high_pressure(const float pressure, UserParameter *userParameters) {
+    SelectedParameter selectedParameter = e_HighPIPAlarm;
+	if (pressure > userParameters[selectedParameter].value) {
         return HIGH_PRESSURE_ALARM;
     } else {
         return 0;
@@ -38,8 +39,9 @@ uint16_t check_high_pressure(const float pressure) {
 }
 
 
-uint16_t check_low_pressure(const float pressure) {
-    if (pressure < MIN_PRESSURE) {
+uint16_t check_low_pressure(const float pressure, UserParameter *userParameters) {
+	SelectedParameter selectedParameter = e_LowPIPAlarm;
+    if (pressure < userParameters[selectedParameter].value) {
         return LOW_PRESSURE_ALARM;
     } else {
         return 0;
@@ -47,8 +49,8 @@ uint16_t check_low_pressure(const float pressure) {
 }
 
 
-uint16_t check_pressure(const float pressure) {
-    return check_high_pressure(pressure) | check_low_pressure(pressure);
+uint16_t check_pressure(const float pressure, UserParameter *userParameters) {
+    return check_high_pressure(pressure, userParameters) | check_low_pressure(pressure, userParameters);
 }
 
 

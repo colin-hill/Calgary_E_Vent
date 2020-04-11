@@ -49,7 +49,7 @@ VentilatorState vcInhaleCommand(VentilatorState state) {
 }
 
 
-VentilatorState vcInhale(VentilatorState state) {
+VentilatorState vcInhale(VentilatorState state, UserParameter *userParameters) {
     assert(state.vc_state == VCInhale);
 
 #ifdef SERIAL_DEBUG
@@ -72,7 +72,7 @@ VentilatorState vcInhale(VentilatorState state) {
         reset_timer(state);
     }
 
-    state.errors |= check_high_pressure(state.pressure);
+    state.errors |= check_high_pressure(state.pressure, userParameters);
 
     // If there's high pressure, abort inhale.
     // TODO: will this state and VCInhaleAbort both raise alarm? Is that fine?
@@ -86,7 +86,7 @@ VentilatorState vcInhale(VentilatorState state) {
 
 
 // Unused parameter warning for expiration_time due to SERIAL_DEBUG
-VentilatorState vcInhaleAbort(VentilatorState state) {
+VentilatorState vcInhaleAbort(VentilatorState state, UserParameter *userParameters) {
     assert(state.vc_state == VCInhaleAbort);
 
 #ifdef SERIAL_DEBUG
@@ -99,14 +99,14 @@ VentilatorState vcInhaleAbort(VentilatorState state) {
 #endif //SERIAL_DEBUG
 
     reset_timer(state);
-    state.errors |= check_high_pressure(state.pressure);
+    state.errors |= check_high_pressure(state.pressure, userParameters);
     state.vc_state = VCExhale;
 
     return state;
 }
 
 
-VentilatorState vcPeak(VentilatorState state) {
+VentilatorState vcPeak(VentilatorState state, UserParameter *userParameters) {
     assert(state.vc_state == VCPeak);
 
 #ifdef SERIAL_DEBUG
@@ -121,7 +121,7 @@ VentilatorState vcPeak(VentilatorState state) {
         state.vc_state = VCExhaleCommand;        
     }
 
-    state.errors |= check_high_pressure(state.pressure);
+    state.errors |= check_high_pressure(state.pressure, userParameters);
     return state;
 }
 
@@ -188,11 +188,11 @@ VentilatorState vc_mode_step(VentilatorState state, UserParameter *userParameter
     case VCInhaleCommand:
         return vcInhaleCommand(state);
     case VCInhale:
-        return vcInhale(state);
+        return vcInhale(state, userParameters);
     case VCInhaleAbort:
-        return vcInhaleAbort(state);
+        return vcInhaleAbort(state, userParameters);
     case VCPeak:
-        return vcPeak(state);
+        return vcPeak(state, userParameters);
     case VCExhaleCommand:
         return vcExhaleCommand(state);
     case VCExhale:
