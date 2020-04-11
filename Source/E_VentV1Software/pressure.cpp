@@ -29,10 +29,10 @@ float readPressureSensor(){
     pressure = pressure*PSI_TO_CMH2O;
 
     #ifdef NO_SENSOR_DEBUG
-      Serial.print("Output: ");
-      Serial.println(output);
-      Serial.print("Pressure: ");
-      Serial.println(pressure);
+      //Serial.print("Output: ");
+      //Serial.println(output);
+      //Serial.print("Pressure: ");
+      //Serial.println(pressure);
     #endif
 
     return pressure;
