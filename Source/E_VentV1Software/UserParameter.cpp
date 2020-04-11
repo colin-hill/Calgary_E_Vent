@@ -34,7 +34,7 @@ void UserParameter::updateTmpValue(int32_t numEncoderSteps){
     this->maxValue = (60.0 / ((2.0*this->currentInspirationTime) + this->currentPlateauPauseTime));
   }
   else if(e_InspirationTime == this->name){
-    this->minValue = (60.0 / (2.0*this->currentBPM)) - ((this->currentPlateauPauseTime)/2);
+    this->maxValue = (60.0 / (2.0*this->currentBPM)) - ((this->currentPlateauPauseTime)/2);
   }
 	
 	float funcValue = this->tmpValue + (this->increment)*((float)numEncoderSteps);

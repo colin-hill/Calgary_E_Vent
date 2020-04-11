@@ -90,9 +90,10 @@ VentilatorState acInhale(VentilatorState state, UserParameter *userParameters) {
 
     }
 
-    state.errors |= check_high_pressure(state.pressure, userParameters);
+    state.errors |= check_pressure(state.pressure, userParameters);
 
-    if (state.errors & HIGH_PRESSURE_ALARM) {
+    if (state.pressure > userParameters[e_HighPIPAlarm].value) {
+        state.peak_pressure = state.current_loop_peak_pressure;
         state.ac_state = ACInhaleAbort;
     }
 
@@ -113,7 +114,7 @@ VentilatorState acInhaleAbort(VentilatorState state, UserParameter *userParamete
 #endif //SERIAL_DEBUG
 
     reset_timer(state);
-    state.errors |= check_high_pressure(state.pressure,userParameters);
+    state.errors |= check_pressure(state.pressure,userParameters);
     state.ac_state = ACExhale;
 
     return state;
@@ -134,7 +135,7 @@ VentilatorState acPeak(VentilatorState state,UserParameter *userParameters) {
         state.ac_state = ACExhaleCommand;
     }
     
-    state.errors |= check_high_pressure(state.pressure, userParameters);
+    state.errors |= check_pressure(state.pressure, userParameters);
 
     return state;
 }
@@ -161,7 +162,7 @@ VentilatorState acExhale(VentilatorState state) {
     //Serial.println(expiration_time);
 #endif //SERIAL_DEBUG
 
-    if (elapsed_time(state) > ((state.expiration_time + INERTIA_BUFFER) * S_TO_MS)) {
+    if (elapsed_time(state) > ((state.motor_return_time + INERTIA_BUFFER) * S_TO_MS)) {//Get back faster so we can listen
         state.ac_state      = ACReset;
     }
 

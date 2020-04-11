@@ -72,13 +72,14 @@ VentilatorState vcInhale(VentilatorState state, UserParameter *userParameters) {
         reset_timer(state);
     }
 
-    state.errors |= check_high_pressure(state.pressure, userParameters);
+    state.errors |= check_pressure(state.pressure, userParameters);
 
     // If there's high pressure, abort inhale.
     // TODO: will this state and VCInhaleAbort both raise alarm? Is that fine?
     // CH: Yes, I think that is fine. Basically anytime the motor is moving we want to know if the pressue is too high
-    if (state.errors & HIGH_PRESSURE_ALARM) {
-        state.vc_state = VCInhaleAbort;
+     if (state.pressure > userParameters[e_HighPIPAlarm].value) {
+        state.peak_pressure = state.current_loop_peak_pressure;
+        state.ac_state = ACInhaleAbort;
     }
 
     return state;
@@ -99,7 +100,7 @@ VentilatorState vcInhaleAbort(VentilatorState state, UserParameter *userParamete
 #endif //SERIAL_DEBUG
 
     reset_timer(state);
-    state.errors |= check_high_pressure(state.pressure, userParameters);
+    state.errors |= check_pressure(state.pressure, userParameters);
     state.vc_state = VCExhale;
 
     return state;
@@ -121,7 +122,7 @@ VentilatorState vcPeak(VentilatorState state, UserParameter *userParameters) {
         state.vc_state = VCExhaleCommand;        
     }
 
-    state.errors |= check_high_pressure(state.pressure, userParameters);
+    state.errors |= check_pressure(state.pressure, userParameters);
     return state;
 }
 

@@ -106,6 +106,8 @@ void update_motor_settings(VentilatorState &state) {
     state.motor_return_time = state.expiration_time*MOTOR_RETURN_FACTOR;
     state.motor_return_speed = state.motor_inhale_pulses/state.motor_return_time;
 
+    state.ac_threshold_time = state.expiration_time - state.motor_return_time;
+
 }
 
 unsigned long elapsed_time(const VentilatorState &state) {
