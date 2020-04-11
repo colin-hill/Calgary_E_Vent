@@ -16,6 +16,8 @@
 VentilatorState vcStart(VentilatorState state) {
     assert(state.vc_state == VCStart);
 
+    state.errors = 0;
+
 #ifdef SERIAL_DEBUG
     Serial.println("VCStart");
 #endif //SERIAL_DEBUG

@@ -19,11 +19,6 @@
 // Alarm Sound definitions
 const float ALARM_SOUND_LENGTH = 0.5; //Seconds
 
-// Alarm pins
-const int ALARM_BUZZER_PIN = 11;
-const int ALARM_LED_PIN    = 12;
-const int ALARM_RELAY_PIN  = 13;
-
 // High PIP Alarm Definitions----------------
 const float MAX_HIGH_PIP_ALARM = 40; //cmH2O
 const float MIN_HIGH_PIP_ALARM = 10; //cmH2O

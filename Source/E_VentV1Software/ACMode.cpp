@@ -14,6 +14,8 @@
 VentilatorState acStart(VentilatorState state) {
     assert(state.ac_state == ACStart);
 
+    state.errors = 0;
+
 #ifdef SERIAL_DEBUG
     Serial.println("ACStart");
 #endif //SERIAL_DEBUG

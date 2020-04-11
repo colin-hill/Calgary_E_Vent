@@ -234,7 +234,7 @@ void parameterSetISR() {
 void alarmResetISR(){
 
   if(alarmResetDebounceTimer > (0.25*S_TO_MS)){
-    digitalWrite(ALARM_LED_PIN,!digitalRead(ALARM_LED_PIN));
+    digitalWrite(ALARM_LED_PIN,HIGH);
     alarmResetDebounceTimer = 0;
     alarmReset = true;
   }

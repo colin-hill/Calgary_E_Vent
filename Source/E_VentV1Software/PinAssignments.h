@@ -26,6 +26,11 @@ const int ALARM_SWITCH_PIN      = 18;
 const int MODE_SWITCH_PIN       = 38;
 const int LIMIT_SWITCH_PIN		  = 10;
 
+// Alarm pins
+const int ALARM_BUZZER_PIN = 11;
+const int ALARM_LED_PIN    = 12;
+const int ALARM_RELAY_PIN  = 13;
+
 //Parameter Select Push Buttons
 const int TIDAL_VOLUME_SELECT_PIN 		  = 4;
 const int INSPIRATION_TIME_SELECT_PIN	  = 5;
