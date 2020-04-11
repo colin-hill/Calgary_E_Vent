@@ -101,7 +101,7 @@ uint16_t check_pressure(const float pressure);
    - Returns error code for HIGH_PEEP_ALARM if there is high
      pressure, and 0 otherwise.
  */
-uint16_t check_high_peep(const float pressure);
+uint16_t check_high_peep(const float pressure, UserParameter *userParameters);
 
 
 /* Function to check for low peep pressure.
@@ -112,7 +112,7 @@ uint16_t check_high_peep(const float pressure);
    - Returns error code for LOW_PEEP_ALARM if there is low
      pressure, and 0 otherwise.
  */
-uint16_t check_low_peep(const float pressure);
+uint16_t check_low_peep(const float pressure, UserParameter *userParameters);
 
 
 /* Function to check for both high / low peep pressure.
@@ -125,7 +125,7 @@ uint16_t check_low_peep(const float pressure);
      0 otherwise.
  */
 
-uint16_t check_peep(const float pressure);
+uint16_t check_peep(const float pressure, UserParameter *userParameters);
 
 
 uint16_t check_controller_temperature(const uint16_t temperature);
@@ -156,7 +156,7 @@ low pressure...?
 
 void reset_alarms(VentilatorState &state);
 
-void setUpAlarmSwitch();
+void setUpAlarmPins();
 
 void alarmResetISR();
 #endif // alarms_h

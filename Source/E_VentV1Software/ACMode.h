@@ -8,6 +8,7 @@
 
 #include "elapsedMillis.h"
 #include "MachineStates.h"
+#include "UserParameter.h"
 #define SERIAL_DEBUG
 
 // ----------------------------------------------------------------------
@@ -23,7 +24,7 @@
    - returns new state.
  */
 
-VentilatorState ac_mode_step(VentilatorState state);
+VentilatorState ac_mode_step(VentilatorState state, UserParameter *userParameters);
 
 /* Get a debug code for the current acModeState.
 
@@ -64,5 +65,5 @@ VentilatorState acExhaleCommand(VentilatorState state);
 
 VentilatorState acExhale(VentilatorState state);
 
-VentilatorState acReset(VentilatorState state);
+VentilatorState acReset(VentilatorState state, UserParameter *userParameters);
 #endif

@@ -52,8 +52,9 @@ uint16_t check_pressure(const float pressure) {
 }
 
 
-uint16_t check_high_peep(const float pressure) {
-    if (pressure > MAX_PEEP_PRESSURE) {
+uint16_t check_high_peep(const float pressure, UserParameter *userParameters) {
+    SelectedParameter selectedParameter = e_HighPEEPAlarm;
+    if (pressure > userParameters[selectedParameter].value) {
         return HIGH_PEEP_ALARM;
     } else {
         return 0;
@@ -61,8 +62,9 @@ uint16_t check_high_peep(const float pressure) {
 }
 
 
-uint16_t check_low_peep(const float pressure) {
-    if (pressure < MIN_PEEP_PRESSURE) {
+uint16_t check_low_peep(const float pressure, UserParameter *userParameters) {
+    SelectedParameter selectedParameter = e_LowPEEPAlarm;
+    if (pressure < userParameters[selectedParameter].value) {
         return LOW_PEEP_ALARM;
     } else {
         return 0;
@@ -70,8 +72,8 @@ uint16_t check_low_peep(const float pressure) {
 }
 
 
-uint16_t check_peep(const float pressure) {
-    return check_high_peep(pressure) | check_low_peep(pressure);
+uint16_t check_peep(const float pressure, UserParameter *userParameters) {
+    return check_high_peep(pressure, userParameters) | check_low_peep(pressure, userParameters);
 }
 
 uint16_t check_controller_temperature(const uint16_t temperature){
@@ -201,7 +203,7 @@ void reset_alarms(VentilatorState &state)
   }
 }
 
-void setUpAlarmPIns()
+void setUpAlarmPins()
 {
   pinMode(ALARM_SWITCH_PIN,INPUT_PULLUP);
 
@@ -213,5 +215,3 @@ void setUpAlarmPIns()
 
   return;
 }
-
-void alarmResetISR(); //ISR declaration

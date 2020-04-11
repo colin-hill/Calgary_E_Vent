@@ -14,7 +14,7 @@
 VentilatorState acStart(VentilatorState state) {
     assert(state.ac_state == ACStart);
 
-    state.errors = 0;
+    //state.errors = 0;
 
 #ifdef SERIAL_DEBUG
     Serial.println("ACStart");
@@ -169,7 +169,7 @@ VentilatorState acExhale(VentilatorState state) {
 }
 
 
-VentilatorState acReset(VentilatorState state) {
+VentilatorState acReset(VentilatorState state, UserParameter *userParameters) {
     assert(state.ac_state == ACReset);
 #ifdef SERIAL_DEBUG
     Serial.println("ACReset");
@@ -177,7 +177,7 @@ VentilatorState acReset(VentilatorState state) {
 
     //Update and check PEEP
     state.peep_pressure = state.pressure;
-    state.errors |= check_peep(state.peep_pressure); 
+    state.errors |= check_peep(state.peep_pressure, userParameters); 
 
     state.machine_state = BreathLoopStart;
     state.ac_state = ACStart;
@@ -185,7 +185,7 @@ VentilatorState acReset(VentilatorState state) {
 }
 
 
-VentilatorState ac_mode_step(VentilatorState state) {
+VentilatorState ac_mode_step(VentilatorState state, UserParameter *userParameters) {
     switch(state.ac_state) {
     case ACStart:
         return acStart(state);
@@ -204,7 +204,7 @@ VentilatorState ac_mode_step(VentilatorState state) {
     case ACExhale:
         return acExhale(state);
     case ACReset:
-        return acReset(state);
+        return acReset(state, userParameters);
     default:
         // Should not happen
 #ifdef SERIAL_DEBUG

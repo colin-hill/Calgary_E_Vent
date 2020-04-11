@@ -6,6 +6,7 @@
 
 #include "elapsedMillis.h"
 #include "MachineStates.h"
+#include "UserParameter.h"
 
 
 // ----------------------------------------------------------------------
@@ -24,7 +25,7 @@
    Output:
    - returns new state.
  */
-VentilatorState vc_mode_step(VentilatorState state);
+VentilatorState vc_mode_step(VentilatorState state, UserParameter *userParameters);
 
 
 /* Get a debug code for the current vcModeState.

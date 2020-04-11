@@ -107,7 +107,7 @@ void setup() {
 #endif //SERIAL_DEBUG
 
     setupLimitSwitch();
-    setUpAlarmSwitch();
+    setUpAlarmPins();
     setUpPressureSensor();
 
     // Motor serial communications startup
@@ -184,7 +184,7 @@ void loop() {
     }
     else {
 
-        displayUserParameters(currentlySelectedParameter, ventilatorDisplay, state.machine_state, state.vc_state, state.ac_state, state.peak_pressure, state.plateau_pressure, LCD_MAX_STRING, userParameters);
+        displayUserParameters(currentlySelectedParameter, ventilatorDisplay, state.machine_state, state.vc_state, state.ac_state, state.peak_pressure, state.peep_pressure, LCD_MAX_STRING, userParameters);
     }
     //TODO: Add in alarm display
     update_motor_settings(state);
@@ -209,10 +209,10 @@ void loop() {
     }
 
     else if (ACMode == state.machine_state) {
-        state = ac_mode_step(state);
+        state = ac_mode_step(state, userParameters);
     }
     else if (VCMode == state.machine_state) {
-        state = vc_mode_step(state);
+        state = vc_mode_step(state, userParameters);
     }
     else if (FailureMode == state.machine_state) {
         state = failure_mode(state);
@@ -234,7 +234,7 @@ void parameterSetISR() {
 void alarmResetISR(){
 
   if(alarmResetDebounceTimer > (0.25*S_TO_MS)){
-    digitalWrite(ALARM_LED_PIN,HIGH);
+    //digitalWrite(ALARM_BUZZER_PIN,HIGH);
     alarmResetDebounceTimer = 0;
     alarmReset = true;
   }
