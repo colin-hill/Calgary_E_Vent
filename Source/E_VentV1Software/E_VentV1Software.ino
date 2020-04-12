@@ -36,7 +36,7 @@ RoboClaw motorController(&Serial2, MOTOR_CONTROLLER_TIMEOUT);
 //#define SERIAL_DEBUG //Comment this out if not debugging, used for visual confirmation of state changes
 //#define NO_INPUT_DEBUG //Comment this out if not debugging, used to spoof input parameters at startup when no controls are present
 
-const char softwareVersion[] = "VERSION 0.1";
+const char softwareVersion[] = "VER. 2020.4.12";
 
 //------------------------------------------------------------------------------
 
@@ -187,7 +187,7 @@ void loop() {
         displayUserParameters(currentlySelectedParameter, ventilatorDisplay, state.machine_state, state.vc_state, state.ac_state, state.peak_pressure, state.peep_pressure, LCD_MAX_STRING, userParameters);
     }
     //TODO: Add in alarm display
-    update_motor_settings(state);
+    
 
     // Read in values for state
     update_state(state);
@@ -206,6 +206,8 @@ void loop() {
 #endif //SERIAL_DEBUG
 
         state.machine_state = check_mode();
+
+        update_motor_settings(state);
     }
 
     else if (ACMode == state.machine_state) {

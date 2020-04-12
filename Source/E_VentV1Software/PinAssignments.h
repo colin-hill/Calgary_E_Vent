@@ -23,7 +23,7 @@ const int VENT_LCD_DB7          = 41;
 
 //Digital Inputs
 const int ALARM_SWITCH_PIN      = 18;
-const int MODE_SWITCH_PIN       = 38;
+const int MODE_SWITCH_PIN       = 39;
 const int LIMIT_SWITCH_PIN		  = 10;
 
 // Alarm pins
