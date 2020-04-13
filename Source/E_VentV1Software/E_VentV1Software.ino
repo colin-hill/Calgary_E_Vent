@@ -241,4 +241,8 @@ void alarmResetISR(){
     alarmResetDebounceTimer = 0;
     alarmReset = true;
   }
+  if(!(state.errors)){
+	alarmDisplay.begin(LCD_COLUMNS, LCD_ROWS);
+    ventilatorDisplay.begin(LCD_COLUMNS, LCD_ROWS);
+  }
 }
