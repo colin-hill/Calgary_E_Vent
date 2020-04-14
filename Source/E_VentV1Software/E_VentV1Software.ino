@@ -82,26 +82,15 @@ float expirationTime;
 float motorReturnTime;
 
 
-
-//------------------------------------------------------------------------------
-
-//Timer Variables--------------------------------------------------------------------------------------------------------
+// Timer Variables--------------------------------------------------------------------------------------------------------
 elapsedMillis parameterSetDebounceTimer;
 elapsedMillis alarmResetDebounceTimer;
-elapsedMillis breathTimer;
 
-//Enumerators------------------------------------------------------------------------------------------------------------
-machineStates machineState = Startup;
-zeroingStates zeroingState = CommandHome;
-acModeStates acModeState   = ACStart;
-vcModeStates vcModeState   = VCStart;
-//------------------------------------------------------------------------------
-
+// State for the ventilator.
 VentilatorState state;
 
 
 void setup() {
-
 #ifdef SERIAL_DEBUG
     Serial.begin(9600);
     Serial.println("Initialization starting...");
@@ -162,9 +151,8 @@ void setup() {
     state.machine_state = BreathLoopStart;
     motorController.SetEncM1(MOTOR_ADDRESS, 0);
 #endif //Set the startup position as zero
-
-
 }
+
 
 void loop() {
     state = handle_motor(motorController, state);
@@ -191,7 +179,6 @@ void loop() {
     // TODO: factor out into a function and turn into switch statement.
     if (MotorZeroing == state.machine_state){
         state = motor_zeroing_step(state);
-
     }
     else if (BreathLoopStart == state.machine_state) { // BreathLoopStart
 #ifdef SERIAL_DEBUG
