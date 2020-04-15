@@ -28,7 +28,7 @@ void updateParameterTempValue(SelectedParameter &currentlySelectedParameter,
 void setParameters(SelectedParameter &currentlySelectedParameter,
     volatile boolean &parameterSet, UserParameter *userParamter);
 
-VentilatorState updateStateUserParameters(VentilatorState &state, SelectedParameter &currentlySelectedParameter,volatile boolean &parameterSet,
+void updateStateUserParameters(VentilatorState &state, SelectedParameter &currentlySelectedParameter,volatile boolean &parameterSet,
     Encoder &parameterSelectEncoder, UserParameter *userParameters, const uint8_t NUM_USER_PARAMETERS);
 
 void displayUserParameters(SelectedParameter &currentlySelectedParameter, LiquidCrystal &displayName, machineStates machineState, vcModeStates vcState, acModeStates acState,
@@ -36,7 +36,7 @@ void displayUserParameters(SelectedParameter &currentlySelectedParameter, Liquid
 
 void displayAlarmParameters(SelectedParameter &currentlySelectedParameter, LiquidCrystal &displayName,UserParameter *userParamters);
 
-VentilatorState setStateParameters(VentilatorState &state, UserParameter *userParameters);
+void setStateParameters(VentilatorState &state, UserParameter *userParameters);
 
 void parameterSetISR();
 

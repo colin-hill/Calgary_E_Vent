@@ -167,7 +167,7 @@ void loop() {
     state = handle_motor(motorController, state);
 
     //Update the state user input parameters
-    state = updateStateUserParameters(state, currentlySelectedParameter, parameterSet, parameterSelectEncoder,
+    updateStateUserParameters(state, currentlySelectedParameter, parameterSet, parameterSelectEncoder,
 	userParameters, NUM_USER_PARAMETERS);
 
     //LCD display internal variables and regular screen
@@ -195,6 +195,7 @@ void loop() {
 #endif //SERIAL_DEBUG
 
         state.machine_state = check_mode();
+        setStateParameters(state, userParameters); //Must be before update_motor_settings
         update_motor_settings(state);
     }
     else if (ACMode == state.machine_state) {

@@ -14,14 +14,14 @@ void setUpParameterSelectButtons(UserParameter *userParameters, const uint8_t NU
 
 }
 
-VentilatorState updateStateUserParameters(VentilatorState &state, SelectedParameter &currentlySelectedParameter, volatile boolean &parameterSet,
+void updateStateUserParameters(VentilatorState &state, SelectedParameter &currentlySelectedParameter, volatile boolean &parameterSet,
                                           Encoder &parameterSelectEncoder, UserParameter *userParameters, const uint8_t NUM_USER_PARAMETERS)
 {
     setParameters(currentlySelectedParameter, parameterSet, userParameters);
     updateParameterTempValue(currentlySelectedParameter, parameterSelectEncoder,userParameters);
     updateSelectedParameter(currentlySelectedParameter, parameterSelectEncoder,
                             userParameters, NUM_USER_PARAMETERS);
-    return setStateParameters(state, userParameters);
+    return;
 }
 
 void updateSelectedParameter(SelectedParameter &currentlySelectedParameter, 
@@ -203,7 +203,7 @@ void displayAlarmParameters(SelectedParameter &currentlySelectedParameter, Liqui
     }
 }
 
-VentilatorState setStateParameters(VentilatorState &state, UserParameter *userParameters){	
+void setStateParameters(VentilatorState &state, UserParameter *userParameters){	
     SelectedParameter selectedParameter = e_ThresholdPressure; //TODO: Find a better way to access the array
     state.ac_threshold_pressure = userParameters[(int)selectedParameter].value;
     selectedParameter = e_BPM;
@@ -215,7 +215,7 @@ VentilatorState setStateParameters(VentilatorState &state, UserParameter *userPa
     selectedParameter = e_InspirationTime;
     state.inspiration_time = userParameters[(int)selectedParameter].value;
   
-    return state;
+    return;
 }
 
 /*
