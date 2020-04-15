@@ -13,10 +13,10 @@
 const long int QP_TO_ZEROPOINT = 550; //Quadrature pulses from limit switch to bag edge
 const long int POSITION_TOLERANCE = 50; //Removing this for the time being
 const float QP_AT_FULL_STROKE = 500; //Quadrature pulses at 100% TV that occurs from zeropoint
-const float MOTOR_RETURN_FACTOR = 0.1; // Percent of nominal exalation time used to return the motor to zeropoint
+const float MOTOR_RETURN_FACTOR = 0.2; // Percent of nominal exalation time used to return the motor to zeropoint
 const long int MOTOR_ZEROING_SPEED = 270;
 const long int MOTOR_HOMING_SPEED = MOTOR_ZEROING_SPEED; //QPPS for homing
-const float ZEROING_TIME = 5.0; // TODO set real time
+const float ZEROING_TIME = 4.0; // TODO set real time
 const float HOMING_TIMEOUT = 10.0;//
 
 const long int ACCEL = 500000;

@@ -73,7 +73,7 @@ VentilatorState motorZeroingWait(VentilatorState state) {
 
     
 
-    if (elapsed_time(state) > ZEROING_TIME) {
+    if (elapsed_time(state) > ZEROING_TIME*S_TO_MS) {
 
        	state.zeroing_state = MotorZero;
     }

@@ -23,6 +23,7 @@
 #include "PinAssignments.h"
 #include "Motor.h"
 #include "RoboClaw.h"
+#include "avr/wdt.h"
 
 //Begin User Defined Section----------------------------------------------------
 
@@ -91,6 +92,9 @@ VentilatorState state;
 
 
 void setup() {
+  
+  wdt_disable();
+  
 #ifdef SERIAL_DEBUG
     Serial.begin(9600);
     Serial.println("Initialization starting...");
@@ -151,10 +155,15 @@ void setup() {
     state.machine_state = BreathLoopStart;
     motorController.SetEncM1(MOTOR_ADDRESS, 0);
 #endif //Set the startup position as zero
+
+  wdt_enable(WDTO_500MS);
 }
 
 
 void loop() {
+  
+   wdt_reset();
+  
     state = handle_motor(motorController, state);
 
     //Update the state user input parameters
@@ -213,7 +222,6 @@ void parameterSetISR() {
 }
 
 void alarmResetISR(){
-<<<<<<< HEAD
 
   if(alarmResetDebounceTimer > (0.25*S_TO_MS)){
     //digitalWrite(ALARM_BUZZER_PIN,HIGH);
@@ -224,11 +232,5 @@ void alarmResetISR(){
 	alarmDisplay.begin(LCD_COLUMNS, LCD_ROWS);
     ventilatorDisplay.begin(LCD_COLUMNS, LCD_ROWS);
   }
-=======
-    if (alarmResetDebounceTimer > (0.25*S_TO_MS)) {
-	//digitalWrite(ALARM_BUZZER_PIN,HIGH);
-	alarmResetDebounceTimer = 0;
-	alarmReset = true;
-    }
->>>>>>> f012022600c619f1c763cf63dcc4f4129a14233e
+
 }
