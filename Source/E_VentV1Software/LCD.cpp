@@ -3,13 +3,14 @@
 //Alarm Display Functions
 
 void displayNoAlarm(LiquidCrystal &displayName, float highPressure, float lowPressure, float highPEEP, float lowPEEP, float lowPlateau, const int LCD_MAX_STRING) {
-        char alarmStr[LCD_MAX_STRING];
+    
+    char alarmStr[LCD_MAX_STRING];
 	
 	int displayHighPressure = roundAndCast(highPressure);
 	int displayLowPressure = roundAndCast(lowPressure);
 	int displayHighPEEP = roundAndCast(highPEEP);
 	int displayLowPEEP = roundAndCast(lowPEEP);
-	int displayLowPlateau = roundAndCast(lowPlateau);
+	//int displayLowPlateau = roundAndCast(lowPlateau);
 
 	displayName.clear();
 
@@ -27,9 +28,9 @@ void displayNoAlarm(LiquidCrystal &displayName, float highPressure, float lowPre
 	displayName.write(alarmStr);
 
         // Fourth line
-	displayName.setCursor(0,3);
-	snprintf(alarmStr, LCD_MAX_STRING, "PLATEAU MIN=%6dCM", displayLowPlateau);
-	displayName.write(alarmStr);
+	//displayName.setCursor(0,3);
+	//snprintf(alarmStr, LCD_MAX_STRING, "PLATEAU MIN=%6dCM", displayLowPlateau);
+	//displayName.write(alarmStr);
 }
 
 
@@ -273,7 +274,7 @@ void displayVentilationParameters(LiquidCrystal &displayName,
 								  acModeStates acState, 
 								  float breathsPerMinute, float thresholdPressure, 
 								  float tidalVolume, float inspirationTime, 
-								  float inspirationPause, float measuredPIP, 
+								  float livePressure, float measuredPIP, 
 								  float measuredPlateau, const int LCD_MAX_STRING) {
 
 	int displayBPM = roundAndCast(breathsPerMinute);
@@ -281,8 +282,7 @@ void displayVentilationParameters(LiquidCrystal &displayName,
 	int displayTV = roundAndCast(tidalVolume);
 	int displayITFirstDigit = (int) inspirationTime;
 	int displayITSecondDigit = getFirstDigitPastDecimal(inspirationTime);
-	int displayIPFirstDigit = getFirstDigitPastDecimal(inspirationPause);
-	int displayIPSecondDigit = getSecondDigitPastDecimal(inspirationPause);
+	int displayMeasuredPressure = roundAndCast(livePressure);
 	int displayPIP = roundAndCast(measuredPIP);
 	int displayPlateau = roundAndCast(measuredPlateau);
 	int displayVCStateCode = vcCodeAssignment(vcState);
@@ -309,7 +309,7 @@ void displayVentilationParameters(LiquidCrystal &displayName,
 
 	snprintf(parameterDispL1, LCD_MAX_STRING, "MODE:%-3s|BPM=%2d  %1c%1d%1d", displayVentilatorMode, displayBPM, displayMachineStateCode, displayACStateCode, displayVCStateCode);
 	snprintf(parameterDispL2, LCD_MAX_STRING, "TP=%2dCM |TV=%3d%%", displayThresholdPressure, displayTV);
-	snprintf(parameterDispL3, LCD_MAX_STRING, "IT=%1d.%1ds |PAUSE 0.%1d%1ds", displayITFirstDigit, displayITSecondDigit, displayIPFirstDigit, displayIPSecondDigit);
+	snprintf(parameterDispL3, LCD_MAX_STRING, "IT=%1d.%1ds |PRESS=%3dCM", displayITFirstDigit, displayITSecondDigit, displayMeasuredPressure);
 	snprintf(parameterDispL4, LCD_MAX_STRING, "PIP=%2dCM|PEEP=%2dCM", displayPIP, displayPlateau);
 
 	displayName.clear();

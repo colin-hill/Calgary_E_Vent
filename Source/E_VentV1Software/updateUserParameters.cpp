@@ -149,7 +149,7 @@ void displayUserParameters(SelectedParameter &currentlySelectedParameter, Liquid
 
     default:
         displayVentilationParameters(displayName, machineState, vcState , acState, 
-                                     bpm, thresholdPressure, tidalVolume, inspirationTime, plateauPauseTime, 
+                                     bpm, thresholdPressure, tidalVolume, inspirationTime, 99, 
                                      measuredPIP, measuredPlateau, LCD_MAX_STRING);
     }
 }

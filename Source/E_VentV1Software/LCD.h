@@ -69,7 +69,7 @@ void displayVentilationParameters(LiquidCrystal &displayName,
 								  acModeStates acState, 
 								  float breathsPerMinute, float thresholdPressure, 
 								  float tidalVolume, float inspirationTime, 
-								  float inspirationPause, float measuredPIP, 
+								  float livePressure, float measuredPIP, 
 								  float measuredPlateau, const int LCD_MAX_STRING);
 
 void displayStartupScreen(LiquidCrystal &displayName, const char softwareVersion[], const int LCD_MAX_STRING); 
