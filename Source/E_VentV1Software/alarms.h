@@ -20,7 +20,7 @@
 const float ALARM_SOUND_LENGTH = 0.5; //Seconds
 
 // High PIP Alarm Definitions----------------
-const float MAX_HIGH_PIP_ALARM = 40; //cmH2O
+const float MAX_HIGH_PIP_ALARM = 70; //cmH2O
 const float MIN_HIGH_PIP_ALARM = 10; //cmH2O
 //------------------------------------------
 
