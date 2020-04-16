@@ -1,5 +1,5 @@
 #define SERIAL_DEBUG //Comment this out if not debugging, used for visual confirmation of state changes
-#define NO_INPUT_DEBUG //Comment this out if not debugging, used to spoof input parameters at startup when no controls are present
+//#define NO_INPUT_DEBUG //Comment this out if not debugging, used to spoof input parameters at startup when no controls are present
 //#define NO_LIMIT_SWITCH_DEBUG
 
 #include <LiquidCrystal.h>
@@ -97,7 +97,7 @@ void setup() {
   
 #ifdef SERIAL_DEBUG
     Serial.begin(9600);
-    Serial.println("Initialization starting...");
+    Serial.println(F("Initialization starting..."));
 #endif //SERIAL_DEBUG
 
     setupLimitSwitch();
@@ -130,22 +130,7 @@ void setup() {
     //LCD Startup hold message
     displayStartupHoldScreen(ventilatorDisplay);
 
-#ifdef SERIAL_DEBUG
-    Serial.begin(9600);
-    Serial.println("StartupHold");
-    Serial.println(state.machine_state);
-#endif //SERIAL_DEBUG
 
-
-#ifndef NO_INPUT_DEBUG
-    while(StartupHold == state.machine_state) {
-	//Wait for interupt routine triggered by user
-
-        //TODO: Declan add interrupt flag to change state
-
-        delay(250);
-    }
-#endif //Skip hardware lockout for debug
 
 #ifndef NO_LIMIT_SWITCH_DEBUG
     state.machine_state = MotorZeroing;
@@ -164,7 +149,7 @@ void loop() {
   
    wdt_reset();
   
-    state = handle_motor(motorController, state);
+    handle_motor(motorController, state);
 
     //Update the state user input parameters
     updateStateUserParameters(state, currentlySelectedParameter, parameterSet, parameterSelectEncoder,
@@ -187,11 +172,11 @@ void loop() {
 
     // TODO: factor out into a function and turn into switch statement.
     if (MotorZeroing == state.machine_state){
-        state = motor_zeroing_step(state);
+        motor_zeroing_step(state);
     }
     else if (BreathLoopStart == state.machine_state) { // BreathLoopStart
 #ifdef SERIAL_DEBUG
-        Serial.println("Breath Loop Start");
+        Serial.println(F("Breath Loop Start"));
 #endif //SERIAL_DEBUG
 
         state.machine_state = check_mode();
@@ -199,16 +184,16 @@ void loop() {
         update_motor_settings(state);
     }
     else if (ACMode == state.machine_state) {
-        state = ac_mode_step(state, userParameters);
+        ac_mode_step(state, userParameters);
     }
     else if (VCMode == state.machine_state) {
-        state = vc_mode_step(state, userParameters);
+        vc_mode_step(state, userParameters);
     }
     else if (FailureMode == state.machine_state) {
-        state = failure_mode(state);
+        failure_mode(state);
     }
 
-    Serial.print("AC State: ");
+    Serial.print(F("AC State: "));
     Serial.println(state.ac_state);
     state = handle_alarms(alarmReset, state, alarmDisplay, userParameters, currentlySelectedParameter);
 }

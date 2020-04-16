@@ -11,13 +11,13 @@
 
 // No globals here. Want these components to be testable in isolation.
 
-VentilatorState acStart(VentilatorState state) {
+void acStart(VentilatorState &state) {
     assert(state.ac_state == ACStart);
 
     //state.errors = 0;
 
 #ifdef SERIAL_DEBUG
-    Serial.println("ACStart");
+    Serial.println(F("ACStart"));
 #endif //SERIAL_DEBUG
 
     //TODO: Reset alarms as outlined on state machine
@@ -27,15 +27,15 @@ VentilatorState acStart(VentilatorState state) {
     state.current_loop_peak_pressure = 0;
 
     state.ac_state = ACInhaleWait;
-    return state;
+    return;
 }
 
 
-VentilatorState acInhaleWait(VentilatorState state) {
+void acInhaleWait(VentilatorState &state) {
     assert(state.ac_state == ACInhaleWait);
 
 #ifdef SERIAL_DEBUG
-    Serial.print("ACInhaleWait: ");
+    Serial.print(F("ACInhaleWait: "));
     Serial.println(elapsed_time(state));
 #endif //SERIAL_DEBUG
 
@@ -49,31 +49,31 @@ VentilatorState acInhaleWait(VentilatorState state) {
         state.ac_state = ACInhaleCommand;
     }
 
-    return state;
+    return;
 }
 
 
-VentilatorState acInhaleCommand(VentilatorState state) {
+void acInhaleCommand(VentilatorState &state) {
     assert(state.ac_state == ACInhaleCommand);
 
 #ifdef SERIAL_DEBUG
-    Serial.println("ACInhaleCommand");
+    Serial.println(F("ACInhaleCommand"));
 #endif //SERIAL_DEBUG
 
     reset_timer(state);
 
     state.ac_state = ACInhale;
-    return state;
+    return;
 }
 
 
-VentilatorState acInhale(VentilatorState state, UserParameter *userParameters) {
+void acInhale(VentilatorState &state, UserParameter *userParameters) {
     assert(state.ac_state == ACInhale);
 
 #ifdef SERIAL_DEBUG
-    Serial.print("ACInhale: ");
+    Serial.print(F("ACInhale: "));
     Serial.println(elapsed_time(state));
-    Serial.print("Desired Inhale Time: ");
+    Serial.print(F("Desired Inhale Time: "));
     Serial.println(state.inspiration_time);
 #endif //SERIAL_DEBUG
 
@@ -97,19 +97,19 @@ VentilatorState acInhale(VentilatorState state, UserParameter *userParameters) {
         state.ac_state = ACInhaleAbort;
     }
 
-    return state;
+    return;
 }
 
 
 // Unused parameter warning for expiration_time due to SERIAL_DEBUG
 // TODO: Do we really want to print exhalation time in debug here?
-VentilatorState acInhaleAbort(VentilatorState state, UserParameter *userParameters) {
+void acInhaleAbort(VentilatorState &state, UserParameter *userParameters) {
     assert(state.ac_state == ACInhaleAbort);
 
 #ifdef SERIAL_DEBUG
-    Serial.print("ACInhaleAbort: ");
+    Serial.print(F("ACInhaleAbort: "));
     Serial.println(elapsed_time(state));
-    Serial.print("Desired Exhale Time: ");
+    Serial.print(F("Desired Exhale Time: "));
     //Serial.println(expiration_time);
 #endif //SERIAL_DEBUG
 
@@ -117,17 +117,17 @@ VentilatorState acInhaleAbort(VentilatorState state, UserParameter *userParamete
     state.errors |= check_high_pressure(state.pressure,userParameters);
     state.ac_state = ACExhale;
 
-    return state;
+    return;
 }
 
 
-VentilatorState acPeak(VentilatorState state,UserParameter *userParameters) {
+void acPeak(VentilatorState &state, UserParameter *userParameters) {
     assert(state.ac_state == ACPeak);
 
 #ifdef SERIAL_DEBUG
-    Serial.print("ACPeak: ");
+    Serial.print(F("ACPeak: "));
     Serial.println(elapsed_time(state));
-    Serial.print("Desired Peak Time: ");
+    Serial.print(F("Desired Peak Time: "));
     Serial.println(state.plateau_pause_time);
 #endif //SERIAL_DEBUG
 
@@ -137,28 +137,28 @@ VentilatorState acPeak(VentilatorState state,UserParameter *userParameters) {
     
     state.errors |= check_pressure(state.pressure, userParameters);
 
-    return state;
+    return;
 }
 
-VentilatorState acExhaleCommand(VentilatorState state) {
+void acExhaleCommand(VentilatorState &state) {
     assert(state.ac_state == ACExhaleCommand);
 #ifdef SERIAL_DEBUG
-    Serial.println("ACExhaleCommand");
+    Serial.println(F("ACExhaleCommand"));
 #endif //SERIAL_DEBUG
 
     reset_timer(state);
     state.plateau_pressure = state.pressure;
     state.ac_state = ACExhale;
 
-    return state;
+    return;
 }
 
-VentilatorState acExhale(VentilatorState state) {
+void acExhale(VentilatorState &state) {
     assert(state.ac_state == ACExhale);
 #ifdef SERIAL_DEBUG
-    Serial.print("ACExhale: ");
+    Serial.print(F("ACExhale: "));
     Serial.println(elapsed_time(state));
-    Serial.print("Desired Exhale Time: ");
+    Serial.print(F("Desired Exhale Time: "));
     //Serial.println(expiration_time);
 #endif //SERIAL_DEBUG
 
@@ -166,14 +166,14 @@ VentilatorState acExhale(VentilatorState state) {
         state.ac_state      = ACReset;
     }
 
-    return state;
+    return;
 }
 
 
-VentilatorState acReset(VentilatorState state, UserParameter *userParameters) {
+void acReset(VentilatorState &state, UserParameter *userParameters) {
     assert(state.ac_state == ACReset);
 #ifdef SERIAL_DEBUG
-    Serial.println("ACReset");
+    Serial.println(F("ACReset"));
 #endif //SERIAL_DEBUG
 
     //Update and check PEEP
@@ -182,39 +182,48 @@ VentilatorState acReset(VentilatorState state, UserParameter *userParameters) {
 
     state.machine_state = BreathLoopStart;
     state.ac_state = ACStart;
-    return state;
+    return;
 }
 
 
-VentilatorState ac_mode_step(VentilatorState state, UserParameter *userParameters) {
+void ac_mode_step(VentilatorState &state, UserParameter *userParameters) {
     switch(state.ac_state) {
     case ACStart:
-        return acStart(state);
+        acStart(state);
+        return;
     case ACInhaleWait:
-        return acInhaleWait(state);
+        acInhaleWait(state);
+        return;
     case ACInhaleCommand:
-        return acInhaleCommand(state);
+        acInhaleCommand(state);
+        return;
     case ACInhale:
-        return acInhale(state, userParameters);
+        acInhale(state, userParameters);
+        return;
     case ACInhaleAbort:
-        return acInhaleAbort(state, userParameters);
+        acInhaleAbort(state, userParameters);
+        return;
     case ACPeak:
-        return acPeak(state, userParameters);
+        acPeak(state, userParameters);
+        return;
     case ACExhaleCommand:
-        return acExhaleCommand(state);
+        acExhaleCommand(state);
+        return;
     case ACExhale:
-        return acExhale(state);
+        acExhale(state);
+        return;
     case ACReset:
-        return acReset(state, userParameters);
+        acReset(state, userParameters);
+        return;
     default:
         // Should not happen
 #ifdef SERIAL_DEBUG
-        Serial.println("Invalid AC state!");
+        Serial.println(F("Invalid AC state!"));
 #endif //SERIAL_DEBUG
         break;
     }
 
-    return state;
+    return;
 }
 
 

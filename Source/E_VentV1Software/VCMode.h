@@ -25,7 +25,7 @@
    Output:
    - returns new state.
  */
-VentilatorState vc_mode_step(VentilatorState state, UserParameter *userParameters);
+void vc_mode_step(VentilatorState &state, UserParameter *userParameters);
 
 
 /* Get a debug code for the current vcModeState.
@@ -46,20 +46,20 @@ int vcCodeAssignment(vcModeStates vcState);
 
 // TODO: These need to be documented with pre and postconditions.
 // These pre/post conditions currently exist in a spreadsheet.
-VentilatorState vcStart(VentilatorState state);
+void vcStart(VentilatorState &state);
 
-VentilatorState vcInhaleCommand(VentilatorState state);
+void vcInhaleCommand(VentilatorState &state);
 
-VentilatorState vcInhale(VentilatorState state,UserParameter *userParameters);
+void vcInhale(VentilatorState &state, UserParameter *userParameters);
 
-VentilatorState vcInhaleAbort(VentilatorState state, UserParameter *userParameters);
+void vcInhaleAbort(VentilatorState &state, UserParameter *userParameters);
 
-VentilatorState vcPeak(VentilatorState state, UserParameter *userParameters);
+void vcPeak(VentilatorState &state, UserParameter *userParameters);
 
-VentilatorState vcExhaleCommand(VentilatorState state);
+void vcExhaleCommand(VentilatorState &state);
 
-VentilatorState vcExhale(VentilatorState state);
+void vcExhale(VentilatorState &state);
 
-VentilatorState vcReset(VentilatorState state);
+void vcReset(VentilatorState &state);
 
 #endif

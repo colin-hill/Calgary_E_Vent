@@ -24,7 +24,7 @@
    - returns new state.
  */
 
-VentilatorState ac_mode_step(VentilatorState state, UserParameter *userParameters);
+void ac_mode_step(VentilatorState &state, UserParameter *userParameters);
 
 /* Get a debug code for the current acModeState.
 
@@ -45,25 +45,25 @@ int acCodeAssignment(acModeStates acState);
 
 // TODO: THESE MUST BE DOCUMENTED!
 
-VentilatorState acStart(VentilatorState state);
+void acStart(VentilatorState &state);
 
-VentilatorState acInhaleWait(VentilatorState state);
+void acInhaleWait(VentilatorState &state);
 
 
 
-VentilatorState acInhaleCommand(VentilatorState state);
+void acInhaleCommand(VentilatorState &state);
 
-VentilatorState acInhale(VentilatorState state, UserParameter *userParameters);
+void acInhale(VentilatorState &state, UserParameter *userParameters);
 
 // Unused parameter warning for expirationTime due to SERIAL_DEBUG
 // TODO: should this be inspiration time?
-VentilatorState acInhaleAbort(VentilatorState state, UserParameter *userParameters);
+void acInhaleAbort(VentilatorState &state, UserParameter *userParameters);
 
-VentilatorState acPeak(VentilatorState state, UserParameter *userParameters);
+void acPeak(VentilatorState &state, UserParameter *userParameters);
 
-VentilatorState acExhaleCommand(VentilatorState state);
+void acExhaleCommand(VentilatorState &state);
 
-VentilatorState acExhale(VentilatorState state);
+void acExhale(VentilatorState &state);
 
-VentilatorState acReset(VentilatorState state, UserParameter *userParameters);
+void acReset(VentilatorState &state, UserParameter *userParameters);
 #endif

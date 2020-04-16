@@ -13,13 +13,13 @@
 
 // No globals here. Want these components to be testable in isolation.
 
-VentilatorState vcStart(VentilatorState state) {
+void vcStart(VentilatorState &state) {
     assert(state.vc_state == VCStart);
 
     //state.errors = 0;
 
 #ifdef SERIAL_DEBUG
-    Serial.println("VCStart");
+    Serial.println(F("VCStart"));
 #endif //SERIAL_DEBUG
 
     //TODO: Reset alarms as outlined on state machine
@@ -31,31 +31,30 @@ VentilatorState vcStart(VentilatorState state) {
     // Set next state.
     state.vc_state = VCInhaleCommand;
 
-    return state;
+    return;
 }
 
-
-VentilatorState vcInhaleCommand(VentilatorState state) {
+void vcInhaleCommand(VentilatorState &state) {
     assert(state.vc_state == VCInhaleCommand);
 
 #ifdef SERIAL_DEBUG
-    Serial.println("VCInhaleCommand");
+    Serial.println(F("VCInhaleCommand"));
 #endif //SERIAL_DEBUG
 
     // TODO: Set motor speed and position
 
     state.vc_state = VCInhale;
-    return state;
+    return;
 }
 
 
-VentilatorState vcInhale(VentilatorState state, UserParameter *userParameters) {
+void vcInhale(VentilatorState &state, UserParameter *userParameters) {
     assert(state.vc_state == VCInhale);
 
 #ifdef SERIAL_DEBUG
-    Serial.print("VCInhale: ");
+    Serial.print(F("VCInhale: "));
     Serial.println(elapsed_time(state));
-    Serial.print("Desired Inhale Time: ");
+    Serial.print(F("Desired Inhale Time: "));
     Serial.println(state.inspiration_time);
 #endif //SERIAL_DEBUG
 
@@ -82,20 +81,20 @@ VentilatorState vcInhale(VentilatorState state, UserParameter *userParameters) {
         state.vc_state = VCInhaleAbort;
     }
 
-    return state;
+    return;
 }
 
 
 // Unused parameter warning for expiration_time due to SERIAL_DEBUG
-VentilatorState vcInhaleAbort(VentilatorState state, UserParameter *userParameters) {
+void vcInhaleAbort(VentilatorState &state, UserParameter *userParameters) {
     assert(state.vc_state == VCInhaleAbort);
 
 #ifdef SERIAL_DEBUG
-    Serial.print("VCInhaleAbort: ");
+    Serial.print(F("VCInhaleAbort: "));
     Serial.println(elapsed_time(state));
     // TODO: should this really be expiration time?
     // Seems like this should be inspiration time?
-    Serial.print("Desired Exhale Time: ");
+    Serial.print(F("Desired Exhale Time: "));
     //Serial.println(expiration_time);
 #endif //SERIAL_DEBUG
 
@@ -103,17 +102,17 @@ VentilatorState vcInhaleAbort(VentilatorState state, UserParameter *userParamete
     state.errors |= check_high_pressure(state.pressure, userParameters);
     state.vc_state = VCExhale;
 
-    return state;
+    return;
 }
 
 
-VentilatorState vcPeak(VentilatorState state, UserParameter *userParameters) {
+void vcPeak(VentilatorState &state, UserParameter *userParameters) {
     assert(state.vc_state == VCPeak);
 
 #ifdef SERIAL_DEBUG
-    Serial.print("VCPeak: ");
+    Serial.print(F("VCPeak: "));
     Serial.println(elapsed_time(state));
-    Serial.print("Desired Peak Time: ");
+    Serial.print(F("Desired Peak Time: "));
     Serial.println(state.plateau_pause_time);
 #endif //SERIAL_DEBUG
     // TODO: Hold motor in position********
@@ -123,16 +122,16 @@ VentilatorState vcPeak(VentilatorState state, UserParameter *userParameters) {
     }
 
     state.errors |= check_pressure(state.pressure, userParameters);
-    return state;
+    return;
 }
 
 
 
-VentilatorState vcExhaleCommand(VentilatorState state) {
+void vcExhaleCommand(VentilatorState &state) {
     assert(state.vc_state == VCExhaleCommand);
 
 #ifdef SERIAL_DEBUG
-    Serial.println("VCExhaleCommand");
+    Serial.println(F("VCExhaleCommand"));
 #endif //SERIAL_DEBUG
 
     // TODO: Set motor speed and position
@@ -140,17 +139,17 @@ VentilatorState vcExhaleCommand(VentilatorState state) {
     state.plateau_pressure = state.pressure;
     state.vc_state = VCExhale;
 
-    return state;
+    return;
 }
 
 
-VentilatorState vcExhale(VentilatorState state) {
+void vcExhale(VentilatorState &state) {
     assert(state.vc_state == VCExhale);
 
 #ifdef SERIAL_DEBUG
-    Serial.print("VCExhale: ");
+    Serial.print(F("VCExhale: "));
     Serial.println(elapsed_time(state));
-    Serial.print("Desired Exhale Time: ");
+    Serial.print(F("Desired Exhale Time: "));
     Serial.println(state.motor_return_time);
 #endif //SERIAL_DEBUG
     // TODO: Set motor velocity and desired position
@@ -159,16 +158,16 @@ VentilatorState vcExhale(VentilatorState state) {
         state.vc_state = VCReset;
     }
 
-    return state;
+    return;
 }
 
 
 // TODO: should this reset timers and stuff like acReset?
-VentilatorState vcReset(VentilatorState state, UserParameter *userParameters) {
+void vcReset(VentilatorState &state, UserParameter *userParameters) {
     assert(state.vc_state == VCReset);
 
 #ifdef SERIAL_DEBUG
-    Serial.println("VCReset");
+    Serial.println(F("VCReset"));
 #endif //SERIAL_DEBUG
 
     //Update and check PEEP
@@ -178,37 +177,45 @@ VentilatorState vcReset(VentilatorState state, UserParameter *userParameters) {
     state.machine_state = BreathLoopStart;
     state.vc_state = VCStart;
 
-    return state;
+    return;
 }
 
 
-VentilatorState vc_mode_step(VentilatorState state, UserParameter *userParameters) {
+void vc_mode_step(VentilatorState &state, UserParameter *userParameters) {
     switch(state.vc_state) {
     case VCStart:
-        return vcStart(state);
+        vcStart(state);
+        return;
     case VCInhaleCommand:
-        return vcInhaleCommand(state);
+        vcInhaleCommand(state);
+        return;
     case VCInhale:
-        return vcInhale(state, userParameters);
+        vcInhale(state, userParameters);
+        return;
     case VCInhaleAbort:
-        return vcInhaleAbort(state, userParameters);
+        vcInhaleAbort(state, userParameters);
+        return;
     case VCPeak:
-        return vcPeak(state, userParameters);
+        vcPeak(state, userParameters);
+        return;
     case VCExhaleCommand:
-        return vcExhaleCommand(state);
+        vcExhaleCommand(state);
+        return;
     case VCExhale:
-        return vcExhale(state);
+        vcExhale(state);
+        return;
     case VCReset:
-        return vcReset(state,userParameters);
+        vcReset(state,userParameters);
+        return;
     default:
         // Should not happen
 #ifdef SERIAL_DEBUG
-        Serial.println("Invalid VC state!");
+        Serial.println(F("Invalid VC state!"));
 #endif //SERIAL_DEBUG
         break;
     }
 
-    return state;
+    return;
 }
 
 

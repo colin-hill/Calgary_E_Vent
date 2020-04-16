@@ -15,24 +15,24 @@ void setupLimitSwitch(void){
 }
 
 
-VentilatorState commandHome(VentilatorState state) {
+void commandHome(VentilatorState &state) {
     assert(state.zeroing_state == CommandHome);
 #ifdef SERIAL_DEBUG
-    Serial.println("CommandHome");
+    Serial.println(F("CommandHome"));
 #endif //SERIAL_DEBUG
 
     state.zeroing_state = MotorHomingWait;
     reset_timer(state);
 
-    return state;
+    return;
 }
 
-VentilatorState motorHomingWait(VentilatorState state) {
+void motorHomingWait(VentilatorState &state) {
     assert(state.zeroing_state == MotorHomingWait);
 
 #ifdef SERIAL_DEBUG
-    Serial.println("motorHomingWait");
-    Serial.print("Elaspsed time: ");
+    Serial.println(F("motorHomingWait"));
+    Serial.print(F("Elaspsed time: "));
     Serial.println(elapsed_time(state));
 #endif //SERIAL_DEBUG
 
@@ -44,14 +44,14 @@ VentilatorState motorHomingWait(VentilatorState state) {
     	//TODO: Add time out error
     }
 
-    return state;
+    return;
 }
 
-VentilatorState commandZero(VentilatorState state) {
+void commandZero(VentilatorState &state) {
     assert(state.zeroing_state == CommandZero);
 
 #ifdef SERIAL_DEBUG
-    Serial.println("CommandZero");
+    Serial.println(F("CommandZero"));
 #endif //SERIAL_DEBUG
 
     state.zeroing_state = MotorZeroingWait;
@@ -59,15 +59,15 @@ VentilatorState commandZero(VentilatorState state) {
 
     //TODO: Add in motor command to move inwards ZERO_POINT_TICKS at MOTOR_HOME_SPEED
 
-    return state;
+    return;
 }
 
-VentilatorState motorZeroingWait(VentilatorState state) {
+void motorZeroingWait(VentilatorState &state) {
     assert(state.zeroing_state == MotorZeroingWait);
 
 #ifdef SERIAL_DEBUG
-    Serial.println("MotorZeroingWait");
-    Serial.print("Elaspsed time: ");
+    Serial.println(F("MotorZeroingWait"));
+    Serial.print(F("Elaspsed time: "));
     Serial.println(elapsed_time(state));
 #endif //SERIAL_DEBUG
 
@@ -78,14 +78,14 @@ VentilatorState motorZeroingWait(VentilatorState state) {
        	state.zeroing_state = MotorZero;
     }
 
-    return state;
+    return;
 }
 
-VentilatorState motorZero(VentilatorState state) {
+void motorZero(VentilatorState &state) {
     assert(state.zeroing_state == MotorZero);
 
 #ifdef SERIAL_DEBUG    
-    Serial.println("motorZero");
+    Serial.println(F("motorZero"));
 #endif //SERIAL_DEBUG
 
 	//TODO: Add error if motor position is not expected
@@ -96,26 +96,31 @@ VentilatorState motorZero(VentilatorState state) {
 
 	state.machine_state = BreathLoopStart;
 
-	return state;
+	return;
 }
 
-VentilatorState motor_zeroing_step(VentilatorState state) {
+void motor_zeroing_step(VentilatorState &state) {
 
 	switch(state.zeroing_state) {
 	case CommandHome:
-		return commandHome(state);
+		commandHome(state);
+        return;
 	case MotorHomingWait:
-		return motorHomingWait(state);
+		motorHomingWait(state);
+        return;
 	case CommandZero:
-		return commandZero(state);
+		commandZero(state);
+        return;
 	case MotorZeroingWait:
-		return motorZeroingWait(state);
+		motorZeroingWait(state);
+        return;
 	case MotorZero:
-		return motorZero(state);
+		motorZero(state);
+        return;
 	default:
 		//Should not occur
 		break;
 	}
 
-	return state;
+	return;
 }

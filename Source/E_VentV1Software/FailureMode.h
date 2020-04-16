@@ -15,7 +15,7 @@
    Output:
    - none
  */
-VentilatorState failure_mode(VentilatorState state);
+void failure_mode(VentilatorState &state);
 
 
 #endif

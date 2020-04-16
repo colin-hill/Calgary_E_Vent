@@ -16,17 +16,17 @@
 
 void setupLimitSwitch(void);
 
-VentilatorState commandHome(VentilatorState state);
+void commandHome(VentilatorState &state);
 
-VentilatorState motorHomingWait(VentilatorState state);
+void motorHomingWait(VentilatorState &state);
 
-VentilatorState commandZero(VentilatorState state);
+void commandZero(VentilatorState &state);
 
-VentilatorState motorZeroingWait(VentilatorState state);
+void motorZeroingWait(VentilatorState &state);
 
-VentilatorState motorZero(VentilatorState state);
+void motorZero(VentilatorState &state);
 
-VentilatorState motor_zeroing_step(VentilatorState state);
+void motor_zeroing_step(VentilatorState &state);
 
 
 
