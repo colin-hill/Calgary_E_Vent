@@ -59,7 +59,7 @@ const uint16_t DEVICE_FAILURE_ALARM  = 0x01 << 7;
 
 // TODO: THESE FUNCTIONS *MUST* BE TESTED
 
-/* Function to check for high pressure.
+/** Function to check for high pressure.
 
    Input:
    - Takes in the current pressure value
@@ -70,7 +70,7 @@ const uint16_t DEVICE_FAILURE_ALARM  = 0x01 << 7;
 uint16_t check_high_pressure(const float pressure, UserParameter *userParameters);
 
 
-/* Function to check for low pressure.
+/** Function to check for low pressure.
 
    Input:
    - Takes in the current pressure value
@@ -81,7 +81,7 @@ uint16_t check_high_pressure(const float pressure, UserParameter *userParameters
 // TODO we NEVER check for low pressure anywhere!!!!
 uint16_t check_low_pressure(const float pressure, UserParameter *userParameters);
 
-/* Function to check for both high / low pressure.
+/** Function to check for both high / low pressure.
 
    Input:
    - Takes in the current pressure value
@@ -93,7 +93,7 @@ uint16_t check_low_pressure(const float pressure, UserParameter *userParameters)
 uint16_t check_pressure(const float pressure, UserParameter *userParameters);
 
 
-/* Function to check for high peep pressure.
+/** Function to check for high peep pressure.
 
    Input:
    - Takes in the current pressure value
@@ -104,7 +104,7 @@ uint16_t check_pressure(const float pressure, UserParameter *userParameters);
 uint16_t check_high_peep(const float pressure, UserParameter *userParameters);
 
 
-/* Function to check for low peep pressure.
+/** Function to check for low peep pressure.
 
    Input:
    - Takes in the current pressure value
@@ -115,7 +115,7 @@ uint16_t check_high_peep(const float pressure, UserParameter *userParameters);
 uint16_t check_low_peep(const float pressure, UserParameter *userParameters);
 
 
-/* Function to check for both high / low peep pressure.
+/** Function to check for both high / low peep pressure.
 
    Input:
    - Takes in the current pressure value
@@ -133,7 +133,7 @@ uint16_t check_controller_temperature(const uint16_t temperature);
 uint16_t check_motor_position(const long int current_position, const long int expected_position);
 
 
-/* Function to handle alarms
+/** Function to handle alarms
 
    Input:
    - Takes in error flags
