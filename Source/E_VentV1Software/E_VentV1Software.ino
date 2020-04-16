@@ -148,6 +148,10 @@ void setup() {
 void loop() {
   
    wdt_reset();
+
+   Serial.println(millis());
+
+   
   
     handle_motor(motorController, state);
 
@@ -179,9 +183,13 @@ void loop() {
         Serial.println(F("Breath Loop Start"));
 #endif //SERIAL_DEBUG
 
+        alarmDisplay.begin(LCD_COLUMNS, LCD_ROWS);
+        ventilatorDisplay.begin(LCD_COLUMNS, LCD_ROWS);
+
         state.machine_state = check_mode();
         setStateParameters(state, userParameters); //Must be before update_motor_settings
         update_motor_settings(state);
+
     }
     else if (ACMode == state.machine_state) {
         ac_mode_step(state, userParameters);
@@ -214,9 +222,6 @@ void alarmResetISR(){
     alarmResetDebounceTimer = 0;
     alarmReset = true;
   }
-  if(!(state.errors)){
-	alarmDisplay.begin(LCD_COLUMNS, LCD_ROWS);
-    ventilatorDisplay.begin(LCD_COLUMNS, LCD_ROWS);
-  }
+ 
 
 }
