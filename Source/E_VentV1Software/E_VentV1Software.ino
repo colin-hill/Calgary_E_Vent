@@ -72,6 +72,7 @@ UserParameter userParameters[NUM_USER_PARAMETERS] =
      UserParameter(MIN_LOW_PLATEAU_PRESSURE_ALARM, MAX_LOW_PLATEAU_PRESSURE_ALARM, LOW_PLATEAU_PRESSURE_ALARM_INCREMENT, LOW_PLATEAU_PRESSURE_ALARM_SELECT_PIN, LOW_PLATEAU_PRESSURE_ALARM_DEFAULT, e_LowPlateauPressureAlarm) };
 
 volatile boolean alarmReset = false;
+volatile boolean alarmSilent = false;
 // TODO: These are never set?
 // TODO: Do these really have to be globals?
 float measuredPIP;
@@ -86,6 +87,8 @@ float motorReturnTime;
 // Timer Variables--------------------------------------------------------------------------------------------------------
 elapsedMillis parameterSetDebounceTimer;
 elapsedMillis alarmResetDebounceTimer;
+
+elapsedMillis alarmSilentTimer;
 
 // State for the ventilator.
 VentilatorState state;
@@ -103,6 +106,7 @@ void setup() {
     setupLimitSwitch();
     setUpAlarmPins();
     setUpPressureSensor();
+    alarmSilentTimer = 0;
 
     // Motor serial communications startup
     // MotorSerial.begin(9600); //********
@@ -117,18 +121,18 @@ void setup() {
     alarmDisplay.begin(LCD_COLUMNS, LCD_ROWS);
     ventilatorDisplay.begin(LCD_COLUMNS, LCD_ROWS);
 
+    displayAEVStartupScreen(alarmDisplay);
+    displayAEVStartupScreen(ventilatorDisplay);
+
     //Motor Controller Start
     motorController.begin(38400);
 
-    //LCD Display Startup Message for two seconds
-    displayStartupScreen(ventilatorDisplay, softwareVersion, LCD_COLUMNS);
+  
 
     // Set up ventilator state.
     state = get_init_state();
     state.machine_state = StartupHold;
 
-    //LCD Startup hold message
-    displayStartupHoldScreen(ventilatorDisplay);
 
 
 
@@ -140,6 +144,8 @@ void setup() {
     state.machine_state = BreathLoopStart;
     motorController.SetEncM1(MOTOR_ADDRESS, 0);
 #endif //Set the startup position as zero
+
+    delay(3000);
 
   wdt_enable(WDTO_500MS);
 }
@@ -203,7 +209,11 @@ void loop() {
 
     Serial.print(F("AC State: "));
     Serial.println(state.ac_state);
-    state = handle_alarms(alarmReset, state, alarmDisplay, userParameters, currentlySelectedParameter);
+    state = handle_alarms(alarmReset, alarmSilent, state, alarmDisplay, userParameters, currentlySelectedParameter);
+    reset_alarm_silence(alarmSilentTimer, alarmSilent);
+
+
+
 }
 
 //FUNCTIONS
@@ -221,6 +231,8 @@ void alarmResetISR(){
     //digitalWrite(ALARM_BUZZER_PIN,HIGH);
     alarmResetDebounceTimer = 0;
     alarmReset = true;
+    alarmSilent = true;
+    alarmSilentTimer = 0;
   }
  
 

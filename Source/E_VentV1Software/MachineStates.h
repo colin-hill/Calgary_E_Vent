@@ -132,6 +132,8 @@ struct VentilatorState {
     long int current_motor_position;
 
     uint16_t errors;
+
+    
 };
 
 
