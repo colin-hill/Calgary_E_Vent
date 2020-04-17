@@ -104,7 +104,7 @@ void setParameters(SelectedParameter &currentlySelectedParameter,
 }
 
 void displayUserParameters(SelectedParameter &currentlySelectedParameter, LiquidCrystal &displayName, machineStates machineState, vcModeStates vcState, acModeStates acState, 
-                           float measuredPIP, float measuredPlateau, const int LCD_MAX_STRING, UserParameter *userParameters)
+                           float measuredPIP, float measuredPEEP, float currentPressure, const int LCD_MAX_STRING, UserParameter *userParameters)
 { 
     SelectedParameter currentParameter = e_BPM;
     float bpm = userParameters[(int)e_BPM].value;
@@ -149,7 +149,7 @@ void displayUserParameters(SelectedParameter &currentlySelectedParameter, Liquid
 
     default:
         displayVentilationParameters(displayName, machineState, vcState , acState, 
-                                     bpm, thresholdPressure, tidalVolume, inspirationTime, 99, 
+                                     bpm, thresholdPressure, tidalVolume, inspirationTime, currentPressure, 
                                      measuredPIP, measuredPlateau, LCD_MAX_STRING);
     }
 }
