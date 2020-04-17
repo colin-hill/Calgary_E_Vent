@@ -34,7 +34,7 @@ void displayNoAlarm(LiquidCrystal &displayName, float highPressure, float lowPre
 }
 
 
-/*void displayMultipleAlarms(LiquidCrystal &displayName, VentilatorState &state) {
+void displayMultipleAlarms(LiquidCrystal &displayName, VentilatorState &state) {
 
 	const char alarmDispL1[] = "ALARM CONDITION:";
 
@@ -79,7 +79,7 @@ void displayNoAlarm(LiquidCrystal &displayName, float highPressure, float lowPre
 		displayName.write((byte)0);
 	}
 
-}*/
+}
 
 void displayHighPressureAlarm(LiquidCrystal &displayName, float pressureMeasurement, const int LCD_MAX_STRING) {
 	int displayPressure = roundAndCast(pressureMeasurement);
@@ -387,7 +387,7 @@ void displayStartupScreen(LiquidCrystal &displayName, const char softwareVersion
 }
 
 
-/*void displayAEVStartupScreen(LiquidCrystal &displayName) {
+void displayAEVStartupScreen(LiquidCrystal &displayName) {
 
 	displayName.createChar(0,L1_1);
 	displayName.createChar(1,L1_2);
@@ -423,7 +423,7 @@ void displayStartupScreen(LiquidCrystal &displayName, const char softwareVersion
 	displayName.write(parameterDispL3);
 
 
-}*/
+}
 
 void displayStartupHoldScreen(LiquidCrystal &displayName) {
 
