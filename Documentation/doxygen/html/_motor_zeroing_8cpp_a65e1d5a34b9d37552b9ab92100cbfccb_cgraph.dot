@@ -1,0 +1,24 @@
+digraph "motor_zeroing_step"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="motor_zeroing_step",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+  Node1 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="commandHome",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_motor_zeroing_8cpp.html#aeb1d7217c5bc1ef44a1980f3223e051a",tooltip=" "];
+  Node2 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="reset_timer",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_machine_states_8cpp.html#a2c8d77686b4bd0a6228fe786d46e5bf9",tooltip=" "];
+  Node1 -> Node4 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="commandZero",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_motor_zeroing_8cpp.html#a8b9283019b88f6408b0ec800df6481bc",tooltip=" "];
+  Node4 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1 -> Node5 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="motorHomingWait",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_motor_zeroing_8cpp.html#a4de0bc4bcfb39222e1eb0d3d2ced9584",tooltip=" "];
+  Node5 -> Node6 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="elapsed_time",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_machine_states_8cpp.html#a96a8530e82d64dab75975faf37def645",tooltip=" "];
+  Node1 -> Node7 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node7 [label="motorZero",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_motor_zeroing_8cpp.html#a8674a5cbea075094d74769bfc481940b",tooltip=" "];
+  Node1 -> Node8 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node8 [label="motorZeroingWait",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_motor_zeroing_8cpp.html#a2c1b6ca552295833bb5905afddbfd86d",tooltip=" "];
+  Node8 -> Node6 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+}

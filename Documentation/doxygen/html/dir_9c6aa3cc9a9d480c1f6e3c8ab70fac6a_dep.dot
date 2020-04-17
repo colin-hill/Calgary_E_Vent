@@ -1,0 +1,14 @@
+digraph "C:/Users/ColinHill/Documents/GitHub/Calgary_E_Vent/Source/E_VentV1Software/src" {
+  compound=true
+  node [ fontsize="10", fontname="Helvetica"];
+  edge [ labelfontsize="10", labelfontname="Helvetica"];
+  subgraph clusterdir_7980ab76a71c14f05126a8a4dfd1e8eb {
+    graph [ bgcolor="#ddddee", pencolor="black", label="E_VentV1Software" fontname="Helvetica", fontsize="10", URL="dir_7980ab76a71c14f05126a8a4dfd1e8eb.html"]
+  subgraph clusterdir_9c6aa3cc9a9d480c1f6e3c8ab70fac6a {
+    graph [ bgcolor="#eeeeff", pencolor="black", label="" URL="dir_9c6aa3cc9a9d480c1f6e3c8ab70fac6a.html"];
+    dir_9c6aa3cc9a9d480c1f6e3c8ab70fac6a [shape=plaintext label="src"];
+    dir_d79ad8baab9e98e5460075e88ce41fa5 [shape=box label="Encoder" color="red" fillcolor="white" style="filled" URL="dir_d79ad8baab9e98e5460075e88ce41fa5.html"];
+    dir_d1c5927461c1ec18f8f344151d1ae850 [shape=box label="SBWire" color="red" fillcolor="white" style="filled" URL="dir_d1c5927461c1ec18f8f344151d1ae850.html"];
+  }
+  }
+}

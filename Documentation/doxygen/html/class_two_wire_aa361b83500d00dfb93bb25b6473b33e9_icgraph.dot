@@ -1,0 +1,14 @@
+digraph "TwoWire::read"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="RL";
+  Node1 [label="TwoWire::read",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="readPressureSensor",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$pressure_8h.html#ab54d1b3d2ecf334a39bff6d546be9061",tooltip=" "];
+  Node2 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="update_state",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_machine_states_8h.html#acc4916099bc80c7c1e050bba2aa1189f",tooltip=" "];
+  Node1 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="TwoWire::requestFrom",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_two_wire.html#acd59cc9570fd49b1cf9044cbefef85ac",tooltip=" "];
+}

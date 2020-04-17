@@ -1,0 +1,18 @@
+digraph "TwoWire::begin"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="TwoWire::begin",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+  Node1 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="TwoWire::begin",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_two_wire.html#ada85a7a8663ec8af0a1248b659be2f18",tooltip=" "];
+  Node2 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="twi_init",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$twi_8c.html#a16f0e6b2fa5a26eadbf4086ab6d54467",tooltip=" "];
+  Node1 -> Node4 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="twi_attachSlaveRxEvent",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$twi_8c.html#a4dc5c27bf3b71b127e8579c8272c761b",tooltip=" "];
+  Node1 -> Node5 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="twi_attachSlaveTxEvent",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$twi_8c.html#a6c7a32f215bc048da3c94c8841d8ae3b",tooltip=" "];
+  Node1 -> Node6 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="twi_setAddress",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$twi_8c.html#aaa9f356c6666f1f28db92703c4499d97",tooltip=" "];
+}

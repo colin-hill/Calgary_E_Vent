@@ -1,0 +1,20 @@
+digraph "RoboClaw::SetEncM1"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="RL";
+  Node1 [label="RoboClaw::SetEncM1",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="commandMotorHoming",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_motor_8h.html#ab868d6e1ac190f3db119dc54995910f9",tooltip=" "];
+  Node2 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="handle_MotorZeroing",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_motor_8h.html#af88e6c189c91e40a32013bc4e41a445b",tooltip=" "];
+  Node3 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="handle_motor",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_motor_8h.html#a204dbae80aa370f076a301082e06567a",tooltip=" "];
+  Node1 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="commandMotorZero",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_motor_8h.html#ad1d690417ddc5b4a5efbc94004daa1a3",tooltip=" "];
+  Node5 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="setMotorZero",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_motor_8h.html#aafd079f08579dda55e52eaa0ce011927",tooltip=" "];
+  Node6 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+}

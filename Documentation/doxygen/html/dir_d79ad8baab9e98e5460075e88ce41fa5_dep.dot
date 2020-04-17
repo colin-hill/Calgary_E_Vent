@@ -1,0 +1,14 @@
+digraph "C:/Users/ColinHill/Documents/GitHub/Calgary_E_Vent/Source/E_VentV1Software/src/Encoder" {
+  compound=true
+  node [ fontsize="10", fontname="Helvetica"];
+  edge [ labelfontsize="10", labelfontname="Helvetica"];
+  subgraph clusterdir_9c6aa3cc9a9d480c1f6e3c8ab70fac6a {
+    graph [ bgcolor="#ddddee", pencolor="black", label="src" fontname="Helvetica", fontsize="10", URL="dir_9c6aa3cc9a9d480c1f6e3c8ab70fac6a.html"]
+  subgraph clusterdir_d79ad8baab9e98e5460075e88ce41fa5 {
+    graph [ bgcolor="#eeeeff", pencolor="black", label="" URL="dir_d79ad8baab9e98e5460075e88ce41fa5.html"];
+    dir_d79ad8baab9e98e5460075e88ce41fa5 [shape=plaintext label="Encoder"];
+    dir_8f37f763233623a783a9657b0e6bec11 [shape=box label="utility" color="black" fillcolor="white" style="filled" URL="dir_8f37f763233623a783a9657b0e6bec11.html"];
+  }
+  }
+  dir_d79ad8baab9e98e5460075e88ce41fa5->dir_8f37f763233623a783a9657b0e6bec11 [headlabel="2", labeldistance=1.5 headhref="dir_000003_000004.html"];
+}
