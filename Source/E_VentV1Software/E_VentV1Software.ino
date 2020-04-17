@@ -37,7 +37,7 @@ RoboClaw motorController(&Serial2, MOTOR_CONTROLLER_TIMEOUT);
 //#define SERIAL_DEBUG //Comment this out if not debugging, used for visual confirmation of state changes
 //#define NO_INPUT_DEBUG //Comment this out if not debugging, used to spoof input parameters at startup when no controls are present
 
-const char softwareVersion[] = "VER. 2020.4.12";
+const char softwareVersion[] = "VER. 2020.4.17";
 
 //------------------------------------------------------------------------------
 
@@ -94,6 +94,8 @@ VentilatorState state;
 void setup() {
   
   wdt_disable();
+
+  
   
 #ifdef SERIAL_DEBUG
     Serial.begin(9600);
@@ -117,18 +119,19 @@ void setup() {
     alarmDisplay.begin(LCD_COLUMNS, LCD_ROWS);
     ventilatorDisplay.begin(LCD_COLUMNS, LCD_ROWS);
 
+    //LCD Display Startup Message for two seconds
+    displayAEVStartupScreen(ventilatorDisplay);
+    displayAEVStartupScreen(alarmDisplay);
+
     //Motor Controller Start
     motorController.begin(38400);
 
-    //LCD Display Startup Message for two seconds
-    displayStartupScreen(ventilatorDisplay, softwareVersion, LCD_COLUMNS);
-
+    
     // Set up ventilator state.
     state = get_init_state();
     state.machine_state = StartupHold;
 
-    //LCD Startup hold message
-    displayStartupHoldScreen(ventilatorDisplay);
+
 
 
 
@@ -140,6 +143,8 @@ void setup() {
     state.machine_state = BreathLoopStart;
     motorController.SetEncM1(MOTOR_ADDRESS, 0);
 #endif //Set the startup position as zero
+
+    delay(2000);
 
   wdt_enable(WDTO_500MS);
 }
@@ -186,6 +191,8 @@ void loop() {
         alarmDisplay.begin(LCD_COLUMNS, LCD_ROWS);
         ventilatorDisplay.begin(LCD_COLUMNS, LCD_ROWS);
 
+        alarm_debounce_reset(state);
+
         state.machine_state = check_mode();
         setStateParameters(state, userParameters); //Must be before update_motor_settings
         update_motor_settings(state);
@@ -201,9 +208,8 @@ void loop() {
         failure_mode(state);
     }
 
-    Serial.print(F("AC State: "));
-    Serial.println(state.ac_state);
-    state = handle_alarms(alarmReset, state, alarmDisplay, userParameters, currentlySelectedParameter);
+    loop_alarm_manager(alarmReset, alarmDisplay, state, userParameters, currentlySelectedParameter);
+
 }
 
 //FUNCTIONS

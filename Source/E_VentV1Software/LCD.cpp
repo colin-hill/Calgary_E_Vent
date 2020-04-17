@@ -66,9 +66,12 @@ void displayMultipleAlarms(LiquidCrystal &displayName, VentilatorState &state) {
 	displayName.setCursor(0,2);
 	displayName.write("   LPIP ");
 	if (state.errors & LOW_PRESSURE_ALARM) {
+		Serial.println(F("Low pressure alarm"));
+		Serial.println(state.errors);
 		displayName.write((byte)1);
 	}
 	else {
+		Serial.println(F("No low pip alarm"));
 		displayName.write((byte)0);
 	}
 	displayName.write(" | LPEEP ");

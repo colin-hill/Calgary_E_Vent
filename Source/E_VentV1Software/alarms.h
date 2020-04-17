@@ -9,6 +9,7 @@
 #include "updateUserParameters.h"
 #include "UserParameter.h"
 #include <assert.h>
+#include "conversions.h"
 
 #if ARDUINO >= 100
 #include "Arduino.h"
@@ -18,6 +19,8 @@
 
 // Alarm Sound definitions
 const float ALARM_SOUND_LENGTH = 0.5; //Seconds
+
+const float ALARM_SILENCE_TIME = 120;
 
 // High PIP Alarm Definitions----------------
 const float MAX_HIGH_PIP_ALARM = 70; //cmH2O
@@ -154,7 +157,14 @@ raised, right? Like in VCPeak or any of the other states you also shouldn't have
 low pressure...?
 */
 
-void reset_alarms(VentilatorState &state);
+void alarm_debounce_reset(VentilatorState &state);
+
+void loop_alarm_manager(volatile boolean alarmReset, LiquidCrystal &displayName, VentilatorState &state, UserParameter *userParameters, SelectedParameter &currentlySelectedParameter);
+
+void control_alarm_output(volatile boolean alarmReset, VentilatorState &state);
+
+void control_alarm_displays(LiquidCrystal &displayName, VentilatorState &state, UserParameter *userParameters, SelectedParameter &currentlySelectedParameter);
+
 
 void setUpAlarmPins();
 

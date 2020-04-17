@@ -15,14 +15,7 @@
 // ----------------------------------------------------------------------
 
 elapsedMillis alarmBuzzerTimer;
-elapsedMillis highPressureAlarmTimer;
-elapsedMillis lowPressureAlarmTimer;
-elapsedMillis highPEEPAlarmTimer;
-elapsedMillis lowPEEPAlarmTimer;
-elapsedMillis disconnectAlarmTimer;
-elapsedMillis highTempAlarmTimer;
-elapsedMillis apneaAlarmTimer;
-elapsedMillis deviceFaiulureAlarmTimer;
+
 
 
 // ----------------------------------------------------------------------
@@ -103,12 +96,43 @@ uint16_t check_motor_position(const long int current_position, const long int ex
     }
 }
 
+void alarm_debounce_reset(VentilatorState &state) {
 
+  state.alarm_outputs = state.this_breath_errors | state.last_breath_errors;
+  state.last_breath_errors = state.this_breath_errors;
+  state.this_breath_errors = 0;
 
-VentilatorState handle_alarms(volatile boolean &alarmReset, VentilatorState &state, LiquidCrystal &displayName, UserParameter *userParameters, SelectedParameter &currentlySelectedParameter) {
-    if (state.errors) { // There is an unserviced error
-        // Control the buzzer
-        if (alarmBuzzerTimer > (ALARM_SOUND_LENGTH*1000)) {
+  return;
+
+}
+
+void loop_alarm_manager(volatile boolean alarmReset, LiquidCrystal &displayName, VentilatorState &state, UserParameter *userParameters, SelectedParameter &currentlySelectedParameter) {
+
+  state.this_breath_errors |= state.errors;
+
+  state.errors = 0;
+
+  control_alarm_output(alarmReset, state);
+
+  state.alarm_outputs |= state.this_breath_errors;
+
+  control_alarm_displays(displayName, state, userParameters, currentlySelectedParameter);
+
+  return;  
+
+}
+
+void control_alarm_output(volatile boolean alarmReset, VentilatorState &state) {
+
+  cli();
+  if (true == alarmReset) {
+    alarmReset = false;
+    reset_alarm_timer(state);
+  }
+  sei();
+
+  if (elapsed_alarm_time(state) > (ALARM_SILENCE_TIME*S_TO_MS)) {
+    if (alarmBuzzerTimer > (ALARM_SOUND_LENGTH*S_TO_MS)) {
             // Reset the timer
             alarmBuzzerTimer = 0;
 
@@ -116,103 +140,51 @@ VentilatorState handle_alarms(volatile boolean &alarmReset, VentilatorState &sta
             digitalWrite(ALARM_BUZZER_PIN,!digitalRead(ALARM_BUZZER_PIN));
             //digitalWrite(ALARM_LED_PIN,!digitalRead(ALARM_LED_PIN));
             digitalWrite(ALARM_RELAY_PIN,!digitalRead(ALARM_RELAY_PIN));
-        }
-
-        // Provide the appropriate screen for the error, error flags held in a 16 bit unsigned integer
-        if (state.errors & HIGH_PRESSURE_ALARM) {
-            // Display high pressure alarm screen
-            displayHighPressureAlarm(displayName, state.peak_pressure, LCD_MAX_STRING);
-        }
-        else if (state.errors & LOW_PRESSURE_ALARM) {
-            // Display low pressure alarm screen
-            displayLowPressureAlarm(displayName, state.peak_pressure, LCD_MAX_STRING);
-        }
-        else if (state.errors & HIGH_PEEP_ALARM) {
-            // Display high PEEP alarm screen
-            displayHighPEEPAlarm(displayName, state.peep_pressure, LCD_MAX_STRING);
-        }
-        else if (state.errors & LOW_PEEP_ALARM) {
-            // Display low PEEP alarm screen
-            displayLowPEEPAlarm(displayName, state.peep_pressure, LCD_MAX_STRING);
-        }
-        else if (state.errors & DISCONNECT_ALARM) {
-            // Display disconnect alarm (also a low pressure alarm)
-            displayDisconnectAlarm(displayName);
-        }
-        else if (state.errors & HIGH_TEMP_ALARM) {
-            // Display high temp alarm screen
-            displayTemperatureAlarm(displayName, state.controller_temperature, LCD_MAX_STRING);
-        }
-        else if (state.errors & APNEA_ALARM) {
-            // Display the apnea alarm screen
-            displayApneaAlarm(displayName);
-        }
-        else if (state.errors & DEVICE_FAILURE_ALARM) {
-            displayDeviceFailureAlarm(displayName);
-            state.machine_state = FailureMode;
-        }
-        else{
-            // TODO: I (Calvin) am actually pretty nervous about this default.
-            // I feel like we should display an unspecified error or something.
-            assert(false);  // This should NOT happen.
-            state.errors = 0;
-        }
-        cli();
-        if(alarmReset){
-          alarmReset = false;
-          sei();
-          reset_alarms(state);
-        }
-        sei();
     }
-    else{
-
-        displayAlarmParameters(currentlySelectedParameter, displayName, userParameters);
-
-        alarmBuzzerTimer = 0;
-        digitalWrite(ALARM_BUZZER_PIN,LOW);
-        //digitalWrite(ALARM_LED_PIN,LOW);
-        digitalWrite(ALARM_RELAY_PIN,LOW);
+    else {
+    digitalWrite(ALARM_BUZZER_PIN, LOW);
+    digitalWrite(ALARM_RELAY_PIN, LOW);
     }
-
-    return state;
+  }
+  return;
 }
 
-void reset_alarms(VentilatorState &state)
-{
-  if (state.errors & HIGH_PRESSURE_ALARM) {
-       // Reset the high pressure alarm error
-       state.errors &= (~HIGH_PRESSURE_ALARM);
-  }
-  else if (state.errors & LOW_PRESSURE_ALARM) {
-       // Reset the low pressure alarm error
-       state.errors &= (~LOW_PRESSURE_ALARM);
-  }
-  else if (state.errors & HIGH_PEEP_ALARM) {
-      // Reset the high PEEP alarm
-      state.errors &= (~HIGH_PEEP_ALARM);
-  }
-  else if (state.errors & LOW_PEEP_ALARM) {
-      // Reset the low PEEP alarm
-      state.errors &= (~LOW_PEEP_ALARM);
-  }
-  else if (state.errors & DISCONNECT_ALARM) {
-      // Rese the low pressure/disconnect alarm
-      state.errors &= (~DISCONNECT_ALARM);
-  }
-  else if (state.errors & HIGH_TEMP_ALARM) {
-      // Reset high temp alarm
-      state.errors &= (~HIGH_TEMP_ALARM);
-  }
-  else if (state.errors & APNEA_ALARM) {
-      // Reset the apnea alarm
-      state.errors &= (~APNEA_ALARM);
-  }
-  else if (state.errors & DEVICE_FAILURE_ALARM) {
-      //No point in resetting this alarm since we are going to a fault state
-      //state.machine_state = FailureMode; this is handled before 
-  }
+void control_alarm_displays(LiquidCrystal &displayName, VentilatorState &state, UserParameter *userParameters, SelectedParameter &currentlySelectedParameter) {
+    
+    SelectedParameter currentParameter = e_HighPIPAlarm;
+    float maxPIP = userParameters[(int)currentParameter].value;
+    float tempMaxPIP = userParameters[(int)currentParameter].tmpValue;
+  
+    currentParameter = e_LowPIPAlarm;
+    float minPIP = userParameters[(int)currentParameter].value;
+    float tempMinPIP = userParameters[(int)currentParameter].tmpValue;
+  
+    currentParameter = e_HighPEEPAlarm;
+    float maxPEEP = userParameters[(int)currentParameter].value;
+    float tempMaxPEEP = userParameters[(int)currentParameter].tmpValue;
+  
+    currentParameter = e_LowPEEPAlarm;
+    float minPEEP = userParameters[(int)currentParameter].value;
+    float tempMinPEEP = userParameters[(int)currentParameter].tmpValue;
+  
+    currentParameter = e_LowPlateauPressureAlarm;
+    float lowPlateauPressure = userParameters[(int)currentParameter].value;
+    float tempLowPlateauPressure = userParameters[(int)currentParameter].tmpValue;
+
+    if (state.alarm_outputs) { // There is an error to display
+
+      displayMultipleAlarms(displayName, state);
+    }
+    else {    
+      displayNoAlarm(displayName, maxPIP, minPIP, maxPEEP, minPEEP, lowPlateauPressure, LCD_MAX_STRING);
+    }
+
+    return;
 }
+
+
+
+
 
 void setUpAlarmPins()
 {

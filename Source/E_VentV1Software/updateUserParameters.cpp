@@ -150,7 +150,7 @@ void displayUserParameters(SelectedParameter &currentlySelectedParameter, Liquid
     default:
         displayVentilationParameters(displayName, machineState, vcState , acState, 
                                      bpm, thresholdPressure, tidalVolume, inspirationTime, currentPressure, 
-                                     measuredPIP, 99, LCD_MAX_STRING);
+                                     measuredPIP, measuredPEEP, LCD_MAX_STRING);
     }
 }
 
@@ -198,7 +198,8 @@ void displayAlarmParameters(SelectedParameter &currentlySelectedParameter, Liqui
         break;
 
     default:
-        displayNoAlarm(displayName, maxPIP, minPIP, maxPEEP, minPEEP, lowPlateauPressure, LCD_MAX_STRING);
+        //TODO clean up
+        //displayNoAlarm(displayName, maxPIP, minPIP, maxPEEP, minPEEP, lowPlateauPressure, LCD_MAX_STRING);
         break;
     }
 }

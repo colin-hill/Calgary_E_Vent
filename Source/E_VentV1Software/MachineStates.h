@@ -85,6 +85,8 @@ struct VentilatorState {
     unsigned long breath_time_start; // When timer was started (ms).
     unsigned long current_time;      // Current time (ms).
 
+    unsigned long alarm_silence_start_time;
+
     //TODO: consider naming
 
     //Ventilation Primary Values -----------------------------------------------------------------------------
@@ -132,6 +134,11 @@ struct VentilatorState {
     long int current_motor_position;
 
     uint16_t errors;
+
+    uint16_t this_breath_errors;
+    uint16_t last_breath_errors;
+    uint16_t last_loop_errors;
+    uint16_t alarm_outputs;
 };
 
 
@@ -181,5 +188,10 @@ void update_motor_settings(VentilatorState &state);
 /* Get elapsed time in ms.
  */
 unsigned long elapsed_time(const VentilatorState &state);
+
+unsigned long elapsed_alarm_time(const VentilatorState &state);
+
+void reset_alarm_timer(VentilatorState &state);
+
 
 #endif

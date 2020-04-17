@@ -27,6 +27,7 @@ VentilatorState get_init_state(void) {
 
     state.breath_time_start = millis();
     state.current_time = state.breath_time_start;
+    state.alarm_silence_start_time = state.breath_time_start;
 
     //Ventilation Primary Values -----------------------------------------------------------------------------
         //BPM
@@ -75,6 +76,11 @@ VentilatorState get_init_state(void) {
     //Errors
     state.errors = 0;
 
+    state.this_breath_errors = 0;
+    state.last_breath_errors = 0;
+    state.last_loop_errors = 0;
+    state.alarm_outputs = 0;
+
     return state;
 }
 
@@ -112,4 +118,12 @@ void update_motor_settings(VentilatorState &state) {
 
 unsigned long elapsed_time(const VentilatorState &state) {
     return state.current_time - state.breath_time_start;
+}
+
+unsigned long elapsed_alarm_time(const VentilatorState &state) {
+    return state.current_time - state.alarm_silence_start_time;
+}
+
+void reset_alarm_timer(VentilatorState &state) {
+    state.alarm_silence_start_time = state.current_time;
 }
