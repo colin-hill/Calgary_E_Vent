@@ -9,6 +9,8 @@
 #include "VCMode.h"
 #include "ACMode.h"
 #include "PinAssignments.h"
+//#include "splash.h"
+#include "alarms.h"
 
 //LCD Constants
 const int LCD_COLUMNS    = 20;
@@ -34,6 +36,9 @@ const int VENTILATOR_LCD_DB7    = 2;
    - Current alarm setpoints
  */
 void displayNoAlarm(LiquidCrystal &displayName, float highPressure, float lowPressure, float highPEEP, float lowPEEP, float lowPlateau, const int LCD_MAX_STRING);
+
+
+//void displayMultipleAlarms(LiquidCrystal &displayName, VentilatorState &state);
 
 /** Function for display of the high PIP alarm
 
@@ -149,6 +154,8 @@ void displayVentilationParameters(LiquidCrystal &displayName,
  */
 void displayStartupScreen(LiquidCrystal &displayName, const char softwareVersion[], const int LCD_MAX_STRING); 
 
+//void displayAEVStartupScreen(LiquidCrystal &displayName);
+
 void displayStartupHoldScreen(LiquidCrystal &displayName);
 
 /** Function for display of a homing message during motor zeroing
@@ -225,5 +232,126 @@ int getFirstDigitPastDecimal(float realNumber);
    - an integer equal to the second digit past the decimal 
  */
 int getSecondDigitPastDecimal(float realNumber);
+
+
+//Custom Characters
+
+const byte L1_1[]  = {
+  B00000,
+  B00000,
+  B00000,
+  B00000,
+  B00000,
+  B00000,
+  B00010,
+  B00011
+};
+
+const byte L1_2[] = {
+  B00000,
+  B00000,
+  B00100,
+  B00100,
+  B01110,
+  B01110,
+  B11111,
+  B11111
+};
+
+//LINE 2
+const byte L2_1[] = {
+  B00000,
+  B00000,
+  B00000,
+  B00000,
+  B11100,
+  B11111,
+  B11111,
+  B01111
+};
+
+const byte L2_2[] = {
+  B00011,
+  B00011,
+  B00011,
+  B00011,
+  B10011,
+  B11011,
+  B11111,
+  B11111
+};
+
+const byte LSS[] = {
+  B11111,
+  B11111,
+  B11111,
+  B11111,
+  B11111,
+  B11111,
+  B11111,
+  B11111
+};
+
+
+//LINE 3
+const byte L3_1[] = {
+  B01111,
+  B11111,
+  B01111,
+  B00111,
+  B00011,
+  B00001,
+  B00000,
+  B00000
+};
+
+const byte L3_2[]  = {
+  B11111,
+  B11111,
+  B11111,
+  B11111,
+  B11111,
+  B11111,
+  B11111,
+  B01111
+};
+
+//LINE 4
+
+const byte L4_1[]  = {
+  B01111,
+  B11000,
+  B00000,
+  B00000,
+  B00000,
+  B00000,
+  B00000,
+  B00000
+};
+
+
+//Virtual LED
+
+const byte DISP_LED_OFF[] = {
+  B11111,
+  B10001,
+  B10001,
+  B10001,
+  B10001,
+  B10001,
+  B10001,
+  B11111
+};
+
+const byte DISP_LED_ON[] = {
+  B11111,
+  B11111,
+  B11111,
+  B11111,
+  B11111,
+  B11111,
+  B11111,
+  B11111
+};
 
 #endif

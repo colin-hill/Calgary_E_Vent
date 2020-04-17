@@ -34,6 +34,53 @@ void displayNoAlarm(LiquidCrystal &displayName, float highPressure, float lowPre
 }
 
 
+/*void displayMultipleAlarms(LiquidCrystal &displayName, VentilatorState &state) {
+
+	const char alarmDispL1[] = "ALARM CONDITION:";
+
+	displayName.createChar(0, DISP_LED_OFF);
+	displayName.createChar(1, DISP_LED_ON);
+
+
+	displayName.clear();
+	displayName.write(alarmDispL1);
+
+	//Line 1
+	displayName.setCursor(0,1);
+	displayName.write("   HPIP ");
+	if (state.errors & HIGH_PRESSURE_ALARM) {
+		displayName.write((byte)1);
+	}
+	else {
+		displayName.write((byte)0);
+	}
+	displayName.write(" | HPEEP ");
+	if (state.errors & HIGH_PEEP_ALARM) {
+		displayName.write((byte)1);
+	}
+	else {
+		displayName.write((byte)0);
+	}	
+	
+	//Line 2
+	displayName.setCursor(0,2);
+	displayName.write("   LPIP ");
+	if (state.errors & LOW_PRESSURE_ALARM) {
+		displayName.write((byte)1);
+	}
+	else {
+		displayName.write((byte)0);
+	}
+	displayName.write(" | LPEEP ");
+	if (state.errors & LOW_PEEP_ALARM) {
+		displayName.write((byte)1);
+	}
+	else {
+		displayName.write((byte)0);
+	}
+
+}*/
+
 void displayHighPressureAlarm(LiquidCrystal &displayName, float pressureMeasurement, const int LCD_MAX_STRING) {
 	int displayPressure = roundAndCast(pressureMeasurement);
 
@@ -338,6 +385,45 @@ void displayStartupScreen(LiquidCrystal &displayName, const char softwareVersion
 	delay(2000);
 
 }
+
+
+/*void displayAEVStartupScreen(LiquidCrystal &displayName) {
+
+	displayName.createChar(0,L1_1);
+	displayName.createChar(1,L1_2);
+	displayName.createChar(2,L2_1);
+	displayName.createChar(3,L2_2);
+	displayName.createChar(4,LSS);
+	displayName.createChar(5,L3_1);
+	displayName.createChar(6,L3_2);
+	displayName.createChar(7,L4_1);
+
+	
+	const char parameterDispL2[] = "ALBERTA";
+	const char parameterDispL3[] = "E-VENT";
+
+	//Line 1
+	displayName.clear();
+	displayName.setCursor(5,0);
+	displayName.write((byte)0);
+	displayName.write((byte)1);
+
+	//Line 2
+	displayName.setCursor(4,1);
+	displayName.write((byte)2);
+	displayName.write((byte)3);
+	displayName.write((byte)4);
+	displayName.write(parameterDispL2);
+	
+	//Line 3
+	displayName.setCursor(4,2);
+	displayName.write((byte)5);
+	displayName.write((byte)6);
+	displayName.write((byte)4);
+	displayName.write(parameterDispL3);
+
+
+}*/
 
 void displayStartupHoldScreen(LiquidCrystal &displayName) {
 
