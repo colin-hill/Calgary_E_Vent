@@ -32,7 +32,7 @@ void updateStateUserParameters(VentilatorState &state, SelectedParameter &curren
     Encoder &parameterSelectEncoder, UserParameter *userParameters, const uint8_t NUM_USER_PARAMETERS);
 
 void displayUserParameters(SelectedParameter &currentlySelectedParameter, LiquidCrystal &displayName, machineStates machineState, vcModeStates vcState, acModeStates acState,
-    float measuredPIP, float measuredPlateau, const int LCD_MAX_STRING, UserParameter *userParameters);
+    float measuredPIP, float measuredPEEP, float currentPressure, const int LCD_MAX_STRING, UserParameter *userParameters);
 
 void displayAlarmParameters(SelectedParameter &currentlySelectedParameter, LiquidCrystal &displayName,UserParameter *userParamters);
 
