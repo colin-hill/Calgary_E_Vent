@@ -139,6 +139,7 @@ struct VentilatorState {
     uint16_t last_breath_errors;
     uint16_t last_loop_errors;
     uint16_t alarm_outputs;
+    uint16_t silenced_alarms;
 };
 
 

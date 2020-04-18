@@ -22,7 +22,7 @@ void vcStart(VentilatorState &state) {
     Serial.println(F("VCStart"));
 #endif //SERIAL_DEBUG
 
-    //TODO: Reset alarms as outlined on state machine
+    
 
     // Reset timer and peak pressure reading.
     reset_timer(state);

@@ -20,7 +20,7 @@
 // Alarm Sound definitions
 const float ALARM_SOUND_LENGTH = 0.5; //Seconds
 
-const float ALARM_SILENCE_TIME = 120;
+const float ALARM_SILENCE_TIME = 30.0;
 
 // High PIP Alarm Definitions----------------
 const float MAX_HIGH_PIP_ALARM = 70; //cmH2O
@@ -146,7 +146,7 @@ uint16_t check_motor_position(const long int current_position, const long int ex
    - TODO: will reset the errors flag --- only in certain conditions.
    - TODO: can resent machine state!!!
  */
-VentilatorState handle_alarms(volatile boolean &alarmReset, VentilatorState &state, LiquidCrystal &displayName, UserParameter *userParameters, SelectedParameter &currentlySelectedParameter);
+//VentilatorState handle_alarms(volatile boolean &alarmReset, VentilatorState &state, LiquidCrystal &displayName, UserParameter *userParameters, SelectedParameter &currentlySelectedParameter);
 
 /* TODO: Check alarms more frequently?
 
@@ -159,11 +159,11 @@ low pressure...?
 
 void alarm_debounce_reset(VentilatorState &state);
 
-void loop_alarm_manager(volatile boolean alarmReset, LiquidCrystal &displayName, VentilatorState &state, UserParameter *userParameters, SelectedParameter &currentlySelectedParameter);
+void loop_alarm_manager(elapsedMillis &alarmSilenceTimer, volatile boolean &alarmReset, LiquidCrystal &alarmDisplay, LiquidCrystal &parameterDisplay, VentilatorState &state, UserParameter *userParameters, SelectedParameter &currentlySelectedParameter);
 
-void control_alarm_output(volatile boolean alarmReset, VentilatorState &state);
+void control_alarm_output(elapsedMillis &alarmSilenceTimer, volatile boolean &alarmReset, VentilatorState &state);
 
-void control_alarm_displays(LiquidCrystal &displayName, VentilatorState &state, UserParameter *userParameters, SelectedParameter &currentlySelectedParameter);
+void control_alarm_displays(LiquidCrystal &alarmDisplay, LiquidCrystal &parameterDisplay, VentilatorState &state, UserParameter *userParameters, SelectedParameter &currentlySelectedParameter);
 
 
 void setUpAlarmPins();

@@ -86,6 +86,7 @@ float motorReturnTime;
 // Timer Variables--------------------------------------------------------------------------------------------------------
 elapsedMillis parameterSetDebounceTimer;
 elapsedMillis alarmResetDebounceTimer;
+elapsedMillis alarmSilenceTimer;
 
 // State for the ventilator.
 VentilatorState state;
@@ -208,7 +209,7 @@ void loop() {
         failure_mode(state);
     }
 
-    loop_alarm_manager(alarmReset, alarmDisplay, state, userParameters, currentlySelectedParameter);
+    loop_alarm_manager(alarmSilenceTimer, alarmReset, alarmDisplay, ventilatorDisplay, state, userParameters, currentlySelectedParameter);
 
 }
 

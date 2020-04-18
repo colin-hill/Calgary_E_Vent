@@ -17,7 +17,6 @@
 elapsedMillis alarmBuzzerTimer;
 
 
-
 // ----------------------------------------------------------------------
 // Function definitions
 // ----------------------------------------------------------------------
@@ -106,33 +105,58 @@ void alarm_debounce_reset(VentilatorState &state) {
 
 }
 
-void loop_alarm_manager(volatile boolean alarmReset, LiquidCrystal &displayName, VentilatorState &state, UserParameter *userParameters, SelectedParameter &currentlySelectedParameter) {
+void loop_alarm_manager(elapsedMillis &alarmSilenceTimer, volatile boolean &alarmReset, LiquidCrystal &alarmDisplay, LiquidCrystal &parameterDisplay, VentilatorState &state, UserParameter *userParameters, SelectedParameter &currentlySelectedParameter) {
 
   state.this_breath_errors |= state.errors;
 
   state.errors = 0;
 
-  control_alarm_output(alarmReset, state);
-
   state.alarm_outputs |= state.this_breath_errors;
 
-  control_alarm_displays(displayName, state, userParameters, currentlySelectedParameter);
+  if (state.alarm_outputs != 0) {
+    control_alarm_output(alarmSilenceTimer, alarmReset, state);
+  }
+  else{
+    digitalWrite(ALARM_BUZZER_PIN, LOW);
+  }
+
+  
+
+
+  control_alarm_displays(alarmDisplay, parameterDisplay, state, userParameters, currentlySelectedParameter);
 
   return;  
 
 }
 
-void control_alarm_output(volatile boolean alarmReset, VentilatorState &state) {
+void control_alarm_output(elapsedMillis &alarmSilenceTimer, volatile boolean &alarmReset, VentilatorState &state) {
+
+  Serial.print(F("alarmReset value: "));
+  Serial.println(alarmReset);
 
   cli();
   if (true == alarmReset) {
     alarmReset = false;
-    reset_alarm_timer(state);
+    alarmSilenceTimer = 0;
+    state.silenced_alarms = state.alarm_outputs;
   }
   sei();
 
-  if (elapsed_alarm_time(state) > (ALARM_SILENCE_TIME*S_TO_MS)) {
-    if (alarmBuzzerTimer > (ALARM_SOUND_LENGTH*S_TO_MS)) {
+
+  
+  Serial.print(F("Silence Timer: "));
+  Serial.println(alarmSilenceTimer);
+
+  if ((alarmSilenceTimer > (ALARM_SILENCE_TIME*S_TO_MS)) || (state.alarm_outputs &(~state.silenced_alarms))) {
+
+     
+
+    if (alarmSilenceTimer > (ALARM_SILENCE_TIME*S_TO_MS)) {
+       state.silenced_alarms = 0;
+    }
+
+    digitalWrite(ALARM_BUZZER_PIN, HIGH);
+    /*if (alarmBuzzerTimer > (ALARM_SOUND_LENGTH*S_TO_MS)) {
             // Reset the timer
             alarmBuzzerTimer = 0;
 
@@ -141,15 +165,17 @@ void control_alarm_output(volatile boolean alarmReset, VentilatorState &state) {
             //digitalWrite(ALARM_LED_PIN,!digitalRead(ALARM_LED_PIN));
             digitalWrite(ALARM_RELAY_PIN,!digitalRead(ALARM_RELAY_PIN));
     }
-    else {
+  }*/
+  }
+  else {
     digitalWrite(ALARM_BUZZER_PIN, LOW);
     digitalWrite(ALARM_RELAY_PIN, LOW);
-    }
   }
+  
   return;
 }
 
-void control_alarm_displays(LiquidCrystal &displayName, VentilatorState &state, UserParameter *userParameters, SelectedParameter &currentlySelectedParameter) {
+void control_alarm_displays(LiquidCrystal &alarmDisplay, LiquidCrystal &parameterDisplay, VentilatorState &state, UserParameter *userParameters, SelectedParameter &currentlySelectedParameter) {
     
     SelectedParameter currentParameter = e_HighPIPAlarm;
     float maxPIP = userParameters[(int)currentParameter].value;
@@ -171,13 +197,15 @@ void control_alarm_displays(LiquidCrystal &displayName, VentilatorState &state, 
     float lowPlateauPressure = userParameters[(int)currentParameter].value;
     float tempLowPlateauPressure = userParameters[(int)currentParameter].tmpValue;
 
-    if (state.alarm_outputs) { // There is an error to display
+    if(((int)currentlySelectedParameter >= e_HighPIPAlarm) && (e_None != (int)currentlySelectedParameter)){
 
-      displayMultipleAlarms(displayName, state);
+      displayAlarmParameters(currentlySelectedParameter, alarmDisplay, userParameters);
     }
-    else {    
-      displayNoAlarm(displayName, maxPIP, minPIP, maxPEEP, minPEEP, lowPlateauPressure, LCD_MAX_STRING);
+    else {
+
+      displayMultipleAlarms(alarmDisplay, maxPIP, minPIP, maxPEEP, minPEEP, state);
     }
+
 
     return;
 }

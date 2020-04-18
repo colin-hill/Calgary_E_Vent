@@ -80,6 +80,7 @@ VentilatorState get_init_state(void) {
     state.last_breath_errors = 0;
     state.last_loop_errors = 0;
     state.alarm_outputs = 0;
+    state.silenced_alarms = 0;
 
     return state;
 }
