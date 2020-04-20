@@ -229,7 +229,6 @@ void control_alarm_displays(LiquidCrystal &alarmDisplay, LiquidCrystal &paramete
       displayMultipleAlarms(alarmDisplay, maxPIP, minPIP, maxPEEP, minPEEP, state);
     }
 
-
     return;
 }
 

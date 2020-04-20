@@ -47,6 +47,11 @@ const float MAX_LOW_PLATEAU_PRESSURE_ALARM = 40; //cmH2O
 const float MIN_LOW_PLATEAU_PRESSURE_ALARM = 1; //cmH2O
 //------------------------------------------
 
+//High Respiratory Rate Alarm----------------
+const float MAX_RESPIRATORY_RATE_ALARM = 10;
+const float MIN_RESPIRATORY_RATE_ALARM = 0;
+//-------------------------------------------
+
 // Alarm flags
 const uint16_t HIGH_PRESSURE_ALARM       = 0x01 << 0;
 const uint16_t LOW_PRESSURE_ALARM        = 0x01 << 1;
@@ -165,7 +170,6 @@ void loop_alarm_manager(elapsedMillis &alarmSilenceTimer, volatile boolean &alar
 void control_alarm_output(elapsedMillis &alarmSilenceTimer, volatile boolean &alarmReset, VentilatorState &state);
 
 void control_alarm_displays(LiquidCrystal &alarmDisplay, LiquidCrystal &parameterDisplay, VentilatorState &state, UserParameter *userParameters, SelectedParameter &currentlySelectedParameter);
-
 
 void setUpAlarmPins();
 

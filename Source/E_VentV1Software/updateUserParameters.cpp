@@ -71,6 +71,9 @@ void updateSelectedParameter(SelectedParameter &currentlySelectedParameter,
         case 9 :
             currentlySelectedParameter = e_LowPlateauPressureAlarm;
             break;
+        case 10 :
+            currentlySelectedParameter = e_HighRespiratoryRateAlarm;
+            break;
         default :
             currentlySelectedParameter = e_None;
             break;
@@ -176,6 +179,10 @@ void displayAlarmParameters(SelectedParameter &currentlySelectedParameter, Liqui
     float lowPlateauPressure = userParameters[(int)currentParameter].value;
     float tempLowPlateauPressure = userParameters[(int)currentParameter].tmpValue;
 
+    currentParameter = e_HighRespiratoryRateAlarm;
+    float highRespiratoryRateAlarm = userParameters[(int)currentParameter].value;
+    float tempHighRespiratoryRateAlarm = userParameters[(int)currentParameter].tmpValue;
+
     switch(currentlySelectedParameter){
     case e_HighPIPAlarm:
         displayHighPressureChange(displayName, tempMaxPIP, LCD_MAX_STRING);
@@ -195,6 +202,10 @@ void displayAlarmParameters(SelectedParameter &currentlySelectedParameter, Liqui
 
     case e_LowPlateauPressureAlarm:
         displayLowPlateauChange(displayName, tempLowPlateauPressure, LCD_MAX_STRING);
+        break;
+
+    case e_HighRespiratoryRateAlarm:
+        //TODO: Display high respiatory rate alarm
         break;
 
     default:

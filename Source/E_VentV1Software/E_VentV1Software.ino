@@ -69,9 +69,11 @@ UserParameter userParameters[NUM_USER_PARAMETERS] =
      UserParameter(MIN_LOW_PIP_ALARM, MAX_LOW_PIP_ALARM, LOW_PIP_ALARM_INCREMENT, LOW_PIP_ALARM_SELECT_PIN, LOW_PIP_ALARM_DEFAULT, e_LowPIPAlarm),
      UserParameter(MIN_HIGH_PEEP_ALARM, MAX_HIGH_PEEP_ALARM, HIGH_PEEP_ALARM_INCREMENT, HIGH_PEEP_ALARM_SELECT_PIN, HIGH_PEEP_ALARM_DEFAULT, e_HighPEEPAlarm),
      UserParameter(MIN_LOW_PEEP_ALARM, MAX_LOW_PEEP_ALARM, LOW_PEEP_ALARM_INCREMENT, LOW_PEEP_ALARM_SELECT_PIN, LOW_PEEP_ALARM_DEFAULT, e_LowPEEPAlarm),
-     UserParameter(MIN_LOW_PLATEAU_PRESSURE_ALARM, MAX_LOW_PLATEAU_PRESSURE_ALARM, LOW_PLATEAU_PRESSURE_ALARM_INCREMENT, LOW_PLATEAU_PRESSURE_ALARM_SELECT_PIN, LOW_PLATEAU_PRESSURE_ALARM_DEFAULT, e_LowPlateauPressureAlarm) };
+     UserParameter(MIN_LOW_PLATEAU_PRESSURE_ALARM, MAX_LOW_PLATEAU_PRESSURE_ALARM, LOW_PLATEAU_PRESSURE_ALARM_INCREMENT, LOW_PLATEAU_PRESSURE_ALARM_SELECT_PIN, LOW_PLATEAU_PRESSURE_ALARM_DEFAULT, e_LowPlateauPressureAlarm), 
+     UserParameter(MIN_RESPIRATORY_RATE_ALARM, MAX_RESPIRATORY_RATE_ALARM, HIGH_RESPIRATORY_RATE_ALARM_INCREMENT, HIGH_RESPIRATORY_RATE_ALARM_SELECT_PIN, DEFAULT_HIGH_RESPIRATORY_RATE_ALARM, e_HighRespiratoryRateAlarm)};
 
 volatile boolean alarmReset = false;
+volatile boolean alarmSilent = false;
 // TODO: These are never set?
 // TODO: Do these really have to be globals?
 float measuredPIP;
@@ -87,6 +89,8 @@ float motorReturnTime;
 elapsedMillis parameterSetDebounceTimer;
 elapsedMillis alarmResetDebounceTimer;
 elapsedMillis alarmSilenceTimer;
+
+elapsedMillis alarmSilentTimer;
 
 // State for the ventilator.
 VentilatorState state;
@@ -106,6 +110,7 @@ void setup() {
     setupLimitSwitch();
     setUpAlarmPins();
     setUpPressureSensor();
+    alarmSilentTimer = 0;
 
     // Motor serial communications startup
     // MotorSerial.begin(9600); //********
@@ -126,13 +131,10 @@ void setup() {
 
     //Motor Controller Start
     motorController.begin(38400);
-
     
     // Set up ventilator state.
     state = get_init_state();
     state.machine_state = StartupHold;
-
-
 
 
 
@@ -228,6 +230,8 @@ void alarmResetISR(){
     //digitalWrite(ALARM_BUZZER_PIN,HIGH);
     alarmResetDebounceTimer = 0;
     alarmReset = true;
+    alarmSilent = true;
+    alarmSilentTimer = 0;
   }
  
 
