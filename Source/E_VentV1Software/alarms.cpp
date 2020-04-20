@@ -101,7 +101,7 @@ uint16_t check_respiratory_rate(VentilatorState &state, UserParameter *userParam
 
   if((state.calculated_respiratory_rate - allowable_difference) > state.breaths_per_minute){
 
-    return HIGH_RESPIRATORY_RATE;
+    return HIGH_RR_ALARM;
   }
   
   return 0;

@@ -63,7 +63,7 @@ const uint16_t MISSED_TRIGGER_ALARM      = 0x01 << 6;
 const uint16_t MECHANICAL_FAILURE_ALARM  = 0x01 << 7;
 const uint16_t FULL_DEVICE_FAILURE       = 0x01 << 8;
 //const uint16_t PRESSURE_SENSOR_ALARM = 0x01 << 8;
-const uint16_t HIGH_RESPIRATORY_RATE      = 0x01 << 10;
+//const uint16_t HIGH_RESPIRATORY_RATE      = 0x01 << 10;
 
 // Functions for triggering alarms.
 

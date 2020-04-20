@@ -4,6 +4,7 @@
 #include "UserParameter.h"
 #include "PinAssignments.h"
 #include "Motor.h"
+#include "conversions.h"
 
 
 char machineStateCodeAssignment(machineStates machineState) {
@@ -152,5 +153,9 @@ void calculate_respiratory_rate(VentilatorState &state){
     unsigned long elapsed_time = elapsed_respiratory_rate_time(state);
 
     state.calculated_respiratory_rate = (state.breath_counter / (elapsed_time / S_TO_MS)) * 60.0;
+
+    state.breath_counter = 0;
+
+    reset_respiratory_rate_timer(state);
 
 }
