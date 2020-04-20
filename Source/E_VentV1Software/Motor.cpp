@@ -121,25 +121,6 @@ void checkMotorStatus(RoboClaw &controller_name, VentilatorState &state) {
 
 	state.errors |= check_motor_position(state.current_motor_position, state.future_motor_position);
 
-	//If there is a mechanical failure, decide what happens next
-	if (state.errors & MECHANICAL_FAILURE_ALARM){
-		//Increment count
-		state.mechanical_failure_count += 1;
-		if (state.mechanical_failure_count >= 2){
-			state.machine_state = FailureMode;
-			state.errors |= FULL_DEVICE_FAILURE;
-		}
-		else {
-		//Go to calibration
-			state.machine_state = BreathLoopStart;
-			state.zeroing_state = CommandHome;
-		}
-	} 
- 
-	//controller_name.ReadTemp(MOTOR_ADDRESS, state.controller_temperature);
-	//state.controller_temperature = state.controller_temperature*0.1; //TODO magic number
-	//state.errors |= check_controller_temperature(state.controller_temperature);	
-
 	
   Serial.println(F("exit check motor status"));
 	return;
