@@ -191,6 +191,15 @@ void loop() {
         Serial.println(F("Breath Loop Start"));
 #endif //SERIAL_DEBUG
 
+        state.breath_counter += 1;
+
+        if(state.breath_counter > 4){
+            calculate_respiratory_rate(state);
+            Serial.println(state.calculated_respiratory_rate);
+        }
+
+        state.errors |= check_respiratory_rate(state, userParameters);
+
         alarmDisplay.begin(LCD_COLUMNS, LCD_ROWS);
         ventilatorDisplay.begin(LCD_COLUMNS, LCD_ROWS);
 

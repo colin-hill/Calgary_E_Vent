@@ -63,6 +63,7 @@ const uint16_t MISSED_TRIGGER_ALARM      = 0x01 << 6;
 const uint16_t MECHANICAL_FAILURE_ALARM  = 0x01 << 7;
 const uint16_t FULL_DEVICE_FAILURE       = 0x01 << 8;
 //const uint16_t PRESSURE_SENSOR_ALARM = 0x01 << 8;
+const uint16_t HIGH_RESPIRATORY_RATE      = 0x01 << 10;
 
 // Functions for triggering alarms.
 
@@ -140,6 +141,9 @@ uint16_t check_peep(const float pressure, UserParameter *userParameters);
 //uint16_t check_controller_temperature(const uint16_t temperature);
 
 uint16_t check_motor_position(const long int current_position, const long int expected_position);
+
+uint16_t check_respiratory_rate(VentilatorState &state, UserParameter *userParameters);
+
 
 
 /** Function to handle alarms

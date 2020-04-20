@@ -95,6 +95,18 @@ uint16_t check_motor_position(const long int current_position, const long int ex
     }
 }
 
+uint16_t check_respiratory_rate(VentilatorState &state, UserParameter *userParameters){
+
+  float allowable_difference = userParameters[(int)e_HighRespiratoryRateAlarm].value;
+
+  if((state.calculated_respiratory_rate - allowable_difference) > state.breaths_per_minute){
+
+    return HIGH_RESPIRATORY_RATE;
+  }
+  
+  return 0;
+}
+
 void alarm_debounce_reset(VentilatorState &state) {
 
   state.alarm_outputs = state.this_breath_errors | state.last_breath_errors;

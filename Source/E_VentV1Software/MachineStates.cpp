@@ -56,6 +56,10 @@ VentilatorState get_init_state(void) {
      state.inspiration_time = DEFAULT_INSPIRATION_TIME;
         //Nominal expiration time
      state.expiration_time = SECONDS_PER_MINUTE/state.breaths_per_minute - state.inspiration_time - state.plateau_pause_time;
+
+     state.calculated_respiratory_rate = DEFAULT_BPM;
+
+     state.breath_counter = 0;
      
 
     //Mechanism Values -----------------------------------------------------------------------------------------
@@ -131,4 +135,22 @@ unsigned long elapsed_alarm_time(const VentilatorState &state) {
 
 void reset_alarm_timer(VentilatorState &state) {
     state.alarm_silence_start_time = state.current_time;
+}
+
+unsigned long elapsed_respiratory_rate_time(const VentilatorState &state){
+
+    return state.current_time - state.respiratory_rate_time;
+}
+
+void reset_respiratory_rate_timer(VentilatorState &state){
+
+    state.respiratory_rate_time = state.current_time;
+}
+
+void calculate_respiratory_rate(VentilatorState &state){
+
+    unsigned long elapsed_time = elapsed_respiratory_rate_time(state);
+
+    state.calculated_respiratory_rate = state.breath_counter / elapsed_time;
+
 }

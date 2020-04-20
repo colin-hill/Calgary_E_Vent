@@ -86,6 +86,7 @@ struct VentilatorState {
     unsigned long current_time;      // Current time (ms).
 
     unsigned long alarm_silence_start_time;
+    unsigned long respiratory_rate_time;
 
     //TODO: consider naming
 
@@ -116,6 +117,8 @@ struct VentilatorState {
      float inspiration_time;
         //Nominal expiration time
      float expiration_time;
+
+     float calculated_respiratory_rate;
      
 
     //Mechanism Values -----------------------------------------------------------------------------------------
@@ -132,6 +135,8 @@ struct VentilatorState {
     long int future_motor_position;
 
     long int current_motor_position;
+
+    uint8_t breath_counter;
 
 
 
@@ -197,6 +202,12 @@ unsigned long elapsed_time(const VentilatorState &state);
 unsigned long elapsed_alarm_time(const VentilatorState &state);
 
 void reset_alarm_timer(VentilatorState &state);
+
+unsigned long elapsed_respiratory_rate_time(const VentilatorState &state);
+
+void reset_respiratory_rate_time(VentilatorState &state);
+
+void calculate_respiratory_rate(VentilatorState &state);
 
 
 #endif
