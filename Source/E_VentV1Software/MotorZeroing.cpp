@@ -41,7 +41,8 @@ void motorHomingWait(VentilatorState &state) {
     	state.zeroing_state = CommandZero;
     }
     else if (elapsed_time(state) > (HOMING_TIMEOUT*S_TO_MS)) {
-    	//TODO: Add time out error
+    	state.errors |= FULL_DEVICE_FAILURE;
+        state.machine_state = FailureMode;
     }
 
     return;

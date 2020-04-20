@@ -7,9 +7,6 @@
 
 void failure_mode(VentilatorState &state) {
 
-    //TODO: Set motor velocity to zero
-
-    //TODO: Set errors to critcal failure
 
 
 #ifdef SERIAL_DEBUG

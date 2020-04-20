@@ -68,10 +68,10 @@ void displayHighPEEPAlarm(LiquidCrystal &displayName, float pressureMeasurement,
  */
 void displayLowPEEPAlarm(LiquidCrystal &displayName, float pressureMeasurement, const int LCD_MAX_STRING);
 
-/** Function for display of a possible disconnection alarm
+/** Function for display of a mechanical failure alarm
 
  */
-void displayDisconnectAlarm(LiquidCrystal &displayName);
+void displayMechanicalFailureAlarm(LiquidCrystal &displayName);
 
 /** Function for display of the high temperature alarm
 

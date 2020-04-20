@@ -74,22 +74,22 @@ uint16_t check_peep(const float pressure, UserParameter *userParameters) {
     return check_high_peep(pressure, userParameters) | check_low_peep(pressure, userParameters);
 }
 
-uint16_t check_controller_temperature(const uint16_t temperature){
+/*uint16_t check_controller_temperature(const uint16_t temperature){
     if (temperature > MAX_CONTROLLER_TEMPERATURE) {
         return HIGH_TEMP_ALARM;
     } else {
         return 0;
     }
-}
+}*/
 
 uint16_t check_motor_position(const long int current_position, const long int expected_position) {
     if (current_position > expected_position + POSITION_TOLERANCE) {
         Serial.println("Out of tolerance");
-        return DEVICE_FAILURE_ALARM;
+        return MECHANICAL_FAILURE_ALARM;
     }
     else if (current_position < expected_position - POSITION_TOLERANCE) {
         Serial.println("Out of tolerance");
-        return DEVICE_FAILURE_ALARM;
+        return MECHANICAL_FAILURE_ALARM;
     } else {
         return 0;
     }
@@ -201,8 +201,13 @@ void control_alarm_displays(LiquidCrystal &alarmDisplay, LiquidCrystal &paramete
 
       displayAlarmParameters(currentlySelectedParameter, alarmDisplay, userParameters);
     }
+    else if (state.alarm_outputs & FULL_DEVICE_FAILURE) {
+      displayDeviceFailureAlarm(alarmDisplay);
+    }
+    else if (state.alarm_outputs & MECHANICAL_FAILURE_ALARM) {
+      displayMechanicalFailureAlarm(alarmDisplay);
+    }
     else {
-
       displayMultipleAlarms(alarmDisplay, maxPIP, minPIP, maxPEEP, minPEEP, state);
     }
 

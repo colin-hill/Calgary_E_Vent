@@ -41,9 +41,8 @@ void acInhaleWait(VentilatorState &state) {
 
     if (elapsed_time(state) > (state.ac_threshold_time * S_TO_MS)) {
         state.ac_state = ACInhaleCommand;
-
-        //Removing APNEA_ALARM for the time being based on feedback from RT
-        //state.errors |= APNEA_ALARM;
+   
+        state.errors |= MISSED_TRIGGER_ALARM;
     }
     else if(state.pressure < (state.peep_pressure - state.ac_threshold_pressure)){
         state.ac_state = ACInhaleCommand;

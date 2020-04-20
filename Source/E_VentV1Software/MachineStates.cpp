@@ -73,6 +73,8 @@ VentilatorState get_init_state(void) {
     state.future_motor_position = 0;
     state.current_motor_position = 0;
 
+
+
     //Errors
     state.errors = 0;
 
@@ -81,6 +83,8 @@ VentilatorState get_init_state(void) {
     state.last_loop_errors = 0;
     state.alarm_outputs = 0;
     state.silenced_alarms = 0;
+
+    state.mechanical_failure_count = 0;
 
     return state;
 }

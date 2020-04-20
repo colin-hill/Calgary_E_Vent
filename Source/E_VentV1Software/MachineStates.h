@@ -133,6 +133,8 @@ struct VentilatorState {
 
     long int current_motor_position;
 
+
+
     uint16_t errors;
 
     uint16_t this_breath_errors;
@@ -140,6 +142,8 @@ struct VentilatorState {
     uint16_t last_loop_errors;
     uint16_t alarm_outputs;
     uint16_t silenced_alarms;
+
+    uint8_t mechanical_failure_count;
 };
 
 

@@ -93,11 +93,21 @@ void displayMultipleAlarms(LiquidCrystal &displayName, float  maxPIP, float minP
 	displayName.setCursor(0,3);
 	snprintf(alarmStr, LCD_MAX_STRING, "HRR(35) ", displayHighPIP);
 	displayName.write(alarmStr);
-	displayName.write((byte)0);
+	if (state.alarm_outputs & HIGH_RR_ALARM) {
+		displayName.write((byte)1);
+	}
+	else {
+		displayName.write((byte)0);
+	}
 
 	snprintf(alarmStr, LCD_MAX_STRING, "| MSDTRIG ", displayHighPIP);
 	displayName.write(alarmStr);
-	displayName.write((byte)0);
+	if (state.alarm_outputs & MISSED_TRIGGER_ALARM) {
+		displayName.write((byte)1);
+	}
+	else {
+		displayName.write((byte)0);
+	}
 
 
 
@@ -179,12 +189,12 @@ void displayLowPEEPAlarm(LiquidCrystal &displayName, float pressureMeasurement, 
 }
 
 
-void displayDisconnectAlarm(LiquidCrystal &displayName) {
+void displayMechanicalFailureAlarm(LiquidCrystal &displayName) {
 	
 	const char alarmDispL1[] = "ALARM CONDITION:";
-	const char alarmDispL2[] = "POSSIBLE DISCONNECT";
-	const char alarmDispL3[] = "CHECK O2 AND AIR";
-	const char alarmDispL4[] = "CONNECTIONS";
+	const char alarmDispL2[] = "MOTOR LOCATION FAULT";
+	const char alarmDispL3[] = "CALIBRATION";
+	const char alarmDispL4[] = "IN PROGRESS...";
 
 	displayName.clear();
 	displayName.write(alarmDispL1);
