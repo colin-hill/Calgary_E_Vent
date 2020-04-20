@@ -227,7 +227,7 @@ void control_alarm_displays(LiquidCrystal &alarmDisplay, LiquidCrystal &paramete
     float lowPlateauPressure = userParameters[(int)currentParameter].value;
     float tempLowPlateauPressure = userParameters[(int)currentParameter].tmpValue;
 
-    if(((int)currentlySelectedParameter >= e_HighPIPAlarm) && (e_None != (int)currentlySelectedParameter)){
+    if(((int)currentlySelectedParameter >= e_HighPIPAlarm) && (e_None != (int)currentlySelectedParameter)){ //If there is a alarm parameter selected display it preferentially
 
       displayAlarmParameters(currentlySelectedParameter, alarmDisplay, userParameters);
     }
