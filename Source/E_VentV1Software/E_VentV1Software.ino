@@ -175,7 +175,7 @@ void loop() {
         displayHomingScreen(ventilatorDisplay);
     }
     else {
-        displayUserParameters(currentlySelectedParameter, ventilatorDisplay, state.machine_state, state.vc_state, state.ac_state, state.peak_pressure, state.peep_pressure, state.pressure, LCD_MAX_STRING, userParameters);
+        displayUserParameters(currentlySelectedParameter, ventilatorDisplay, state.machine_state, state.vc_state, state.ac_state, state.peak_pressure, state.peep_pressure, state.calculated_respiratory_rate, LCD_MAX_STRING, userParameters);
     }
 
     //TODO: Add in alarm display

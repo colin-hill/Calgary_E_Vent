@@ -31,10 +31,17 @@ void UserParameter::updateValue(){
 void UserParameter::updateTmpValue(int32_t numEncoderSteps){
 
     if(e_BPM == this->name){
-        this->maxValue = min(MAX_BPM,(60.0 / ((this->currentInspirationTime) + this->currentPlateauPauseTime + 2*INERTIA_BUFFER + CODE_LATENCY)));
+        this->maxValue = min(MAX_BPM,(60.0 / ((this->currentInspirationTime) + this->currentPlateauPauseTime + 2*INERTIA_BUFFER + CODE_LATENCY+ 0.25)));
     }
     else if(e_InspirationTime == this->name){
-        this->maxValue = (60.0 / (this->currentBPM)) - ((this->currentPlateauPauseTime)) - 2*INERTIA_BUFFER - (CODE_LATENCY);
+        float tmp = (60.0 / (this->currentBPM)) - ((this->currentPlateauPauseTime) + 2*INERTIA_BUFFER + (CODE_LATENCY) + 0.25);
+
+        if(tmp < this->minValue){
+            this->maxValue = 0.5;
+        }
+        else{
+            this->maxValue = tmp;
+        }
     }
 	
     float funcValue = this->tmpValue + (this->increment)*((float)numEncoderSteps);
