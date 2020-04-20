@@ -151,6 +151,6 @@ void calculate_respiratory_rate(VentilatorState &state){
 
     unsigned long elapsed_time = elapsed_respiratory_rate_time(state);
 
-    state.calculated_respiratory_rate = state.breath_counter / elapsed_time;
+    state.calculated_respiratory_rate = (state.breath_counter / (elapsed_time / S_TO_MS)) * 60.0;
 
 }
