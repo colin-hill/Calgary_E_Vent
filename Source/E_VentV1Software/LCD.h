@@ -38,7 +38,7 @@ const int VENTILATOR_LCD_DB7    = 2;
 void displayNoAlarm(LiquidCrystal &displayName, float highPressure, float lowPressure, float highPEEP, float lowPEEP, float lowPlateau, const int LCD_MAX_STRING);
 
 
-void displayMultipleAlarms(LiquidCrystal &displayName, float  maxPIP, float minPIP, float maxPEEP, float minPEEP, VentilatorState &state);
+void displayMultipleAlarms(LiquidCrystal &displayName, float  maxPIP, float minPIP, float maxPEEP, float minPEEP, float respiratoryRate, VentilatorState &state);
 
 /** Function for display of the high PIP alarm
 

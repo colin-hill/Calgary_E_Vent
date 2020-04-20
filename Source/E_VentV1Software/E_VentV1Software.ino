@@ -157,11 +157,14 @@ void loop() {
   
    wdt_reset();
 
-   Serial.println(millis());
+   
 
    
-  
+    Serial.print(F("motor handle in: "));
+    Serial.println(millis());
     handle_motor(motorController, state);
+    Serial.print(F("motor handle out: "));
+    Serial.println(millis());
 
     //Update the state user input parameters
     updateStateUserParameters(state, currentlySelectedParameter, parameterSet, parameterSelectEncoder,
@@ -172,13 +175,14 @@ void loop() {
         displayHomingScreen(ventilatorDisplay);
     }
     else {
-        displayUserParameters(currentlySelectedParameter, ventilatorDisplay, state.machine_state, state.vc_state, state.ac_state, state.peak_pressure, state.peep_pressure, state.calculated_respiratory_rate, LCD_MAX_STRING, userParameters);
+        displayUserParameters(currentlySelectedParameter, ventilatorDisplay, state.machine_state, state.vc_state, state.ac_state, state.peak_pressure, state.peep_pressure, state.pressure, LCD_MAX_STRING, userParameters);
     }
 
     //TODO: Add in alarm display
 
     // Read in values for state
     update_state(state);
+    Serial.println(millis());
 
     //Beginning of state machine code
 
@@ -219,7 +223,7 @@ void loop() {
     else if (FailureMode == state.machine_state) {
         failure_mode(state);
     }
-
+    Serial.println(millis());
     loop_alarm_manager(alarmSilenceTimer, alarmReset, alarmDisplay, ventilatorDisplay, state, userParameters, currentlySelectedParameter);
 
 }

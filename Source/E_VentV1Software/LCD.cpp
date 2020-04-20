@@ -34,7 +34,7 @@ void displayNoAlarm(LiquidCrystal &displayName, float highPressure, float lowPre
 }
 
 
-void displayMultipleAlarms(LiquidCrystal &displayName, float  maxPIP, float minPIP, float maxPEEP, float minPEEP, VentilatorState &state) {
+void displayMultipleAlarms(LiquidCrystal &displayName, float  maxPIP, float minPIP, float maxPEEP, float minPEEP, float respiratoryRate, VentilatorState &state) {
 
 	const char alarmDispL1[] = "ALARM OVERVIEW:";
 	char alarmStr[LCD_MAX_STRING];
@@ -43,6 +43,7 @@ void displayMultipleAlarms(LiquidCrystal &displayName, float  maxPIP, float minP
 	int displayLowPIP = roundAndCast(minPIP);
 	int displayHighPEEP = roundAndCast(maxPEEP);
 	int displayLowPEEP = roundAndCast(minPEEP);
+	int displayRespiratoryRate = roundAndCast(respiratoryRate);
 
 	displayName.createChar(0, DISP_LED_OFF);
 	displayName.createChar(1, DISP_LED_ON);
@@ -91,7 +92,7 @@ void displayMultipleAlarms(LiquidCrystal &displayName, float  maxPIP, float minP
 
 	//Line 4
 	displayName.setCursor(0,3);
-	snprintf(alarmStr, LCD_MAX_STRING, "HRR(35) ", displayHighPIP);
+	snprintf(alarmStr, LCD_MAX_STRING, "HRR(%2d) ", displayRespiratoryRate);
 	displayName.write(alarmStr);
 	if (state.alarm_outputs & HIGH_RR_ALARM) {
 		displayName.write((byte)1);
@@ -100,7 +101,7 @@ void displayMultipleAlarms(LiquidCrystal &displayName, float  maxPIP, float minP
 		displayName.write((byte)0);
 	}
 
-	snprintf(alarmStr, LCD_MAX_STRING, "| MSDTRIG ", displayHighPIP);
+	/*snprintf(alarmStr, LCD_MAX_STRING, "| MSDTRIG ", displayHighPIP);
 	displayName.write(alarmStr);
 	if (state.alarm_outputs & MISSED_TRIGGER_ALARM) {
 		displayName.write((byte)1);
@@ -108,7 +109,7 @@ void displayMultipleAlarms(LiquidCrystal &displayName, float  maxPIP, float minP
 	else {
 		displayName.write((byte)0);
 	}
-
+*/
 
 
 

@@ -10,6 +10,8 @@
 #include "WProgram.h"
 #endif
 
+#include "conversions.h"
+
 
 // Make sure each state has a character in machineStatesCodes
 // This is for debug information.

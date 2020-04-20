@@ -11,6 +11,8 @@
 #endif
 
 #include "breathing.h"
+#include "Motor.h"
+#include "conversions.h"
 
 enum SelectedParameter{
                        e_ThresholdPressure,
@@ -50,7 +52,7 @@ const float LOW_PEEP_ALARM_DEFAULT                = 3;
 const float LOW_PLATEAU_PRESSURE_ALARM_INCREMENT  = 1; //cmH2O
 const float LOW_PLATEAU_PRESSURE_ALARM_DEFAULT    = 0;
 const float HIGH_RESPIRATORY_RATE_ALARM_INCREMENT = 1; //Breaths per Minute
-const float DEFAULT_HIGH_RESPIRATORY_RATE_ALARM   = 1;
+const float DEFAULT_HIGH_RESPIRATORY_RATE_ALARM   = 35;
 
 class UserParameter {
 public:

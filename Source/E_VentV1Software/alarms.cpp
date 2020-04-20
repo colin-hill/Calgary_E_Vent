@@ -97,9 +97,9 @@ uint16_t check_motor_position(const long int current_position, const long int ex
 
 uint16_t check_respiratory_rate(VentilatorState &state, UserParameter *userParameters){
 
-  float allowable_difference = userParameters[(int)e_HighRespiratoryRateAlarm].value;
+  float max_respiratory_rate = userParameters[(int)e_HighRespiratoryRateAlarm].value;
 
-  if((state.calculated_respiratory_rate - allowable_difference) > state.breaths_per_minute){
+  if(state.calculated_respiratory_rate > max_respiratory_rate){
 
     return HIGH_RR_ALARM;
   }
@@ -227,6 +227,9 @@ void control_alarm_displays(LiquidCrystal &alarmDisplay, LiquidCrystal &paramete
     float lowPlateauPressure = userParameters[(int)currentParameter].value;
     float tempLowPlateauPressure = userParameters[(int)currentParameter].tmpValue;
 
+    currentParameter = e_HighRespiratoryRateAlarm;
+    float respiratoryRateAlarm = userParameters[(int)currentParameter].value;
+
     if(((int)currentlySelectedParameter >= e_HighPIPAlarm) && (e_None != (int)currentlySelectedParameter)){ //If there is a alarm parameter selected display it preferentially
 
       displayAlarmParameters(currentlySelectedParameter, alarmDisplay, userParameters);
@@ -238,7 +241,7 @@ void control_alarm_displays(LiquidCrystal &alarmDisplay, LiquidCrystal &paramete
       displayMechanicalFailureAlarm(alarmDisplay);
     }
     else {
-      displayMultipleAlarms(alarmDisplay, maxPIP, minPIP, maxPEEP, minPEEP, state);
+      displayMultipleAlarms(alarmDisplay, maxPIP, minPIP, maxPEEP, minPEEP, respiratoryRateAlarm, state);
     }
 
     return;
