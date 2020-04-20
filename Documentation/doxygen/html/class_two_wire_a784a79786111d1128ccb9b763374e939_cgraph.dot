@@ -1,0 +1,10 @@
+digraph "TwoWire::clearRecoveryCount"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="TwoWire::clearRecoveryCount",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+  Node1 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="twi_clearRecoveryCount",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$twi_8c.html#a9f2c12c59cf4018c579b49f01cc7d43e",tooltip=" "];
+}

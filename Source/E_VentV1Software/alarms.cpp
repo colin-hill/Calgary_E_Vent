@@ -15,14 +15,7 @@
 // ----------------------------------------------------------------------
 
 elapsedMillis alarmBuzzerTimer;
-elapsedMillis highPressureAlarmTimer;
-elapsedMillis lowPressureAlarmTimer;
-elapsedMillis highPEEPAlarmTimer;
-elapsedMillis lowPEEPAlarmTimer;
-elapsedMillis disconnectAlarmTimer;
-elapsedMillis highTempAlarmTimer;
-elapsedMillis apneaAlarmTimer;
-elapsedMillis deviceFaiulureAlarmTimer;
+
 
 
 // ----------------------------------------------------------------------
@@ -105,10 +98,13 @@ uint16_t check_motor_position(const long int current_position, const long int ex
 
 
 
-VentilatorState handle_alarms(volatile boolean &alarmReset, VentilatorState &state, LiquidCrystal &displayName, UserParameter *userParameters, SelectedParameter &currentlySelectedParameter) {
+VentilatorState handle_alarms(volatile boolean &alarmReset,volatile boolean &alarmSilent, VentilatorState &state, LiquidCrystal &displayName, UserParameter *userParameters, SelectedParameter &currentlySelectedParameter) {
     if (state.errors) { // There is an unserviced error
         // Control the buzzer
         if (alarmBuzzerTimer > (ALARM_SOUND_LENGTH*1000)) {
+            
+
+            if (false == alarmSilent){
             // Reset the timer
             alarmBuzzerTimer = 0;
 
@@ -116,6 +112,10 @@ VentilatorState handle_alarms(volatile boolean &alarmReset, VentilatorState &sta
             digitalWrite(ALARM_BUZZER_PIN,!digitalRead(ALARM_BUZZER_PIN));
             //digitalWrite(ALARM_LED_PIN,!digitalRead(ALARM_LED_PIN));
             digitalWrite(ALARM_RELAY_PIN,!digitalRead(ALARM_RELAY_PIN));
+          }
+          else {
+            digitalWrite(ALARM_BUZZER_PIN, LOW);
+          }
         }
 
         // Provide the appropriate screen for the error, error flags held in a 16 bit unsigned integer
@@ -176,6 +176,18 @@ VentilatorState handle_alarms(volatile boolean &alarmReset, VentilatorState &sta
     }
 
     return state;
+}
+
+void reset_alarm_silence(elapsedMillis &alarmSilentTimer, volatile boolean &alarmSilent){
+
+
+  cli();
+  if (alarmSilentTimer > 120000){
+    alarmSilent = false;
+    alarmSilentTimer = 0;
+  }
+  sei();
+
 }
 
 void reset_alarms(VentilatorState &state)

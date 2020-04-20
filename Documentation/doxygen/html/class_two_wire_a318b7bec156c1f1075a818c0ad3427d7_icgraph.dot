@@ -1,0 +1,12 @@
+digraph "TwoWire::write"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="RL";
+  Node1 [label="TwoWire::write",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="TwoWire::requestFrom",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_two_wire.html#acd59cc9570fd49b1cf9044cbefef85ac",tooltip=" "];
+  Node1 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="TwoWire::write",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_two_wire.html#a1957b4d5a6a997bdde436e9e40d131a7",tooltip=" "];
+}

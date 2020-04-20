@@ -1,0 +1,52 @@
+digraph "handle_alarms"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="handle_alarms",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+  Node1 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="displayAlarmParameters",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$update_user_parameters_8cpp.html#a22d8161af66e477ca261b6f34a7ac783",tooltip=" "];
+  Node2 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="displayHighPEEPChange",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_l_c_d_8cpp.html#aef4d7989e9d415fc1e44e35064c0d698",tooltip=" "];
+  Node3 -> Node4 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="roundAndCast",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_l_c_d_8cpp.html#a186543cef0be5a7aaf40a6fb361aa531",tooltip=" "];
+  Node2 -> Node5 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="displayHighPressureChange",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_l_c_d_8cpp.html#ac4e40eb93194b288ed07ff8bcc1c9220",tooltip=" "];
+  Node5 -> Node4 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 -> Node6 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="displayLowPEEPChange",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_l_c_d_8cpp.html#a1a29aebb45c827892c55042f42f929db",tooltip=" "];
+  Node6 -> Node4 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 -> Node7 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node7 [label="displayLowPlateauChange",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_l_c_d_8cpp.html#ad6087dc492135066e7be5cb20e74d1a3",tooltip=" "];
+  Node7 -> Node4 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 -> Node8 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node8 [label="displayLowPressureChange",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_l_c_d_8cpp.html#afead16f2b67e9121e0b25df67eb35e03",tooltip=" "];
+  Node8 -> Node4 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 -> Node9 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node9 [label="displayNoAlarm",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_l_c_d_8cpp.html#abe25f27948a9515f67c00071900dcb7a",tooltip=" "];
+  Node9 -> Node4 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1 -> Node10 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node10 [label="displayApneaAlarm",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_l_c_d_8cpp.html#a14ab81681380ffa209c4e061ebc760a3",tooltip=" "];
+  Node1 -> Node11 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node11 [label="displayDeviceFailureAlarm",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_l_c_d_8cpp.html#afadf609ee92b61d1d8f8d2908854b3d0",tooltip=" "];
+  Node1 -> Node12 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node12 [label="displayDisconnectAlarm",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_l_c_d_8cpp.html#a9760d67d8ec54d4e72db33a260e72101",tooltip=" "];
+  Node1 -> Node13 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node13 [label="displayHighPEEPAlarm",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_l_c_d_8cpp.html#ace309292bfe4cfb98d1d38040d286aaf",tooltip=" "];
+  Node13 -> Node4 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1 -> Node14 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node14 [label="displayHighPressureAlarm",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_l_c_d_8cpp.html#aae883be89e18b704e085c2492bf08f31",tooltip=" "];
+  Node14 -> Node4 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1 -> Node15 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node15 [label="displayLowPEEPAlarm",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_l_c_d_8cpp.html#a6235758a69d89c29ca06ec100474d271",tooltip=" "];
+  Node15 -> Node4 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1 -> Node16 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node16 [label="displayLowPressureAlarm",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_l_c_d_8cpp.html#a2bab0324c53a65e8f5c6f2256b2d8e85",tooltip=" "];
+  Node16 -> Node4 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1 -> Node17 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node17 [label="displayTemperatureAlarm",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_l_c_d_8cpp.html#a0e8226271f537171619849b7fa1eb6f3",tooltip=" "];
+  Node17 -> Node4 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1 -> Node18 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node18 [label="reset_alarms",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$alarms_8cpp.html#a06d374d52a95a21932378b1890d1bafc",tooltip=" "];
+}

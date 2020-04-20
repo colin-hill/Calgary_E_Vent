@@ -1,0 +1,20 @@
+digraph "TwoWire::requestFrom"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="TwoWire::requestFrom",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+  Node1 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="TwoWire::beginTransmission",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_two_wire.html#a8d55f00ea8ac3d7427d62e0c71e95ec2",tooltip=" "];
+  Node1 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="TwoWire::endTransmission",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_two_wire.html#af80f9a7b85a3a81a035ca94c95bcdc1d",tooltip=" "];
+  Node1 -> Node4 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="TwoWire::read",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_two_wire.html#aa361b83500d00dfb93bb25b6473b33e9",tooltip=" "];
+  Node1 -> Node5 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="twi_readFrom",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$twi_8c.html#a96bfb24c154b0e332343359eb14e36fe",tooltip=" "];
+  Node1 -> Node6 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="TwoWire::write",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_two_wire.html#a318b7bec156c1f1075a818c0ad3427d7",tooltip=" "];
+  Node6 -> Node7 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node7 [label="twi_transmit",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$twi_8c.html#abb66f08d8061c1064047324c1bacc2a9",tooltip=" "];
+}

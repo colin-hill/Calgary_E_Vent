@@ -1,0 +1,30 @@
+digraph "handle_VCMode"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="handle_VCMode",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+  Node1 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="checkMotorStatus",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_motor_8cpp.html#a07a94c203aa1013ea0e50c615b348657",tooltip=" "];
+  Node2 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="check_motor_position",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$alarms_8cpp.html#aa229b3a3cfcfa1c62204f64b8d10ac98",tooltip=" "];
+  Node2 -> Node4 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="readPosition",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_motor_8cpp.html#a9f8782c6231694694e9f043553b90eb8",tooltip=" "];
+  Node4 -> Node5 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="RoboClaw::ReadEncM1",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_robo_claw.html#aa55d834a2f46f37ee3338707cabd4308",tooltip=" "];
+  Node1 -> Node6 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="commandExhale",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_motor_8cpp.html#a54e6b51ba2b1953c8c008727988d22b0",tooltip=" "];
+  Node6 -> Node7 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node7 [label="RoboClaw::SpeedAccelDeccel\lPositionM1",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_robo_claw.html#a6d676288a7ba6e0fd698692f40fee4a6",tooltip=" "];
+  Node1 -> Node8 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node8 [label="commandInhale",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_motor_8cpp.html#ac0c8fa80eaccf14636e3f975fd96696f",tooltip=" "];
+  Node8 -> Node7 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1 -> Node9 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node9 [label="commandInhaleAbort",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_motor_8cpp.html#a7722cd6eea8f797bb308bfe212625d45",tooltip=" "];
+  Node9 -> Node10 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node10 [label="commandStop",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_motor_8cpp.html#ab706207905c7bc0de4f097f591c65ce8",tooltip=" "];
+  Node10 -> Node11 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node11 [label="RoboClaw::SpeedDistanceM1",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_robo_claw.html#aa4df4efb2e1a1b599e6a88748323f2aa",tooltip=" "];
+  Node9 -> Node7 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+}

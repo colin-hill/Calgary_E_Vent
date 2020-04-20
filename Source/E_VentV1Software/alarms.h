@@ -149,7 +149,7 @@ uint16_t check_motor_position(const long int current_position, const long int ex
    - TODO: will reset the errors flag --- only in certain conditions.
    - TODO: can resent machine state!!!
  */
-VentilatorState handle_alarms(volatile boolean &alarmReset, VentilatorState &state, LiquidCrystal &displayName, UserParameter *userParameters, SelectedParameter &currentlySelectedParameter);
+VentilatorState handle_alarms(volatile boolean &alarmReset, volatile boolean &alarmSilent, VentilatorState &state, LiquidCrystal &displayName, UserParameter *userParameters, SelectedParameter &currentlySelectedParameter);
 
 /* TODO: Check alarms more frequently?
 
@@ -159,6 +159,8 @@ checks? I think if any of these checks fails at any point an alarm should be
 raised, right? Like in VCPeak or any of the other states you also shouldn't have
 low pressure...?
 */
+
+void reset_alarm_silence(elapsedMillis &alarmSilentTimer, volatile boolean &alarmSilent);
 
 void reset_alarms(VentilatorState &state);
 
