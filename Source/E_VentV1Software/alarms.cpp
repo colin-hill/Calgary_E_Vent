@@ -119,11 +119,29 @@ void alarm_debounce_reset(VentilatorState &state) {
 
 void loop_alarm_manager(elapsedMillis &alarmSilenceTimer, volatile boolean &alarmReset, LiquidCrystal &alarmDisplay, LiquidCrystal &parameterDisplay, VentilatorState &state, UserParameter *userParameters, SelectedParameter &currentlySelectedParameter) {
 
+  //If there is a mechanical failure, decide what happens next
+  if (state.errors & MECHANICAL_FAILURE_ALARM){
+    //Increment count
+    state.mechanical_failure_count += 1;
+    if (state.mechanical_failure_count >= 2){
+      state.machine_state = FailureMode;
+      state.errors |= FULL_DEVICE_FAILURE;
+    }
+    else {
+    //Go to calibration
+      state.machine_state = MotorZeroing;
+      state.zeroing_state = CommandHome;
+    }
+  } 
+
   state.this_breath_errors |= state.errors;
 
   state.errors = 0;
 
   state.alarm_outputs |= state.this_breath_errors;
+
+
+
 
   if (state.alarm_outputs != 0) {
     control_alarm_output(alarmSilenceTimer, alarmReset, state);
@@ -132,7 +150,7 @@ void loop_alarm_manager(elapsedMillis &alarmSilenceTimer, volatile boolean &alar
     digitalWrite(ALARM_BUZZER_PIN, LOW);
   }
 
-  
+ 
 
 
   control_alarm_displays(alarmDisplay, parameterDisplay, state, userParameters, currentlySelectedParameter);
