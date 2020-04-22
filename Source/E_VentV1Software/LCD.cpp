@@ -34,9 +34,16 @@ void displayNoAlarm(LiquidCrystal &displayName, float highPressure, float lowPre
 }
 
 
-void displayMultipleAlarms(LiquidCrystal &displayName, VentilatorState &state) {
+void displayMultipleAlarms(LiquidCrystal &displayName, float  maxPIP, float minPIP, float maxPEEP, float minPEEP, float respiratoryRate, VentilatorState &state) {
 
-	const char alarmDispL1[] = "ALARM CONDITION:";
+	const char alarmDispL1[] = "ALARM OVERVIEW:";
+	char alarmStr[LCD_MAX_STRING];
+
+	int displayHighPIP = roundAndCast(maxPIP);
+	int displayLowPIP = roundAndCast(minPIP);
+	int displayHighPEEP = roundAndCast(maxPEEP);
+	int displayLowPEEP = roundAndCast(minPEEP);
+	int displayRespiratoryRate = roundAndCast(respiratoryRate);
 
 	displayName.createChar(0, DISP_LED_OFF);
 	displayName.createChar(1, DISP_LED_ON);
@@ -45,39 +52,66 @@ void displayMultipleAlarms(LiquidCrystal &displayName, VentilatorState &state) {
 	displayName.clear();
 	displayName.write(alarmDispL1);
 
-	//Line 1
+	//Line 2
 	displayName.setCursor(0,1);
-	displayName.write("   HPIP ");
-	if (state.errors & HIGH_PRESSURE_ALARM) {
+	snprintf(alarmStr, LCD_MAX_STRING, "HPI(%2d) ", displayHighPIP);
+	displayName.write(alarmStr);
+	if (state.alarm_outputs & HIGH_PRESSURE_ALARM) {
 		displayName.write((byte)1);
 	}
 	else {
 		displayName.write((byte)0);
 	}
-	displayName.write(" | HPEEP ");
-	if (state.errors & HIGH_PEEP_ALARM) {
+	snprintf(alarmStr, LCD_MAX_STRING, "| LPI(%2d) ", displayLowPIP);
+	displayName.write(alarmStr);
+	if (state.alarm_outputs & LOW_PRESSURE_ALARM) {
 		displayName.write((byte)1);
 	}
 	else {
 		displayName.write((byte)0);
 	}	
 	
-	//Line 2
+	//Line 3
 	displayName.setCursor(0,2);
-	displayName.write("   LPIP ");
-	if (state.errors & LOW_PRESSURE_ALARM) {
+	snprintf(alarmStr, LCD_MAX_STRING, "HPE(%2d) ", displayHighPEEP);
+	displayName.write(alarmStr);
+	if (state.alarm_outputs & HIGH_PEEP_ALARM) {
 		displayName.write((byte)1);
 	}
 	else {
 		displayName.write((byte)0);
 	}
-	displayName.write(" | LPEEP ");
-	if (state.errors & LOW_PEEP_ALARM) {
+	snprintf(alarmStr, LCD_MAX_STRING, "| LPE(%2d) ", displayLowPEEP);
+	displayName.write(alarmStr);
+	if (state.alarm_outputs & LOW_PEEP_ALARM) {
 		displayName.write((byte)1);
 	}
 	else {
 		displayName.write((byte)0);
 	}
+
+	//Line 4
+	displayName.setCursor(0,3);
+	snprintf(alarmStr, LCD_MAX_STRING, "HRR(%2d) ", displayRespiratoryRate);
+	displayName.write(alarmStr);
+	if (state.alarm_outputs & HIGH_RR_ALARM) {
+		displayName.write((byte)1);
+	}
+	else {
+		displayName.write((byte)0);
+	}
+
+	/*snprintf(alarmStr, LCD_MAX_STRING, "| MSDTRIG ", displayHighPIP);
+	displayName.write(alarmStr);
+	if (state.alarm_outputs & MISSED_TRIGGER_ALARM) {
+		displayName.write((byte)1);
+	}
+	else {
+		displayName.write((byte)0);
+	}
+*/
+
+
 
 }
 
@@ -156,12 +190,12 @@ void displayLowPEEPAlarm(LiquidCrystal &displayName, float pressureMeasurement, 
 }
 
 
-void displayDisconnectAlarm(LiquidCrystal &displayName) {
+void displayMechanicalFailureAlarm(LiquidCrystal &displayName) {
 	
 	const char alarmDispL1[] = "ALARM CONDITION:";
-	const char alarmDispL2[] = "POSSIBLE DISCONNECT";
-	const char alarmDispL3[] = "CHECK O2 AND AIR";
-	const char alarmDispL4[] = "CONNECTIONS";
+	const char alarmDispL2[] = "MOTOR LOCATION FAULT";
+	const char alarmDispL3[] = "CALIBRATION";
+	const char alarmDispL4[] = "IN PROGRESS...";
 
 	displayName.clear();
 	displayName.write(alarmDispL1);

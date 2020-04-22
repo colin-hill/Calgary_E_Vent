@@ -9,6 +9,7 @@
 #include "updateUserParameters.h"
 #include "UserParameter.h"
 #include <assert.h>
+#include "conversions.h"
 
 #if ARDUINO >= 100
 #include "Arduino.h"
@@ -18,6 +19,10 @@
 
 // Alarm Sound definitions
 const float ALARM_SOUND_LENGTH = 0.5; //Seconds
+
+const float ALARM_SILENCE_TIME = 30.0; //seconds
+
+const float EXTERNAL_DISPLAY_DWELL = 3.0; //seconds
 
 // High PIP Alarm Definitions----------------
 const float MAX_HIGH_PIP_ALARM = 70; //cmH2O
@@ -45,21 +50,22 @@ const float MIN_LOW_PLATEAU_PRESSURE_ALARM = 1; //cmH2O
 //------------------------------------------
 
 //High Respiratory Rate Alarm----------------
-const float MAX_RESPIRATORY_RATE_ALARM = 10;
-const float MIN_RESPIRATORY_RATE_ALARM = 0;
+const float MAX_RESPIRATORY_RATE_ALARM = 40;
+const float MIN_RESPIRATORY_RATE_ALARM = 10;
 //-------------------------------------------
 
 // Alarm flags
-const uint16_t HIGH_PRESSURE_ALARM          = 0x01 << 0;
-const uint16_t LOW_PRESSURE_ALARM           = 0x01 << 1;
-const uint16_t HIGH_PEEP_ALARM              = 0x01 << 2;
-const uint16_t LOW_PEEP_ALARM               = 0x01 << 3;
-const uint16_t DISCONNECT_ALARM             = 0x01 << 4;
-const uint16_t HIGH_TEMP_ALARM              = 0x01 << 5;
-const uint16_t APNEA_ALARM                  = 0x01 << 6;
-const uint16_t DEVICE_FAILURE_ALARM         = 0x01 << 7;
-const uint16_t HIGH_RESPIRATORY_RATE_ALARM  = 0x01 << 8;
-const uint16_t PRESSURE_SENSOR_ALARM        = 0x01 << 9;
+const uint16_t HIGH_PRESSURE_ALARM       = 0x01 << 0;
+const uint16_t LOW_PRESSURE_ALARM        = 0x01 << 1;
+const uint16_t HIGH_PEEP_ALARM           = 0x01 << 2;
+const uint16_t LOW_PEEP_ALARM            = 0x01 << 3;
+const uint16_t DISCONNECT_ALARM          = 0x01 << 4;
+const uint16_t HIGH_RR_ALARM             = 0x01 << 5;
+const uint16_t MISSED_TRIGGER_ALARM      = 0x01 << 6;
+const uint16_t MECHANICAL_FAILURE_ALARM  = 0x01 << 7;
+const uint16_t FULL_DEVICE_FAILURE       = 0x01 << 8;
+//const uint16_t PRESSURE_SENSOR_ALARM = 0x01 << 8;
+//const uint16_t HIGH_RESPIRATORY_RATE      = 0x01 << 10;
 
 // Functions for triggering alarms.
 
@@ -134,9 +140,12 @@ uint16_t check_low_peep(const float pressure, UserParameter *userParameters);
 uint16_t check_peep(const float pressure, UserParameter *userParameters);
 
 
-uint16_t check_controller_temperature(const uint16_t temperature);
+//uint16_t check_controller_temperature(const uint16_t temperature);
 
 uint16_t check_motor_position(const long int current_position, const long int expected_position);
+
+uint16_t check_respiratory_rate(VentilatorState &state, UserParameter *userParameters);
+
 
 
 /** Function to handle alarms
@@ -149,7 +158,7 @@ uint16_t check_motor_position(const long int current_position, const long int ex
    - TODO: will reset the errors flag --- only in certain conditions.
    - TODO: can resent machine state!!!
  */
-VentilatorState handle_alarms(volatile boolean &alarmReset, volatile boolean &alarmSilent, VentilatorState &state, LiquidCrystal &displayName, UserParameter *userParameters, SelectedParameter &currentlySelectedParameter);
+//VentilatorState handle_alarms(volatile boolean &alarmReset, VentilatorState &state, LiquidCrystal &displayName, UserParameter *userParameters, SelectedParameter &currentlySelectedParameter);
 
 /* TODO: Check alarms more frequently?
 
@@ -160,9 +169,19 @@ raised, right? Like in VCPeak or any of the other states you also shouldn't have
 low pressure...?
 */
 
-void reset_alarm_silence(elapsedMillis &alarmSilentTimer, volatile boolean &alarmSilent);
+void alarm_debounce_reset(VentilatorState &state);
 
-void reset_alarms(VentilatorState &state);
+void loop_alarm_manager(elapsedMillis &externalDisplayTimer, elapsedMillis &alarmSilenceTimer,
+                        volatile boolean &alarmReset, LiquidCrystal &alarmDisplay,
+                        LiquidCrystal &parameterDisplay, HardwareSerial &externalDisplay,
+                        VentilatorState &state, UserParameter *userParameters,
+                        SelectedParameter &currentlySelectedParameter);
+
+void control_alarm_output(elapsedMillis &alarmSilenceTimer, volatile boolean &alarmReset, VentilatorState &state);
+
+void control_alarm_displays(LiquidCrystal &alarmDisplay, LiquidCrystal &parameterDisplay, VentilatorState &state, UserParameter *userParameters, SelectedParameter &currentlySelectedParameter);
+
+void control_external_display(elapsedMillis &externalDisplayTimer, HardwareSerial &externalDisplay, VentilatorState &state);
 
 void setUpAlarmPins();
 

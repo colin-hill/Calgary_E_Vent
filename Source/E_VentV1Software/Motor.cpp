@@ -119,11 +119,7 @@ void checkMotorStatus(RoboClaw &controller_name, VentilatorState &state) {
 	Serial.print(F("Expected: "));
 	Serial.println(state.future_motor_position);
 
-	state.errors |= check_motor_position(state.current_motor_position, state.future_motor_position); 
- 
-	//controller_name.ReadTemp(MOTOR_ADDRESS, state.controller_temperature);
-	//state.controller_temperature = state.controller_temperature*0.1; //TODO magic number
-	//state.errors |= check_controller_temperature(state.controller_temperature);	
+	state.errors |= check_motor_position(state.current_motor_position, state.future_motor_position);
 
 	
   Serial.println(F("exit check motor status"));
@@ -228,6 +224,10 @@ void handle_MotorZeroing(RoboClaw &controller_name, VentilatorState &state) {
 		//no action required
 		break;
 	case MotorZero:
+		//Reset errors
+		state.errors = 0;
+		state.alarm_outputs = 0;
+		//Check motor position
 		checkMotorStatus(controller_name, state);
 		setMotorZero(controller_name);
 		return;

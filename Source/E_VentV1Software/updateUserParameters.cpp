@@ -209,7 +209,8 @@ void displayAlarmParameters(SelectedParameter &currentlySelectedParameter, Liqui
         break;
 
     default:
-        displayNoAlarm(displayName, maxPIP, minPIP, maxPEEP, minPEEP, lowPlateauPressure, LCD_MAX_STRING);
+        //TODO clean up
+        //displayNoAlarm(displayName, maxPIP, minPIP, maxPEEP, minPEEP, lowPlateauPressure, LCD_MAX_STRING);
         break;
     }
 }
