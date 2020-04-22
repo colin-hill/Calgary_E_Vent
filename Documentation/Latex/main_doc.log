@@ -1,0 +1,375 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7250) (preloaded format=pdflatex 2020.3.16)  21 APR 2020 11:54
+entering extended mode
+**./main_doc.tex
+(main_doc.tex
+LaTeX2e <2019-10-01> patch level 3
+(H:\MikTex_Portable\texmfs\install\tex/latex/base\article.cls
+Document Class: article 2019/10/25 v1.4k Standard LaTeX document class
+(H:\MikTex_Portable\texmfs\install\tex/latex/base\size10.clo
+File: size10.clo 2019/10/25 v1.4k Standard LaTeX file (size option)
+)
+\c@part=\count80
+\c@section=\count81
+\c@subsection=\count82
+\c@subsubsection=\count83
+\c@paragraph=\count84
+\c@subparagraph=\count85
+\c@figure=\count86
+\c@table=\count87
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+(H:\MikTex_Portable\texmfs\install\tex/latex/appendix\appendix.sty
+Package: appendix 2009/09/02 v1.2b extra appendix facilities
+\c@@pps=\count88
+\c@@ppsavesec=\count89
+\c@@ppsaveapp=\count90
+)
+(H:\MikTex_Portable\texmfs\install\tex/latex/acronym\acronym.sty
+Package: acronym 2020/04/17 v1.47 Support for acronyms (Tobias Oetiker)
+
+(H:\MikTex_Portable\texmfs\install\tex/latex/bigfoot\suffix.sty
+Package: suffix 2006/07/15 1.5a Variant command support
+)
+(H:\MikTex_Portable\texmfs\install\tex/latex/xstring\xstring.sty
+(H:\MikTex_Portable\texmfs\install\tex/generic/xstring\xstring.tex
+\integerpart=\count91
+\decimalpart=\count92
+)
+Package: xstring 2019/02/06 v1.83 String manipulations (CT)
+)
+\AC@clearlist=\toks14
+)
+(H:\MikTex_Portable\texmfs\install\tex/latex/tools\multicol.sty
+Package: multicol 2019/03/01 v1.8w multicolumn formatting (FMi)
+\c@tracingmulticols=\count93
+\mult@box=\box27
+\multicol@leftmargin=\dimen103
+\c@unbalance=\count94
+\c@collectmore=\count95
+\doublecol@number=\count96
+\multicoltolerance=\count97
+\multicolpretolerance=\count98
+\full@width=\dimen104
+\page@free=\dimen105
+\premulticols=\dimen106
+\postmulticols=\dimen107
+\multicolsep=\skip43
+\multicolbaselineskip=\skip44
+\partial@page=\box28
+\last@line=\box29
+\maxbalancingoverflow=\dimen108
+\mult@rightbox=\box30
+\mult@grightbox=\box31
+\mult@gfirstbox=\box32
+\mult@firstbox=\box33
+\@tempa=\box34
+\@tempa=\box35
+\@tempa=\box36
+\@tempa=\box37
+\@tempa=\box38
+\@tempa=\box39
+\@tempa=\box40
+\@tempa=\box41
+\@tempa=\box42
+\@tempa=\box43
+\@tempa=\box44
+\@tempa=\box45
+\@tempa=\box46
+\@tempa=\box47
+\@tempa=\box48
+\@tempa=\box49
+\@tempa=\box50
+\c@minrows=\count99
+\c@columnbadness=\count100
+\c@finalcolumnbadness=\count101
+\last@try=\dimen109
+\multicolovershoot=\dimen110
+\multicolundershoot=\dimen111
+\mult@nat@firstbox=\box51
+\colbreak@box=\box52
+\mc@col@check@num=\count102
+)
+(H:\MikTex_Portable\texmfs\install\tex/latex/graphics\graphicx.sty
+Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
+
+(H:\MikTex_Portable\texmfs\install\tex/latex/graphics\keyval.sty
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks15
+)
+(H:\MikTex_Portable\texmfs\install\tex/latex/graphics\graphics.sty
+Package: graphics 2019/11/01 v1.3d Standard LaTeX Graphics (DPC,SPQR)
+
+(H:\MikTex_Portable\texmfs\install\tex/latex/graphics\trig.sty
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+)
+(H:\MikTex_Portable\texmfs\install\tex/latex/graphics-cfg\graphics.cfg
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 105.
+
+(H:\MikTex_Portable\texmfs\install\tex/latex/graphics-def\pdftex.def
+File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
+))
+\Gin@req@height=\dimen112
+\Gin@req@width=\dimen113
+)
+(H:\MikTex_Portable\texmfs\install\tex/latex/graphics\rotating.sty
+Package: rotating 2016/08/11 v2.16d rotated objects in LaTeX
+
+(H:\MikTex_Portable\texmfs\install\tex/latex/base\ifthen.sty
+Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
+)
+\c@r@tfl@t=\count103
+\rotFPtop=\skip45
+\rotFPbot=\skip46
+\rot@float@box=\box53
+\rot@mess@toks=\toks16
+)
+(H:\MikTex_Portable\texmfs\install\tex/latex/geometry\geometry.sty
+Package: geometry 2018/04/16 v5.8 Page Geometry
+
+(H:\MikTex_Portable\texmfs\install\tex/generic/iftex\ifpdf.sty
+Package: ifpdf 2019/10/25 v3.4 ifpdf legacy package. Use iftex instead.
+
+(H:\MikTex_Portable\texmfs\install\tex/generic/iftex\iftex.sty
+Package: iftex 2019/11/07 v1.0c TeX engine tests
+))
+(H:\MikTex_Portable\texmfs\install\tex/generic/iftex\ifvtex.sty
+Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
+)
+(H:\MikTex_Portable\texmfs\install\tex/generic/iftex\ifxetex.sty
+Package: ifxetex 2019/10/25 v0.7 ifxetex legacy package. Use iftex instead.
+)
+\Gm@cnth=\count104
+\Gm@cntv=\count105
+\c@Gm@tempcnt=\count106
+\Gm@bindingoffset=\dimen114
+\Gm@wd@mp=\dimen115
+\Gm@odd@mp=\dimen116
+\Gm@even@mp=\dimen117
+\Gm@layoutwidth=\dimen118
+\Gm@layoutheight=\dimen119
+\Gm@layouthoffset=\dimen120
+\Gm@layoutvoffset=\dimen121
+\Gm@dimlist=\toks17
+
+(H:\MikTex_Portable\texmfs\install\tex/latex/geometry\geometry.cfg))
+(main_doc.aux)
+\openout1 = `main_doc.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+
+(H:\MikTex_Portable\texmfs\install\tex/context/base/mkii\supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count107
+\scratchdimen=\dimen122
+\scratchbox=\box54
+\nofMPsegments=\count108
+\nofMParguments=\count109
+\everyMPshowfont=\toks18
+\MPscratchCnt=\count110
+\MPscratchDim=\dimen123
+\MPnumerator=\count111
+\makeMPintoPDFobject=\count112
+\everyMPtoPDFconversion=\toks19
+) (H:\MikTex_Portable\texmfs\install\tex/latex/epstopdf-pkg\epstopdf-base.sty
+Package: epstopdf-base 2019-11-30 v2.9 Base part for package epstopdf
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+85.
+)
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+*geometry* verbose mode - [ preamble ] result:
+* driver: pdftex
+* paper: <default>
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: 
+* h-part:(L,W,R)=(90.3375pt, 433.62001pt, 90.3375pt)
+* v-part:(T,H,B)=(90.3375pt, 614.295pt, 90.3375pt)
+* \paperwidth=614.295pt
+* \paperheight=794.96999pt
+* \textwidth=433.62001pt
+* \textheight=614.295pt
+* \oddsidemargin=18.0675pt
+* \evensidemargin=18.0675pt
+* \topmargin=-18.9325pt
+* \headheight=12.0pt
+* \headsep=25.0pt
+* \topskip=10.0pt
+* \footskip=30.0pt
+* \marginparwidth=65.0pt
+* \marginparsep=11.0pt
+* \columnsep=10.0pt
+* \skip\footins=9.0pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidefalse
+* \@mparswitchfalse
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 20.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 20.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 20.
+[1
+
+{H:/MikTex_Portable/texmfs/data/pdftex/config/pdftex.map}]
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 26.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 26.
+ [2] (main_doc.toc)
+\tf@toc=\write3
+\openout3 = `main_doc.toc'.
+
+[3
+
+] [4
+
+] [5
+
+]
+LaTeX Font Info:    Trying to load font information for OMS+cmr on input line 1
+09.
+ (H:\MikTex_Portable\texmfs\install\tex/latex/base\omscmr.fd
+File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 109.
+
+[6
+
+] [7] [8] [9]
+
+pdfTeX warning: pdflatex.exe (file ./figures/main_loop.pdf): PDF inclusion: fou
+nd PDF version <1.7>, but at most version <1.5> allowed
+<figures/main_loop.pdf, id=37, 596.98032pt x 844.65562pt>
+File: figures/main_loop.pdf Graphic file (type pdf)
+<use figures/main_loop.pdf>
+Package pdftex.def Info: figures/main_loop.pdf  used on input line 314.
+(pdftex.def)             Requested size: 464.83456pt x 593.85222pt.
+
+Overfull \hbox (31.21455pt too wide) in paragraph at lines 314--315
+[][] 
+ []
+
+
+LaTeX Warning: Float too large for page by 3.50166pt on input line 317.
+
+
+
+pdfTeX warning: pdflatex.exe (file ./figures/main_state_flow.pdf): PDF inclusio
+n: found PDF version <1.7>, but at most version <1.5> allowed
+<figures/main_state_flow.pdf, id=39, 844.65562pt x 596.98032pt>
+File: figures/main_state_flow.pdf Graphic file (type pdf)
+<use figures/main_state_flow.pdf>
+Package pdftex.def Info: figures/main_state_flow.pdf  used on input line 320.
+(pdftex.def)             Requested size: 666.08939pt x 467.94885pt.
+
+Overfull \hbox (51.79439pt too wide) in paragraph at lines 320--321
+[][] 
+ []
+
+
+
+pdfTeX warning: pdflatex.exe (file ./figures/motor_zeroing.pdf): PDF inclusion:
+ found PDF version <1.7>, but at most version <1.5> allowed
+<figures/motor_zeroing.pdf, id=41, 844.65562pt x 596.98032pt>
+File: figures/motor_zeroing.pdf Graphic file (type pdf)
+<use figures/motor_zeroing.pdf>
+Package pdftex.def Info: figures/motor_zeroing.pdf  used on input line 326.
+(pdftex.def)             Requested size: 666.08939pt x 467.94885pt.
+
+Overfull \hbox (51.79439pt too wide) in paragraph at lines 326--327
+[][] 
+ []
+
+
+
+pdfTeX warning: pdflatex.exe (file ./figures/ac_mode.pdf): PDF inclusion: found
+ PDF version <1.7>, but at most version <1.5> allowed
+<figures/ac_mode.pdf, id=43, 844.65562pt x 596.98032pt>
+File: figures/ac_mode.pdf Graphic file (type pdf)
+<use figures/ac_mode.pdf>
+Package pdftex.def Info: figures/ac_mode.pdf  used on input line 332.
+(pdftex.def)             Requested size: 666.08939pt x 467.94885pt.
+
+Overfull \hbox (51.79439pt too wide) in paragraph at lines 332--333
+[][] 
+ []
+
+
+
+pdfTeX warning: pdflatex.exe (file ./figures/vc_mode.pdf): PDF inclusion: found
+ PDF version <1.7>, but at most version <1.5> allowed
+<figures/vc_mode.pdf, id=45, 844.65562pt x 596.98032pt>
+File: figures/vc_mode.pdf Graphic file (type pdf)
+<use figures/vc_mode.pdf>
+Package pdftex.def Info: figures/vc_mode.pdf  used on input line 338.
+(pdftex.def)             Requested size: 666.08939pt x 467.94885pt.
+
+Overfull \hbox (51.79439pt too wide) in paragraph at lines 338--339
+[][] 
+ []
+
+
+
+pdfTeX warning: pdflatex.exe (file ./figures/alarm_handler.pdf): PDF inclusion:
+ found PDF version <1.7>, but at most version <1.5> allowed
+<figures/alarm_handler.pdf, id=47, 596.98032pt x 844.65562pt>
+File: figures/alarm_handler.pdf Graphic file (type pdf)
+<use figures/alarm_handler.pdf>
+Package pdftex.def Info: figures/alarm_handler.pdf  used on input line 344.
+(pdftex.def)             Requested size: 464.83456pt x 593.85222pt.
+
+Overfull \hbox (31.21455pt too wide) in paragraph at lines 344--345
+[][] 
+ []
+
+
+LaTeX Warning: Float too large for page by 3.50166pt on input line 347.
+
+[10] [11 <./figures/main_loop.pdf>] [12 <./figures/main_state_flow.pdf>]
+[13 <./figures/motor_zeroing.pdf>] [14 <./figures/ac_mode.pdf>] [15 <./figures/
+vc_mode.pdf>] [16 <./figures/alarm_handler.pdf>] (main_doc.aux) ) 
+Here is how much of TeX's memory you used:
+ 2511 strings out of 492450
+ 34904 string characters out of 3127024
+ 120251 words of memory out of 3000000
+ 6858 multiletter control sequences out of 15000+200000
+ 7895 words of font info for 28 fonts, out of 3000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 30i,12n,34p,714b,289s stack positions out of 5000i,500n,10000p,200000b,50000s
+<H:/MikTex_Por
+table/texmfs/install/fonts/type1/public/amsfonts/cm/cmbx10.pfb><H:/MikTex_Porta
+ble/texmfs/install/fonts/type1/public/amsfonts/cm/cmbx12.pfb><H:/MikTex_Portabl
+e/texmfs/install/fonts/type1/public/amsfonts/cm/cmr10.pfb><H:/MikTex_Portable/t
+exmfs/install/fonts/type1/public/amsfonts/cm/cmr12.pfb><H:/MikTex_Portable/texm
+fs/install/fonts/type1/public/amsfonts/cm/cmr17.pfb><H:/MikTex_Portable/texmfs/
+install/fonts/type1/public/amsfonts/cm/cmr7.pfb><H:/MikTex_Portable/texmfs/inst
+all/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
+Output written on main_doc.pdf (16 pages, 478674 bytes).
+PDF statistics:
+ 191 PDF objects out of 1000 (max. 8388607)
+ 0 named destinations out of 1000 (max. 500000)
+ 67 words of extra memory for PDF output out of 10000 (max. 10000000)
+

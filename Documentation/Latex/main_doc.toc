@@ -1,0 +1,29 @@
+\contentsline {section}{\numberline {1}Summary}{4}%
+\contentsline {section}{\numberline {2}Acronyms}{5}%
+\contentsline {section}{\numberline {3}Functionality Overview}{6}%
+\contentsline {section}{\numberline {4}Software Specifications}{6}%
+\contentsline {subsection}{\numberline {4.1}Supported Modes}{6}%
+\contentsline {subsection}{\numberline {4.2}Adjustable Ventilation Parameters}{6}%
+\contentsline {subsection}{\numberline {4.3}Alarms and Fault Detection}{7}%
+\contentsline {subsection}{\numberline {4.4}Software and Compiler Versions}{7}%
+\contentsline {section}{\numberline {5}Process Descriptions}{7}%
+\contentsline {subsection}{\numberline {5.1}Startup and Calibration}{7}%
+\contentsline {subsection}{\numberline {5.2}Assist Control Mode}{7}%
+\contentsline {subsection}{\numberline {5.3}Volume Control Mode}{8}%
+\contentsline {subsection}{\numberline {5.4}Alarm Conditions}{8}%
+\contentsline {subsubsection}{\numberline {5.4.1}High Peak Inspiratory Pressure (PIP)}{8}%
+\contentsline {subsubsection}{\numberline {5.4.2}Low Peak Inspiratory Pressure (PIP)}{8}%
+\contentsline {subsubsection}{\numberline {5.4.3}High Peak End-Expiratory Pressure (PEEP)}{8}%
+\contentsline {subsubsection}{\numberline {5.4.4}Low Peak End-Expiratory Pressure (PEEP)}{9}%
+\contentsline {subsubsection}{\numberline {5.4.5}High Respiratory Rate (AC Mode Only)}{9}%
+\contentsline {subsection}{\numberline {5.5}Fault Conditions}{9}%
+\contentsline {subsubsection}{\numberline {5.5.1}Mechanical Failure}{9}%
+\contentsline {subsubsection}{\numberline {5.5.2}Homing Failure}{9}%
+\contentsline {section}{\numberline {6}Risk Control Measures}{9}%
+\contentsline {section}{\numberline {7}Verification and Validation}{10}%
+\contentsline {subsection}{\numberline {7.1}Servo Lung Testing}{10}%
+\contentsline {subsubsection}{\numberline {7.1.1}Ventilation Testing}{10}%
+\contentsline {subsubsection}{\numberline {7.1.2}Alarm Testing}{10}%
+\contentsline {subsubsection}{\numberline {7.1.3}Clinical Feedback}{10}%
+\contentsline {subsection}{\numberline {7.2}Longevity Testing}{10}%
+\contentsline {section}{\numberline {A}Software Flow Charts}{10}%
