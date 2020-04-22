@@ -24,6 +24,7 @@ void acStart(VentilatorState &state) {
 
     // Reset timer and peak pressure reading
     reset_timer(state);
+    
     state.current_loop_peak_pressure = 0;
 
     state.ac_state = ACInhaleWait;
@@ -41,9 +42,8 @@ void acInhaleWait(VentilatorState &state) {
 
     if (elapsed_time(state) > (state.ac_threshold_time * S_TO_MS)) {
         state.ac_state = ACInhaleCommand;
-
-        //Removing APNEA_ALARM for the time being based on feedback from RT
-        //state.errors |= APNEA_ALARM;
+   
+        //state.errors |= MISSED_TRIGGER_ALARM;
     }
     else if(state.pressure < (state.peep_pressure - state.ac_threshold_pressure)){
         state.ac_state = ACInhaleCommand;
@@ -85,8 +85,8 @@ void acInhale(VentilatorState &state, UserParameter *userParameters) {
     // TODO: nervous about this else if for alarm.
     if (elapsed_time(state) > ((state.inspiration_time + INERTIA_BUFFER) * S_TO_MS)) {
         state.ac_state = ACPeak;
-        reset_timer(state);
         state.peak_pressure = state.current_loop_peak_pressure;
+        reset_timer(state);
 
     }
 
@@ -94,6 +94,7 @@ void acInhale(VentilatorState &state, UserParameter *userParameters) {
 
     if (state.pressure > userParameters[e_HighPIPAlarm].value) {
         state.peak_pressure = state.current_loop_peak_pressure;
+        reset_timer(state);
         state.ac_state = ACInhaleAbort;
     }
 
@@ -113,7 +114,7 @@ void acInhaleAbort(VentilatorState &state, UserParameter *userParameters) {
     //Serial.println(expiration_time);
 #endif //SERIAL_DEBUG
 
-    reset_timer(state);
+    
     state.errors |= check_high_pressure(state.pressure,userParameters);
     state.ac_state = ACExhale;
 
@@ -133,6 +134,7 @@ void acPeak(VentilatorState &state, UserParameter *userParameters) {
 
     if (elapsed_time(state) > (state.plateau_pause_time * S_TO_MS)) { 
         state.ac_state = ACExhaleCommand;
+        reset_timer(state);
     }
     
     state.errors |= check_pressure(state.pressure, userParameters);
@@ -146,7 +148,7 @@ void acExhaleCommand(VentilatorState &state) {
     Serial.println(F("ACExhaleCommand"));
 #endif //SERIAL_DEBUG
 
-    reset_timer(state);
+    
     state.plateau_pressure = state.pressure;
     state.ac_state = ACExhale;
 
@@ -175,6 +177,8 @@ void acReset(VentilatorState &state, UserParameter *userParameters) {
 #ifdef SERIAL_DEBUG
     Serial.println(F("ACReset"));
 #endif //SERIAL_DEBUG
+
+    
 
     //Update and check PEEP
     state.peep_pressure = state.pressure;

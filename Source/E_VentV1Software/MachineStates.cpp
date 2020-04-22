@@ -4,6 +4,7 @@
 #include "UserParameter.h"
 #include "PinAssignments.h"
 #include "Motor.h"
+#include "conversions.h"
 
 
 char machineStateCodeAssignment(machineStates machineState) {
@@ -27,6 +28,7 @@ VentilatorState get_init_state(void) {
 
     state.breath_time_start = millis();
     state.current_time = state.breath_time_start;
+    state.alarm_silence_start_time = state.breath_time_start;
 
     //Ventilation Primary Values -----------------------------------------------------------------------------
         //BPM
@@ -55,6 +57,10 @@ VentilatorState get_init_state(void) {
      state.inspiration_time = DEFAULT_INSPIRATION_TIME;
         //Nominal expiration time
      state.expiration_time = SECONDS_PER_MINUTE/state.breaths_per_minute - state.inspiration_time - state.plateau_pause_time;
+
+     state.calculated_respiratory_rate = DEFAULT_BPM;
+
+     state.breath_counter = 0;
      
 
     //Mechanism Values -----------------------------------------------------------------------------------------
@@ -72,8 +78,20 @@ VentilatorState get_init_state(void) {
     state.future_motor_position = 0;
     state.current_motor_position = 0;
 
+
+
     //Errors
     state.errors = 0;
+
+    state.this_breath_errors = 0;
+    state.last_breath_errors = 0;
+    state.last_loop_errors = 0;
+    state.alarm_outputs = 0;
+    state.silenced_alarms = 0;
+
+    state.mechanical_failure_count = 0;
+
+    state.external_display = false;
 
     return state;
 }
@@ -102,7 +120,7 @@ void update_motor_settings(VentilatorState &state) {
 
     state.motor_inhale_pulses = 0.01*state.tidal_volume*QP_AT_FULL_STROKE;
     state.motor_inhale_speed = state.motor_inhale_pulses/state.inspiration_time;
-    state.expiration_time = SECONDS_PER_MINUTE/state.breaths_per_minute - state.inspiration_time; //This can go negative
+    state.expiration_time = (SECONDS_PER_MINUTE/state.breaths_per_minute) - state.inspiration_time - (2*INERTIA_BUFFER) - DEFAULT_PLATEAU_PAUSE_TIME - CODE_LATENCY; 
     state.motor_return_time = state.expiration_time*MOTOR_RETURN_FACTOR;
     state.motor_return_speed = state.motor_inhale_pulses/state.motor_return_time;
 
@@ -112,4 +130,34 @@ void update_motor_settings(VentilatorState &state) {
 
 unsigned long elapsed_time(const VentilatorState &state) {
     return state.current_time - state.breath_time_start;
+}
+
+unsigned long elapsed_alarm_time(const VentilatorState &state) {
+    return state.current_time - state.alarm_silence_start_time;
+}
+
+void reset_alarm_timer(VentilatorState &state) {
+    state.alarm_silence_start_time = state.current_time;
+}
+
+unsigned long elapsed_respiratory_rate_time(const VentilatorState &state){
+
+    return state.current_time - state.respiratory_rate_time;
+}
+
+void reset_respiratory_rate_timer(VentilatorState &state){
+
+    state.respiratory_rate_time = state.current_time;
+}
+
+void calculate_respiratory_rate(VentilatorState &state){
+
+    unsigned long elapsed_time = elapsed_respiratory_rate_time(state);
+
+    state.calculated_respiratory_rate = (state.breath_counter / (elapsed_time / S_TO_MS)) * 60.0;
+
+    state.breath_counter = 0;
+
+    reset_respiratory_rate_timer(state);
+
 }

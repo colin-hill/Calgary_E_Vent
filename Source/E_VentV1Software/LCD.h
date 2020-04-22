@@ -38,7 +38,7 @@ const int VENTILATOR_LCD_DB7    = 2;
 void displayNoAlarm(LiquidCrystal &displayName, float highPressure, float lowPressure, float highPEEP, float lowPEEP, float lowPlateau, const int LCD_MAX_STRING);
 
 
-void displayMultipleAlarms(LiquidCrystal &displayName, VentilatorState &state);
+void displayMultipleAlarms(LiquidCrystal &displayName, float  maxPIP, float minPIP, float maxPEEP, float minPEEP, float respiratoryRate, VentilatorState &state);
 
 /** Function for display of the high PIP alarm
 
@@ -68,10 +68,10 @@ void displayHighPEEPAlarm(LiquidCrystal &displayName, float pressureMeasurement,
  */
 void displayLowPEEPAlarm(LiquidCrystal &displayName, float pressureMeasurement, const int LCD_MAX_STRING);
 
-/** Function for display of a possible disconnection alarm
+/** Function for display of a mechanical failure alarm
 
  */
-void displayDisconnectAlarm(LiquidCrystal &displayName);
+void displayMechanicalFailureAlarm(LiquidCrystal &displayName);
 
 /** Function for display of the high temperature alarm
 

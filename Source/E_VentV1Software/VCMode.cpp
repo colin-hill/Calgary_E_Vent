@@ -22,10 +22,11 @@ void vcStart(VentilatorState &state) {
     Serial.println(F("VCStart"));
 #endif //SERIAL_DEBUG
 
-    //TODO: Reset alarms as outlined on state machine
+    
 
     // Reset timer and peak pressure reading.
     reset_timer(state);
+    
     state.current_loop_peak_pressure = 0;
 
     // Set next state.
@@ -118,7 +119,8 @@ void vcPeak(VentilatorState &state, UserParameter *userParameters) {
     // TODO: Hold motor in position********
 
     if(elapsed_time(state) > (state.plateau_pause_time * S_TO_MS)){
-        state.vc_state = VCExhaleCommand;        
+        state.vc_state = VCExhaleCommand;
+        reset_timer(state);        
     }
 
     state.errors |= check_pressure(state.pressure, userParameters);
@@ -135,7 +137,7 @@ void vcExhaleCommand(VentilatorState &state) {
 #endif //SERIAL_DEBUG
 
     // TODO: Set motor speed and position
-    reset_timer(state);
+    
     state.plateau_pressure = state.pressure;
     state.vc_state = VCExhale;
 
@@ -150,7 +152,7 @@ void vcExhale(VentilatorState &state) {
     Serial.print(F("VCExhale: "));
     Serial.println(elapsed_time(state));
     Serial.print(F("Desired Exhale Time: "));
-    Serial.println(state.motor_return_time);
+    Serial.println(state.expiration_time + INERTIA_BUFFER);
 #endif //SERIAL_DEBUG
     // TODO: Set motor velocity and desired position
 
@@ -169,6 +171,8 @@ void vcReset(VentilatorState &state, UserParameter *userParameters) {
 #ifdef SERIAL_DEBUG
     Serial.println(F("VCReset"));
 #endif //SERIAL_DEBUG
+
+    
 
     //Update and check PEEP
     state.peep_pressure = state.pressure;

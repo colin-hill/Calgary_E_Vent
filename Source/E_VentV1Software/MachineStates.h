@@ -10,6 +10,8 @@
 #include "WProgram.h"
 #endif
 
+#include "conversions.h"
+
 
 // Make sure each state has a character in machineStatesCodes
 // This is for debug information.
@@ -85,6 +87,9 @@ struct VentilatorState {
     unsigned long breath_time_start; // When timer was started (ms).
     unsigned long current_time;      // Current time (ms).
 
+    unsigned long alarm_silence_start_time;
+    unsigned long respiratory_rate_time;
+
     //TODO: consider naming
 
     //Ventilation Primary Values -----------------------------------------------------------------------------
@@ -114,6 +119,8 @@ struct VentilatorState {
      float inspiration_time;
         //Nominal expiration time
      float expiration_time;
+
+     float calculated_respiratory_rate;
      
 
     //Mechanism Values -----------------------------------------------------------------------------------------
@@ -131,7 +138,21 @@ struct VentilatorState {
 
     long int current_motor_position;
 
+    uint8_t breath_counter;
+
+
+
     uint16_t errors;
+
+    uint16_t this_breath_errors;
+    uint16_t last_breath_errors;
+    uint16_t last_loop_errors;
+    uint16_t alarm_outputs;
+    uint16_t silenced_alarms;
+
+    uint8_t mechanical_failure_count;
+
+    bool external_display = false;
 };
 
 
@@ -181,5 +202,16 @@ void update_motor_settings(VentilatorState &state);
 /* Get elapsed time in ms.
  */
 unsigned long elapsed_time(const VentilatorState &state);
+
+unsigned long elapsed_alarm_time(const VentilatorState &state);
+
+void reset_alarm_timer(VentilatorState &state);
+
+unsigned long elapsed_respiratory_rate_time(const VentilatorState &state);
+
+void reset_respiratory_rate_time(VentilatorState &state);
+
+void calculate_respiratory_rate(VentilatorState &state);
+
 
 #endif

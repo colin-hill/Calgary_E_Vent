@@ -11,6 +11,8 @@
 #endif
 
 #include "breathing.h"
+#include "Motor.h"
+#include "conversions.h"
 
 enum SelectedParameter{
                        e_ThresholdPressure,
@@ -23,31 +25,34 @@ enum SelectedParameter{
                        e_HighPEEPAlarm,
                        e_LowPEEPAlarm,
                        e_LowPlateauPressureAlarm,
+                       e_HighRespiratoryRateAlarm,
                        e_None
 };
 
-const uint8_t NUM_USER_PARAMETERS = 10;
+const uint8_t NUM_USER_PARAMETERS = 11;
 
-const float THRESHOLD_PRESSURE_INCREMENT = 1; //cmH2O
-const float THRESHOLD_PRESSURE_DEFAULT = 3;
-const float BPM_INCREMENT = 1; //Breath per Minute
-const float BPM_DEFAULT = 20;
-const float INSPIRATION_TIME_INCREMENT = 0.1; //Seconds
-const float INSPIRATION_TIME_DEFAULT = 2;
-const float TIDAL_VOLUME_INCREMENT = 5; //% of bag
-const float TIDAL_VOLUME_DEFAULT = 50;
-const float PLATEAU_PAUSE_TIME_INCREMENT = 0.05; //Seconds
-const float PLATEAU_PAUSE_TIME_DEFAULT = 0.3;
-const float HIGH_PIP_ALARM_INCREMENT = 1; //cmH2O
-const float HIGH_PIP_ALARM_DEFAULT = 40;
-const float LOW_PIP_ALARM_INCREMENT = 1; //cmH2O
-const float LOW_PIP_ALARM_DEFAULT = 5.0;
-const float HIGH_PEEP_ALARM_INCREMENT = 1; //cmH2O
-const float HIGH_PEEP_ALARM_DEFAULT = 20;
-const float LOW_PEEP_ALARM_INCREMENT = 1; //cmH2O
-const float LOW_PEEP_ALARM_DEFAULT = 3;
-const float LOW_PLATEAU_PRESSURE_ALARM_INCREMENT = 1; //cmH2O
-const float LOW_PLATEAU_PRESSURE_ALARM_DEFAULT = 0;
+const float THRESHOLD_PRESSURE_INCREMENT          = 1; //cmH2O
+const float THRESHOLD_PRESSURE_DEFAULT            = 3;
+const float BPM_INCREMENT                         = 1; //Breaths per Minute
+const float BPM_DEFAULT                           = 16;
+const float INSPIRATION_TIME_INCREMENT            = 0.1; //Seconds
+const float INSPIRATION_TIME_DEFAULT              = 2;
+const float TIDAL_VOLUME_INCREMENT                = 5; //% of bag
+const float TIDAL_VOLUME_DEFAULT                  = 50;
+const float PLATEAU_PAUSE_TIME_INCREMENT          = 0.05; //Seconds
+const float PLATEAU_PAUSE_TIME_DEFAULT            = 0.3;
+const float HIGH_PIP_ALARM_INCREMENT              = 1; //cmH2O
+const float HIGH_PIP_ALARM_DEFAULT                = 40;
+const float LOW_PIP_ALARM_INCREMENT               = 1; //cmH2O
+const float LOW_PIP_ALARM_DEFAULT                 = 5.0;
+const float HIGH_PEEP_ALARM_INCREMENT             = 1; //cmH2O
+const float HIGH_PEEP_ALARM_DEFAULT               = 20;
+const float LOW_PEEP_ALARM_INCREMENT              = 1; //cmH2O
+const float LOW_PEEP_ALARM_DEFAULT                = 3;
+const float LOW_PLATEAU_PRESSURE_ALARM_INCREMENT  = 1; //cmH2O
+const float LOW_PLATEAU_PRESSURE_ALARM_DEFAULT    = 0;
+const float HIGH_RESPIRATORY_RATE_ALARM_INCREMENT = 1; //Breaths per Minute
+const float DEFAULT_HIGH_RESPIRATORY_RATE_ALARM   = 35;
 
 class UserParameter {
 public:
