@@ -18,6 +18,7 @@
 #include "UserParameter.h"
 #include "updateUserParameters.h"
 #include "LCD.h"
+#include "LED.h"
 #include "FailureMode.h"
 #include "MotorZeroing.h"
 #include "PinAssignments.h"
@@ -169,14 +170,14 @@ void loop() {
   
    wdt_reset();
 
-   
+    
+    //Handle Mode and Cycle LEDs
+    control_mode_LEDs(state);
+    control_inhale_exhale_LEDs(state);
 
-   
-    Serial.print(F("motor handle in: "));
-    Serial.println(millis());
+    //Issue motor commands
     handle_motor(motorController, state);
-    Serial.print(F("motor handle out: "));
-    Serial.println(millis());
+
 
     //Update the state user input parameters
     updateStateUserParameters(state, currentlySelectedParameter, parameterSet, parameterSelectEncoder,
@@ -190,11 +191,11 @@ void loop() {
         displayUserParameters(currentlySelectedParameter, ventilatorDisplay, state.machine_state, state.vc_state, state.ac_state, state.peak_pressure, state.peep_pressure, state.pressure, LCD_MAX_STRING, userParameters);
     }
 
-    //TODO: Add in alarm display
+
 
     // Read in values for state
     update_state(state);
-    Serial.println(millis());
+
 
     //Beginning of state machine code
 
@@ -203,9 +204,6 @@ void loop() {
         motor_zeroing_step(state);
     }
     else if (BreathLoopStart == state.machine_state) { // BreathLoopStart
-#ifdef SERIAL_DEBUG
-        Serial.println(F("Breath Loop Start"));
-#endif //SERIAL_DEBUG
 
         state.breath_counter += 1;
 
@@ -216,8 +214,8 @@ void loop() {
 
         state.errors |= check_respiratory_rate(state, userParameters);
 
-        alarmDisplay.begin(LCD_COLUMNS, LCD_ROWS);
-        ventilatorDisplay.begin(LCD_COLUMNS, LCD_ROWS);
+        alarmDisplay.begin(LCD_COLUMNS, LCD_ROWS); //TODO remove this
+        ventilatorDisplay.begin(LCD_COLUMNS, LCD_ROWS); //TODO remove this
 
         alarm_debounce_reset(state);
 
@@ -235,7 +233,8 @@ void loop() {
     else if (FailureMode == state.machine_state) {
         failure_mode(state);
     }
-    Serial.println(millis());
+
+
     loop_alarm_manager(externalDisplayTimer, alarmSilenceTimer, alarmReset, alarmDisplay, ventilatorDisplay, externalDisplay, state, userParameters, currentlySelectedParameter);
 
 }

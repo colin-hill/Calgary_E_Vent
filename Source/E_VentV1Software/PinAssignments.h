@@ -49,4 +49,12 @@ const int PARAMETER_ENCODER_PIN_1 			    = 3;
 const int PARAMETER_ENCODER_PIN_2			      = 2;
 const int PARAMETER_ENCODER_PUSH_BUTTON_PIN = 19; 
 
+
+//LED Pins (except for alarm)
+const int INHALE_LED_PIN   = 39;
+const int EXHALE_LED_PIN   = 41;
+const int VC_MODE_LED_PIN  = 7;
+const int AC_MODE_LED_PIN  = 9;
+
+
 #endif
