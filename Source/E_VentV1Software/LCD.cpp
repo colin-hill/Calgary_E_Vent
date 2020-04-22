@@ -329,17 +329,20 @@ void displayLowPEEPChange(LiquidCrystal &displayName, float tempLowPEEP, const i
 	displayName.write(alarmDispL4); 
 }
 
-void displayLowPlateauChange(LiquidCrystal &displayName, float tempLowPlateau, const int LCD_MAX_STRING) {
+void displayHighRRChange(LiquidCrystal &displayName, float tempHighRR, const int LCD_MAX_STRING) {
 
-	int displayPressure = roundAndCast(tempLowPlateau);
+	int displayRR = roundAndCast(tempHighRR);
 
 	const char alarmDispL1[] = "PRESS TO SET";
-	const char alarmDispL3[] = "LOW PLATEAU PRESSURE";
+	const char alarmDispL2[] = "HIGH RESPIRATORY";
+	const char alarmDispL3[] = "RATE LIMIT";
 	char alarmDispL4[LCD_MAX_STRING];
-	snprintf(alarmDispL4, LCD_MAX_STRING, "PRESSURE=%3d CM", displayPressure);
+	snprintf(alarmDispL4, LCD_MAX_STRING, "RATE=%3d BPM", displayRR);
 
 	displayName.clear();
 	displayName.write(alarmDispL1);
+	displayName.setCursor(0,1);
+	displayName.write(alarmDispL2);
 	displayName.setCursor(0,2);
 	displayName.write(alarmDispL3);
 	displayName.setCursor(0,3);

@@ -201,11 +201,12 @@ void displayAlarmParameters(SelectedParameter &currentlySelectedParameter, Liqui
         break;
 
     case e_LowPlateauPressureAlarm:
-        displayLowPlateauChange(displayName, tempLowPlateauPressure, LCD_MAX_STRING);
+        //Functionality omitted TODO clean up
+        //displayLowPlateauChange(displayName, tempLowPlateauPressure, LCD_MAX_STRING);
         break;
 
     case e_HighRespiratoryRateAlarm:
-        //TODO: Display high respiatory rate alarm
+        displayHighRRChange(displayName, tempHighRespiratoryRateAlarm, LCD_MAX_STRING);
         break;
 
     default:
