@@ -117,7 +117,11 @@ void alarm_debounce_reset(VentilatorState &state) {
 
 }
 
-void loop_alarm_manager(elapsedMillis &alarmSilenceTimer, volatile boolean &alarmReset, LiquidCrystal &alarmDisplay, LiquidCrystal &parameterDisplay, VentilatorState &state, UserParameter *userParameters, SelectedParameter &currentlySelectedParameter) {
+void loop_alarm_manager(elapsedMillis &externalDisplayTimer, elapsedMillis &alarmSilenceTimer,
+                        volatile boolean &alarmReset, LiquidCrystal &alarmDisplay,
+                        LiquidCrystal &parameterDisplay, HardwareSerial &externalDisplay,
+                        VentilatorState &state, UserParameter *userParameters,
+                        SelectedParameter &currentlySelectedParameter) {
 
   //If there is a mechanical failure, decide what happens next
   if (state.errors & MECHANICAL_FAILURE_ALARM){
@@ -146,17 +150,22 @@ void loop_alarm_manager(elapsedMillis &alarmSilenceTimer, volatile boolean &alar
   if (state.alarm_outputs != 0) {
     control_alarm_output(alarmSilenceTimer, alarmReset, state);
   }
-  else{
+  else {
     digitalWrite(ALARM_BUZZER_PIN, LOW);
   }
-
- 
 
 
   control_alarm_displays(alarmDisplay, parameterDisplay, state, userParameters, currentlySelectedParameter);
 
-  return;  
 
+  if (externalDisplayTimer > (EXTERNAL_DISPLAY_DWELL*S_TO_MS)) {
+    state.external_display = !state.external_display;
+    externalDisplayTimer = 0;
+  }
+
+  control_external_display(externalDisplayTimer, externalDisplay, state);
+
+  return;   
 }
 
 void control_alarm_output(elapsedMillis &alarmSilenceTimer, volatile boolean &alarmReset, VentilatorState &state) {
@@ -245,6 +254,58 @@ void control_alarm_displays(LiquidCrystal &alarmDisplay, LiquidCrystal &paramete
     }
 
     return;
+}
+
+void control_external_display(elapsedMillis &externalDisplayTimer, HardwareSerial &externalDisplay, VentilatorState &state) {
+
+  if (state.alarm_outputs & FULL_DEVICE_FAILURE) {
+    char outputString[] = "FAIL";
+    externalDisplay.print('v');
+    externalDisplay.print(outputString);
+  }
+  else if (state.alarm_outputs & MECHANICAL_FAILURE_ALARM) {
+    char outputString[] = "CAL";
+    externalDisplay.print('v');
+    externalDisplay.print(outputString);
+  }
+  else if (state.alarm_outputs & HIGH_PRESSURE_ALARM) {
+    char outputString[] = "HpIp";
+    externalDisplay.print('v');
+    externalDisplay.print(outputString);
+  }
+  else if (state.alarm_outputs & LOW_PEEP_ALARM) {
+    char outputString[] = "LEEp";
+    externalDisplay.print('v');
+    externalDisplay.print(outputString);
+  }
+  else if (state.alarm_outputs & LOW_PRESSURE_ALARM) {
+    char outputString[] = "LpIp";
+    externalDisplay.print('v');
+    externalDisplay.print(outputString);
+  }
+  else if (state.alarm_outputs & HIGH_RR_ALARM) {
+    char outputString[] = "HIrr";
+    externalDisplay.print('v');
+    externalDisplay.print(outputString);
+  }
+  else {
+
+    if (false == state.external_display) {
+      int extDispPIP = (int) round(state.peak_pressure);
+      char outputString[] = "Ip";
+      externalDisplay.print('v');
+      externalDisplay.print(outputString);
+      externalDisplay.print(extDispPIP);
+      
+    }
+    else {
+      int extDispPEEP = (int) round(state.peep_pressure);
+      char outputString[] = "Ep";
+      externalDisplay.print('v');
+      externalDisplay.print(outputString);
+      externalDisplay.print(extDispPEEP);
+    }
+  }
 }
 
 

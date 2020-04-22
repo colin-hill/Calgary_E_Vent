@@ -31,6 +31,9 @@
 LiquidCrystal alarmDisplay(ALARM_LCD_RS, ALARM_LCD_ENABLE, ALARM_LCD_DB4, ALARM_LCD_DB5, ALARM_LCD_DB6, ALARM_LCD_DB7);
 LiquidCrystal ventilatorDisplay(VENT_LCD_RS, VENT_LCD_ENABLE, VENT_LCD_DB4, VENT_LCD_DB5, VENT_LCD_DB6, VENT_LCD_DB7);
 
+//Define External Display
+HardwareSerial & externalDisplay = Serial3;
+
 //Define Motor Controller
 RoboClaw motorController(&Serial2, MOTOR_CONTROLLER_TIMEOUT);
 
@@ -73,7 +76,7 @@ UserParameter userParameters[NUM_USER_PARAMETERS] =
      UserParameter(MIN_RESPIRATORY_RATE_ALARM, MAX_RESPIRATORY_RATE_ALARM, HIGH_RESPIRATORY_RATE_ALARM_INCREMENT, HIGH_RESPIRATORY_RATE_ALARM_SELECT_PIN, DEFAULT_HIGH_RESPIRATORY_RATE_ALARM, e_HighRespiratoryRateAlarm)};
 
 volatile boolean alarmReset = false;
-volatile boolean alarmSilent = false;
+
 // TODO: These are never set?
 // TODO: Do these really have to be globals?
 float measuredPIP;
@@ -90,7 +93,7 @@ elapsedMillis parameterSetDebounceTimer;
 elapsedMillis alarmResetDebounceTimer;
 elapsedMillis alarmSilenceTimer;
 
-elapsedMillis alarmSilentTimer;
+elapsedMillis externalDisplayTimer;
 
 // State for the ventilator.
 VentilatorState state;
@@ -110,7 +113,11 @@ void setup() {
     setupLimitSwitch();
     setUpAlarmPins();
     setUpPressureSensor();
-    alarmSilentTimer = 0;
+
+
+    externalDisplayTimer = 0;
+    alarmSilenceTimer = 0;
+
 
     // Motor serial communications startup
     // MotorSerial.begin(9600); //********
@@ -124,6 +131,11 @@ void setup() {
     //LCD Setup
     alarmDisplay.begin(LCD_COLUMNS, LCD_ROWS);
     ventilatorDisplay.begin(LCD_COLUMNS, LCD_ROWS);
+
+    //External Display Setup
+    externalDisplay.begin(9600);
+    externalDisplay.write('v'); //Clears the display
+    externalDisplay.write("ALTA");
 
     //LCD Display Startup Message for two seconds
     displayAEVStartupScreen(ventilatorDisplay);
@@ -175,7 +187,7 @@ void loop() {
         displayHomingScreen(ventilatorDisplay);
     }
     else {
-        displayUserParameters(currentlySelectedParameter, ventilatorDisplay, state.machine_state, state.vc_state, state.ac_state, state.peak_pressure, state.peep_pressure, state.calculated_respiratory_rate, LCD_MAX_STRING, userParameters);
+        displayUserParameters(currentlySelectedParameter, ventilatorDisplay, state.machine_state, state.vc_state, state.ac_state, state.peak_pressure, state.peep_pressure, state.pressure, LCD_MAX_STRING, userParameters);
     }
 
     //TODO: Add in alarm display
@@ -224,7 +236,7 @@ void loop() {
         failure_mode(state);
     }
     Serial.println(millis());
-    loop_alarm_manager(alarmSilenceTimer, alarmReset, alarmDisplay, ventilatorDisplay, state, userParameters, currentlySelectedParameter);
+    loop_alarm_manager(externalDisplayTimer, alarmSilenceTimer, alarmReset, alarmDisplay, ventilatorDisplay, externalDisplay, state, userParameters, currentlySelectedParameter);
 
 }
 
@@ -243,8 +255,6 @@ void alarmResetISR(){
     //digitalWrite(ALARM_BUZZER_PIN,HIGH);
     alarmResetDebounceTimer = 0;
     alarmReset = true;
-    alarmSilent = true;
-    alarmSilentTimer = 0;
   }
  
 

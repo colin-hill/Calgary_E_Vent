@@ -151,6 +151,8 @@ struct VentilatorState {
     uint16_t silenced_alarms;
 
     uint8_t mechanical_failure_count;
+
+    bool external_display = false;
 };
 
 

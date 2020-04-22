@@ -91,6 +91,8 @@ VentilatorState get_init_state(void) {
 
     state.mechanical_failure_count = 0;
 
+    state.external_display = false;
+
     return state;
 }
 

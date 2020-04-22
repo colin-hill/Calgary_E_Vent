@@ -20,7 +20,9 @@
 // Alarm Sound definitions
 const float ALARM_SOUND_LENGTH = 0.5; //Seconds
 
-const float ALARM_SILENCE_TIME = 30.0;
+const float ALARM_SILENCE_TIME = 30.0; //seconds
+
+const float EXTERNAL_DISPLAY_DWELL = 3.0; //seconds
 
 // High PIP Alarm Definitions----------------
 const float MAX_HIGH_PIP_ALARM = 70; //cmH2O
@@ -169,11 +171,17 @@ low pressure...?
 
 void alarm_debounce_reset(VentilatorState &state);
 
-void loop_alarm_manager(elapsedMillis &alarmSilenceTimer, volatile boolean &alarmReset, LiquidCrystal &alarmDisplay, LiquidCrystal &parameterDisplay, VentilatorState &state, UserParameter *userParameters, SelectedParameter &currentlySelectedParameter);
+void loop_alarm_manager(elapsedMillis &externalDisplayTimer, elapsedMillis &alarmSilenceTimer,
+                        volatile boolean &alarmReset, LiquidCrystal &alarmDisplay,
+                        LiquidCrystal &parameterDisplay, HardwareSerial &externalDisplay,
+                        VentilatorState &state, UserParameter *userParameters,
+                        SelectedParameter &currentlySelectedParameter);
 
 void control_alarm_output(elapsedMillis &alarmSilenceTimer, volatile boolean &alarmReset, VentilatorState &state);
 
 void control_alarm_displays(LiquidCrystal &alarmDisplay, LiquidCrystal &parameterDisplay, VentilatorState &state, UserParameter *userParameters, SelectedParameter &currentlySelectedParameter);
+
+void control_external_display(elapsedMillis &externalDisplayTimer, HardwareSerial &externalDisplay, VentilatorState &state);
 
 void setUpAlarmPins();
 
