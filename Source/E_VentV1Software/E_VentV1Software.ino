@@ -68,7 +68,7 @@ UserParameter userParameters[NUM_USER_PARAMETERS] =
      UserParameter(MIN_BPM, MAX_BPM, BPM_INCREMENT, BPM_SELECT_PIN, BPM_DEFAULT, e_BPM),
      UserParameter(MIN_INSPIRATION_TIME, MAX_INSPIRATION_TIME, INSPIRATION_TIME_INCREMENT, INSPIRATION_TIME_SELECT_PIN, DEFAULT_INSPIRATION_TIME,e_InspirationTime),
      UserParameter(MIN_TIDAL_VOLUME, MAX_TIDAL_VOLUME, TIDAL_VOLUME_INCREMENT, TIDAL_VOLUME_SELECT_PIN, TIDAL_VOLUME_DEFAULT,e_TidalVolume),
-     UserParameter(MIN_PLATEAU_PAUSE_TIME, MAX_PLATEAU_PAUSE_TIME, PLATEAU_PAUSE_TIME_INCREMENT, PLATEAU_PAUSE_TIME_SELECT_PIN, DEFAULT_PLATEAU_PAUSE_TIME,e_PlateauPauseTime),
+     UserParameter(MIN_MODE_SELECT, MAX_MODE_SELECT, MODE_SELECT_INCREMENT, MODE_SELECT_PIN, DEFAULT_MODE_SELECT,e_ModeSelect),
      UserParameter(MIN_HIGH_PIP_ALARM, MAX_HIGH_PIP_ALARM, HIGH_PIP_ALARM_INCREMENT, HIGH_PIP_ALARM_SELECT_PIN, HIGH_PIP_ALARM_DEFAULT, e_HighPIPAlarm),
      UserParameter(MIN_LOW_PIP_ALARM, MAX_LOW_PIP_ALARM, LOW_PIP_ALARM_INCREMENT, LOW_PIP_ALARM_SELECT_PIN, LOW_PIP_ALARM_DEFAULT, e_LowPIPAlarm),
      UserParameter(MIN_HIGH_PEEP_ALARM, MAX_HIGH_PEEP_ALARM, HIGH_PEEP_ALARM_INCREMENT, HIGH_PEEP_ALARM_SELECT_PIN, HIGH_PEEP_ALARM_DEFAULT, e_HighPEEPAlarm),
@@ -219,7 +219,13 @@ void loop() {
 
         alarm_debounce_reset(state);
 
-        state.machine_state = check_mode();
+        if(userParameters[e_ModeSelect].value < 0){
+            state.machine_state = VCMode;
+        }
+        else{
+            state.machine_state = ACMode;
+        }
+
         setStateParameters(state, userParameters); //Must be before update_motor_settings
         update_motor_settings(state);
 

@@ -19,7 +19,7 @@ enum SelectedParameter{
                        e_BPM,
                        e_InspirationTime,
                        e_TidalVolume,
-                       e_PlateauPauseTime,
+                       e_ModeSelect,
                        e_HighPIPAlarm,
                        e_LowPIPAlarm,
                        e_HighPEEPAlarm,
@@ -39,8 +39,8 @@ const float INSPIRATION_TIME_INCREMENT            = 0.1; //Seconds
 const float INSPIRATION_TIME_DEFAULT              = 2;
 const float TIDAL_VOLUME_INCREMENT                = 5; //% of bag
 const float TIDAL_VOLUME_DEFAULT                  = 50;
-const float PLATEAU_PAUSE_TIME_INCREMENT          = 0.05; //Seconds
-const float PLATEAU_PAUSE_TIME_DEFAULT            = 0.3;
+const float MODE_SELECT_INCREMENT                 = 20.0; //Seconds
+const float MODE_SELECT_DEFAULT                   = -10.0; //Negative refers to VCMode, positive to ACMode
 const float HIGH_PIP_ALARM_INCREMENT              = 1; //cmH2O
 const float HIGH_PIP_ALARM_DEFAULT                = 40;
 const float LOW_PIP_ALARM_INCREMENT               = 1; //cmH2O

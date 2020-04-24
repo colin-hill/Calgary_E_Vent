@@ -54,7 +54,7 @@ void updateSelectedParameter(SelectedParameter &currentlySelectedParameter,
             currentlySelectedParameter = e_TidalVolume;
             break;
         case 4 :
-            currentlySelectedParameter = e_PlateauPauseTime;
+            currentlySelectedParameter = e_ModeSelect;
             break;
         case 5 :
             currentlySelectedParameter = e_HighPIPAlarm;
@@ -125,9 +125,9 @@ void displayUserParameters(SelectedParameter &currentlySelectedParameter, Liquid
     float tidalVolume = userParameters[(int)e_TidalVolume].value;
     float tempTidalVolume = userParameters[(int)e_TidalVolume].tmpValue;
   
-    currentParameter = e_PlateauPauseTime;
-    float plateauPauseTime = userParameters[(int)e_PlateauPauseTime].value;
-    float tempPlateauPauseTime = userParameters[(int)e_PlateauPauseTime].tmpValue;
+    currentParameter = e_ModeSelect;
+    float modeSelect = userParameters[(int)e_ModeSelect].value;
+    float tempModeSelect = userParameters[(int)e_ModeSelect].tmpValue;
 
     switch(currentlySelectedParameter){
     case e_ThresholdPressure:
@@ -146,8 +146,9 @@ void displayUserParameters(SelectedParameter &currentlySelectedParameter, Liquid
         displayTVChange(displayName, tempTidalVolume, LCD_MAX_STRING);
         break;
 
-    case e_PlateauPauseTime:
-        displayPauseTimeChange(displayName, tempPlateauPauseTime, LCD_MAX_STRING);
+    case e_ModeSelect:
+        //displayPauseTimeChange(displayName, tempPlateauPauseTime, LCD_MAX_STRING);
+        //Do the ACMode VCMode selection screen
         break;
 
     default:
@@ -221,8 +222,8 @@ void setStateParameters(VentilatorState &state, UserParameter *userParameters){
     state.ac_threshold_pressure = userParameters[(int)selectedParameter].value;
     selectedParameter = e_BPM;
     state.breaths_per_minute = userParameters[(int)selectedParameter].value;
-    selectedParameter = e_PlateauPauseTime;
-    state.plateau_pause_time = userParameters[(int)selectedParameter].value;
+    //selectedParameter = e_PlateauPauseTime;
+    //state.plateau_pause_time = userParameters[(int)selectedParameter].value;
     selectedParameter = e_TidalVolume;
     state.tidal_volume = userParameters[(int)selectedParameter].value;
     selectedParameter = e_InspirationTime;

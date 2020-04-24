@@ -184,7 +184,7 @@ VentilatorState get_init_state(void);
 
 /* Get machine state from mode switch pin.
  */
-machineStates check_mode(void);
+//machineStates check_mode(UserParameter *userParameters);
 
 
 /* Update state with current time + pressure readings.

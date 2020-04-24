@@ -23,9 +23,9 @@ void UserParameter::updateValue(){
     else if(e_InspirationTime == this->name){
         this->currentInspirationTime = this->value;
     }
-    else if(e_PlateauPauseTime == this->name){
-        this->currentPlateauPauseTime = this->value;
-    }	
+    //else if(e_PlateauPauseTime == this->name){
+        //this->currentPlateauPauseTime = this->value;
+    //}	
 }
 
 void UserParameter::updateTmpValue(int32_t numEncoderSteps){

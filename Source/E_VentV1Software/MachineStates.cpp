@@ -1,10 +1,10 @@
 #include "MachineStates.h"
 #include "pressure.h"
 #include "breathing.h"
-#include "UserParameter.h"
 #include "PinAssignments.h"
 #include "Motor.h"
 #include "conversions.h"
+#include "UserParameter.h"
 
 
 char machineStateCodeAssignment(machineStates machineState) {
@@ -96,14 +96,16 @@ VentilatorState get_init_state(void) {
     return state;
 }
 
-machineStates check_mode(void) {
-    if (digitalRead(MODE_SWITCH_PIN) == ACMODE) {
-        return ACMode;
-    }
-    else {
+/*
+machineStates check_mode(UserParameter *userParameters) {
+    if (userParameters[e_ModeSelect] < 0) {
         return VCMode;
     }
+    else {
+        return ACMode;
+    }
 }
+*/
 
 void update_state(VentilatorState &state) {
     state.pressure     = readPressureSensor();
