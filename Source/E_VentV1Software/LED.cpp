@@ -19,10 +19,14 @@ void control_mode_LEDs(VentilatorState &state) {
 		digitalWrite(AC_MODE_LED_PIN, LOW);
 		digitalWrite(VC_MODE_LED_PIN, HIGH);
 	}
-	else {
-		digitalWrite(AC_MODE_LED_PIN, LOW);
-		digitalWrite(VC_MODE_LED_PIN, LOW);
-	}
+	else if (BreathLoopStart == state.machine_state) {
+        //Do nothing
+    }
+    else {
+        digitalWrite(AC_MODE_LED_PIN, LOW);
+        digitalWrite(VC_MODE_LED_PIN, LOW);
+    }
+	
 }
 
 void control_inhale_exhale_LEDs(VentilatorState &state) {
@@ -34,6 +38,9 @@ void control_inhale_exhale_LEDs(VentilatorState &state) {
 		vcmode_LED(state);
 
 	}
+    else if (BreathLoopStart == state.machine_state) {
+        //Do nothing
+    }
 	else {
 		digitalWrite(INHALE_LED_PIN, LOW);
 		digitalWrite(EXHALE_LED_PIN, LOW);

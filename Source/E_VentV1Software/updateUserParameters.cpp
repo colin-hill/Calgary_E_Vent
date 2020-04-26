@@ -147,8 +147,7 @@ void displayUserParameters(SelectedParameter &currentlySelectedParameter, Liquid
         break;
 
     case e_ModeSelect:
-        //displayPauseTimeChange(displayName, tempPlateauPauseTime, LCD_MAX_STRING);
-        //Do the ACMode VCMode selection screen
+        displayModeChange(displayName, tempModeSelect);
         break;
 
     default:

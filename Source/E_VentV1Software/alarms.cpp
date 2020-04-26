@@ -149,9 +149,11 @@ void loop_alarm_manager(elapsedMillis &externalDisplayTimer, elapsedMillis &alar
 
   if (state.alarm_outputs != 0) {
     control_alarm_output(alarmSilenceTimer, alarmReset, state);
+    digitalWrite(ALARM_LED_PIN, HIGH);
   }
   else {
     digitalWrite(ALARM_BUZZER_PIN, LOW);
+    digitalWrite(ALARM_LED_PIN, LOW);
   }
 
 
@@ -208,7 +210,6 @@ void control_alarm_output(elapsedMillis &alarmSilenceTimer, volatile boolean &al
   }
   else {
     digitalWrite(ALARM_BUZZER_PIN, LOW);
-    digitalWrite(ALARM_RELAY_PIN, LOW);
   }
   
   return;
@@ -275,6 +276,11 @@ void control_external_display(elapsedMillis &externalDisplayTimer, HardwareSeria
   }
   else if (state.alarm_outputs & LOW_PEEP_ALARM) {
     char outputString[] = "LEEp";
+    externalDisplay.print('v');
+    externalDisplay.print(outputString);
+  }
+  else if (state.alarm_outputs & HIGH_PEEP_ALARM){
+    char outputString[] = "HEEp";
     externalDisplay.print('v');
     externalDisplay.print(outputString);
   }

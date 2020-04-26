@@ -41,7 +41,7 @@ RoboClaw motorController(&Serial2, MOTOR_CONTROLLER_TIMEOUT);
 //#define SERIAL_DEBUG //Comment this out if not debugging, used for visual confirmation of state changes
 //#define NO_INPUT_DEBUG //Comment this out if not debugging, used to spoof input parameters at startup when no controls are present
 
-const char softwareVersion[] = "VER. 2020.4.17";
+const char softwareVersion[] = "VER. 2020.4.24";
 
 //------------------------------------------------------------------------------
 
@@ -104,6 +104,8 @@ void setup() {
   
   wdt_disable();
 
+  pinMode(A2, OUTPUT);
+  digitalWrite(A2, HIGH);
   
   
 #ifdef SERIAL_DEBUG
@@ -114,6 +116,7 @@ void setup() {
     setupLimitSwitch();
     setUpAlarmPins();
     setUpPressureSensor();
+    setup_LED_pins();
 
 
     externalDisplayTimer = 0;
@@ -134,11 +137,14 @@ void setup() {
     ventilatorDisplay.begin(LCD_COLUMNS, LCD_ROWS);
 
     //External Display Setup
+    //Setup external display
     externalDisplay.begin(9600);
     externalDisplay.write('v'); //Clears the display
     externalDisplay.write("ALTA");
 
     //LCD Display Startup Message for two seconds
+    digitalWrite(ALARM_BACKLIGHT, HIGH);
+    digitalWrite(VENT_BACKLIGHT, HIGH);
     displayAEVStartupScreen(ventilatorDisplay);
     displayAEVStartupScreen(alarmDisplay);
 
@@ -169,6 +175,9 @@ void setup() {
 void loop() {
   
    wdt_reset();
+
+
+
 
     
     //Handle Mode and Cycle LEDs

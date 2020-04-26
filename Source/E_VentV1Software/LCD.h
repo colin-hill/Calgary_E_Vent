@@ -165,6 +165,8 @@ void displayHomingScreen(LiquidCrystal &displayName);
 
 //Parameter setpoint change functions
 
+void displayModeChange(LiquidCrystal &displayName, float ventMode);
+
 /** Function for display of the changing tidal volume setpoint
 
    Input:

@@ -6,7 +6,7 @@
 
 const float S_TO_MS = 1000.0f;
 
-const float CODE_LATENCY = 0.5;
+const float CODE_LATENCY = 0.45;
 
 
 #endif

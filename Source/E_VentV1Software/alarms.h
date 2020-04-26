@@ -20,7 +20,7 @@
 // Alarm Sound definitions
 const float ALARM_SOUND_LENGTH = 0.5; //Seconds
 
-const float ALARM_SILENCE_TIME = 30.0; //seconds
+const float ALARM_SILENCE_TIME = 120.0; //seconds
 
 const float EXTERNAL_DISPLAY_DWELL = 3.0; //seconds
 
