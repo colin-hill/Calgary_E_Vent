@@ -70,12 +70,6 @@ void acInhaleCommand(VentilatorState &state) {
 void acInhale(VentilatorState &state, UserParameter *userParameters, RoboClaw &controller_name) {
     assert(state.ac_state == ACInhale);
 
-#ifdef SERIAL_DEBUG
-    Serial.print(F("ACInhale: "));
-    Serial.println(elapsed_time(state));
-    Serial.print(F("Desired Inhale Time: "));
-    Serial.println(state.inspiration_time);
-#endif //SERIAL_DEBUG
 
     if (state.pressure > state.current_loop_peak_pressure) {
         // Update the peak pressure
@@ -94,6 +88,8 @@ void acInhale(VentilatorState &state, UserParameter *userParameters, RoboClaw &c
         return;
     }
 
+
+    
     // TODO: nervous about this else if for alarm.
     if (elapsed_time(state) > (state.inspiration_time * S_TO_MS)) {
         state.ac_state = ACPeak;

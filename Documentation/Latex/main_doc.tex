@@ -349,7 +349,34 @@ This section outlines the performance of the ventilator software including suppo
 \subsection{Software of Unknown Pedigree (SOUP)}
 \label{sect:soup}
 
-TODO: need to add elapsedMillis, Roboclaw, LiquidCrystal etc.
+The following libraries have been used in the Alberta E-Vent Software:
+
+\begin{center}
+	\begin{table}[h]
+		\caption{Software of Unknown Pedigree used by Alberta E-Vent}
+		\label{tab:sw_soup}
+		\begin{tabular}{ |p{3cm}|p{3cm}|p{8cm}|}
+			
+			\hline
+			\textbf{Name} & \textbf{Publisher} & \textbf{Purpose}  \\ \hline
+			RoboClaw & Basic Micro\textsuperscript{1} & Used for communication with the RoboClaw Solo 30A motor controller \\ \hline
+			LiquidCrystal & Arduino LLC\textsuperscript{2} & Used for display of parameters and alarms on the ventilator LCD screens\\ \hline
+			elapsedMillis & Paul Stoffregen\textsuperscript{3} & Used for timing\\ \hline
+			Encoder & Paul Stoffregen\textsuperscript{4} & Used for user interface rotary encoder\\ \hline
+			SBWire & Steve Bian\textsuperscript{5} & Used for I2C communication with pressure sensor\\ \hline			
+		\end{tabular}
+	\end{table}	
+\end{center}
+
+\noindent \textbf{Footnotes:}
+\begin{enumerate}
+	\item https://github.com/basicmicro/roboclaw\_arduino\_library
+	\item https://github.com/arduino-libraries/LiquidCrystal
+	\item https://github.com/pfeerick/elapsedMillis
+	\item https://github.com/PaulStoffregen/Encoder
+	\item https://github.com/freespace/SBWire
+\end{enumerate}
+
 
 \subsubsection{Publish Anomaly Lists for SOUP}
 Published anomaly lists are not available for many of the open-source software libraries used.  As such, verification of these libraries has relied on testing specific to the Alberta E-Vent to ensure that the functionality expected is delivered over the full range of ventilator operating conditions.  Further details on the verification and validation testing performed for the ventilator can be found in Section \ref{sect:vandv}.
@@ -522,7 +549,7 @@ Occurs at power-up and after the detection of a mechanical fault.  See Section \
 
 
 \begin{center}
-\begin{table}
+\begin{table}[h]
 \caption{Motor Calibration Phase Risk Controls}
 \label{tab:motor_cal_risk}
 \begin{tabular}{ |p{3.5cm}|p{3cm}| p{3.5cm}| p{3.5cm}|}
@@ -565,7 +592,7 @@ Occurs at power-up and after the detection of a mechanical fault.  See Section \
 Both the AC and VC Modes of operation include a inhale phase.  Refer to Sections \ref{sect:acMode} and \ref{sect:vcMode} for further details. This section examines the possible failure modes of the inhale phase and identifies the risk control measures that have been implemented to reduce the risk.
 
 \begin{center}
-	\begin{table}
+	\begin{table}[h]
 		\caption{Inhale Phase Risk Controls}
 		\label{tab:inhale_risk}
 		\begin{tabular}{ |p{3.5cm}|p{3cm}| p{3.5cm}| p{3.5cm}|}
@@ -602,7 +629,7 @@ Both the AC and VC Modes of operation include a inhale phase.  Refer to Sections
 Both the AC and VC Modes of operation include a exhale phase.  Refer to Sections \ref{sect:acMode} and \ref{sect:vcMode} for further details.  This section examines the possible failure modes of the exhale phase and identifies the risk control measures that have been implemented to reduce the risk.
 
 \begin{center}
-	\begin{table}
+	\begin{table}[h]
 		\caption{Exhale Phase Risk Controls}
 		\label{tab:exhale_risk}
 		\begin{tabular}{ |p{3.5cm}|p{3cm}| p{3.5cm}| p{3.5cm}|}
@@ -637,7 +664,7 @@ Both the AC and VC Modes of operation include a exhale phase.  Refer to Sections
 The ventilator includes a number of alarms. Refer to Sections \ref{sect:alarms} and \ref{sect:fault} for further details. This section examines the possible failure modes these alarms and identifies the risk control measures that have been implemented to reduce the risk.
 
 \begin{center}
-	\begin{table}
+	\begin{table}[h]
 		\caption{Alarm and Fault Detection Risk Controls}
 		\label{tab:alarm_risk}
 		\begin{tabular}{ |p{3.5cm}|p{3cm}| p{3.5cm}| p{3.5cm}|}
@@ -677,7 +704,19 @@ To be completed with finalized software.
 
 \subsubsection{Alarm Testing}
 
-To be completed with finalized software.
+
+\noindent \textbf{High PIP Alarm:} The high PIP alarm is of high importance for the safe operation of the software.  As such, testing has been undertaken to characterize the peak pressure experienced by a patient under conditions that cause the ventilator to abort breaths.  The inspiration time and tidal volumes were varied to result in different motor speeds and air flow rates in the system.  A low-compliance patient was simulated using as ASL 5000 servolung.  The high PIP and asscoiated breath abort was set at 30 cm H\textsubscript{2}O.  The ASL measured patient pressure was then tracked to ensure the high pressure alarm acitvated appropriately and the breath abort occurred fast enough to maintain the set maximum pressure.
+
+
+\noindent \textbf{Low PIP Alarm:}
+
+
+
+\noindent \textbf{High PEEP Alarm:}
+
+\noindent \textbf{Low PEEP Alarm:}
+
+\noindent \textbf{High Respiratory Rate Alarm:}
 
 \subsubsection{Clinical Feedback}
 
@@ -685,7 +724,7 @@ To be completed with finalized software.
 
 \subsection{Longevity Testing}
 
-To be completed with finalized software.
+Code stability was assessed over a 24-hour period.
 
 \subsection{Verification of Risk Control Methods}
 \label{sect:v_risk}
@@ -693,6 +732,28 @@ To be completed with finalized software.
 
 \subsection{Anomalies}
 \label{sect:anomalies}
+
+Identified anomalies for software release version 042620.
+
+\begin{center}
+	\begin{table}[h]
+		\caption{Software Anomalies for Version 042620}
+		\label{tab:sw_anom}
+		\begin{tabular}{ |p{4cm}|p{10cm}|}
+			
+			\hline
+			\textbf{Anomaly Name} & \textbf{Anomaly Description}  \\ \hline
+			Mode switch breath stacking & When the mode is switched from AC Mode to VC Mode, the inhale wait period that is characteristic of AC Mode is no longer needed.  As a result, transitioning from AC to VC mode results in a breath being given immediately after the exhale period of the last breath in AC mode.\\ \hline 
+		
+			
+		\end{tabular}
+	\end{table}	
+\end{center}
+
+
+
+
+
 
 \clearpage
 

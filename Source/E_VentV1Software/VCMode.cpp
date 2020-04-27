@@ -52,13 +52,6 @@ void vcInhaleCommand(VentilatorState &state) {
 void vcInhale(VentilatorState &state, UserParameter *userParameters, RoboClaw &controller_name) {
     assert(state.vc_state == VCInhale);
 
-#ifdef SERIAL_DEBUG
-    Serial.print(F("VCInhale: "));
-    Serial.println(elapsed_time(state));
-    Serial.print(F("Desired Inhale Time: "));
-    Serial.println(state.inspiration_time);
-#endif //SERIAL_DEBUG
-
 
     // Monitor pressure.
     if (state.pressure > state.current_loop_peak_pressure) {
@@ -66,7 +59,6 @@ void vcInhale(VentilatorState &state, UserParameter *userParameters, RoboClaw &c
     }
 
     state.errors |= check_high_pressure((PRESSURE_SAFETY_MARGIN*state.pressure), userParameters);
-
 
     if ((PRESSURE_SAFETY_MARGIN*state.pressure) > userParameters[e_HighPIPAlarm].value) {
         commandStop(controller_name);
