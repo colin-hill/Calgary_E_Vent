@@ -49,7 +49,7 @@ void vcInhaleCommand(VentilatorState &state) {
 }
 
 
-void vcInhale(VentilatorState &state, UserParameter *userParameters) {
+void vcInhale(VentilatorState &state, UserParameter *userParameters, RoboClaw &controller_name) {
     assert(state.vc_state == VCInhale);
 
 #ifdef SERIAL_DEBUG
@@ -69,6 +69,7 @@ void vcInhale(VentilatorState &state, UserParameter *userParameters) {
 
 
     if ((PRESSURE_SAFETY_MARGIN*state.pressure) > userParameters[e_HighPIPAlarm].value) {
+        commandStop(controller_name);
         state.peak_pressure = state.current_loop_peak_pressure;
         reset_timer(state);
         state.vc_state = VCInhaleAbort;
@@ -193,7 +194,7 @@ void vcReset(VentilatorState &state, UserParameter *userParameters) {
 }
 
 
-void vc_mode_step(VentilatorState &state, UserParameter *userParameters) {
+void vc_mode_step(VentilatorState &state, UserParameter *userParameters, RoboClaw &controller_name) {
     switch(state.vc_state) {
     case VCStart:
         vcStart(state);
@@ -202,7 +203,7 @@ void vc_mode_step(VentilatorState &state, UserParameter *userParameters) {
         vcInhaleCommand(state);
         return;
     case VCInhale:
-        vcInhale(state, userParameters);
+        vcInhale(state, userParameters, controller_name);
         return;
     case VCInhaleAbort:
         vcInhaleAbort(state, userParameters);

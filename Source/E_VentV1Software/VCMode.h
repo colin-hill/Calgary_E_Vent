@@ -25,7 +25,7 @@
    Output:
    - returns new state.
  */
-void vc_mode_step(VentilatorState &state, UserParameter *userParameters);
+void vc_mode_step(VentilatorState &state, UserParameter *userParameters, RoboClaw &controller_name);
 
 
 /* Get a debug code for the current vcModeState.
@@ -50,7 +50,7 @@ void vcStart(VentilatorState &state);
 
 void vcInhaleCommand(VentilatorState &state);
 
-void vcInhale(VentilatorState &state, UserParameter *userParameters);
+void vcInhale(VentilatorState &state, UserParameter *userParameters, RoboClaw &controller_name);
 
 void vcInhaleAbort(VentilatorState &state, UserParameter *userParameters);
 

@@ -240,10 +240,10 @@ void loop() {
 
     }
     else if (ACMode == state.machine_state) {
-        ac_mode_step(state, userParameters);
+        ac_mode_step(state, userParameters, motorController);
     }
     else if (VCMode == state.machine_state) {
-        vc_mode_step(state, userParameters);
+        vc_mode_step(state, userParameters, motorController);
     }
     else if (FailureMode == state.machine_state) {
         failure_mode(state);

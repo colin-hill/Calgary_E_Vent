@@ -98,7 +98,7 @@ void commandInhaleAbort(RoboClaw &controller_name, VentilatorState &state) {
 	
 	long int desired_speed = (long int) state.motor_return_speed;
 	//Stop Motion
-	commandStop(controller_name);
+	//commandStop(controller_name); Moved to the state machine
 	//Read Current Location
 	long int desired_position = 0;
 	state.future_motor_position = 0;

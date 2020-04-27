@@ -24,7 +24,7 @@
    - returns new state.
  */
 
-void ac_mode_step(VentilatorState &state, UserParameter *userParameters);
+void ac_mode_step(VentilatorState &state, UserParameter *userParameters, RoboClaw &controller_name);
 
 /* Get a debug code for the current acModeState.
 
@@ -53,7 +53,7 @@ void acInhaleWait(VentilatorState &state);
 
 void acInhaleCommand(VentilatorState &state);
 
-void acInhale(VentilatorState &state, UserParameter *userParameters);
+void acInhale(VentilatorState &state, UserParameter *userParameters, RoboClaw &controller_name);
 
 // Unused parameter warning for expirationTime due to SERIAL_DEBUG
 // TODO: should this be inspiration time?
