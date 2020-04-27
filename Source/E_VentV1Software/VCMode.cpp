@@ -65,23 +65,30 @@ void vcInhale(VentilatorState &state, UserParameter *userParameters) {
         state.current_loop_peak_pressure = state.pressure;
     }
 
-    // Check time
-    if(elapsed_time(state) > ((state.inspiration_time + INERTIA_BUFFER) * S_TO_MS)){
-        state.vc_state = VCPeak;
+    state.errors |= check_high_pressure((PRESSURE_SAFETY_MARGIN*state.pressure), userParameters);
+
+
+    if ((PRESSURE_SAFETY_MARGIN*state.pressure) > userParameters[e_HighPIPAlarm].value) {
         state.peak_pressure = state.current_loop_peak_pressure;
         reset_timer(state);
+        state.vc_state = VCInhaleAbort;
+        return;
     }
 
-    state.errors |= check_high_pressure(state.pressure, userParameters);
 
+    // Check time
+    if(elapsed_time(state) > (state.inspiration_time * S_TO_MS)){
+        state.vc_state = VCPeak;
+        state.peak_pressure = state.current_loop_peak_pressure;
+        state.errors |= check_pressure(state.pressure, userParameters);
+        
+    }
+
+    
     // If there's high pressure, abort inhale.
     // TODO: will this state and VCInhaleAbort both raise alarm? Is that fine?
     // CH: Yes, I think that is fine. Basically anytime the motor is moving we want to know if the pressue is too high
-     if (state.pressure > userParameters[e_HighPIPAlarm].value) {
-        state.peak_pressure = state.current_loop_peak_pressure;
-        state.vc_state = VCInhaleAbort;
-    }
-
+     
     return;
 }
 
@@ -100,7 +107,7 @@ void vcInhaleAbort(VentilatorState &state, UserParameter *userParameters) {
 #endif //SERIAL_DEBUG
 
     reset_timer(state);
-    state.errors |= check_high_pressure(state.pressure, userParameters);
+    state.errors |= check_high_pressure((PRESSURE_SAFETY_MARGIN*state.pressure), userParameters);
     state.vc_state = VCExhale;
 
     return;
@@ -118,12 +125,13 @@ void vcPeak(VentilatorState &state, UserParameter *userParameters) {
 #endif //SERIAL_DEBUG
     // TODO: Hold motor in position********
 
-    if(elapsed_time(state) > (state.plateau_pause_time * S_TO_MS)){
+    if(elapsed_time(state) > ((state.plateau_pause_time + INERTIA_BUFFER) * S_TO_MS)){
         state.vc_state = VCExhaleCommand;
         reset_timer(state);        
     }
 
-    state.errors |= check_pressure(state.pressure, userParameters);
+    //Pressure check moved to inhale phase
+    //state.errors |= check_pressure(state.pressure, userParameters);
     return;
 }
 

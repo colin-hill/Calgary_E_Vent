@@ -82,21 +82,27 @@ void acInhale(VentilatorState &state, UserParameter *userParameters) {
         state.current_loop_peak_pressure = state.pressure;
     }
 
-    // TODO: nervous about this else if for alarm.
-    if (elapsed_time(state) > ((state.inspiration_time + INERTIA_BUFFER) * S_TO_MS)) {
-        state.ac_state = ACPeak;
-        state.peak_pressure = state.current_loop_peak_pressure;
-        reset_timer(state);
+    state.errors |= check_high_pressure((PRESSURE_SAFETY_MARGIN*state.pressure), userParameters);
 
-    }
-
-    state.errors |= check_high_pressure(state.pressure, userParameters);
-
-    if (state.pressure > userParameters[e_HighPIPAlarm].value) {
+    if ((PRESSURE_SAFETY_MARGIN*state.pressure) > userParameters[e_HighPIPAlarm].value) {
         state.peak_pressure = state.current_loop_peak_pressure;
         reset_timer(state);
         state.ac_state = ACInhaleAbort;
+        return;
     }
+
+    // TODO: nervous about this else if for alarm.
+    if (elapsed_time(state) > (state.inspiration_time * S_TO_MS)) {
+        state.ac_state = ACPeak;
+        state.peak_pressure = state.current_loop_peak_pressure;
+        state.errors |= check_pressure(state.pressure, userParameters);
+        reset_timer(state);
+
+    }
+
+    
+
+
 
     return;
 }
@@ -115,7 +121,7 @@ void acInhaleAbort(VentilatorState &state, UserParameter *userParameters) {
 #endif //SERIAL_DEBUG
 
     
-    state.errors |= check_high_pressure(state.pressure,userParameters);
+    state.errors |= check_high_pressure((PRESSURE_SAFETY_MARGIN*state.pressure),userParameters);
     state.ac_state = ACExhale;
 
     return;
@@ -132,12 +138,13 @@ void acPeak(VentilatorState &state, UserParameter *userParameters) {
     Serial.println(state.plateau_pause_time);
 #endif //SERIAL_DEBUG
 
-    if (elapsed_time(state) > (state.plateau_pause_time * S_TO_MS)) { 
+    if (elapsed_time(state) > ((state.plateau_pause_time + INERTIA_BUFFER) * S_TO_MS)) { 
         state.ac_state = ACExhaleCommand;
         reset_timer(state);
     }
     
-    state.errors |= check_pressure(state.pressure, userParameters);
+    //Check pressure has been moved to the transition in inhale phase
+    //state.errors |= check_pressure(state.pressure, userParameters);
 
     return;
 }

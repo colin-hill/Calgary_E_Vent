@@ -41,7 +41,7 @@ RoboClaw motorController(&Serial2, MOTOR_CONTROLLER_TIMEOUT);
 //#define SERIAL_DEBUG //Comment this out if not debugging, used for visual confirmation of state changes
 //#define NO_INPUT_DEBUG //Comment this out if not debugging, used to spoof input parameters at startup when no controls are present
 
-const char softwareVersion[] = "VER. 2020.4.24";
+const char softwareVersion[] = "042620";
 
 //------------------------------------------------------------------------------
 
@@ -61,7 +61,7 @@ Encoder parameterSelectEncoder(PARAMETER_ENCODER_PIN_1, PARAMETER_ENCODER_PIN_2)
 
 float UserParameter::currentBPM = DEFAULT_BPM; //Declaration of user parameter static variables for dynamic changing allowable bpm, inspiration time,
 float UserParameter::currentInspirationTime = DEFAULT_INSPIRATION_TIME; // and plateau pause time
-float UserParameter::currentPlateauPauseTime = DEFAULT_PLATEAU_PAUSE_TIME;
+float UserParameter::currentTidalVolume = DEFAULT_TIDAL_VOLUME;
 
 UserParameter userParameters[NUM_USER_PARAMETERS] =
    { UserParameter(MIN_THRESHOLD_PRESSURE, MAX_THRESHOLD_PRESSURE, THRESHOLD_PRESSURE_INCREMENT, THRESHOLD_PRESSURE_SELECT_PIN, DEFAULT_THRESHOLD_PRESSURE, e_ThresholdPressure),
@@ -145,8 +145,8 @@ void setup() {
     //LCD Display Startup Message for two seconds
     digitalWrite(ALARM_BACKLIGHT, HIGH);
     digitalWrite(VENT_BACKLIGHT, HIGH);
-    displayAEVStartupScreen(ventilatorDisplay);
-    displayAEVStartupScreen(alarmDisplay);
+    displayAEVStartupScreen(ventilatorDisplay, softwareVersion, LCD_MAX_STRING);
+    displayAEVStartupScreen(alarmDisplay, softwareVersion, LCD_MAX_STRING);
 
     //Motor Controller Start
     motorController.begin(38400);

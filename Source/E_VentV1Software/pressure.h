@@ -32,6 +32,8 @@ const uint16_t MIN_DIGITAL_OUTPUT = 1638; //Honeywell I2C comms documentation
 // TODO: Double check these constants. I'm unclear on the units.
 const float MIN_SENSOR_PRESSURE = -1.0; //PSI Differential
 const float MAX_SENSOR_PRESSURE = 1.0; //PSI Differential
+
+const float PRESSURE_SAFETY_MARGIN = 1.1;
 //------------------------------------------------------------------------------
 
 

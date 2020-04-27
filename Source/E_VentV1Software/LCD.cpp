@@ -425,7 +425,7 @@ void displayStartupScreen(LiquidCrystal &displayName, const char softwareVersion
 }
 
 
-void displayAEVStartupScreen(LiquidCrystal &displayName) {
+void displayAEVStartupScreen(LiquidCrystal &displayName, const char softwareVersion[], const int LCD_MAX_STRING) {
 
 	displayName.createChar(0,L1_1);
 	displayName.createChar(1,L1_2);
@@ -435,6 +435,10 @@ void displayAEVStartupScreen(LiquidCrystal &displayName) {
 	displayName.createChar(5,L3_1);
 	displayName.createChar(6,L3_2);
 	displayName.createChar(7,L4_1);
+
+	char parameterDispL4[LCD_MAX_STRING];
+
+	snprintf(parameterDispL4, LCD_MAX_STRING, "%s",softwareVersion);
 
 	
 	const char parameterDispL2[] = "ALBERTA";
@@ -459,6 +463,10 @@ void displayAEVStartupScreen(LiquidCrystal &displayName) {
 	displayName.write((byte)6);
 	displayName.write((byte)4);
 	displayName.write(parameterDispL3);
+
+	//Line 4
+	displayName.setCursor(14,4);
+	displayName.write(parameterDispL4);
 
 
 }

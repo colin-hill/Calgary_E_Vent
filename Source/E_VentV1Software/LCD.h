@@ -154,7 +154,7 @@ void displayVentilationParameters(LiquidCrystal &displayName,
  */
 void displayStartupScreen(LiquidCrystal &displayName, const char softwareVersion[], const int LCD_MAX_STRING); 
 
-void displayAEVStartupScreen(LiquidCrystal &displayName);
+void displayAEVStartupScreen(LiquidCrystal &displayName, const char softwareVersion[], const int LCD_MAX_STRING);
 
 void displayStartupHoldScreen(LiquidCrystal &displayName);
 

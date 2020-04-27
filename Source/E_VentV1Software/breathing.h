@@ -39,7 +39,7 @@ const float MAX_MODE_SELECT            = 5.0; //Seconds
 const float DEFAULT_MODE_SELECT        = -5.0; //Seconds
 
 //Breath hold time--------------------------------------------------------------
-const float DEFAULT_PLATEAU_PAUSE_TIME = 0.15; //Seconds
+const float DEFAULT_PLATEAU_PAUSE_TIME = 0.01; //Seconds
 
 //Max & Min PIP Pressures--------------------------------------------------------
 const float MAX_PRESSURE = 50.0; //cmH2O

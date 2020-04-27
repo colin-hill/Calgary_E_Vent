@@ -23,25 +23,41 @@ void UserParameter::updateValue(){
     else if(e_InspirationTime == this->name){
         this->currentInspirationTime = this->value;
     }
-    //else if(e_PlateauPauseTime == this->name){
-        //this->currentPlateauPauseTime = this->value;
-    //}	
+    else if(e_TidalVolume == this->name){
+        this->currentTidalVolume = this->value;
+    }	
 }
 
 void UserParameter::updateTmpValue(int32_t numEncoderSteps){
 
     if(e_BPM == this->name){
-        this->maxValue = min(MAX_BPM,(60.0 / ((this->currentInspirationTime) + this->currentPlateauPauseTime + 2*INERTIA_BUFFER + CODE_LATENCY+ 0.25)));
+        this->maxValue = min(MAX_BPM,(60.0 / ((this->currentInspirationTime) + DEFAULT_PLATEAU_PAUSE_TIME + 2*INERTIA_BUFFER + CODE_LATENCY+ 0.25)));
     }
     else if(e_InspirationTime == this->name){
-        float tmp = (60.0 / (this->currentBPM)) - ((this->currentPlateauPauseTime) + 2*INERTIA_BUFFER + (CODE_LATENCY) + 0.25);
+        
+        float tmpNewMax = (60.0 / (this->currentBPM)) - ((DEFAULT_PLATEAU_PAUSE_TIME) + 2*INERTIA_BUFFER + (CODE_LATENCY) + 0.25);
 
-        if(tmp < this->minValue){
-            this->maxValue = 0.5;
+        float tmpNewMin = (this->currentTidalVolume) / 135.0; //TODO: Get rid of this magic number, this is the motor speed conversion factor
+
+        if(tmpNewMax < this->minValue){
+            this->maxValue = 0.5; //TODO: get rid of this magic number, this is the default min inspiration time
         }
         else{
-            this->maxValue = tmp;
+            this->maxValue = tmpNewMax;
         }
+
+        //if(tmpNewMin > this->maxValue){
+            //this->minValue = this->maxValue;
+        //}
+        //else{
+            //this->minValue = tmpNewMin;
+        //}
+    }
+    else if(e_TidalVolume){
+
+        //float tmp = (this->currentInspirationTime)*135.0; //TODO: Fix magic number  
+
+        //this->maxValue = tmp;
     }
 	
     float funcValue = this->tmpValue + (this->increment)*((float)numEncoderSteps);

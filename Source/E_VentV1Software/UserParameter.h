@@ -68,7 +68,7 @@ public:
 
     static float currentInspirationTime;
     static float currentBPM;
-    static float currentPlateauPauseTime;
+    static float currentTidalVolume;
 		
 private:
     float minValue;
