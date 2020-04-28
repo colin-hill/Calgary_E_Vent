@@ -31,7 +31,7 @@ const float DEFAULT_TIDAL_VOLUME = 50.0; //Tidal Volume (% of max)
 // Inspiration Expiration Ratio Definitions--------------------------------------
 const float MIN_INSPIRATION_TIME     = 0.5; //Seconds
 const float MAX_INSPIRATION_TIME     = 3.0; //Seconds
-const float DEFAULT_INSPIRATION_TIME = 1.5; //Seconds
+const float DEFAULT_INSPIRATION_TIME = 1.0; //Seconds
 //------------------------------------------------------------------------------
 
 const float MIN_MODE_SELECT            = -5.0; //Seconds
