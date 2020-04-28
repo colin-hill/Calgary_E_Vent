@@ -121,7 +121,7 @@ void acInhaleAbort(VentilatorState &state, UserParameter *userParameters) {
 
     
     state.errors |= check_high_pressure((PRESSURE_SAFETY_MARGIN*state.pressure),userParameters);
-    state.peep_pressure = state.pressure;
+    //state.peep_pressure = state.pressure;
     state.ac_state = ACExhale;
 
     return;
@@ -157,7 +157,7 @@ void acExhaleCommand(VentilatorState &state) {
 
     
     state.plateau_pressure = state.pressure;
-    state.peep_pressure = state.pressure;
+    //state.peep_pressure = state.pressure;
     state.ac_state = ACExhale;
 
     return;
@@ -172,7 +172,7 @@ void acExhale(VentilatorState &state) {
     //Serial.println(expiration_time);
 #endif //SERIAL_DEBUG
 
-    state.peep_pressure = min(state.pressure, state.peep_pressure);
+    //state.peep_pressure = min(state.pressure, state.peep_pressure);
 
     if (elapsed_time(state) > ((state.motor_return_time + INERTIA_BUFFER) * S_TO_MS)) {//Get back faster so we can listen
         state.ac_state      = ACReset;
@@ -191,7 +191,7 @@ void acReset(VentilatorState &state, UserParameter *userParameters) {
     
 
     //Update and check PEEP
-    state.peep_pressure = min(state.pressure, state.peep_pressure);
+    state.peep_pressure = state.pressure;
     state.errors |= check_peep(state.peep_pressure, userParameters); //Now checks the minimum peep_pressure for asynchronous breathing
 
     state.machine_state = BreathLoopStart;
