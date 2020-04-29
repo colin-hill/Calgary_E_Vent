@@ -11,13 +11,13 @@ const float SECONDS_PER_MINUTE = 60.0;
 
 // Threshold Pressure Definitions--------------------------------------------------
 
-const float MIN_THRESHOLD_PRESSURE     = 1.0; //cmH2O
+const float MIN_THRESHOLD_PRESSURE     = 2.0; //cmH2O
 const float MAX_THRESHOLD_PRESSURE     = 5.0; //cmH2O
-const float DEFAULT_THRESHOLD_PRESSURE = 2.0; //cmH2O
+const float DEFAULT_THRESHOLD_PRESSURE = 3.0; //cmH2O
 //-------------------------------------------------------------------------------
 
 // Breath Per Minute Definitions-------------------------------------------------
-const float MIN_BPM     = 10.0; //Breaths per Minute, awful global for a reason
+const float MIN_BPM     = 5.0; //Breaths per Minute, awful global for a reason
 const float MAX_BPM     = 40.0; //Breaths per Minute, awful global for a reason
 const float DEFAULT_BPM = 16.0; //Breaths per Minute
 //------------------------------------------------------------------------------

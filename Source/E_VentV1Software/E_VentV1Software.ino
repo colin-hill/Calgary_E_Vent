@@ -214,14 +214,7 @@ void loop() {
     }
     else if (BreathLoopStart == state.machine_state) { // BreathLoopStart
 
-        state.breath_counter += 1;
-
-        if(state.breath_counter > 4){
-            calculate_respiratory_rate(state);
-            Serial.println(state.calculated_respiratory_rate);
-        }
-
-        state.errors |= check_respiratory_rate(state, userParameters);
+        
 
         alarmDisplay.begin(LCD_COLUMNS, LCD_ROWS); //TODO remove this
         ventilatorDisplay.begin(LCD_COLUMNS, LCD_ROWS); //TODO remove this
@@ -241,6 +234,17 @@ void loop() {
     }
     else if (ACMode == state.machine_state) {
         ac_mode_step(state, userParameters, motorController);
+
+        if (ACInhaleCommand == state.ac_state){
+            state.breath_counter += 1;
+
+            if(state.breath_counter > 0){
+                calculate_respiratory_rate(state);
+                //Serial.println(state.calculated_respiratory_rate);
+            }
+
+        state.errors |= check_respiratory_rate(state, userParameters);
+        }
     }
     else if (VCMode == state.machine_state) {
         vc_mode_step(state, userParameters, motorController);
