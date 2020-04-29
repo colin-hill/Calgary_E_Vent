@@ -72,18 +72,13 @@
 
 \section{Summary}
 
-TODO:
-
-%This report outlines the Alberta E-Vent software design, development and testing that has been undertaken.  The report is composed of four main sections:
-%\begin{enumerate}
-%	\item Functionality Overview outlining the software's high-level functionality.
-%	\item Process Descriptions describing the nominal operation of the ventilator modes and alarms
-%	\item Software Specifications outlining the full capabilities of the software.
-%	\item Risk Control Measures outlining the failure modes and mitigation associated with the ventilator.
-%	\item Verification and Validation summarizing the testing that has been conducted.
-%\end{enumerate}
-
-%Further summary of the performance of the ventilator to be added.
+This report outlines the Alberta E-Vent software design, development and testing that has been undertaken.  The report is composed of four main parts:
+\begin{itemize}
+	\item Sections \ref{sect:software_class} to \ref{sect:quality_manage} cover how the development of the software has been undertaken in accordance with the IEC 62304.2006 standard.
+	\item Sections \ref{sect:function_overview} to \ref{sect:risk} describes the function and design of the software in detail.
+	\item Section \ref{sect:vandv} covers verification and validation testing performed to check the performance of the software.
+	\item Section \ref{sect:maintenance} covers the proposed maintenance plan for continuing support of the Alberta E-Vent software.
+\end{itemize}
 
 \clearpage
 
@@ -289,9 +284,6 @@ The Alberta E-Vent Software has designated Class B. See Section \ref{sect:softwa
 	
 	
 \end{longtable}
-\end{center}
-
-\noindent \textbf{Footnotes:}
 \begin{enumerate}
 	\item The development of the Alberta E-Vent occurred over 1-month period to respond to the immediate need for emergency ventilation systems for use in the COVID-19 pandemic.  The rapid development schedule meant that not all aspects of the IEC 62304 software development criteria could be followed.  The Alberta E-Vent hardware and software was developed using an agile development procedure with a small team.  The focus of the development procedure has been to iterate quickly, solicit clinician feedback, and implement requested changes.
 	\item Software of Unknown Pedigree (SOUP) has been avoided where possible, however, the software developed utilizes the Arduino suite of IDE, compiler, and libraries.  The use of an a widely available platform intended for rapid development, like Arduino, was necessitated by the short development timelines associated with this project.  A selection of additional open-source libraries not associated with the Arduino suite have been used when necessary.  Full details of the the SOUP utilized in the Alberta E-Vent is given in Section \ref{sect:soup} of this document.  Risks associated with using SOUP has been reduced by extensively testing the full ventilator to ensure it functions as expected in reliable manner.
@@ -299,6 +291,9 @@ The Alberta E-Vent Software has designated Class B. See Section \ref{sect:softwa
 	\item Items related to ongoing maintenance of the software are not addressed in detail by the current set of documents.  A brief overview of the maintenance polices to be employed is given in Section \ref{sect:maintenance}. The intent of the current set of documents is to outline the software development procedure.
 	
 \end{enumerate}
+\end{center}
+
+
 
 
 
@@ -344,6 +339,18 @@ In Assist Control (AC) Mode, the ventilator will respond to patient triggered-br
 
 This section outlines the performance of the ventilator software including supported ventilation modes, user adjustable parameters, and built in system alarms and checks.  Verification and validation of these specifications are provided in Section \ref{sect:vandv}.
 
+\subsection{Hardware}
+The current software has been developed and tested with the Arduino MEGA 2560 microcontroller.
+
+\noindent \textbf{Microcontroller:} Arudino MEGA 2560 R3
+
+\noindent \textbf{Clock Speed:} 16 MHz 
+
+\noindent \textbf{SRAM:} 8 kB
+
+\noindent \textbf{Flash Memory:} 256 kB
+
+
 
 
 \subsection{Software of Unknown Pedigree (SOUP)}
@@ -366,20 +373,21 @@ The following libraries have been used in the Alberta E-Vent Software:
 			SBWire & Steve Bian\textsuperscript{5} & Used for I2C communication with pressure sensor\\ \hline			
 		\end{tabular}
 	
-	\noindent \textbf{Footnotes:}
-	\begin{enumerate}
-		\item https://github.com/basicmicro/roboclaw\_arduino\_library
-		\item https://github.com/arduino-libraries/LiquidCrystal
-		\item https://github.com/pfeerick/elapsedMillis
-		\item https://github.com/PaulStoffregen/Encoder
-		\item https://github.com/freespace/SBWire
-	\end{enumerate}
+	\noindent% \textbf{Footnotes:}
+	1. https://github.com/basicmicro/roboclaw\_arduino\_library
+	
+	2. https://github.com/arduino-libraries/LiquidCrystal
+	
+	3. https://github.com/pfeerick/elapsedMillis
+	
+	4. https://github.com/PaulStoffregen/Encoder
+	
+	5. https://github.com/freespace/SBWire
+
 \end{table}	
 \end{center}
 
-
-
-\subsubsection{Publish Anomaly Lists for SOUP}
+\subsubsection{Published Anomaly Lists for SOUP}
 Published anomaly lists are not available for many of the open-source software libraries used.  As such, verification of these libraries has relied on testing specific to the Alberta E-Vent to ensure that the functionality expected is delivered over the full range of ventilator operating conditions.  Further details on the verification and validation testing performed for the ventilator can be found in Section \ref{sect:vandv}.
 
 
@@ -393,16 +401,14 @@ The ventilator software supports the following features and specifications:
 \end{enumerate}
 
 
-
-
 \subsection{Adjustable Ventilation Parameters}
 
 
 \begin{center}
-	\begin{table}
+	\begin{table}[h]
 		
 	
-	\begin{tabular}{ |p{3.8cm}| p{2.2cm}| p{2.2cm}|p{2.2cm}|}
+	\begin{tabular}{ |p{4.3cm}| p{3cm}| p{3cm}|p{3cm}|}
 		\hline
 		\textbf{Parameter} & \textbf{Range} & \textbf{Increment}& \textbf{Default} \\
 		\hline 
@@ -416,7 +422,7 @@ The ventilator software supports the following features and specifications:
 		\hline
 	\end{tabular}
 
-\noindent \textbf{Footnotes:}
+%\noindent \textbf{Footnotes:}
 
 * Corresponds to a tidal volume range of approximately 400-800 milliliters
 
@@ -427,8 +433,13 @@ The ventilator software supports the following features and specifications:
 
 
 \subsection{Alarms and Fault Detection}
+
 \begin{center}
-	\begin{tabular}{ |p{3.8cm}| p{2.2cm}| p{2.2cm}|p{2.2cm}|}
+	
+	\begin{table}[h]
+		
+
+	\begin{tabular}{ |p{4.3cm}| p{3cm}| p{3cm}|p{3cm}|}
 		\hline
 		\textbf{Alarm} & \textbf{Range} & \textbf{Increment} & \textbf{Default}\\
 		\hline
@@ -447,9 +458,13 @@ The ventilator software supports the following features and specifications:
 		Homing Failure & N/A & N/A & N/A \\
 		\hline
 	\end{tabular}
+
+* Only applies during AC Mode
+
+	\end{table}
 	
 \end{center}
-* Only applies during AC Mode
+
 
 
 \subsection{Software and Compiler Versions}
@@ -694,7 +709,7 @@ The ventilator includes a number of alarms. Refer to Sections \ref{sect:alarms} 
 			Low PIP alarm condition not detected & Insufficient ventilation & Faulty pressure sensor & None (blood gases monitoring)\\ \hline
 			High PEEP alarm condition not detected& Persistent occurrence could lead to pnemeauthorax & Faulty pressure sensor & Mechanical PEEP valve\\ \hline
 			Low PEEP alarm condition not detected & Collapse of patient lungs & Faulty pressure sensor & Mechanical PEEP valve\\ \hline
-			High respiratory rate not detected & TODO & TODO & TODO\\ \hline
+			High respiratory rate not detected & Failure to alert RT of increased respiratory rate & Software fault & None\\ \hline
 		
 			
 		\end{tabular}
@@ -707,45 +722,140 @@ The ventilator includes a number of alarms. Refer to Sections \ref{sect:alarms} 
 \section{Verification and Validation}
 \label{sect:vandv}
 
-TODO: COMPLETE THIS SECTION
 
-\subsection{Servo Lung Testing}
+All testing was conducted using an ASL 5000 servo-lung under the direction of an experienced respiratory therapist.
 
-To be completed with finalized software.
+\subsection{Ventilation Testing}
 
-
-\subsubsection{Ventilation Testing}
-
-To be completed with finalized software.
+Full details on testing of the ventilator settings and accuracy can be found in the testing documentation external to this document.
 
 
-\subsubsection{Alarm Testing}
+\subsection{Alarm Testing}
+
+A summary of the alarm testing that was conducted is presented here.  External documentation of the testing results should also be considered in addition to this document.
+
+\subsubsection{High PIP Alarm}
+The high PIP alarm is of high importance for the safe operation of the software.  As such, testing has been undertaken to characterize the peak pressure experienced by a patient under conditions that cause the ventilator to abort breaths.  The inspiration time and tidal volumes were varied to result in different motor speeds and air flow rates in the system.  A low-compliance patient was simulated using as ASL 5000 servo-lung.  The high PIP and associated breath abort was set at 30 cm H\textsubscript{2}O.  The ASL measured patient pressure was then tracked to ensure the high pressure alarm activated appropriately and the breath abort occurred fast enough to maintain the set maximum pressure.
+
+Due to the safety critical nature of the high PIP alarm extensive testing was carried out at a variety of ventilating settings.  Details on this testing can be found in the testing documentation external to this document.
 
 
-\noindent \textbf{High PIP Alarm:} The high PIP alarm is of high importance for the safe operation of the software.  As such, testing has been undertaken to characterize the peak pressure experienced by a patient under conditions that cause the ventilator to abort breaths.  The inspiration time and tidal volumes were varied to result in different motor speeds and air flow rates in the system.  A low-compliance patient was simulated using as ASL 5000 servolung.  The high PIP and asscoiated breath abort was set at 30 cm H\textsubscript{2}O.  The ASL measured patient pressure was then tracked to ensure the high pressure alarm acitvated appropriately and the breath abort occurred fast enough to maintain the set maximum pressure.
+\subsubsection{Low PIP Alarm}
+The low PIP alarm can be used to detect breathing circuit disconnections or changes in patient condition.  The low PIP alarm for software version 042620 by adjusting the tidal volume down from 100\% until a low PIP alarm was triggered.  
 
+\begin{center}
+	\begin{table}[h]
+		\caption{Low PIP Alarm Test Results}
+		\label{tab:low_pip_test}
+		\begin{tabular}{ |p{3.7cm}|p{3.3cm}|p{4cm}| p{2.9cm}|}
+			
+			\hline
+			\textbf{Inspiration Time (s)} & \textbf{Tidal Volume (\%)} & \textbf{Measured Inspiration Pressure* (cm H\textsubscript{2}O)} & \textbf{Alarm Triggered}  \\ \hline
+			2.5 & 100 & 30.7 & No\\ \hline
+			2.5 & 90 & 26.7 & No\\ \hline
+			2.5 & 80 & 23.0 & No\\ \hline
+			2.5 & 78 & 22.2 & No\\ \hline
+			2.5 & 77 & 21.7 & Yes\\ \hline
+			2.5 & 75 & 21.1 & Yes\\ \hline
+			2.5 & 70 & 19.3 & Yes\\ \hline
+		\end{tabular}
 
-\noindent \textbf{Low PIP Alarm:}
+	\noindent *Measured pressures are average values you derived from three consecutive readings performed by the ASL 5000.
+	\end{table}	
+\end{center}
 
+\subsubsection{High PEEP Alarm}
 
+The high PEEP alarm was tested by setting the external PEEP valve at a fixed value and then adjusting the high PEEP alarm set point until an alarm condition occurred.
 
-\noindent \textbf{High PEEP Alarm:}
+\begin{center}
+	\begin{table}[h]
+		\caption{High PEEP Alarm Test Results}
+		\label{tab:high_peep_test}
+		\begin{tabular}{ |p{3.7cm}|p{3.3cm}|p{4cm}| p{2.9cm}|}
+			
+			\hline
+			\textbf{PEEP Setpoint (cm H\textsubscript{2}O)} & \textbf{PEEP Alarm Setpoint (cm H\textsubscript{2}O)} & \textbf{Measured PEEP* (cm H\textsubscript{2}O)} & \textbf{Alarm Triggered}  \\ \hline
+			15 & 18 & 15.4 & No\\ \hline
+			15 & 17 & 15.5& Yes\\ \hline
+			15 & 16 & 15.3 & Yes\\ \hline
+			15 & 15 & 15.3 & Yes\\ \hline
+			20 & 23 & 21.9 & No\\ \hline
+			20 & 22 & 21.2 & No\\ \hline
+			20 & 21 & 21.2 & Yes\\ \hline
+			20 & 20 & 21.2 & Yes\\ \hline
+		\end{tabular}
 
-\noindent \textbf{Low PEEP Alarm:}
+		\noindent *Measured pressures are average values you derived from three consecutive readings performed by the ASL 5000.
+	\end{table}	
+\end{center}
 
-\noindent \textbf{High Respiratory Rate Alarm:}
+\subsubsection{Low PEEP Alarm}
 
-\subsubsection{Clinical Feedback}
+The low PEEP alarm was tested by setting the external PEEP valve at a fixed value and then adjusting the low PEEP alarm set point until an alarm condition occurred.
 
-To be completed with finalized software.
+\begin{center}
+	\begin{table}[h]
+		\caption{Low PEEP Alarm Test Results}
+		\label{tab:low_peep_test}
+		\begin{tabular}{ |p{3.7cm}|p{3.3cm}|p{4cm}| p{2.9cm}|}
+			
+			\hline
+			\textbf{PEEP Setpoint (cm H\textsubscript{2}O)} & \textbf{PEEP Alarm Setpoint (cm H\textsubscript{2}O)} & \textbf{Measured PEEP* (cm H\textsubscript{2}O)} & \textbf{Alarm Triggered}  \\ \hline
+			5 & 3 & 4.7 & No\\ \hline
+			5 & 4 & 4.7& No\\ \hline
+			5 & 5 & 4.7 & Yes\\ \hline
+			5 & 6 & 4.7 & Yes\\ \hline
+			8 & 6 & 7.8 & No\\ \hline
+			8 & 7 & 7.8 & No\\ \hline
+			8 & 8 & 7.8 & Yes\\ \hline
+			8 & 9 & 7.8 & Yes\\ \hline
+		\end{tabular}
+		\noindent *Measured pressures are average values you derived from three consecutive readings performed by the ASL 5000.
+	\end{table}	
+\end{center}
 
-\subsection{Longevity Testing}
+\subsubsection{High Respiratory Rate Alarm}
+The high respiratory rate alarm was tested by setting the respiratory rate at a fixed value and then adjusting the high respiratory rate alarm set point until an alarm condition occurred.  It is important to note that the respiratory rate used for triggering the alarm is calculated independent of the set respiratory rate.  This allows for the alarm to be triggered if either patient-triggers or user settings result in a respiratory rate exceeding the alarm setpoint.
 
-Code stability was assessed over a 24-hour period.
+\begin{center}
+	\begin{table}[h]
+		\caption{High Respiratory Rate Alarm Test Results}
+		\label{tab:high_rr_test}
+		\begin{tabular}{ |p{3.7cm}|p{3.3cm}|p{4cm}| p{2.9cm}|}
+			
+			\hline
+			\textbf{BPM Setpoint} & \textbf{High Respiratory Rate Alarm Setpoint} & \textbf{Measured Respiratory Rate* (cm H\textsubscript{2}O)} & \textbf{Alarm Triggered}  \\ \hline
+			20 & 23 & 19.5 & No\\ \hline
+			20 & 22 & 19.5& No\\ \hline
+			20 & 21& 19.5& No\\ \hline
+			20 & 20 & 19.5 & No\\ \hline
+			20 & 19 & 19.5 & Yes\\ \hline
+			30 & 32 & 28.7 & No\\ \hline
+			30 & 31 & 28.7 & No\\ \hline
+			30 & 30 & 28.7 & No\\ \hline
+			30 & 29 & 28.7 & No\\ \hline
+			30 & 28 & 28.7 & Yes\\ \hline
+		\end{tabular}
+		\noindent *Measured pressures are average values you derived from three consecutive readings performed by the ASL 5000.
+	\end{table}	
+\end{center}
+
 
 \subsection{Verification of Risk Control Methods}
 \label{sect:v_risk}
 
+Verification of the devices external to the software were evaluated.  Results of this testing can be found in external documentation.
+
+\subsubsection{Mechanical Fault Detection}
+Testing of mechanical fault detection was tested on both the inhale and exhale portions of the code.
+
+\noindent \textbf{Inhale:} A incompressible object was position between the arms to prevent closure during inhale. This condition was immediately detected by the software and initiated a homing sequence.  Following the homing sequence, ventilation was once again attempted.  Upon encountering the incompressible object again, motor motion ceased and the device displayed an unrecoverable error requiring a power-cycle.
+
+\noindent \textbf{Exhale:} The arms were mechanically held in place during the exhale phased to cause a motor position alarm.  This alarm condition initiated a motor homing sequence. Following the homing sequence, ventilation was once again attempted.  Further motor positions errors induced by restraining the mechanism arms resulted in an unrecoverable error message and required a power-cycle to restart.
+
+\subsubsection{Watchdog Timer}
+The watchdog timer reset was tested by artificially introducing a hard-coded delay into the code.  The delay caused the watchdog timer to exceed its setpoint and the Arduino was successfully reset demonstrating the watchdog implementation.
 
 \subsection{Anomalies}
 \label{sect:anomalies}
