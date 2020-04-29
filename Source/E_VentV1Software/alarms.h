@@ -50,8 +50,8 @@ const float MIN_LOW_PLATEAU_PRESSURE_ALARM = 1; //cmH2O
 //------------------------------------------
 
 //High Respiratory Rate Alarm----------------
-const float MAX_RESPIRATORY_RATE_ALARM = 40;
-const float MIN_RESPIRATORY_RATE_ALARM = 10;
+const float MAX_RESPIRATORY_RATE_ALARM = 35;
+const float MIN_RESPIRATORY_RATE_ALARM = 15;
 //-------------------------------------------
 
 // Alarm flags

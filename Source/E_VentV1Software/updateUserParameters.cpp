@@ -33,6 +33,7 @@ void updateSelectedParameter(SelectedParameter &currentlySelectedParameter,
 
         while(selectedArrayIndex < NUM_USER_PARAMETERS){
             if(SWITCH_PRESS == digitalRead(userParameters[selectedArrayIndex].selectPin)){
+                parameterSelectEncoder.write(0);
                 break;
             }
             else{

@@ -11,19 +11,19 @@ const float SECONDS_PER_MINUTE = 60.0;
 
 // Threshold Pressure Definitions--------------------------------------------------
 
-const float MIN_THRESHOLD_PRESSURE     = 1.0; //cmH2O
+const float MIN_THRESHOLD_PRESSURE     = 2.0; //cmH2O
 const float MAX_THRESHOLD_PRESSURE     = 5.0; //cmH2O
-const float DEFAULT_THRESHOLD_PRESSURE = 2.0; //cmH2O
+const float DEFAULT_THRESHOLD_PRESSURE = 3.0; //cmH2O
 //-------------------------------------------------------------------------------
 
 // Breath Per Minute Definitions-------------------------------------------------
-const float MIN_BPM     = 10.0; //Breaths per Minute, awful global for a reason
+const float MIN_BPM     = 5.0; //Breaths per Minute, awful global for a reason
 const float MAX_BPM     = 40.0; //Breaths per Minute, awful global for a reason
 const float DEFAULT_BPM = 16.0; //Breaths per Minute
 //------------------------------------------------------------------------------
 
 // Tidal Volume Definitions------------------------------------------------------
-const float MIN_TIDAL_VOLUME     = 5.0; //Tidal Volume (% of max)
+const float MIN_TIDAL_VOLUME     = 40.0; //Tidal Volume (% of max)
 const float MAX_TIDAL_VOLUME     = 100.0; //Tidal Volume (% of max)
 const float DEFAULT_TIDAL_VOLUME = 50.0; //Tidal Volume (% of max)
 //------------------------------------------------------------------------------
@@ -31,12 +31,12 @@ const float DEFAULT_TIDAL_VOLUME = 50.0; //Tidal Volume (% of max)
 // Inspiration Expiration Ratio Definitions--------------------------------------
 const float MIN_INSPIRATION_TIME     = 0.5; //Seconds
 const float MAX_INSPIRATION_TIME     = 3.0; //Seconds
-const float DEFAULT_INSPIRATION_TIME = 1.5; //Seconds
+const float DEFAULT_INSPIRATION_TIME = 1.0; //Seconds
 //------------------------------------------------------------------------------
 
 const float MIN_MODE_SELECT            = -5.0; //Seconds
 const float MAX_MODE_SELECT            = 5.0; //Seconds
-const float DEFAULT_MODE_SELECT        = -5.0; //Seconds
+const float DEFAULT_MODE_SELECT        = 5.0; //Seconds
 
 //Breath hold time--------------------------------------------------------------
 const float DEFAULT_PLATEAU_PAUSE_TIME = 0.01; //Seconds
