@@ -365,17 +365,18 @@ The following libraries have been used in the Alberta E-Vent Software:
 			Encoder & Paul Stoffregen\textsuperscript{4} & Used for user interface rotary encoder\\ \hline
 			SBWire & Steve Bian\textsuperscript{5} & Used for I2C communication with pressure sensor\\ \hline			
 		\end{tabular}
-	\end{table}	
+	
+	\noindent \textbf{Footnotes:}
+	\begin{enumerate}
+		\item https://github.com/basicmicro/roboclaw\_arduino\_library
+		\item https://github.com/arduino-libraries/LiquidCrystal
+		\item https://github.com/pfeerick/elapsedMillis
+		\item https://github.com/PaulStoffregen/Encoder
+		\item https://github.com/freespace/SBWire
+	\end{enumerate}
+\end{table}	
 \end{center}
 
-\noindent \textbf{Footnotes:}
-\begin{enumerate}
-	\item https://github.com/basicmicro/roboclaw\_arduino\_library
-	\item https://github.com/arduino-libraries/LiquidCrystal
-	\item https://github.com/pfeerick/elapsedMillis
-	\item https://github.com/PaulStoffregen/Encoder
-	\item https://github.com/freespace/SBWire
-\end{enumerate}
 
 
 \subsubsection{Publish Anomaly Lists for SOUP}
@@ -398,6 +399,9 @@ The ventilator software supports the following features and specifications:
 
 
 \begin{center}
+	\begin{table}
+		
+	
 	\begin{tabular}{ |p{3.8cm}| p{2.2cm}| p{2.2cm}|p{2.2cm}|}
 		\hline
 		\textbf{Parameter} & \textbf{Range} & \textbf{Increment}& \textbf{Default} \\
@@ -411,11 +415,16 @@ The ventilator software supports the following features and specifications:
 		Trigger Pressure** & 1-5 cm H\textsubscript{2}O & 1 cm H\textsubscript{2}O& 1 cm H\textsubscript{2}O \\
 		\hline
 	\end{tabular}
-	
-\end{center}
+
+\noindent \textbf{Footnotes:}
+
 * Corresponds to a tidal volume range of approximately 400-800 milliliters
 
-\noindent ** Only applies during AC Mode
+** Only applies during AC Mode
+\end{table}
+	
+\end{center}
+
 
 \subsection{Alarms and Fault Detection}
 \begin{center}
@@ -446,10 +455,18 @@ The ventilator software supports the following features and specifications:
 \subsection{Software and Compiler Versions}
 
 All verification and validation of the Alberta E-Vent software has been carried out using the following versions and tools:
+\bigskip
 
 \noindent\textbf{IDE/Compiler:} Arudino IDE Version 1.8.12
 
 \noindent\textbf{Alberta E-Vent Software:} Version 010520
+
+\subsection{Software Repository}
+
+Software revisions have been tracked using GitHub.  The automated revision tracking associated with this platform was critical for the fast-paced development style used.  A full development revision history can be viewed at the repository URL.
+\bigskip
+
+\noindent \textbf{Software Repository:} https://github.com/colin-hill/Calgary\_E\_Vent
 
 
 
