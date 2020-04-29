@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6350 64-bit) (preloaded format=pdflatex 2017.10.9)  27 APR 2020 16:49
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6350 64-bit) (preloaded format=pdflatex 2017.10.9)  29 APR 2020 10:50
 entering extended mode
 **./main_doc.tex
 (main_doc.tex
@@ -692,40 +692,44 @@ Underfull \hbox (badness 1005) in paragraph at lines 680--680
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[21] [22] [23
+[21] [22]
 
-] [24
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[23
+
+] [24] [25
 
 ]
 
 pdfTeX warning: pdflatex.exe (file ./figures/main_loop.pdf): PDF inclusion: fou
 nd PDF version <1.7>, but at most version <1.5> allowed
-<figures/main_loop.pdf, id=84, 596.98032pt x 844.65562pt>
+<figures/main_loop.pdf, id=88, 596.98032pt x 844.65562pt>
 File: figures/main_loop.pdf Graphic file (type pdf)
 
 <use figures/main_loop.pdf>
-Package pdftex.def Info: figures/main_loop.pdf used on input line 823.
+Package pdftex.def Info: figures/main_loop.pdf used on input line 824.
 (pdftex.def)             Requested size: 464.83456pt x 593.85222pt.
 
-Overfull \hbox (31.21455pt too wide) in paragraph at lines 823--824
+Overfull \hbox (31.21455pt too wide) in paragraph at lines 824--825
 [][] 
  []
 
 
-LaTeX Warning: Float too large for page by 3.50166pt on input line 826.
+LaTeX Warning: Float too large for page by 3.50166pt on input line 827.
 
 
 
 pdfTeX warning: pdflatex.exe (file ./figures/main_state_flow.pdf): PDF inclusio
 n: found PDF version <1.7>, but at most version <1.5> allowed
-<figures/main_state_flow.pdf, id=86, 844.65562pt x 596.98032pt>
+<figures/main_state_flow.pdf, id=90, 844.65562pt x 596.98032pt>
 File: figures/main_state_flow.pdf Graphic file (type pdf)
 
 <use figures/main_state_flow.pdf>
-Package pdftex.def Info: figures/main_state_flow.pdf used on input line 829.
+Package pdftex.def Info: figures/main_state_flow.pdf used on input line 830.
 (pdftex.def)             Requested size: 666.08939pt x 467.94885pt.
 
-Overfull \hbox (51.79439pt too wide) in paragraph at lines 829--830
+Overfull \hbox (51.79439pt too wide) in paragraph at lines 830--831
 [][] 
  []
 
@@ -733,14 +737,14 @@ Overfull \hbox (51.79439pt too wide) in paragraph at lines 829--830
 
 pdfTeX warning: pdflatex.exe (file ./figures/motor_zeroing.pdf): PDF inclusion:
  found PDF version <1.7>, but at most version <1.5> allowed
-<figures/motor_zeroing.pdf, id=88, 844.65562pt x 596.98032pt>
+<figures/motor_zeroing.pdf, id=92, 844.65562pt x 596.98032pt>
 File: figures/motor_zeroing.pdf Graphic file (type pdf)
 
 <use figures/motor_zeroing.pdf>
-Package pdftex.def Info: figures/motor_zeroing.pdf used on input line 835.
+Package pdftex.def Info: figures/motor_zeroing.pdf used on input line 836.
 (pdftex.def)             Requested size: 666.08939pt x 467.94885pt.
 
-Overfull \hbox (51.79439pt too wide) in paragraph at lines 835--836
+Overfull \hbox (51.79439pt too wide) in paragraph at lines 836--837
 [][] 
  []
 
@@ -748,14 +752,14 @@ Overfull \hbox (51.79439pt too wide) in paragraph at lines 835--836
 
 pdfTeX warning: pdflatex.exe (file ./figures/ac_mode.pdf): PDF inclusion: found
  PDF version <1.7>, but at most version <1.5> allowed
-<figures/ac_mode.pdf, id=90, 844.65562pt x 596.98032pt>
+<figures/ac_mode.pdf, id=94, 844.65562pt x 596.98032pt>
 File: figures/ac_mode.pdf Graphic file (type pdf)
 
 <use figures/ac_mode.pdf>
-Package pdftex.def Info: figures/ac_mode.pdf used on input line 841.
+Package pdftex.def Info: figures/ac_mode.pdf used on input line 842.
 (pdftex.def)             Requested size: 666.08939pt x 467.94885pt.
 
-Overfull \hbox (51.79439pt too wide) in paragraph at lines 841--842
+Overfull \hbox (51.79439pt too wide) in paragraph at lines 842--843
 [][] 
  []
 
@@ -763,14 +767,14 @@ Overfull \hbox (51.79439pt too wide) in paragraph at lines 841--842
 
 pdfTeX warning: pdflatex.exe (file ./figures/vc_mode.pdf): PDF inclusion: found
  PDF version <1.7>, but at most version <1.5> allowed
-<figures/vc_mode.pdf, id=92, 844.65562pt x 596.98032pt>
+<figures/vc_mode.pdf, id=96, 844.65562pt x 596.98032pt>
 File: figures/vc_mode.pdf Graphic file (type pdf)
 
 <use figures/vc_mode.pdf>
-Package pdftex.def Info: figures/vc_mode.pdf used on input line 847.
+Package pdftex.def Info: figures/vc_mode.pdf used on input line 848.
 (pdftex.def)             Requested size: 666.08939pt x 467.94885pt.
 
-Overfull \hbox (51.79439pt too wide) in paragraph at lines 847--848
+Overfull \hbox (51.79439pt too wide) in paragraph at lines 848--849
 [][] 
  []
 
@@ -778,108 +782,108 @@ Overfull \hbox (51.79439pt too wide) in paragraph at lines 847--848
 
 pdfTeX warning: pdflatex.exe (file ./figures/alarm_handler.pdf): PDF inclusion:
  found PDF version <1.7>, but at most version <1.5> allowed
-<figures/alarm_handler.pdf, id=94, 596.98032pt x 844.65562pt>
+<figures/alarm_handler.pdf, id=98, 596.98032pt x 844.65562pt>
 File: figures/alarm_handler.pdf Graphic file (type pdf)
 
 <use figures/alarm_handler.pdf>
-Package pdftex.def Info: figures/alarm_handler.pdf used on input line 853.
+Package pdftex.def Info: figures/alarm_handler.pdf used on input line 854.
 (pdftex.def)             Requested size: 464.83456pt x 593.85222pt.
 
-Overfull \hbox (31.21455pt too wide) in paragraph at lines 853--854
+Overfull \hbox (31.21455pt too wide) in paragraph at lines 854--855
 [][] 
  []
 
 
-LaTeX Warning: Float too large for page by 3.50166pt on input line 856.
+LaTeX Warning: Float too large for page by 3.50166pt on input line 857.
 
-[25
+[26
 
-] [26 <./figures/main_loop.pdf>] [27 <./figures/main_state_flow.pdf>]
-[28 <./figures/motor_zeroing.pdf>] [29 <./figures/ac_mode.pdf>] [30 <./figures/
-vc_mode.pdf>] [31 <./figures/alarm_handler.pdf>]
-<figures/risk_matrix.pdf, id=216, 794.97pt x 614.295pt>
+] [27 <./figures/main_loop.pdf>] [28 <./figures/main_state_flow.pdf>]
+[29 <./figures/motor_zeroing.pdf>] [30 <./figures/ac_mode.pdf>] [31 <./figures/
+vc_mode.pdf>] [32 <./figures/alarm_handler.pdf>]
+<figures/risk_matrix.pdf, id=219, 794.97pt x 614.295pt>
 File: figures/risk_matrix.pdf Graphic file (type pdf)
 
 <use figures/risk_matrix.pdf>
-Package pdftex.def Info: figures/risk_matrix.pdf used on input line 870.
+Package pdftex.def Info: figures/risk_matrix.pdf used on input line 871.
 (pdftex.def)             Requested size: 607.06215pt x 408.32137pt.
 
-<figures/unmit_1.jpg, id=218, 959.08313pt x 549.55313pt>
+<figures/unmit_1.jpg, id=221, 959.08313pt x 549.55313pt>
 File: figures/unmit_1.jpg Graphic file (type jpg)
 
 <use figures/unmit_1.jpg>
-Package pdftex.def Info: figures/unmit_1.jpg used on input line 876.
+Package pdftex.def Info: figures/unmit_1.jpg used on input line 877.
 (pdftex.def)             Requested size: 575.45433pt x 329.73442pt.
 
-<figures/unmit_2.jpg, id=219, 836.3747pt x 487.06969pt>
+<figures/unmit_2.jpg, id=222, 836.3747pt x 487.06969pt>
 File: figures/unmit_2.jpg Graphic file (type jpg)
 
 <use figures/unmit_2.jpg>
-Package pdftex.def Info: figures/unmit_2.jpg used on input line 882.
+Package pdftex.def Info: figures/unmit_2.jpg used on input line 883.
 (pdftex.def)             Requested size: 543.63712pt x 316.59154pt.
 
-<figures/unmit_3.jpg, id=220, 835.62187pt x 423.08063pt>
+<figures/unmit_3.jpg, id=223, 835.62187pt x 423.08063pt>
 File: figures/unmit_3.jpg Graphic file (type jpg)
 
 <use figures/unmit_3.jpg>
-Package pdftex.def Info: figures/unmit_3.jpg used on input line 888.
+Package pdftex.def Info: figures/unmit_3.jpg used on input line 889.
 (pdftex.def)             Requested size: 584.93132pt x 296.15442pt.
- <figures/mit1.jpg, id=221, 903.375pt x 556.32843pt>
+ <figures/mit1.jpg, id=224, 903.375pt x 556.32843pt>
 File: figures/mit1.jpg Graphic file (type jpg)
 
 <use figures/mit1.jpg>
-Package pdftex.def Info: figures/mit1.jpg used on input line 896.
+Package pdftex.def Info: figures/mit1.jpg used on input line 897.
 (pdftex.def)             Requested size: 596.22935pt x 367.1779pt.
- <figures/mit2.jpg, id=222, 880.79062pt x 480.29437pt>
+ <figures/mit2.jpg, id=225, 880.79062pt x 480.29437pt>
 File: figures/mit2.jpg Graphic file (type jpg)
 
 <use figures/mit2.jpg>
-Package pdftex.def Info: figures/mit2.jpg used on input line 902.
+Package pdftex.def Info: figures/mit2.jpg used on input line 903.
 (pdftex.def)             Requested size: 616.54922pt x 336.20375pt.
 
-Overfull \hbox (2.25423pt too wide) in paragraph at lines 902--903
+Overfull \hbox (2.25423pt too wide) in paragraph at lines 903--904
 [][] 
  []
 
-<figures/mit3.jpg, id=223, 882.29625pt x 481.8pt>
+<figures/mit3.jpg, id=226, 882.29625pt x 481.8pt>
 File: figures/mit3.jpg Graphic file (type jpg)
  <use figures/mit3.jpg>
-Package pdftex.def Info: figures/mit3.jpg used on input line 908.
+Package pdftex.def Info: figures/mit3.jpg used on input line 909.
 (pdftex.def)             Requested size: 617.60316pt x 337.25769pt.
 
-Overfull \hbox (3.30817pt too wide) in paragraph at lines 908--909
+Overfull \hbox (3.30817pt too wide) in paragraph at lines 909--910
 [][] 
  []
 
-<figures/mit4.jpg, id=224, 1037.37563pt x 425.33907pt>
+<figures/mit4.jpg, id=227, 1037.37563pt x 425.33907pt>
 File: figures/mit4.jpg Graphic file (type jpg)
  <use figures/mit4.jpg>
-Package pdftex.def Info: figures/mit4.jpg used on input line 914.
+Package pdftex.def Info: figures/mit4.jpg used on input line 915.
 (pdftex.def)             Requested size: 622.43018pt x 255.2054pt.
 
-Overfull \hbox (8.13518pt too wide) in paragraph at lines 914--915
+Overfull \hbox (8.13518pt too wide) in paragraph at lines 915--916
 [][] 
  []
 
-[32
+[33
 
-] [33 <./figures/risk_matrix.pdf>] [34 <./figures/unmit_1.jpg>] [35 <./figures/
-unmit_2.jpg>] [36 <./figures/unmit_3.jpg>] [37 <./figures/mit1.jpg>]
-[38 <./figures/mit2.jpg>] [39 <./figures/mit3.jpg>] [40 <./figures/mit4.jpg>]
-<figures/change.jpg, id=264, 1053.9375pt x 444.91219pt>
+] [34 <./figures/risk_matrix.pdf>] [35 <./figures/unmit_1.jpg>] [36 <./figures/
+unmit_2.jpg>] [37 <./figures/unmit_3.jpg>] [38 <./figures/mit1.jpg>]
+[39 <./figures/mit2.jpg>] [40 <./figures/mit3.jpg>] [41 <./figures/mit4.jpg>]
+<figures/change.jpg, id=267, 1053.9375pt x 444.91219pt>
 File: figures/change.jpg Graphic file (type jpg)
 
 <use figures/change.jpg>
-Package pdftex.def Info: figures/change.jpg used on input line 926.
+Package pdftex.def Info: figures/change.jpg used on input line 927.
 (pdftex.def)             Requested size: 632.36739pt x 266.94936pt.
 
-Overfull \hbox (18.07239pt too wide) in paragraph at lines 926--927
+Overfull \hbox (18.07239pt too wide) in paragraph at lines 927--928
 [][] 
  []
 
-[41
+[42
 
-] [42 <./figures/change.jpg>] (main_doc.aux) ) 
+] [43 <./figures/change.jpg>] (main_doc.aux) ) 
 Here is how much of TeX's memory you used:
  3754 strings out of 493323
  51756 string characters out of 3139066
@@ -895,9 +899,9 @@ msfonts/cm/cmr10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/c
 m/cmr12.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.p
 fb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Pro
 gram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on main_doc.pdf (42 pages, 1910415 bytes).
+Output written on main_doc.pdf (43 pages, 1911316 bytes).
 PDF statistics:
- 296 PDF objects out of 1000 (max. 8388607)
+ 300 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  118 words of extra memory for PDF output out of 10000 (max. 10000000)
 

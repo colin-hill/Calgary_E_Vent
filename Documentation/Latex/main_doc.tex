@@ -744,6 +744,7 @@ Identified anomalies for software release version 042620.
 			\hline
 			\textbf{Anomaly Name} & \textbf{Anomaly Description}  \\ \hline
 			Mode switch breath stacking & When the mode is switched from AC Mode to VC Mode, the inhale wait period that is characteristic of AC Mode is no longer needed.  As a result, transitioning from AC to VC mode results in a breath being given immediately after the exhale period of the last breath in AC mode.\\ \hline 
+			Alarm handling latency & When alarms are triggered, additional algorithms are required to silence and debounce the alarms.  This causes additional latency in the code and the delivered respiratory rate slows from the set-point by approximately 10\%.\\ \hline
 		
 			
 		\end{tabular}

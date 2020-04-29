@@ -37,9 +37,9 @@
 \contentsline {subsection}{\numberline {10.2}Longevity Testing}{23}
 \contentsline {subsection}{\numberline {10.3}Verification of Risk Control Methods}{23}
 \contentsline {subsection}{\numberline {10.4}Anomalies}{23}
-\contentsline {section}{\numberline {11}Maintenance}{24}
-\contentsline {subsection}{\numberline {11.1}Software Problem Identification}{24}
-\contentsline {subsection}{\numberline {11.2}Verification and Release of Modified Software}{24}
-\contentsline {section}{\numberline {A}Software Flow Charts}{25}
-\contentsline {section}{\numberline {B}Risk Assessment}{32}
-\contentsline {section}{\numberline {C}Software Change Request Tracking}{41}
+\contentsline {section}{\numberline {11}Maintenance}{25}
+\contentsline {subsection}{\numberline {11.1}Software Problem Identification}{25}
+\contentsline {subsection}{\numberline {11.2}Verification and Release of Modified Software}{25}
+\contentsline {section}{\numberline {A}Software Flow Charts}{26}
+\contentsline {section}{\numberline {B}Risk Assessment}{33}
+\contentsline {section}{\numberline {C}Software Change Request Tracking}{42}
