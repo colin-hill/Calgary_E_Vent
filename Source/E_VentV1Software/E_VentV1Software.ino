@@ -155,6 +155,8 @@ void setup() {
     state = get_init_state();
     state.machine_state = StartupHold;
 
+    state.cycle_counter = 0;
+
 
 
 #ifndef NO_LIMIT_SWITCH_DEBUG
@@ -231,6 +233,8 @@ void loop() {
         setStateParameters(state, userParameters); //Must be before update_motor_settings
         update_motor_settings(state);
 
+        state.cycle_counter += 1;
+
     }
     else if (ACMode == state.machine_state) {
         ac_mode_step(state, userParameters, motorController);
@@ -252,6 +256,8 @@ void loop() {
     else if (FailureMode == state.machine_state) {
         failure_mode(state);
     }
+
+
 
 
     loop_alarm_manager(externalDisplayTimer, alarmSilenceTimer, alarmReset, alarmDisplay, ventilatorDisplay, externalDisplay, state, userParameters, currentlySelectedParameter);

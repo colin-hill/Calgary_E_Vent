@@ -42,7 +42,7 @@ const float DEFAULT_MODE_SELECT        = 5.0; //Seconds
 const float DEFAULT_PLATEAU_PAUSE_TIME = 0.01; //Seconds
 
 //Max & Min PIP Pressures--------------------------------------------------------
-const float MAX_PRESSURE = 50.0; //cmH2O
+const float MAX_PRESSURE = 75.0; //cmH2O
 const float MIN_PRESSURE = 10.0; //cmH2O
 
 //Max & Min PEEP Pressures-----------------------------------------------------------

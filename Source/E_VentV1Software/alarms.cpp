@@ -251,7 +251,8 @@ void control_alarm_displays(LiquidCrystal &alarmDisplay, LiquidCrystal &paramete
       displayMechanicalFailureAlarm(alarmDisplay);
     }
     else {
-      displayMultipleAlarms(alarmDisplay, maxPIP, minPIP, maxPEEP, minPEEP, respiratoryRateAlarm, state);
+      //displayMultipleAlarms(alarmDisplay, maxPIP, minPIP, maxPEEP, minPEEP, respiratoryRateAlarm, state);
+      displayCycleCount(alarmDisplay, state.cycle_counter, LCD_MAX_STRING);
     }
 
     return;

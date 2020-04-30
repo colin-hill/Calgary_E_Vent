@@ -349,6 +349,26 @@ void displayHighRRChange(LiquidCrystal &displayName, float tempHighRR, const int
 	displayName.setCursor(0,3);
 	displayName.write(alarmDispL4);
 }
+
+
+
+void displayCycleCount(LiquidCrystal &displayName, const unsigned long cycleCount, const int LCD_MAX_STRING) {
+
+	const char alarmDispL1[] = "GEAR WEAR TEST";
+	const char alarmDispL2[] = "CYCLE COUNT:";
+	char alarmDispL4[LCD_MAX_STRING];
+
+	snprintf(alarmDispL4, LCD_MAX_STRING, "= %10d", cycleCount);
+
+	displayName.clear();
+	displayName.write(alarmDispL1);
+	displayName.setCursor(0,1);
+	displayName.write(alarmDispL2);
+	displayName.setCursor(0,3);
+	displayName.write(alarmDispL4);
+
+}
+
 //End of Alarm Screen Functions
 
 //Parameter display functions

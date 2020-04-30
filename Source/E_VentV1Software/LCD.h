@@ -123,6 +123,9 @@ void displayLowPEEPChange(LiquidCrystal &displayName, float tempLowPEEP, const i
 
 void displayHighRRChange(LiquidCrystal &displayName, float tempHighRR, const int LCD_MAX_STRING);
 
+
+void displayCycleCount(LiquidCrystal &displayName, const unsigned long cycleCount, const int LCD_MAX_STRING);
+
 //END OF ALARM DISPLAY FUNCTIONS-------------------------------------------------------------------------------------------------------------------------------------------
 
 

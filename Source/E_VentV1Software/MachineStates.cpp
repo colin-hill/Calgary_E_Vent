@@ -62,6 +62,7 @@ VentilatorState get_init_state(void) {
 
      state.breath_counter = 0;
      
+     state.cycle_counter = 0;
 
     //Mechanism Values -----------------------------------------------------------------------------------------
         //Controller temperature

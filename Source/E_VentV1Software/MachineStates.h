@@ -140,6 +140,8 @@ struct VentilatorState {
 
     uint8_t breath_counter;
 
+    unsigned long cycle_counter;
+
 
 
     uint16_t errors;
