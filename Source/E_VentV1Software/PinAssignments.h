@@ -27,13 +27,13 @@ const int VENT_BACKLIGHT		= 35;
 //Digital Inputs
 const int ALARM_SWITCH_PIN      = 19;
 const int MODE_SWITCH_PIN       = 8;
-const int LIMIT_SWITCH_PIN		= 12;
+const int LIMIT_SWITCH_PIN		= 34;
 
 
 // Alarm pins
 const int ALARM_BUZZER_PIN = 42;
-const int ALARM_LED_PIN    = 10; //Originally 40
-const int ALARM_RELAY_PIN  = 34;
+const int ALARM_LED_PIN    = 40; //Originally 40
+const int ALARM_RELAY_PIN  = 12; //Unused
 
 //Parameter Select Push Buttons
 const int TIDAL_VOLUME_SELECT_PIN 		  = 26;
@@ -55,9 +55,9 @@ const int PARAMETER_ENCODER_PUSH_BUTTON_PIN = 18;
 
 
 //LED Pins (except for alarm)
-const int INHALE_LED_PIN   = 7; // Originally 39
-const int EXHALE_LED_PIN   = 9; //Originally 41
-const int VC_MODE_LED_PIN  = 11; //Originally 7
+const int INHALE_LED_PIN   = 39; // Originally 39
+const int EXHALE_LED_PIN   = 41; //Originally 41
+const int VC_MODE_LED_PIN  = 7; //Originally 7
 const int AC_MODE_LED_PIN  = 13; //Originally 9
 
 

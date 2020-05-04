@@ -4,6 +4,10 @@
 #include "MachineStates.h"
 #include "PinAssignments.h"
 
+
+const int LED_OFF = 1;
+const int LED_ON = 0;
+
 void setup_LED_pins(void);
 
 void control_mode_LEDs(VentilatorState &state);
