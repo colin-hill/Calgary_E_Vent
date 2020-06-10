@@ -324,7 +324,6 @@ void setUpAlarmPins()
 
   pinMode(ALARM_LED_PIN,OUTPUT);
   pinMode(ALARM_BUZZER_PIN,OUTPUT);
-  pinMode(ALARM_RELAY_PIN,OUTPUT);
 
   attachInterrupt(digitalPinToInterrupt(ALARM_SWITCH_PIN),alarmResetISR,FALLING);
 

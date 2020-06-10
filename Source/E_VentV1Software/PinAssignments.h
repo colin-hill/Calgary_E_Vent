@@ -33,7 +33,7 @@ const int LIMIT_SWITCH_PIN		= 34;
 // Alarm pins
 const int ALARM_BUZZER_PIN = 42;
 const int ALARM_LED_PIN    = 40; //Originally 40
-const int ALARM_RELAY_PIN  = 12; //Unused
+
 
 //Parameter Select Push Buttons
 const int TIDAL_VOLUME_SELECT_PIN 		  = 26;
@@ -45,8 +45,8 @@ const int HIGH_PIP_ALARM_SELECT_PIN       = 49;
 const int LOW_PIP_ALARM_SELECT_PIN        = 53;
 const int HIGH_PEEP_ALARM_SELECT_PIN      = 51;
 const int LOW_PEEP_ALARM_SELECT_PIN       = 52;
-const int LOW_PLATEAU_PRESSURE_ALARM_SELECT_PIN = 35; //Changed to avoid conflict, is no longer used
-const int HIGH_RESPIRATORY_RATE_ALARM_SELECT_PIN = 50; //TODO: Make sure this pin is correct
+const int LOW_PLATEAU_PRESSURE_ALARM_SELECT_PIN = 36; //Changed to avoid conflict, is no longer used
+const int HIGH_RESPIRATORY_RATE_ALARM_SELECT_PIN = 50; 
 
 //Parameter Change Encoder Pins
 const int PARAMETER_ENCODER_PIN_1 			= 2;
