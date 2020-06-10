@@ -5,7 +5,12 @@ void setUpParameterSelectButtons(UserParameter *userParameters, const uint8_t NU
 {
 
     for(uint8_t i = 0; i < NUM_USER_PARAMETERS; i++){
-        pinMode(userParameters[i].selectPin,INPUT_PULLUP); //Active LOW
+        if(e_LowPlateauPressureAlarm == i){
+            break; //Quick bug fix to remove ability to select the this parameter
+        }
+        else{
+            pinMode(userParameters[i].selectPin,INPUT_PULLUP); //Active LOW
+        }
     }
 	
     pinMode(parameterEncoderPushButtonPin,INPUT_PULLUP); //Active LOW
@@ -70,7 +75,7 @@ void updateSelectedParameter(SelectedParameter &currentlySelectedParameter,
             currentlySelectedParameter = e_LowPEEPAlarm;
             break;
         case 9 :
-            currentlySelectedParameter = e_LowPlateauPressureAlarm;
+            //currentlySelectedParameter = e_LowPlateauPressureAlarm;
             break;
         case 10 :
             currentlySelectedParameter = e_HighRespiratoryRateAlarm;

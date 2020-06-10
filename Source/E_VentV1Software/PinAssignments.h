@@ -45,7 +45,7 @@ const int HIGH_PIP_ALARM_SELECT_PIN       = 49;
 const int LOW_PIP_ALARM_SELECT_PIN        = 53;
 const int HIGH_PEEP_ALARM_SELECT_PIN      = 51;
 const int LOW_PEEP_ALARM_SELECT_PIN       = 52;
-const int LOW_PLATEAU_PRESSURE_ALARM_SELECT_PIN = 34;
+const int LOW_PLATEAU_PRESSURE_ALARM_SELECT_PIN = 35; //Changed to avoid conflict, is no longer used
 const int HIGH_RESPIRATORY_RATE_ALARM_SELECT_PIN = 50; //TODO: Make sure this pin is correct
 
 //Parameter Change Encoder Pins
