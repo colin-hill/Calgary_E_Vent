@@ -41,7 +41,7 @@ RoboClaw motorController(&Serial2, MOTOR_CONTROLLER_TIMEOUT);
 //#define SERIAL_DEBUG //Comment this out if not debugging, used for visual confirmation of state changes
 //#define NO_INPUT_DEBUG //Comment this out if not debugging, used to spoof input parameters at startup when no controls are present
 
-const char softwareVersion[] = "060920";
+const char softwareVersion[] = "120420";
 
 //------------------------------------------------------------------------------
 
@@ -131,6 +131,9 @@ void setup() {
 
     //Mode Switch Pin input setup
     pinMode(MODE_SWITCH_PIN, INPUT_PULLUP);
+
+    //Recal pin
+    pinMode(RECAL_PIN, INPUT_PULLUP);
 
     //LCD Setup
     alarmDisplay.begin(LCD_COLUMNS, LCD_ROWS);
@@ -230,6 +233,11 @@ void loop() {
 
         setStateParameters(state, userParameters); //Must be before update_motor_settings
         update_motor_settings(state);
+
+        if(LOW == digitalRead(RECAL_PIN)){
+        	state.machine_state = MotorZeroing;
+        	state.zeroing_state = CommandHome;
+        }
 
     }
     else if (ACMode == state.machine_state) {
