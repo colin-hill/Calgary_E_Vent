@@ -1,6 +1,11 @@
 #define SERIAL_DEBUG //Comment this out if not debugging, used for visual confirmation of state changes
 //#define NO_INPUT_DEBUG //Comment this out if not debugging, used to spoof input parameters at startup when no controls are present
 //#define NO_LIMIT_SWITCH_DEBUG
+#define PYTHON_DEBUG //when defined: dumps key:value pairs to the serial port for logging by a seperate python script
+
+//IMPORTANT!! THIS MUST BE DEFINED FOR PRODUCTION CODE!!
+//#define AUDIO_ALARM_ON //when defined: turns on the audible alarms
+//IMPORTANT!! THIS MUST BE DEFINED FOR PRODUCTION CODE!!
 
 #include <LiquidCrystal.h>
 
@@ -41,7 +46,7 @@ RoboClaw motorController(&Serial2, MOTOR_CONTROLLER_TIMEOUT);
 //#define SERIAL_DEBUG //Comment this out if not debugging, used for visual confirmation of state changes
 //#define NO_INPUT_DEBUG //Comment this out if not debugging, used to spoof input parameters at startup when no controls are present
 
-const char softwareVersion[] = "120420";
+const char softwareVersion[] = "020621";
 
 //------------------------------------------------------------------------------
 
@@ -248,7 +253,6 @@ void loop() {
 
             if(state.breath_counter > 0){
                 calculate_respiratory_rate(state);
-                //Serial.println(state.calculated_respiratory_rate);
             }
 
         state.errors |= check_respiratory_rate(state, userParameters);
@@ -278,7 +282,6 @@ void parameterSetISR() {
 void alarmResetISR(){
 
   if(alarmResetDebounceTimer > (0.25*S_TO_MS)){
-    //digitalWrite(ALARM_BUZZER_PIN,HIGH);
     alarmResetDebounceTimer = 0;
     alarmReset = true;
   }

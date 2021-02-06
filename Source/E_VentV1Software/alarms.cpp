@@ -33,8 +33,10 @@ uint16_t check_high_pressure(const float pressure, UserParameter *userParameters
 
 uint16_t check_low_pressure(const float pressure, UserParameter *userParameters) {
 	SelectedParameter selectedParameter = e_LowPIPAlarm;
-  Serial.print("Low PEEP Setting: ");
-    Serial.println(userParameters[selectedParameter].value);
+  #ifdef SERIAL_DEBUG:
+  Serial.print(F("Low PEEP Setting: "));
+  Serial.println(userParameters[selectedParameter].value);
+  #endif
     if (pressure < userParameters[selectedParameter].value) {
         return LOW_PRESSURE_ALARM;
     } else {
@@ -60,8 +62,6 @@ uint16_t check_high_peep(const float pressure, UserParameter *userParameters) {
 
 uint16_t check_low_peep(const float pressure, UserParameter *userParameters) {
     SelectedParameter selectedParameter = e_LowPEEPAlarm;
-    //Serial.print("Low PEEP Setting: ");
-    //Serial.println(userParameters[selectedParameter].value);
     if (pressure < userParameters[selectedParameter].value) {
         return LOW_PEEP_ALARM;
     } else {
@@ -84,11 +84,15 @@ uint16_t check_peep(const float pressure, UserParameter *userParameters) {
 
 uint16_t check_motor_position(const long int current_position, const long int expected_position) {
     if (current_position > expected_position + POSITION_TOLERANCE) {
-        Serial.println("Out of tolerance");
+      #ifdef SERIAL_DEBUG:
+        Serial.println(F("Out of tolerance"));
+      #endif
         return MECHANICAL_FAILURE_ALARM;
     }
     else if (current_position < expected_position - POSITION_TOLERANCE) {
-        Serial.println("Out of tolerance");
+      #ifdef SERIAL_DEBUG:
+        Serial.println(F("Out of tolerance"));
+      #endif
         return MECHANICAL_FAILURE_ALARM;
     } else {
         return 0;
@@ -172,8 +176,10 @@ void loop_alarm_manager(elapsedMillis &externalDisplayTimer, elapsedMillis &alar
 
 void control_alarm_output(elapsedMillis &alarmSilenceTimer, volatile boolean &alarmReset, VentilatorState &state) {
 
+  #ifdef SERIAL_DEBUG:
   Serial.print(F("alarmReset value: "));
   Serial.println(alarmReset);
+  #endif
 
   cli();
   if (true == alarmReset) {
@@ -184,29 +190,21 @@ void control_alarm_output(elapsedMillis &alarmSilenceTimer, volatile boolean &al
   sei();
 
 
-  
+  #ifdef SERIAL_DEBUG:
   Serial.print(F("Silence Timer: "));
   Serial.println(alarmSilenceTimer);
+  #endif
 
   if ((alarmSilenceTimer > (ALARM_SILENCE_TIME*S_TO_MS)) || (state.alarm_outputs &(~state.silenced_alarms))) {
 
-     
-
     if (alarmSilenceTimer > (ALARM_SILENCE_TIME*S_TO_MS)) {
-       state.silenced_alarms = 0;
+        state.silenced_alarms = 0;
     }
 
+    #ifdef AUDIO_ALARM_ON
     digitalWrite(ALARM_BUZZER_PIN, HIGH);
-    /*if (alarmBuzzerTimer > (ALARM_SOUND_LENGTH*S_TO_MS)) {
-            // Reset the timer
-            alarmBuzzerTimer = 0;
+    #endif
 
-            // Toggle the buzzer output pins
-            digitalWrite(ALARM_BUZZER_PIN,!digitalRead(ALARM_BUZZER_PIN));
-            //digitalWrite(ALARM_LED_PIN,!digitalRead(ALARM_LED_PIN));
-            digitalWrite(ALARM_RELAY_PIN,!digitalRead(ALARM_RELAY_PIN));
-    }
-  }*/
   }
   else {
     digitalWrite(ALARM_BUZZER_PIN, LOW);

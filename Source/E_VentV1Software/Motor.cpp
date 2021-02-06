@@ -12,10 +12,14 @@ void setMotorZero(RoboClaw &controller_name) {
 }
 
 long int readPosition(RoboClaw &controller_name) {
-  //Serial.println(F("read position-----------------------------------------------------------------------------"));
 	long int pos = controller_name.ReadEncM1(MOTOR_ADDRESS);
-  //Serial.println(pos);
-  return pos;
+
+	#ifdef PYTHON_DEBUG
+	Serial.print(F("Encoder Reading:"));
+	Serial.println(pos)
+	#endif
+
+  	return pos;
 }
 
 
@@ -29,7 +33,9 @@ void commandStop(RoboClaw &controller_name) {
 
 void commandMotorHoming(RoboClaw &controller_name) {
 	//command motor to move outwards
+	#ifdef SERIAL_DEBUG:
 	Serial.println(F("Motor home start"));
+	#endif
 
 	controller_name.SetEncM1(MOTOR_ADDRESS, 0);
 	controller_name.SpeedAccelDeccelPositionM1(MOTOR_ADDRESS, ACCEL, MOTOR_ZEROING_SPEED, DECCEL, -1000, 1); //TODO could we set a hard limit?
@@ -47,8 +53,10 @@ void commandMotorZero(RoboClaw &controller_name, VentilatorState &state) {
 
 
 	state.current_motor_position = readPosition(controller_name);
+	#ifdef SERIAL_DEBUG:
 	Serial.println(F("Location at zero command"));
 	Serial.println(state.current_motor_position);
+	#endif
 
 	controller_name.SetEncM1(MOTOR_ADDRESS, 0);
 
@@ -111,18 +119,21 @@ void commandInhaleAbort(RoboClaw &controller_name, VentilatorState &state) {
 
 void checkMotorStatus(RoboClaw &controller_name, VentilatorState &state) {
 
-  Serial.println(F("check motor status"));
+
+	#ifdef SERIAL_DEBUG:
+  	Serial.println(F("check motor status"));
+  	#endif
 
 
 	//Check current position
 	state.current_motor_position = readPosition(controller_name);
-	//Serial.print(F("------------------------------------------------------------------Expected: "));
-	//Serial.println(state.future_motor_position);
 
 	state.errors |= check_motor_position(state.current_motor_position, state.future_motor_position);
 
-	
-  Serial.println(F("exit check motor status"));
+	#ifdef SERIAL_DEBUG:
+  	Serial.println(F("exit check motor status"));
+  	#endif
+
 	return;
 }
 
@@ -132,9 +143,11 @@ void checkMotorStatus(RoboClaw &controller_name, VentilatorState &state) {
 
 void handle_ACMode(RoboClaw &controller_name, VentilatorState &state) {
 
-  Serial.println(F("Motor ac mode handle"));
-  Serial.print(F("AC State: "));
-  Serial.println(state.ac_state);
+	#ifdef SERIAL_DEBUG:
+ 	Serial.println(F("Motor ac mode handle"));
+  	Serial.print(F("AC State: "));
+  	Serial.println(state.ac_state);
+  	#endif
 	
 	switch(state.ac_state) {
 	case ACStart:	
@@ -175,7 +188,9 @@ void handle_ACMode(RoboClaw &controller_name, VentilatorState &state) {
 
 void handle_VCMode(RoboClaw &controller_name, VentilatorState &state) {
 
-  Serial.println(F("Motor vc mode handle"));
+	#ifdef SERIAL_DEBUG:	
+  	Serial.println(F("Motor vc mode handle"));
+  	#endif
 
 		switch(state.vc_state) {
 	case VCStart:
@@ -212,7 +227,10 @@ void handle_VCMode(RoboClaw &controller_name, VentilatorState &state) {
 }
 
 void handle_MotorZeroing(RoboClaw &controller_name, VentilatorState &state) {
-  Serial.println(F("Motor zeroing handle"));
+
+	#ifdef SERIAL_DEBUG:
+  	Serial.println(F("Motor zeroing handle"));
+  	#endif
 
 	switch(state.zeroing_state) {
 	case CommandHome:
@@ -246,7 +264,10 @@ void handle_MotorZeroing(RoboClaw &controller_name, VentilatorState &state) {
 
 
 void handle_motor(RoboClaw &controller_name, VentilatorState &state) {
-  Serial.println(F("Motor handle"));
+
+	#ifdef SERIAL_DEBUG:
+	Serial.println(F("Motor handle"));
+	#endif
 
 	switch(state.machine_state) {
 	case Startup:

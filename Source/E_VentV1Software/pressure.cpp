@@ -27,13 +27,6 @@ float readPressureSensor() {
 
     float pressure = (output - MIN_DIGITAL_OUTPUT)*(MAX_SENSOR_PRESSURE - MIN_SENSOR_PRESSURE)/(MAX_DIGITAL_OUTPUT - MIN_DIGITAL_OUTPUT) + MIN_SENSOR_PRESSURE;
     pressure = pressure*PSI_TO_CMH2O;
-    
-    #ifdef NO_SENSOR_DEBUG
-      //Serial.print("Output: ");
-      //Serial.println(output);
-      //Serial.print("Pressure: ");
-      //Serial.println(pressure);
-    #endif
 
     return pressure;
 }
