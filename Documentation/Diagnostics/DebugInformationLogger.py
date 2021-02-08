@@ -54,11 +54,11 @@ def main():
 
 
 	except KeyboardInterrupt:
-		debug_log.close()
 		header_string = ""
 		for keys in column_keys:
 			header_string = header_string + "{:<25}".format(str(keys))
-		line_prepender("debug_log.txt",header_string)
+		line_appender(debug_log,header_string)
+		debug_log.close()
 		ser.close()
 
 def getKeyIndex(column_keys,row, new_key):
@@ -85,11 +85,8 @@ def getTimeString():
 	time_string = str(day) + "/" + str(hour) + ":" + str(minute) + ":" + str(second)
 	return time_string
 
-def line_prepender(filename, line):
-    with open(filename, 'r+') as f:
-        content = f.read()
-        f.seek(0, 0)
-        f.write(line.rstrip('\r\n') + '\n' + content)
+def line_appender(file, line):
+    file.write(line + "\n")
 
 if __name__ == '__main__':
 	main()	
