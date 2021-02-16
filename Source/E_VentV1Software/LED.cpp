@@ -1,7 +1,7 @@
 #include "LED.h"
 
 
-void setup_LED_pins(void){
+void setupLEDPins(void){
 
 	pinMode(INHALE_LED_PIN, OUTPUT);
 	pinMode(EXHALE_LED_PIN, OUTPUT);

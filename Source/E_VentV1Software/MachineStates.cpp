@@ -165,3 +165,13 @@ void calculate_respiratory_rate(VentilatorState &state){
     reset_respiratory_rate_timer(state);
 
 }
+
+void check_recalibration_button(VentilatorState &state){
+    
+    if(LOW == digitalRead(RECAL_PIN)){
+        state.machine_state = MotorZeroing;
+        state.zeroing_state = CommandHome;
+    }
+
+    return;
+}

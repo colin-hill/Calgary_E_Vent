@@ -26,31 +26,37 @@ const float EXTERNAL_DISPLAY_DWELL = 3.0; //seconds
 
 // High PIP Alarm Definitions----------------
 const float MAX_HIGH_PIP_ALARM = 70; //cmH2O
+const float DEFAULT_HIGH_PIP_ALARM = 40; //cmH2O
 const float MIN_HIGH_PIP_ALARM = 10; //cmH2O
 //------------------------------------------
 
 // Low PIP Alarm Definitions-----------------
 const float MAX_LOW_PIP_ALARM = 40; //cmH2O
+const float DEFAULT_LOW_PIP_ALARM = 5.0; //cmH2O
 const float MIN_LOW_PIP_ALARM = 0; //cmH2O
 //------------------------------------------
 
 // High PEEP Alarm Definitions---------------
 const float MAX_HIGH_PEEP_ALARM = 35; //cmH2O
+const float DEFAULT_HIGH_PEEP_ALARM = 20; //cmH2O
 const float MIN_HIGH_PEEP_ALARM = 5; //cmH2O
 //------------------------------------------
 
 // Low PEEP Alarm Definitions----------------
 const float MAX_LOW_PEEP_ALARM = 15; //cmH2O
+const float DEFAULT_LOW_PEEP_ALARM = 3.0; //cmH2O
 const float MIN_LOW_PEEP_ALARM = 1; //cmH2O
 //------------------------------------------
 
 // Low Plateau Pressure Alarm Defintions-----
 const float MAX_LOW_PLATEAU_PRESSURE_ALARM = 40; //cmH2O
+const float DEFAULT_LOW_PLATEAU_PRESSURE_ALARM = 0.0; //cmH2O
 const float MIN_LOW_PLATEAU_PRESSURE_ALARM = 1; //cmH2O
 //------------------------------------------
 
 //High Respiratory Rate Alarm----------------
 const float MAX_RESPIRATORY_RATE_ALARM = 35;
+const float DEFAULT_HIGH_RESPIRATORY_RATE_ALARM = 20;
 const float MIN_RESPIRATORY_RATE_ALARM = 15;
 //-------------------------------------------
 

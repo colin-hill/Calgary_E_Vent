@@ -8,7 +8,7 @@
 const int LED_OFF = 1;
 const int LED_ON = 0;
 
-void setup_LED_pins(void);
+void setupLEDPins(void);
 
 void control_mode_LEDs(VentilatorState &state);
 

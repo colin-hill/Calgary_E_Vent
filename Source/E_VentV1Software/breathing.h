@@ -34,7 +34,7 @@ const float MAX_INSPIRATION_TIME     = 3.0; //Seconds
 const float DEFAULT_INSPIRATION_TIME = 1.0; //Seconds
 //------------------------------------------------------------------------------
 
-const float MIN_MODE_SELECT            = -5.0; //Seconds
+const float MIN_MODE_SELECT            = -5.0; //Negative refers to VC mode, positive to AC mode
 const float MAX_MODE_SELECT            = 5.0; //Seconds
 const float DEFAULT_MODE_SELECT        = 5.0; //Seconds
 

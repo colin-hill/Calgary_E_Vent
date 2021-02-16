@@ -60,8 +60,8 @@ const int EXHALE_LED_PIN   = 41; //Originally 41
 const int VC_MODE_LED_PIN  = 7; //Originally 7
 const int AC_MODE_LED_PIN  = 13; //Originally 9
 
-//Recal pin
-const int RECAL_PIN = 22;
+//Recalibration pin
+const int RECALIBRATION_PIN = 22;
 
 
 #endif

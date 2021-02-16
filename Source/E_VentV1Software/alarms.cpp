@@ -111,7 +111,7 @@ uint16_t check_respiratory_rate(VentilatorState &state, UserParameter *userParam
   return 0;
 }
 
-void alarm_debounce_reset(VentilatorState &state) {
+void reset_alarm_capture(VentilatorState &state) {
 
   state.alarm_outputs = state.this_breath_errors | state.last_breath_errors;
   state.last_breath_errors = state.this_breath_errors;

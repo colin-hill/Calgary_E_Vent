@@ -29,6 +29,7 @@
 #include "PinAssignments.h"
 #include "Motor.h"
 #include "RoboClaw.h"
+//Standard Arduino Library
 #include "avr/wdt.h"
 
 //Begin User Defined Section----------------------------------------------------
@@ -43,45 +44,39 @@ HardwareSerial & externalDisplay = Serial3;
 //Define Motor Controller
 RoboClaw motorController(&Serial2, MOTOR_CONTROLLER_TIMEOUT);
 
-//#define SERIAL_DEBUG //Comment this out if not debugging, used for visual confirmation of state changes
-//#define NO_INPUT_DEBUG //Comment this out if not debugging, used to spoof input parameters at startup when no controls are present
-
 const char softwareVersion[] = "020621";
-
 //------------------------------------------------------------------------------
-
 //End User Defined Section------------------------------------------------------
-//Useful Definitions and Macros-------------------------------------------------
 
+//Useful Definitions and Macros------------------------------------------------------------------------------------------
 
-//#define MotorSerial Serial1
+//-----------------------------------------------------------------------------------------------------------------------
 
 //Function Definitions---------------------------------------------------------------------------------------------------
 
-// TODO: Nervous about these -- make sure that they are initialized.
 //Global Variables-------------------------------------------------------------------------------------------------------
-volatile boolean parameterSet = false;
-SelectedParameter currentlySelectedParameter = e_None;
+volatile boolean parameterSet = false; //Flag to determine if a new set point has been selected, set by an ISR
+SelectedParameter currentlySelectedParameter = e_None; //Enum to track which set point is being changed
 Encoder parameterSelectEncoder(PARAMETER_ENCODER_PIN_1, PARAMETER_ENCODER_PIN_2);
 
-float UserParameter::currentBPM = DEFAULT_BPM; //Declaration of user parameter static variables for dynamic changing allowable bpm, inspiration time,
-float UserParameter::currentInspirationTime = DEFAULT_INSPIRATION_TIME; // and plateau pause time
+float UserParameter::currentBPM = DEFAULT_BPM; //Initialize the ventilator operation variables to the power on default,...
+float UserParameter::currentInspirationTime = DEFAULT_INSPIRATION_TIME;//these are defined for convenience
 float UserParameter::currentTidalVolume = DEFAULT_TIDAL_VOLUME;
 
 UserParameter userParameters[NUM_USER_PARAMETERS] =
    { UserParameter(MIN_THRESHOLD_PRESSURE, MAX_THRESHOLD_PRESSURE, THRESHOLD_PRESSURE_INCREMENT, THRESHOLD_PRESSURE_SELECT_PIN, DEFAULT_THRESHOLD_PRESSURE, e_ThresholdPressure),
-     UserParameter(MIN_BPM, MAX_BPM, BPM_INCREMENT, BPM_SELECT_PIN, BPM_DEFAULT, e_BPM),
+     UserParameter(MIN_BPM, MAX_BPM, BPM_INCREMENT, BPM_SELECT_PIN, DEFAULT_BPM, e_BPM),
      UserParameter(MIN_INSPIRATION_TIME, MAX_INSPIRATION_TIME, INSPIRATION_TIME_INCREMENT, INSPIRATION_TIME_SELECT_PIN, DEFAULT_INSPIRATION_TIME,e_InspirationTime),
-     UserParameter(MIN_TIDAL_VOLUME, MAX_TIDAL_VOLUME, TIDAL_VOLUME_INCREMENT, TIDAL_VOLUME_SELECT_PIN, TIDAL_VOLUME_DEFAULT,e_TidalVolume),
+     UserParameter(MIN_TIDAL_VOLUME, MAX_TIDAL_VOLUME, TIDAL_VOLUME_INCREMENT, TIDAL_VOLUME_SELECT_PIN,  DEFAULT_TIDAL_VOLUME,e_TidalVolume),
      UserParameter(MIN_MODE_SELECT, MAX_MODE_SELECT, MODE_SELECT_INCREMENT, MODE_SELECT_PIN, DEFAULT_MODE_SELECT,e_ModeSelect),
-     UserParameter(MIN_HIGH_PIP_ALARM, MAX_HIGH_PIP_ALARM, HIGH_PIP_ALARM_INCREMENT, HIGH_PIP_ALARM_SELECT_PIN, HIGH_PIP_ALARM_DEFAULT, e_HighPIPAlarm),
-     UserParameter(MIN_LOW_PIP_ALARM, MAX_LOW_PIP_ALARM, LOW_PIP_ALARM_INCREMENT, LOW_PIP_ALARM_SELECT_PIN, LOW_PIP_ALARM_DEFAULT, e_LowPIPAlarm),
-     UserParameter(MIN_HIGH_PEEP_ALARM, MAX_HIGH_PEEP_ALARM, HIGH_PEEP_ALARM_INCREMENT, HIGH_PEEP_ALARM_SELECT_PIN, HIGH_PEEP_ALARM_DEFAULT, e_HighPEEPAlarm),
-     UserParameter(MIN_LOW_PEEP_ALARM, MAX_LOW_PEEP_ALARM, LOW_PEEP_ALARM_INCREMENT, LOW_PEEP_ALARM_SELECT_PIN, LOW_PEEP_ALARM_DEFAULT, e_LowPEEPAlarm),
-     UserParameter(MIN_LOW_PLATEAU_PRESSURE_ALARM, MAX_LOW_PLATEAU_PRESSURE_ALARM, LOW_PLATEAU_PRESSURE_ALARM_INCREMENT, LOW_PLATEAU_PRESSURE_ALARM_SELECT_PIN, LOW_PLATEAU_PRESSURE_ALARM_DEFAULT, e_LowPlateauPressureAlarm), 
+     UserParameter(MIN_HIGH_PIP_ALARM, MAX_HIGH_PIP_ALARM, HIGH_PIP_ALARM_INCREMENT, HIGH_PIP_ALARM_SELECT_PIN, DEFAULT_HIGH_PIP_ALARM, e_HighPIPAlarm),
+     UserParameter(MIN_LOW_PIP_ALARM, MAX_LOW_PIP_ALARM, LOW_PIP_ALARM_INCREMENT, LOW_PIP_ALARM_SELECT_PIN, DEFAULT_LOW_PIP_ALARM, e_LowPIPAlarm),
+     UserParameter(MIN_HIGH_PEEP_ALARM, MAX_HIGH_PEEP_ALARM, HIGH_PEEP_ALARM_INCREMENT, HIGH_PEEP_ALARM_SELECT_PIN, DEFAULT_HIGH_PEEP_ALARM, e_HighPEEPAlarm),
+     UserParameter(MIN_LOW_PEEP_ALARM, MAX_LOW_PEEP_ALARM, LOW_PEEP_ALARM_INCREMENT, LOW_PEEP_ALARM_SELECT_PIN, DEFAULT_LOW_PEEP_ALARM, e_LowPEEPAlarm),
+     UserParameter(MIN_LOW_PLATEAU_PRESSURE_ALARM, MAX_LOW_PLATEAU_PRESSURE_ALARM, LOW_PLATEAU_PRESSURE_ALARM_INCREMENT, LOW_PLATEAU_PRESSURE_ALARM_SELECT_PIN, DEFAULT_LOW_PLATEAU_PRESSURE_ALARM, e_LowPlateauPressureAlarm), 
      UserParameter(MIN_RESPIRATORY_RATE_ALARM, MAX_RESPIRATORY_RATE_ALARM, HIGH_RESPIRATORY_RATE_ALARM_INCREMENT, HIGH_RESPIRATORY_RATE_ALARM_SELECT_PIN, DEFAULT_HIGH_RESPIRATORY_RATE_ALARM, e_HighRespiratoryRateAlarm)};
 
-volatile boolean alarmReset = false;
+volatile boolean alarmReset = false; //Flag to determine if alarms have been reset, set by an ISR
 
 // TODO: These are never set?
 // TODO: Do these really have to be globals?
@@ -121,15 +116,11 @@ void setup() {
     setupLimitSwitch();
     setUpAlarmPins();
     setUpPressureSensor();
-    setup_LED_pins();
+    setupLEDPins();
 
-
+    //Initialize millisecond timers to 0
     externalDisplayTimer = 0;
     alarmSilenceTimer = 0;
-
-
-    // Motor serial communications startup
-    // MotorSerial.begin(9600); //********
 
     //Parameter Input Pin Set Up
     setUpParameterSelectButtons(userParameters, NUM_USER_PARAMETERS, PARAMETER_ENCODER_PUSH_BUTTON_PIN);
@@ -138,7 +129,7 @@ void setup() {
     pinMode(MODE_SWITCH_PIN, INPUT_PULLUP);
 
     //Recal pin
-    pinMode(RECAL_PIN, INPUT_PULLUP);
+    pinMode(RECALIBRATION_PIN, INPUT_PULLUP);
 
     //LCD Setup
     alarmDisplay.begin(LCD_COLUMNS, LCD_ROWS);
@@ -176,25 +167,21 @@ void setup() {
 
     delay(2000);
 
-  wdt_enable(WDTO_500MS);
+  wdt_enable(WDTO_500MS);//Set watchdog to half a second
 }
 
 
 void loop() {
   
-   wdt_reset();
+    //Reset the watchdog timer
+    wdt_reset();
 
-
-
-
-    
-    //Handle Mode and Cycle LEDs
+    //Handle Mode and Inhale/Exhale LEDs
     control_mode_LEDs(state);
     control_inhale_exhale_LEDs(state);
 
     //Issue motor commands
     handle_motor(motorController, state);
-
 
     //Update the state user input parameters
     updateStateUserParameters(state, currentlySelectedParameter, parameterSet, parameterSelectEncoder,
@@ -208,26 +195,17 @@ void loop() {
         displayUserParameters(currentlySelectedParameter, ventilatorDisplay, state.machine_state, state.vc_state, state.ac_state, state.peak_pressure, state.peep_pressure, state.pressure, LCD_MAX_STRING, userParameters);
     }
 
-
-
-    // Read in values for state
+    //Update state internal variables
     update_state(state);
 
-
     //Beginning of state machine code
-
-    // TODO: factor out into a function and turn into switch statement.
     if (MotorZeroing == state.machine_state){
         motor_zeroing_step(state);
     }
     else if (BreathLoopStart == state.machine_state) { // BreathLoopStart
 
-        
 
-        alarmDisplay.begin(LCD_COLUMNS, LCD_ROWS); //TODO remove this
-        ventilatorDisplay.begin(LCD_COLUMNS, LCD_ROWS); //TODO remove this
-
-        alarm_debounce_reset(state);
+        reset_alarm_capture(state);
 
         if(userParameters[e_ModeSelect].value < 0){
             state.machine_state = VCMode;
@@ -239,12 +217,10 @@ void loop() {
         setStateParameters(state, userParameters); //Must be before update_motor_settings
         update_motor_settings(state);
 
-        if(LOW == digitalRead(RECAL_PIN)){
-        	state.machine_state = MotorZeroing;
-        	state.zeroing_state = CommandHome;
-        }
+        check_recalibration_button(state);
 
     }
+
     else if (ACMode == state.machine_state) {
         ac_mode_step(state, userParameters, motorController);
 
@@ -285,6 +261,4 @@ void alarmResetISR(){
     alarmResetDebounceTimer = 0;
     alarmReset = true;
   }
- 
-
 }
