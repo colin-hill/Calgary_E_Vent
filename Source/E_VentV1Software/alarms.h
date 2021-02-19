@@ -176,7 +176,7 @@ raised, right? Like in VCPeak or any of the other states you also shouldn't have
 low pressure...?
 */
 
-void alarm_debounce_reset(VentilatorState &state);
+void reset_alarm_capture(VentilatorState &state);
 
 void loop_alarm_manager(elapsedMillis &externalDisplayTimer, elapsedMillis &alarmSilenceTimer,
                         volatile boolean &alarmReset, LiquidCrystal &alarmDisplay,
