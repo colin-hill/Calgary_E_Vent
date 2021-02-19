@@ -168,7 +168,7 @@ void calculate_respiratory_rate(VentilatorState &state){
 
 void check_recalibration_button(VentilatorState &state){
     
-    if(LOW == digitalRead(RECAL_PIN)){
+    if(LOW == digitalRead(RECALIBRATION_PIN)){
         state.machine_state = MotorZeroing;
         state.zeroing_state = CommandHome;
     }

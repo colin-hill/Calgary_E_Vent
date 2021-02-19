@@ -39,7 +39,7 @@ LiquidCrystal alarmDisplay(ALARM_LCD_RS, ALARM_LCD_ENABLE, ALARM_LCD_DB4, ALARM_
 LiquidCrystal ventilatorDisplay(VENT_LCD_RS, VENT_LCD_ENABLE, VENT_LCD_DB4, VENT_LCD_DB5, VENT_LCD_DB6, VENT_LCD_DB7);
 
 //Define External Display
-HardwareSerial & externalDisplay = Serial3;
+HardwareSerial &externalDisplay = Serial3;
 
 //Define Motor Controller
 RoboClaw motorController(&Serial2, MOTOR_CONTROLLER_TIMEOUT);
@@ -59,7 +59,7 @@ volatile boolean parameterSet = false; //Flag to determine if a new set point ha
 SelectedParameter currentlySelectedParameter = e_None; //Enum to track which set point is being changed
 Encoder parameterSelectEncoder(PARAMETER_ENCODER_PIN_1, PARAMETER_ENCODER_PIN_2);
 
-float UserParameter::currentBPM = DEFAULT_BPM; //Initialize the ventilator operation variables to the power on default,...
+float UserParameter::currentBPM = DEFAULT_BPM; //Initialize the ventilator operation variables to the power on default
 float UserParameter::currentInspirationTime = DEFAULT_INSPIRATION_TIME;//these are defined for convenience
 float UserParameter::currentTidalVolume = DEFAULT_TIDAL_VOLUME;
 
