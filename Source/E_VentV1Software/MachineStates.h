@@ -213,7 +213,7 @@ void reset_respiratory_rate_time(VentilatorState &state);
 
 void calculate_respiratory_rate(VentilatorState &state);
 
-void check_recalibration_button(VentilatorState &state)
+void check_recalibration_button(VentilatorState &state);
 
 
 #endif

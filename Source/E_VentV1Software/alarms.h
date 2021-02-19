@@ -10,6 +10,7 @@
 #include "UserParameter.h"
 #include <assert.h>
 #include "conversions.h"
+#include "elapsedMillis.h"
 
 #if ARDUINO >= 100
 #include "Arduino.h"
