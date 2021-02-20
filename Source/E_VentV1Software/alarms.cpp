@@ -8,6 +8,9 @@
 #include <assert.h>
 
 
+//IMPORTANT!! THIS MUST BE DEFINED FOR PRODUCTION CODE!!
+#define AUDIO_ALARM_ON //when defined: turns on the audible alarms
+//IMPORTANT!! THIS MUST BE DEFINED FOR PRODUCTION CODE!!
 
 
 // ----------------------------------------------------------------------
@@ -84,13 +87,13 @@ uint16_t check_peep(const float pressure, UserParameter *userParameters) {
 
 uint16_t check_motor_position(const long int current_position, const long int expected_position) {
     if (current_position > expected_position + POSITION_TOLERANCE) {
-      #ifdef SERIAL_DEBUG:
+      #ifdef SERIAL_DEBUG
         Serial.println(F("Out of tolerance"));
       #endif
         return MECHANICAL_FAILURE_ALARM;
     }
     else if (current_position < expected_position - POSITION_TOLERANCE) {
-      #ifdef SERIAL_DEBUG:
+      #ifdef SERIAL_DEBUG
         Serial.println(F("Out of tolerance"));
       #endif
         return MECHANICAL_FAILURE_ALARM;
@@ -176,7 +179,7 @@ void loop_alarm_manager(elapsedMillis &externalDisplayTimer, elapsedMillis &alar
 
 void control_alarm_output(elapsedMillis &alarmSilenceTimer, volatile boolean &alarmReset, VentilatorState &state) {
 
-  #ifdef SERIAL_DEBUG:
+  #ifdef SERIAL_DEBUG
   Serial.print(F("alarmReset value: "));
   Serial.println(alarmReset);
   #endif
@@ -190,7 +193,7 @@ void control_alarm_output(elapsedMillis &alarmSilenceTimer, volatile boolean &al
   sei();
 
 
-  #ifdef SERIAL_DEBUG:
+  #ifdef SERIAL_DEBUG
   Serial.print(F("Silence Timer: "));
   Serial.println(alarmSilenceTimer);
   #endif

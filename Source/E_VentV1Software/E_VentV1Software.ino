@@ -3,9 +3,6 @@
 //#define NO_LIMIT_SWITCH_DEBUG
 #define PYTHON_DEBUG //when defined: dumps key:value pairs to the serial port for logging by a seperate python script
 
-//IMPORTANT!! THIS MUST BE DEFINED FOR PRODUCTION CODE!!
-//#define AUDIO_ALARM_ON //when defined: turns on the audible alarms
-//IMPORTANT!! THIS MUST BE DEFINED FOR PRODUCTION CODE!!
 
 #include <LiquidCrystal.h>
 
