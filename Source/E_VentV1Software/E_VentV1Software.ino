@@ -44,7 +44,7 @@ RoboClaw motorController(&Serial2, MOTOR_CONTROLLER_TIMEOUT);
 //#define SERIAL_DEBUG //Comment this out if not debugging, used for visual confirmation of state changes
 //#define NO_INPUT_DEBUG //Comment this out if not debugging, used to spoof input parameters at startup when no controls are present
 
-const char softwareVersion[] = "060221";
+const char softwareVersion[] = "020621";
 //------------------------------------------------------------------------------
 //End User Defined Section------------------------------------------------------
 
