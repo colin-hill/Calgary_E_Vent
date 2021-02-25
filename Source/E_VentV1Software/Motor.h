@@ -40,6 +40,7 @@ long int readPosition(RoboClaw &controller_name);
 void commandStop(RoboClaw &controller_name);
 
 //Command Functions
+void commandMotorMoveOff(RoboClaw &controller_name);
 
 void commandMotorHoming(RoboClaw &controller_name);
 

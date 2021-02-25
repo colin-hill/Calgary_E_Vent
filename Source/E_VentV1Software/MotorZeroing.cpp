@@ -14,6 +14,27 @@ void setupLimitSwitch(void){
 	pinMode(LIMIT_SWITCH_PIN, INPUT_PULLUP);
 }
 
+void commandMoveOff(VentilatorState &state) {
+    state.zeroing_state = MoveOffLimitSwitch;
+    reset_timer(state);
+
+    return;
+}
+
+void moveOffSwitchWait(VentilatorState &state) {
+
+    if (HIGH == digitalRead(LIMIT_SWITCH_PIN)) {
+        state.zeroing_state = CommandHome;
+    }
+    else if (elapsed_time(state) > (HOMING_TIMEOUT*S_TO_MS)) {
+        state.errors |= FULL_DEVICE_FAILURE;
+        state.machine_state = FailureMode;
+    }
+
+    delay(250); //Wait to ensure the switch is fully unactuated
+    return;
+}
+
 
 void commandHome(VentilatorState &state) {
     assert(state.zeroing_state == CommandHome);
@@ -103,6 +124,12 @@ void motorZero(VentilatorState &state) {
 void motor_zeroing_step(VentilatorState &state) {
 
 	switch(state.zeroing_state) {
+    case CommandMoveOff:
+        commandMoveOff(state);
+        return;
+    case MoveOffLimitSwitch:
+        moveOffSwitchWait(state);
+        return;
 	case CommandHome:
 		commandHome(state);
         return;

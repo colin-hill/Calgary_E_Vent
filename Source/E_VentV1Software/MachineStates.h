@@ -63,6 +63,8 @@ enum vcModeStates {
    TODO: directions to state machine diagram.
  */
 enum zeroingStates {
+                    CommandMoveOff,
+                    MoveOffLimitSwitch,
                     CommandHome,
                     MotorHomingWait,
                     CommandZero,

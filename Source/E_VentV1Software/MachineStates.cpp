@@ -24,7 +24,14 @@ VentilatorState get_init_state(void) {
 
     state.vc_state = VCStart;
     state.ac_state = ACStart;
-    state.zeroing_state = CommandHome;
+
+    //Check if limti switch is pressed at startup
+    if (LOW == digitalRead(LIMIT_SWITCH_PIN)) {
+        state.zeroing_state = CommandMoveOff;
+    }
+    else {
+        state.zeroing_state = CommandHome;
+    }
 
     state.breath_time_start = millis();
     state.current_time = state.breath_time_start;

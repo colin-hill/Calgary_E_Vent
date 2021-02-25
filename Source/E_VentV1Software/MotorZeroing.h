@@ -16,6 +16,10 @@
 
 void setupLimitSwitch(void);
 
+void commandMoveOff(VentilatorState &state);
+
+void moveOffSwitchWait(VentilatorState &state);
+
 void commandHome(VentilatorState &state);
 
 void motorHomingWait(VentilatorState &state);

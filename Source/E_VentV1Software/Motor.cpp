@@ -16,7 +16,7 @@ long int readPosition(RoboClaw &controller_name) {
 
 	#ifdef PYTHON_DEBUG
 	Serial.print(F("Encoder Reading:"));
-	Serial.println(pos)
+	Serial.println(pos);
 	#endif
 
   	return pos;
@@ -31,7 +31,13 @@ void commandStop(RoboClaw &controller_name) {
 
 //Command Functions
 
+void commandMotorMoveOff(RoboClaw &controller_name) {
+	controller_name.SetEncM1(MOTOR_ADDRESS, 0);
+	controller_name.SpeedAccelDeccelPositionM1(MOTOR_ADDRESS, ACCEL, MOTOR_ZEROING_SPEED, DECCEL, QP_AT_FULL_STROKE, 1);
+}
+
 void commandMotorHoming(RoboClaw &controller_name) {
+	commandStop(controller_name);
 	//command motor to move outwards
 	#ifdef SERIAL_DEBUG:
 	Serial.println(F("Motor home start"));
@@ -233,6 +239,12 @@ void handle_MotorZeroing(RoboClaw &controller_name, VentilatorState &state) {
   	#endif
 
 	switch(state.zeroing_state) {
+	case CommandMoveOff:
+		commandMotorMoveOff(controller_name);
+		break;
+	case MoveOffLimitSwitch:
+		//no action required
+		break;
 	case CommandHome:
 		commandMotorHoming(controller_name);
 		break;
