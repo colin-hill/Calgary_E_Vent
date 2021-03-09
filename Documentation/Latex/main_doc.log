@@ -1,30 +1,31 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7250) (preloaded format=pdflatex 2020.3.16)  1 MAY 2020 10:04
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 21.1 32-bit Portable) (preloaded format=pdflatex 2021.2.16)  8 MAR 2021 08:29
 entering extended mode
 **./main_doc.tex
 (main_doc.tex
-LaTeX2e <2019-10-01> patch level 3
+LaTeX2e <2020-10-01> patch level 4
+L3 programming layer <2021-02-06> xparse <2020-03-03>
 (H:\MikTex_Portable\texmfs\install\tex/latex/base\article.cls
-Document Class: article 2019/10/25 v1.4k Standard LaTeX document class
+Document Class: article 2020/04/10 v1.4m Standard LaTeX document class
 (H:\MikTex_Portable\texmfs\install\tex/latex/base\size10.clo
-File: size10.clo 2019/10/25 v1.4k Standard LaTeX file (size option)
+File: size10.clo 2020/04/10 v1.4m Standard LaTeX file (size option)
 )
-\c@part=\count80
-\c@section=\count81
-\c@subsection=\count82
-\c@subsubsection=\count83
-\c@paragraph=\count84
-\c@subparagraph=\count85
-\c@figure=\count86
-\c@table=\count87
-\abovecaptionskip=\skip41
-\belowcaptionskip=\skip42
-\bibindent=\dimen102
+\c@part=\count177
+\c@section=\count178
+\c@subsection=\count179
+\c@subsubsection=\count180
+\c@paragraph=\count181
+\c@subparagraph=\count182
+\c@figure=\count183
+\c@table=\count184
+\abovecaptionskip=\skip47
+\belowcaptionskip=\skip48
+\bibindent=\dimen138
 )
 (H:\MikTex_Portable\texmfs\install\tex/latex/appendix\appendix.sty
-Package: appendix 2009/09/02 v1.2b extra appendix facilities
-\c@@pps=\count88
-\c@@ppsavesec=\count89
-\c@@ppsaveapp=\count90
+Package: appendix 2020/02/08 v1.2c extra appendix facilities
+\c@@pps=\count185
+\c@@ppsavesec=\count186
+\c@@ppsaveapp=\count187
 )
 (H:\MikTex_Portable\texmfs\install\tex/latex/acronym\acronym.sty
 Package: acronym 2020/04/17 v1.47 Support for acronyms (Tobias Oetiker)
@@ -34,69 +35,89 @@ Package: suffix 2006/07/15 1.5a Variant command support
 )
 (H:\MikTex_Portable\texmfs\install\tex/latex/xstring\xstring.sty
 (H:\MikTex_Portable\texmfs\install\tex/generic/xstring\xstring.tex
-\integerpart=\count91
-\decimalpart=\count92
+\integerpart=\count188
+\decimalpart=\count189
 )
 Package: xstring 2019/02/06 v1.83 String manipulations (CT)
 )
-\AC@clearlist=\toks14
+\AC@clearlist=\toks15
 )
-(H:\MikTex_Portable\texmfs\install\tex/latex/tools\multicol.sty
-Package: multicol 2019/03/01 v1.8w multicolumn formatting (FMi)
-\c@tracingmulticols=\count93
-\mult@box=\box27
-\multicol@leftmargin=\dimen103
-\c@unbalance=\count94
-\c@collectmore=\count95
-\doublecol@number=\count96
-\multicoltolerance=\count97
-\multicolpretolerance=\count98
-\full@width=\dimen104
-\page@free=\dimen105
-\premulticols=\dimen106
-\postmulticols=\dimen107
-\multicolsep=\skip43
-\multicolbaselineskip=\skip44
-\partial@page=\box28
-\last@line=\box29
-\maxbalancingoverflow=\dimen108
-\mult@rightbox=\box30
-\mult@grightbox=\box31
-\mult@gfirstbox=\box32
-\mult@firstbox=\box33
-\@tempa=\box34
-\@tempa=\box35
-\@tempa=\box36
-\@tempa=\box37
-\@tempa=\box38
-\@tempa=\box39
-\@tempa=\box40
-\@tempa=\box41
-\@tempa=\box42
-\@tempa=\box43
-\@tempa=\box44
-\@tempa=\box45
-\@tempa=\box46
-\@tempa=\box47
-\@tempa=\box48
-\@tempa=\box49
-\@tempa=\box50
-\c@minrows=\count99
-\c@columnbadness=\count100
-\c@finalcolumnbadness=\count101
-\last@try=\dimen109
-\multicolovershoot=\dimen110
-\multicolundershoot=\dimen111
-\mult@nat@firstbox=\box51
-\colbreak@box=\box52
-\mc@col@check@num=\count102
+(H:\MikTex_Portable\texmfs\install\tex/latex/latex-tools\multicol.sty
+Package: multicol 2019/12/09 v1.8y multicolumn formatting (FMi)
+\c@tracingmulticols=\count190
+\mult@box=\box47
+\multicol@leftmargin=\dimen139
+\c@unbalance=\count191
+\c@collectmore=\count192
+\doublecol@number=\count193
+\multicoltolerance=\count194
+\multicolpretolerance=\count195
+\full@width=\dimen140
+\page@free=\dimen141
+\premulticols=\dimen142
+\postmulticols=\dimen143
+\multicolsep=\skip49
+\multicolbaselineskip=\skip50
+\partial@page=\box48
+\last@line=\box49
+\maxbalancingoverflow=\dimen144
+\mult@rightbox=\box50
+\mult@grightbox=\box51
+\mult@gfirstbox=\box52
+\mult@firstbox=\box53
+\@tempa=\box54
+\@tempa=\box55
+\@tempa=\box56
+\@tempa=\box57
+\@tempa=\box58
+\@tempa=\box59
+\@tempa=\box60
+\@tempa=\box61
+\@tempa=\box62
+\@tempa=\box63
+\@tempa=\box64
+\@tempa=\box65
+\@tempa=\box66
+\@tempa=\box67
+\@tempa=\box68
+\@tempa=\box69
+\@tempa=\box70
+\@tempa=\box71
+\@tempa=\box72
+\@tempa=\box73
+\@tempa=\box74
+\@tempa=\box75
+\@tempa=\box76
+\@tempa=\box77
+\@tempa=\box78
+\@tempa=\box79
+\@tempa=\box80
+\@tempa=\box81
+\@tempa=\box82
+\@tempa=\box83
+\@tempa=\box84
+\@tempa=\box85
+\@tempa=\box86
+\@tempa=\box87
+\@tempa=\box88
+\@tempa=\box89
+\@tempa=\box90
+\c@minrows=\count196
+\c@columnbadness=\count197
+\c@finalcolumnbadness=\count198
+\last@try=\dimen145
+\multicolovershoot=\dimen146
+\multicolundershoot=\dimen147
+\mult@nat@firstbox=\box91
+\colbreak@box=\box92
+\mc@col@check@num=\count199
 )
 (H:\MikTex_Portable\texmfs\install\tex/latex/graphics\graphicx.sty
 Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
 
 (H:\MikTex_Portable\texmfs\install\tex/latex/graphics\keyval.sty
 Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
-\KV@toks@=\toks15
+\KV@toks@=\toks16
 )
 (H:\MikTex_Portable\texmfs\install\tex/latex/graphics\graphics.sty
 Package: graphics 2019/11/01 v1.3d Standard LaTeX Graphics (DPC,SPQR)
@@ -112,8 +133,8 @@ Package graphics Info: Driver file: pdftex.def on input line 105.
 (H:\MikTex_Portable\texmfs\install\tex/latex/graphics-def\pdftex.def
 File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
 ))
-\Gin@req@height=\dimen112
-\Gin@req@width=\dimen113
+\Gin@req@height=\dimen148
+\Gin@req@width=\dimen149
 )
 (H:\MikTex_Portable\texmfs\install\tex/latex/graphics\rotating.sty
 Package: rotating 2016/08/11 v2.16d rotated objects in LaTeX
@@ -121,36 +142,36 @@ Package: rotating 2016/08/11 v2.16d rotated objects in LaTeX
 (H:\MikTex_Portable\texmfs\install\tex/latex/base\ifthen.sty
 Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
 )
-\c@r@tfl@t=\count103
-\rotFPtop=\skip45
-\rotFPbot=\skip46
-\rot@float@box=\box53
-\rot@mess@toks=\toks16
+\c@r@tfl@t=\count266
+\rotFPtop=\skip51
+\rotFPbot=\skip52
+\rot@float@box=\box93
+\rot@mess@toks=\toks17
 )
-(H:\MikTex_Portable\texmfs\install\tex/latex/tools\longtable.sty
-Package: longtable 2019/02/06 v4.12 Multi-page Table package (DPC)
-\LTleft=\skip47
-\LTright=\skip48
-\LTpre=\skip49
-\LTpost=\skip50
-\LTchunksize=\count104
-\LTcapwidth=\dimen114
-\LT@head=\box54
-\LT@firsthead=\box55
-\LT@foot=\box56
-\LT@lastfoot=\box57
-\LT@cols=\count105
-\LT@rows=\count106
-\c@LT@tables=\count107
-\c@LT@chunks=\count108
-\LT@p@ftn=\toks17
+(H:\MikTex_Portable\texmfs\install\tex/latex/latex-tools\longtable.sty
+Package: longtable 2020/01/07 v4.13 Multi-page Table package (DPC)
+\LTleft=\skip53
+\LTright=\skip54
+\LTpre=\skip55
+\LTpost=\skip56
+\LTchunksize=\count267
+\LTcapwidth=\dimen150
+\LT@head=\box94
+\LT@firsthead=\box95
+\LT@foot=\box96
+\LT@lastfoot=\box97
+\LT@cols=\count268
+\LT@rows=\count269
+\c@LT@tables=\count270
+\c@LT@chunks=\count271
+\LT@p@ftn=\toks18
 )
 (H:\MikTex_Portable\texmfs\install\tex/latex/multirow\multirow.sty
-Package: multirow 2019/05/31 v2.5 Span multiple rows of a table
-\multirow@colwidth=\skip51
-\multirow@cntb=\count109
-\multirow@dima=\skip52
-\bigstrutjot=\dimen115
+Package: multirow 2021/01/29 v2.7 Span multiple rows of a table
+\multirow@colwidth=\skip57
+\multirow@cntb=\count272
+\multirow@dima=\skip58
+\bigstrutjot=\dimen151
 )
 (H:\MikTex_Portable\texmfs\install\tex/latex/chngcntr\chngcntr.sty
 Package: chngcntr 2018/04/09 v1.1a change counter resetting
@@ -168,20 +189,20 @@ Package xcolor Info: Driver file: pdftex.def on input line 225.
 (H:\MikTex_Portable\texmfs\install\tex/latex/colortbl\colortbl.sty
 Package: colortbl 2020/01/04 v1.0e Color table columns (DPC)
 
-(H:\MikTex_Portable\texmfs\install\tex/latex/tools\array.sty
-Package: array 2019/08/31 v2.4l Tabular extension package (FMi)
-\col@sep=\dimen116
-\ar@mcellbox=\box58
-\extrarowheight=\dimen117
-\NC@list=\toks18
-\extratabsurround=\skip53
-\backup@length=\skip54
-\ar@cellbox=\box59
+(H:\MikTex_Portable\texmfs\install\tex/latex/latex-tools\array.sty
+Package: array 2020/10/01 v2.5c Tabular extension package (FMi)
+\col@sep=\dimen152
+\ar@mcellbox=\box98
+\extrarowheight=\dimen153
+\NC@list=\toks19
+\extratabsurround=\skip59
+\backup@length=\skip60
+\ar@cellbox=\box99
 )
-\everycr=\toks19
-\minrowclearance=\skip55
+\everycr=\toks20
+\minrowclearance=\skip61
 )
-\rownum=\count110
+\rownum=\count273
 Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1348.
 Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1352.
 Package xcolor Info: Model `RGB' extended on input line 1364.
@@ -207,49 +228,56 @@ Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
 (H:\MikTex_Portable\texmfs\install\tex/generic/iftex\ifxetex.sty
 Package: ifxetex 2019/10/25 v0.7 ifxetex legacy package. Use iftex instead.
 )
-\Gm@cnth=\count111
-\Gm@cntv=\count112
-\c@Gm@tempcnt=\count113
-\Gm@bindingoffset=\dimen118
-\Gm@wd@mp=\dimen119
-\Gm@odd@mp=\dimen120
-\Gm@even@mp=\dimen121
-\Gm@layoutwidth=\dimen122
-\Gm@layoutheight=\dimen123
-\Gm@layouthoffset=\dimen124
-\Gm@layoutvoffset=\dimen125
-\Gm@dimlist=\toks20
+\Gm@cnth=\count274
+\Gm@cntv=\count275
+\c@Gm@tempcnt=\count276
+\Gm@bindingoffset=\dimen154
+\Gm@wd@mp=\dimen155
+\Gm@odd@mp=\dimen156
+\Gm@even@mp=\dimen157
+\Gm@layoutwidth=\dimen158
+\Gm@layoutheight=\dimen159
+\Gm@layouthoffset=\dimen160
+\Gm@layoutvoffset=\dimen161
+\Gm@dimlist=\toks21
 
 (H:\MikTex_Portable\texmfs\install\tex/latex/geometry\geometry.cfg))
+(H:\MikTex_Portable\texmfs\install\tex/latex/l3backend\l3backend-pdftex.def
+File: l3backend-pdftex.def 2021-02-06 L3 backend support: PDF output (pdfTeX)
+\l__color_backend_stack_int=\count277
+\l__pdf_internal_box=\box100
+)
 (main_doc.aux)
 \openout1 = `main_doc.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
 
 (H:\MikTex_Portable\texmfs\install\tex/context/base/mkii\supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count114
-\scratchdimen=\dimen126
-\scratchbox=\box60
-\nofMPsegments=\count115
-\nofMParguments=\count116
-\everyMPshowfont=\toks21
-\MPscratchCnt=\count117
-\MPscratchDim=\dimen127
-\MPnumerator=\count118
-\makeMPintoPDFobject=\count119
-\everyMPtoPDFconversion=\toks22
+\scratchcounter=\count278
+\scratchdimen=\dimen162
+\scratchbox=\box101
+\nofMPsegments=\count279
+\nofMParguments=\count280
+\everyMPshowfont=\toks22
+\MPscratchCnt=\count281
+\MPscratchDim=\dimen163
+\MPnumerator=\count282
+\makeMPintoPDFobject=\count283
+\everyMPtoPDFconversion=\toks23
 ) (H:\MikTex_Portable\texmfs\install\tex/latex/epstopdf-pkg\epstopdf-base.sty
 Package: epstopdf-base 2019-11-30 v2.9 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
@@ -290,163 +318,143 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 30.
+(Font)              <12> on input line 33.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 30.
+(Font)              <8> on input line 33.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 30.
+(Font)              <6> on input line 33.
 [1
 
 {H:/MikTex_Portable/texmfs/data/pdftex/config/pdftex.map}]
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 36.
+(Font)              <7> on input line 39.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 36.
- [2] (main_doc.toc
-[3
+(Font)              <5> on input line 39.
+
+Underfull \hbox (badness 10000) in paragraph at lines 45--45
+[]|\OT1/cmr/m/n/10 Improved cal-i-bra-
+ []
+
+
+Underfull \hbox (badness 5417) in paragraph at lines 81--81
+[]|\OT1/cmr/m/n/10 Improved cal-i-bra-tion at startup and on-the-fly re-
+ []
+
+[2] (main_doc.toc [3
 
 ])
 \tf@toc=\write3
 \openout3 = `main_doc.toc'.
 
- [4]
-LaTeX Font Info:    Trying to load font information for OMS+cmr on input line 7
-7.
- (H:\MikTex_Portable\texmfs\install\tex/latex/base\omscmr.fd
-File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
-)
-LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 77.
- [5
+ [4] [5
 
-]
-[6
+] [6
 
 ] [7
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 142--142
+Underfull \hbox (badness 10000) in paragraph at lines 167--167
 []|\OT1/cmr/m/n/10 Software de-vel-op-ment stan-dard,
  []
 
 
-Underfull \hbox (badness 2158) in paragraph at lines 149--149
+Underfull \hbox (badness 2158) in paragraph at lines 174--174
 []|\OT1/cmr/m/n/10 Software con-fig-u-ra-tion item con-
  []
 
 
-Underfull \hbox (badness 2600) in paragraph at lines 153--153
+Underfull \hbox (badness 2600) in paragraph at lines 178--178
 \OT1/cmr/m/n/10 quire-ments from sys-tem re-quire-
  []
 
 
-Underfull \vbox (badness 10000) detected at line 154
+Underfull \vbox (badness 10000) detected at line 179
  []
 
 
-Underfull \hbox (badness 5756) in paragraph at lines 156--156
+Underfull \hbox (badness 5756) in paragraph at lines 181--181
 []|\OT1/cmr/m/n/10 Re-evaluate med-i-cal de-vice risk
  []
 
 
-Underfull \hbox (badness 5359) in paragraph at lines 162--162
+Underfull \hbox (badness 5359) in paragraph at lines 187--187
 []|\OT1/cmr/m/n/10 Transform soft-ware re-quire-ments
  []
 
 
-Underfull \hbox (badness 2376) in paragraph at lines 171--171
+Underfull \hbox (badness 2376) in paragraph at lines 196--196
 []|\OT1/cmr/m/n/10 Subdivide soft-ware into soft-ware
  []
 
 
-Underfull \hbox (badness 1237) in paragraph at lines 172--172
+Underfull \hbox (badness 1237) in paragraph at lines 197--197
 []|\OT1/cmr/m/n/10 Develop de-tailed de-sign for each
  []
 
 
-Underfull \hbox (badness 3417) in paragraph at lines 193--193
+Underfull \hbox (badness 3417) in paragraph at lines 218--218
 []|\OT1/cmr/m/n/10 Use soft-ware prob-lem res-o-lu-tion
  []
 
 
-Underfull \hbox (badness 3417) in paragraph at lines 198--198
+Underfull \hbox (badness 3417) in paragraph at lines 223--223
 []|\OT1/cmr/m/n/10 Use soft-ware prob-lem res-o-lu-tion
  []
 
 [8
 
 ]
-Underfull \hbox (badness 2042) in paragraph at lines 209--209
+Underfull \hbox (badness 2042) in paragraph at lines 234--234
 []|\OT1/cmr/m/n/10 Document how re-leased soft-ware
  []
 
 
-Underfull \hbox (badness 2158) in paragraph at lines 216--216
+Underfull \hbox (badness 2158) in paragraph at lines 241--241
 []|\OT1/cmr/m/n/10 See Sec-tion 11[]; See
  []
 
 
-Underfull \hbox (badness 2158) in paragraph at lines 220--220
+Underfull \hbox (badness 2158) in paragraph at lines 245--245
 []|\OT1/cmr/m/n/10 See Sec-tion 11[]; See
  []
 
 
-Underfull \hbox (badness 2158) in paragraph at lines 221--221
+Underfull \hbox (badness 2158) in paragraph at lines 246--246
 []|\OT1/cmr/m/n/10 See Sec-tion 11[]; See
  []
 
 
-Underfull \hbox (badness 2158) in paragraph at lines 222--222
+Underfull \hbox (badness 2158) in paragraph at lines 247--247
 []|\OT1/cmr/m/n/10 See Sec-tion 11[]; See
  []
 
 
-Underfull \hbox (badness 2158) in paragraph at lines 223--223
+Underfull \hbox (badness 2158) in paragraph at lines 248--248
 []|\OT1/cmr/m/n/10 See Sec-tion 11[]; See
  []
 
 
-Underfull \hbox (badness 3417) in paragraph at lines 224--224
+Underfull \hbox (badness 3417) in paragraph at lines 249--249
 []|\OT1/cmr/m/n/10 Use soft-ware prob-lem res-o-lu-tion
  []
 
 
-Underfull \hbox (badness 2158) in paragraph at lines 224--224
+Underfull \hbox (badness 2158) in paragraph at lines 249--249
 []|\OT1/cmr/m/n/10 See Sec-tion 11[]; See
  []
 
 
-Underfull \hbox (badness 2158) in paragraph at lines 225--225
+Underfull \hbox (badness 2158) in paragraph at lines 250--250
 []|\OT1/cmr/m/n/10 See Sec-tion 11[]; See
  []
 
 
-Underfull \hbox (badness 2158) in paragraph at lines 226--226
+Underfull \hbox (badness 2158) in paragraph at lines 251--251
 []|\OT1/cmr/m/n/10 See Sec-tion 11[]; See
  []
 
 
-Underfull \hbox (badness 2158) in paragraph at lines 227--227
-[]|\OT1/cmr/m/n/10 See Sec-tion 11[]; See
- []
-
-
-Underfull \hbox (badness 2158) in paragraph at lines 231--231
-[]|\OT1/cmr/m/n/10 See Sec-tion 11[]; See
- []
-
-
-Underfull \hbox (badness 2158) in paragraph at lines 232--232
-[]|\OT1/cmr/m/n/10 See Sec-tion 11[]; See
- []
-
-
-Underfull \hbox (badness 4441) in paragraph at lines 249--249
-[]|\OT1/cmr/bx/n/10 Verification of Risk con-trol
- []
-
-
-Underfull \hbox (badness 2158) in paragraph at lines 255--255
+Underfull \hbox (badness 2158) in paragraph at lines 252--252
 []|\OT1/cmr/m/n/10 See Sec-tion 11[]; See
  []
 
@@ -460,59 +468,9 @@ Underfull \hbox (badness 2158) in paragraph at lines 257--257
 []|\OT1/cmr/m/n/10 See Sec-tion 11[]; See
  []
 
-[9]
-Underfull \hbox (badness 2158) in paragraph at lines 267--267
-[]|\OT1/cmr/m/n/10 See Sec-tion 11[]; See
- []
 
-
-Underfull \hbox (badness 2158) in paragraph at lines 268--268
-[]|\OT1/cmr/m/n/10 See Sec-tion 11[]; See
- []
-
-
-Underfull \hbox (badness 2158) in paragraph at lines 269--269
-[]|\OT1/cmr/m/n/10 See Sec-tion 11[]; See
- []
-
-
-Underfull \hbox (badness 2158) in paragraph at lines 270--270
-[]|\OT1/cmr/m/n/10 See Sec-tion 11[]; See
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 273--273
-[]|\OT1/cmr/m/n/10 Configuration sta-tus ac-count-ing
- []
-
-
-Underfull \hbox (badness 2158) in paragraph at lines 273--273
-[]|\OT1/cmr/m/n/10 See Sec-tion 11[]; See
- []
-
-
-Underfull \hbox (badness 5331) in paragraph at lines 275--275
-[]|\OT1/cmr/bx/n/10 Software prob-lem res-o-lu-tion
- []
-
-
-Underfull \hbox (badness 2158) in paragraph at lines 276--276
-[]|\OT1/cmr/m/n/10 See Sec-tion 11[]; See
- []
-
-
-Underfull \hbox (badness 2158) in paragraph at lines 277--277
-[]|\OT1/cmr/m/n/10 See Sec-tion 11[]; See
- []
-
-
-Underfull \hbox (badness 2158) in paragraph at lines 278--278
-[]|\OT1/cmr/m/n/10 See Sec-tion 11[]; See
- []
-
-
-Underfull \hbox (badness 2158) in paragraph at lines 279--279
-[]|\OT1/cmr/m/n/10 See Sec-tion 11[]; See
+Underfull \hbox (badness 4441) in paragraph at lines 274--274
+[]|\OT1/cmr/bx/n/10 Verification of Risk con-trol
  []
 
 
@@ -530,8 +488,78 @@ Underfull \hbox (badness 2158) in paragraph at lines 282--282
 []|\OT1/cmr/m/n/10 See Sec-tion 11[]; See
  []
 
+[9]
+Underfull \hbox (badness 2158) in paragraph at lines 292--292
+[]|\OT1/cmr/m/n/10 See Sec-tion 11[]; See
+ []
 
-Underfull \hbox (badness 2158) in paragraph at lines 283--283
+
+Underfull \hbox (badness 2158) in paragraph at lines 293--293
+[]|\OT1/cmr/m/n/10 See Sec-tion 11[]; See
+ []
+
+
+Underfull \hbox (badness 2158) in paragraph at lines 294--294
+[]|\OT1/cmr/m/n/10 See Sec-tion 11[]; See
+ []
+
+
+Underfull \hbox (badness 2158) in paragraph at lines 295--295
+[]|\OT1/cmr/m/n/10 See Sec-tion 11[]; See
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 298--298
+[]|\OT1/cmr/m/n/10 Configuration sta-tus ac-count-ing
+ []
+
+
+Underfull \hbox (badness 2158) in paragraph at lines 298--298
+[]|\OT1/cmr/m/n/10 See Sec-tion 11[]; See
+ []
+
+
+Underfull \hbox (badness 5331) in paragraph at lines 300--300
+[]|\OT1/cmr/bx/n/10 Software prob-lem res-o-lu-tion
+ []
+
+
+Underfull \hbox (badness 2158) in paragraph at lines 301--301
+[]|\OT1/cmr/m/n/10 See Sec-tion 11[]; See
+ []
+
+
+Underfull \hbox (badness 2158) in paragraph at lines 302--302
+[]|\OT1/cmr/m/n/10 See Sec-tion 11[]; See
+ []
+
+
+Underfull \hbox (badness 2158) in paragraph at lines 303--303
+[]|\OT1/cmr/m/n/10 See Sec-tion 11[]; See
+ []
+
+
+Underfull \hbox (badness 2158) in paragraph at lines 304--304
+[]|\OT1/cmr/m/n/10 See Sec-tion 11[]; See
+ []
+
+
+Underfull \hbox (badness 2158) in paragraph at lines 305--305
+[]|\OT1/cmr/m/n/10 See Sec-tion 11[]; See
+ []
+
+
+Underfull \hbox (badness 2158) in paragraph at lines 306--306
+[]|\OT1/cmr/m/n/10 See Sec-tion 11[]; See
+ []
+
+
+Underfull \hbox (badness 2158) in paragraph at lines 307--307
+[]|\OT1/cmr/m/n/10 See Sec-tion 11[]; See
+ []
+
+
+Underfull \hbox (badness 2158) in paragraph at lines 308--308
 []|\OT1/cmr/m/n/10 See Sec-tion 11[]; See
  []
 
@@ -540,7 +568,7 @@ Underfull \hbox (badness 2158) in paragraph at lines 283--283
 ] [14
 
 ]
-Overfull \hbox (2.31853pt too wide) in paragraph at lines 365--375
+Overfull \hbox (2.31853pt too wide) in paragraph at lines 390--400
 [][] 
  []
 
@@ -549,17 +577,17 @@ Overfull \hbox (2.31853pt too wide) in paragraph at lines 365--375
 ] [16] [17
 
 ] [18] [19]
-Underfull \hbox (badness 10000) in paragraph at lines 592--592
+Underfull \hbox (badness 10000) in paragraph at lines 617--617
 []|\OT1/cmr/m/n/10 Limit switch stuck
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 635--635
+Underfull \hbox (badness 10000) in paragraph at lines 660--660
 []|\OT1/cmr/m/n/10 Timer cal-cu-la-tion
  []
 
 
-Underfull \hbox (badness 1735) in paragraph at lines 648--648
+Underfull \hbox (badness 1735) in paragraph at lines 673--673
 []|\OT1/cmr/m/n/10 Tidal vol-ume set-
  []
 
@@ -569,37 +597,37 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 [20
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 672--672
+Underfull \hbox (badness 10000) in paragraph at lines 697--697
 []|\OT1/cmr/m/n/10 Timer cal-cu-la-tion
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 681--681
+Underfull \hbox (badness 10000) in paragraph at lines 706--706
 []|\OT1/cmr/m/n/10 Exhale du-ra-tion
  []
 
 
-Underfull \hbox (badness 2717) in paragraph at lines 684--684
+Underfull \hbox (badness 2717) in paragraph at lines 709--709
 []|\OT1/cmr/m/n/10 Software fault (arms
  []
 
 
-Underfull \hbox (badness 2269) in paragraph at lines 684--684
+Underfull \hbox (badness 2269) in paragraph at lines 709--709
 []|\OT1/cmr/m/n/10 Visual in-spec-tion re-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 685--685
+Underfull \hbox (badness 10000) in paragraph at lines 710--710
 []|\OT1/cmr/m/n/10 Inaccurate tidal
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 685--685
+Underfull \hbox (badness 10000) in paragraph at lines 710--710
 \OT1/cmr/m/n/10 vol-ume on next
  []
 
 
-Underfull \hbox (badness 2269) in paragraph at lines 689--689
+Underfull \hbox (badness 2269) in paragraph at lines 714--714
 []|\OT1/cmr/m/n/10 Visual in-spec-tion re-
  []
 
@@ -607,47 +635,47 @@ Underfull \hbox (badness 2269) in paragraph at lines 689--689
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 707--707
+Underfull \hbox (badness 10000) in paragraph at lines 732--732
 []|\OT1/cmr/m/n/10 Inaccurate tidal
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 707--707
+Underfull \hbox (badness 10000) in paragraph at lines 732--732
 \OT1/cmr/m/n/10 vol-ume and/or
  []
 
 
-Underfull \hbox (badness 5091) in paragraph at lines 707--707
+Underfull \hbox (badness 5091) in paragraph at lines 732--732
 []|\OT1/cmr/m/n/10 Mechanical fault af-
  []
 
 
-Underfull \hbox (badness 2269) in paragraph at lines 707--707
+Underfull \hbox (badness 2269) in paragraph at lines 732--732
 []|\OT1/cmr/m/n/10 Visual in-spec-tion re-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 709--709
+Underfull \hbox (badness 10000) in paragraph at lines 734--734
 []|\OT1/cmr/m/n/10 None (blood gases
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 710--710
+Underfull \hbox (badness 10000) in paragraph at lines 735--735
 []|\OT1/cmr/m/n/10 Persistent oc-cur-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 710--710
+Underfull \hbox (badness 10000) in paragraph at lines 735--735
 []|\OT1/cmr/m/n/10 Mechanical PEEP
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 711--711
+Underfull \hbox (badness 10000) in paragraph at lines 736--736
 []|\OT1/cmr/m/n/10 Mechanical PEEP
  []
 
 
-Underfull \hbox (badness 1005) in paragraph at lines 712--712
+Underfull \hbox (badness 1005) in paragraph at lines 737--737
 []|\OT1/cmr/m/n/10 High res-pi-ra-tory rate
  []
 
@@ -655,39 +683,39 @@ Underfull \hbox (badness 1005) in paragraph at lines 712--712
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 [21] [22]
-Underfull \hbox (badness 2875) in paragraph at lines 753--753
+Underfull \hbox (badness 2875) in paragraph at lines 778--778
 []|\OT1/cmr/bx/n/10 Measured In-spi-ra-tion
  []
 
 
-Overfull \hbox (11.87308pt too wide) in paragraph at lines 750--762
+Overfull \hbox (11.87308pt too wide) in paragraph at lines 775--787
 [][] 
  []
 
 [23
 
 ]
-Overfull \hbox (11.87308pt too wide) in paragraph at lines 775--788
+Overfull \hbox (11.87308pt too wide) in paragraph at lines 800--813
 [][] 
  []
 
 
-Overfull \hbox (11.87308pt too wide) in paragraph at lines 801--815
+Overfull \hbox (11.87308pt too wide) in paragraph at lines 826--840
 [][]
  []
 
 
-Underfull \hbox (badness 3646) in paragraph at lines 828--828
+Underfull \hbox (badness 3646) in paragraph at lines 853--853
 []|\OT1/cmr/bx/n/10 High Res-pi-ra-tory
  []
 
 
-Underfull \hbox (badness 2050) in paragraph at lines 828--828
+Underfull \hbox (badness 2050) in paragraph at lines 853--853
 \OT1/cmr/bx/n/10 Rate Alarm Set-
  []
 
 
-Overfull \hbox (11.87308pt too wide) in paragraph at lines 825--841
+Overfull \hbox (11.87308pt too wide) in paragraph at lines 850--866
 [][]
  []
 
@@ -707,15 +735,15 @@ nd PDF version <1.7>, but at most version <1.5> allowed
 <figures/main_loop.pdf, id=95, 596.98032pt x 844.65562pt>
 File: figures/main_loop.pdf Graphic file (type pdf)
 <use figures/main_loop.pdf>
-Package pdftex.def Info: figures/main_loop.pdf  used on input line 951.
+Package pdftex.def Info: figures/main_loop.pdf  used on input line 976.
 (pdftex.def)             Requested size: 464.83456pt x 593.85222pt.
 
-Overfull \hbox (31.21455pt too wide) in paragraph at lines 951--952
+Overfull \hbox (31.21455pt too wide) in paragraph at lines 976--977
 [][] 
  []
 
 
-LaTeX Warning: Float too large for page by 3.50166pt on input line 954.
+LaTeX Warning: Float too large for page by 3.50166pt on input line 979.
 
 
 
@@ -724,10 +752,10 @@ n: found PDF version <1.7>, but at most version <1.5> allowed
 <figures/main_state_flow.pdf, id=97, 844.65562pt x 596.98032pt>
 File: figures/main_state_flow.pdf Graphic file (type pdf)
 <use figures/main_state_flow.pdf>
-Package pdftex.def Info: figures/main_state_flow.pdf  used on input line 957.
+Package pdftex.def Info: figures/main_state_flow.pdf  used on input line 982.
 (pdftex.def)             Requested size: 666.08939pt x 467.94885pt.
 
-Overfull \hbox (51.79439pt too wide) in paragraph at lines 957--958
+Overfull \hbox (51.79439pt too wide) in paragraph at lines 982--983
 [][] 
  []
 
@@ -738,10 +766,10 @@ pdfTeX warning: pdflatex.exe (file ./figures/motor_zeroing.pdf): PDF inclusion:
 <figures/motor_zeroing.pdf, id=99, 844.65562pt x 596.98032pt>
 File: figures/motor_zeroing.pdf Graphic file (type pdf)
 <use figures/motor_zeroing.pdf>
-Package pdftex.def Info: figures/motor_zeroing.pdf  used on input line 963.
+Package pdftex.def Info: figures/motor_zeroing.pdf  used on input line 988.
 (pdftex.def)             Requested size: 666.08939pt x 467.94885pt.
 
-Overfull \hbox (51.79439pt too wide) in paragraph at lines 963--964
+Overfull \hbox (51.79439pt too wide) in paragraph at lines 988--989
 [][] 
  []
 
@@ -752,10 +780,10 @@ pdfTeX warning: pdflatex.exe (file ./figures/ac_mode.pdf): PDF inclusion: found
 <figures/ac_mode.pdf, id=101, 844.65562pt x 596.98032pt>
 File: figures/ac_mode.pdf Graphic file (type pdf)
 <use figures/ac_mode.pdf>
-Package pdftex.def Info: figures/ac_mode.pdf  used on input line 969.
+Package pdftex.def Info: figures/ac_mode.pdf  used on input line 994.
 (pdftex.def)             Requested size: 666.08939pt x 467.94885pt.
 
-Overfull \hbox (51.79439pt too wide) in paragraph at lines 969--970
+Overfull \hbox (51.79439pt too wide) in paragraph at lines 994--995
 [][] 
  []
 
@@ -766,10 +794,10 @@ pdfTeX warning: pdflatex.exe (file ./figures/vc_mode.pdf): PDF inclusion: found
 <figures/vc_mode.pdf, id=103, 844.65562pt x 596.98032pt>
 File: figures/vc_mode.pdf Graphic file (type pdf)
 <use figures/vc_mode.pdf>
-Package pdftex.def Info: figures/vc_mode.pdf  used on input line 975.
+Package pdftex.def Info: figures/vc_mode.pdf  used on input line 1000.
 (pdftex.def)             Requested size: 666.08939pt x 467.94885pt.
 
-Overfull \hbox (51.79439pt too wide) in paragraph at lines 975--976
+Overfull \hbox (51.79439pt too wide) in paragraph at lines 1000--1001
 [][] 
  []
 
@@ -780,15 +808,15 @@ pdfTeX warning: pdflatex.exe (file ./figures/alarm_handler.pdf): PDF inclusion:
 <figures/alarm_handler.pdf, id=105, 596.98032pt x 844.65562pt>
 File: figures/alarm_handler.pdf Graphic file (type pdf)
 <use figures/alarm_handler.pdf>
-Package pdftex.def Info: figures/alarm_handler.pdf  used on input line 981.
+Package pdftex.def Info: figures/alarm_handler.pdf  used on input line 1006.
 (pdftex.def)             Requested size: 464.83456pt x 593.85222pt.
 
-Overfull \hbox (31.21455pt too wide) in paragraph at lines 981--982
+Overfull \hbox (31.21455pt too wide) in paragraph at lines 1006--1007
 [][] 
  []
 
 
-LaTeX Warning: Float too large for page by 3.50166pt on input line 984.
+LaTeX Warning: Float too large for page by 3.50166pt on input line 1009.
 
 [28
 
@@ -798,55 +826,55 @@ vc_mode.pdf>] [34 <./figures/alarm_handler.pdf>]
 <figures/risk_matrix.pdf, id=226, 794.97pt x 614.295pt>
 File: figures/risk_matrix.pdf Graphic file (type pdf)
 <use figures/risk_matrix.pdf>
-Package pdftex.def Info: figures/risk_matrix.pdf  used on input line 998.
+Package pdftex.def Info: figures/risk_matrix.pdf  used on input line 1023.
 (pdftex.def)             Requested size: 607.06215pt x 408.32137pt.
 <figures/unmit_1.jpg, id=228, 959.08313pt x 549.55313pt>
 File: figures/unmit_1.jpg Graphic file (type jpg)
 <use figures/unmit_1.jpg>
-Package pdftex.def Info: figures/unmit_1.jpg  used on input line 1004.
+Package pdftex.def Info: figures/unmit_1.jpg  used on input line 1029.
 (pdftex.def)             Requested size: 575.45433pt x 329.73442pt.
 <figures/unmit_2.jpg, id=229, 836.3747pt x 487.06969pt>
 File: figures/unmit_2.jpg Graphic file (type jpg)
 <use figures/unmit_2.jpg>
-Package pdftex.def Info: figures/unmit_2.jpg  used on input line 1010.
+Package pdftex.def Info: figures/unmit_2.jpg  used on input line 1035.
 (pdftex.def)             Requested size: 543.63712pt x 316.59154pt.
 <figures/unmit_3.jpg, id=230, 835.62187pt x 423.08063pt>
 File: figures/unmit_3.jpg Graphic file (type jpg)
 <use figures/unmit_3.jpg>
-Package pdftex.def Info: figures/unmit_3.jpg  used on input line 1016.
+Package pdftex.def Info: figures/unmit_3.jpg  used on input line 1041.
 (pdftex.def)             Requested size: 584.93132pt x 296.15442pt.
 <figures/mit1.jpg, id=231, 903.375pt x 556.32843pt>
 File: figures/mit1.jpg Graphic file (type jpg)
 <use figures/mit1.jpg>
-Package pdftex.def Info: figures/mit1.jpg  used on input line 1024.
+Package pdftex.def Info: figures/mit1.jpg  used on input line 1049.
 (pdftex.def)             Requested size: 596.22935pt x 367.1779pt.
 <figures/mit2.jpg, id=232, 880.79062pt x 480.29437pt>
 File: figures/mit2.jpg Graphic file (type jpg)
 <use figures/mit2.jpg>
-Package pdftex.def Info: figures/mit2.jpg  used on input line 1030.
+Package pdftex.def Info: figures/mit2.jpg  used on input line 1055.
 (pdftex.def)             Requested size: 616.54922pt x 336.20375pt.
 
-Overfull \hbox (2.25423pt too wide) in paragraph at lines 1030--1031
+Overfull \hbox (2.25423pt too wide) in paragraph at lines 1055--1056
 [][] 
  []
 
 <figures/mit3.jpg, id=233, 882.29625pt x 481.8pt>
 File: figures/mit3.jpg Graphic file (type jpg)
 <use figures/mit3.jpg>
-Package pdftex.def Info: figures/mit3.jpg  used on input line 1036.
+Package pdftex.def Info: figures/mit3.jpg  used on input line 1061.
 (pdftex.def)             Requested size: 617.60316pt x 337.25769pt.
 
-Overfull \hbox (3.30817pt too wide) in paragraph at lines 1036--1037
+Overfull \hbox (3.30817pt too wide) in paragraph at lines 1061--1062
 [][] 
  []
 
 <figures/mit4.jpg, id=234, 1037.37563pt x 425.33907pt>
 File: figures/mit4.jpg Graphic file (type jpg)
 <use figures/mit4.jpg>
-Package pdftex.def Info: figures/mit4.jpg  used on input line 1042.
+Package pdftex.def Info: figures/mit4.jpg  used on input line 1067.
 (pdftex.def)             Requested size: 622.43018pt x 255.2054pt.
 
-Overfull \hbox (8.13518pt too wide) in paragraph at lines 1042--1043
+Overfull \hbox (8.13518pt too wide) in paragraph at lines 1067--1068
 [][] 
  []
 
@@ -858,10 +886,10 @@ unmit_2.jpg>] [39 <./figures/unmit_3.jpg>] [40 <./figures/mit1.jpg>]
 <figures/change.jpg, id=275, 1053.9375pt x 444.91219pt>
 File: figures/change.jpg Graphic file (type jpg)
 <use figures/change.jpg>
-Package pdftex.def Info: figures/change.jpg  used on input line 1054.
+Package pdftex.def Info: figures/change.jpg  used on input line 1079.
 (pdftex.def)             Requested size: 632.36739pt x 266.94936pt.
 
-Overfull \hbox (18.07239pt too wide) in paragraph at lines 1054--1055
+Overfull \hbox (18.07239pt too wide) in paragraph at lines 1079--1080
 [][] 
  []
 
@@ -869,25 +897,26 @@ Overfull \hbox (18.07239pt too wide) in paragraph at lines 1054--1055
 
 ] [45 <./figures/change.jpg>] (main_doc.aux) ) 
 Here is how much of TeX's memory you used:
- 3333 strings out of 492450
- 45304 string characters out of 3127024
- 195686 words of memory out of 3000000
- 7645 multiletter control sequences out of 15000+200000
- 8205 words of font info for 29 fonts, out of 3000000 for 9000
+ 3566 strings out of 479587
+ 51672 string characters out of 2869102
+ 444432 words of memory out of 3000000
+ 20705 multiletter control sequences out of 15000+200000
+ 408330 words of font info for 43 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 32i,15n,37p,841b,338s stack positions out of 5000i,500n,10000p,200000b,50000s
-<H:/MikTex_Portable/texmfs/instal
-l/fonts/type1/public/amsfonts/cm/cmbx10.pfb><H:/MikTex_Portable/texmfs/install/
-fonts/type1/public/amsfonts/cm/cmbx12.pfb><H:/MikTex_Portable/texmfs/install/fo
-nts/type1/public/amsfonts/cm/cmbx7.pfb><H:/MikTex_Portable/texmfs/install/fonts
-/type1/public/amsfonts/cm/cmr10.pfb><H:/MikTex_Portable/texmfs/install/fonts/ty
-pe1/public/amsfonts/cm/cmr12.pfb><H:/MikTex_Portable/texmfs/install/fonts/type1
-/public/amsfonts/cm/cmr17.pfb><H:/MikTex_Portable/texmfs/install/fonts/type1/pu
-blic/amsfonts/cm/cmr7.pfb><H:/MikTex_Portable/texmfs/install/fonts/type1/public
-/amsfonts/cm/cmsy10.pfb>
-Output written on main_doc.pdf (45 pages, 1928580 bytes).
+ 68i,15n,74p,841b,349s stack positions out of 5000i,500n,10000p,200000b,50000s
+{H:/MikTex_Portable/texmfs/instal
+l/fonts/enc/dvips/cm-super/cm-super-ts1.enc}<H:/MikTex_Portable/texmfs/install/
+fonts/type1/public/amsfonts/cm/cmbx10.pfb><H:/MikTex_Portable/texmfs/install/fo
+nts/type1/public/amsfonts/cm/cmbx12.pfb><H:/MikTex_Portable/texmfs/install/font
+s/type1/public/amsfonts/cm/cmbx7.pfb><H:/MikTex_Portable/texmfs/install/fonts/t
+ype1/public/amsfonts/cm/cmr10.pfb><H:/MikTex_Portable/texmfs/install/fonts/type
+1/public/amsfonts/cm/cmr12.pfb><H:/MikTex_Portable/texmfs/install/fonts/type1/p
+ublic/amsfonts/cm/cmr17.pfb><H:/MikTex_Portable/texmfs/install/fonts/type1/publ
+ic/amsfonts/cm/cmr7.pfb><H:/MikTex_Portable/texmfs/install/fonts/type1/public/c
+m-super/sfrm1000.pfb>
+Output written on main_doc.pdf (45 pages, 1931454 bytes).
 PDF statistics:
- 310 PDF objects out of 1000 (max. 8388607)
+ 311 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  118 words of extra memory for PDF output out of 10000 (max. 10000000)
 
