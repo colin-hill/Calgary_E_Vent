@@ -104,6 +104,7 @@ This report outlines the Alberta E-Vent software design, development and testing
 	\item Section \ref{sect:vandv} covers verification and validation testing performed to check the performance of the software.
 	\item Section \ref{sect:maintenance} covers the proposed maintenance plan for continuing support of the Alberta E-Vent software.
 \end{itemize}
+Items highlighted in \textcolor{red}{red} indicate a change from released software version 060920, to the proposed software version 022521.
 
 \clearpage
 
@@ -136,7 +137,7 @@ This report outlines the Alberta E-Vent software design, development and testing
 
 \section{Software Classification}
 \label{sect:software_class}
-The Alberta E-Vent has been designed as a emergency ventilation system which requires human supervision. The intent of the system is to offload the physical burden of manually running a bag-valve-mask setup while still utilizing the trained supervision of medical professional. Further, it is expected that the device will be used on patients capable of spontaneous breathing which requires the Assist Control Mode of ventilation.
+The Alberta E-Vent has been designed as a emergency ventilation system which requires human supervision. The intent of the system is to offload the physical burden of manually running a bag-valve-mask setup while still utilizing the trained supervision of a medical professional. Further, it is expected that the device will be used on patients capable of spontaneous breathing which requires the Assist Control Mode of ventilation.
 
 The Alberta E-Vent utilizes an external mechanical relief valve to limit the maximum operating pressure of the ventilator.  This valve prevents the ventilator from generating pressures that would cause severe harm to the patient.  Further, the ventilator acts as an aid to patient's breathing but does not prevent them from spontaneous inhalation or exhalation during operation.  The anticipated operating conditions of the ventilator, as detailed in the preceding paragraph, would mean that a software malfunction will not cause suffocation.  The primary risks associated with a software failure relate to asynchronous breathing and the associated lung injury associated with this operating condition.  This rationalization provides the justification for treating the software as Class B in accordance with IEC 62304.2006.
 
@@ -311,7 +312,7 @@ The Alberta E-Vent Software has designated Class B. See Section \ref{sect:softwa
 \end{longtable}
 \begin{enumerate}
 	\item The development of the Alberta E-Vent occurred over 1-month period to respond to the immediate need for emergency ventilation systems for use in the COVID-19 pandemic.  The rapid development schedule meant that not all aspects of the IEC 62304 software development criteria could be followed.  The Alberta E-Vent hardware and software was developed using an agile development procedure with a small team.  The focus of the development procedure has been to iterate quickly, solicit clinician feedback, and implement requested changes.
-	\item Software of Unknown Pedigree (SOUP) has been avoided where possible, however, the software developed utilizes the Arduino suite of IDE, compiler, and libraries.  The use of an a widely available platform intended for rapid development, like Arduino, was necessitated by the short development timelines associated with this project.  A selection of additional open-source libraries not associated with the Arduino suite have been used when necessary.  Full details of the the SOUP utilized in the Alberta E-Vent is given in Section \ref{sect:soup} of this document.  Risks associated with using SOUP has been reduced by extensively testing the full ventilator to ensure it functions as expected in reliable manner.
+	\item Software of Unknown Pedigree (SOUP) has been avoided where possible, however, the software developed utilizes the Arduino suite of IDE, compiler, and libraries.  The use of an a widely available platform intended for rapid development, like Arduino, was necessitated by the short development timelines associated with this project.  A selection of additional open-source libraries not associated with the Arduino suite have been used when necessary.  Full details of the the SOUP utilized in the Alberta E-Vent is given in Section \ref{sect:soup} of this document.  Risks associated with using SOUP has been reduced by extensively testing the full ventilator to ensure it functions as expected in a reliable manner.
 	\item The software developed for the Alberta E-Vent is relatively compact (less than 10k lines). As such, the entire  software suite required to operate the ventilator has been treated as a single unit.  The software has been developed and tested as a single unit. The small size of the code base enabled this type of testing to be effective for debugging and verification testing.
 	\item Items related to ongoing maintenance of the software are not addressed in detail by the current set of documents.  A brief overview of the maintenance polices to be employed is given in Section \ref{sect:maintenance}. The intent of the current set of documents is to outline the software development procedure.
 	
@@ -427,6 +428,7 @@ The ventilator software supports the following features and specifications:
 
 
 \subsection{Adjustable Ventilation Parameters}
+\label{Sec:Ventilation Parameters}
 
 
 \begin{center}
@@ -499,7 +501,7 @@ All verification and validation of the Alberta E-Vent software has been carried 
 
 \noindent\textbf{IDE/Compiler:} Arudino IDE Version 1.8.12
 
-\noindent\textbf{Alberta E-Vent Software:} Version 042920
+\noindent\textbf{Alberta E-Vent Software:} Version \textcolor{red}{060920}
 
 \subsection{Software Repository}
 
@@ -522,11 +524,23 @@ Software revisions have been tracked using GitHub.  The automated revision track
 
 Upon power-up, the ventilator LCD screens will display the Albert E-Vent name and the software version for 2-seconds.  The ventilator will then proceed into a calibration procedure:
 \begin{itemize}
-	\item Arms will move outwards (away from the bag) until a limit switch is reached.  An audible click will be heard when the limit switch is depressed by the arms.
+	\item \textcolor{red}{Arms will move inwards (towards the bag) until a limit switch is released. This part of the procedure may be instantaneous if the arms are not depressing the limit switch at startup}
+	\item Arms will move outwards (away from the bag) until the limit switch is reached.  An audible click will be heard when the limit switch is depressed by the arms.
 	\item Arms will stop momentarily and then begin to move inwards towards the edge of the bag.  They should stop just at the edge, or in slight contact, with the bag.  The ventilator will stop in this position for approximately 1-second before transitioning into ventilation.
 	\item This location at the edge of the bag is referred to as the ventilator's zero point.
 \end{itemize}
 The full state flow diagram for the motor calibration procedure is provided in Appendix \ref{app:sfd}.
+
+\subsection{Breath Reset}
+
+\textcolor{red}{
+Immediately after a breath has been delivered, and before entering the breath waiting period, the ventilator performs it's update procedure:}
+\begin{itemize}
+	\item \textcolor{red}{Ventilator updates it's operating mode (Volume Control or Assist Control)}
+	\item \textcolor{red}{Ventilator updates it's operating conditions (see Section \ref{Sec:Ventilation Parameters})}
+	\item \textcolor{red}{Ventilator checks if a recalibration is required or has been requested}
+	
+\end{itemize}
 
 
 \subsection{Assist Control Mode}
@@ -748,12 +762,11 @@ The ventilator includes a number of alarms. Refer to Sections \ref{sect:alarms} 
 \label{sect:vandv}
 
 
-All testing was conducted using an ASL 5000 servo-lung under the direction of an experienced respiratory therapist.
+All testing on \textcolor{red}{released software version 060920} was conducted using an ASL 5000 servo-lung under the direction of an experienced respiratory therapist. \textcolor{red}{Due to a lack of availability of an ASL 5000 for verification and validation of proposed software version 022521. The verification and validation testing performed on software version 022521 is described in Section \ref{Sec:VandV022521}.}
 
 \subsection{Ventilation Testing}
 
-Full details on testing of the ventilator settings and accuracy can be found in the testing documentation external to this document.
-
+Full details on testing of the ventilator settings and accuracy \textcolor{red}{for software version 060920} can be found in the testing documentation external to this document.
 
 \subsection{Alarm Testing}
 
@@ -866,6 +879,10 @@ The high respiratory rate alarm was tested by setting the respiratory rate at a 
 	\end{table}	
 \end{center}
 
+\subsection{Verification and Validation of Proposed Software Change 022521}
+\label{Sec:VandV022521}
+\textcolor{red}{Verification and Validation testing of software version 022521 was performed without an ASL 5000 due to a lack of availability. The verification and validation testing of software version 022521 was performed by comparing ventilator performance parameters against software version 060920. This was deemed to be adequate testing as the changes to software version 022521 do not have direct impact on the ventilation control loops as discussed in Section \ref{sect:architecture} and shown in Appendix \ref{app:sfd}. A description of the testing methodology and the results of the verification and validation testing can be found in the testing documents external to this document.} \textcolor{blue}{May need help on whether this makes sense Lyndon}
+
 
 \subsection{Verification of Risk Control Methods}
 \label{sect:v_risk}
@@ -885,11 +902,11 @@ The watchdog timer reset was tested by artificially introducing a hard-coded del
 \subsection{Anomalies}
 \label{sect:anomalies}
 
-Identified anomalies for software release version 042920.
+Identified anomalies for software release version 060920.
 
 \begin{center}
 	\begin{table}[h]
-		\caption{Software Anomalies for Version 042920}
+		\caption{Software Anomalies for Version 060920}
 		\label{tab:sw_anom}
 		\begin{tabular}{ |p{4cm}|p{10cm}|}
 			
@@ -1010,6 +1027,56 @@ Note that the combined behavior of all of these state flow diagrams is necessary
 
 
 \clearpage
+\section{Deprecated Software Flow Charts}
+
+These state flow diagrams describe the program flow for software version 060920.
+
+\begin{enumerate}
+	\item The overall program state flow diagram is shown in Fig. \ref{fig:main_dstfd}.
+	\item The motor homing and zeroing (calibration) state flow diagram is shown in Fig. \ref{fig:mz_dstfd}.
+	\item The Assist control Mode state flow diagram is shown in Fig. \ref{fig:ac_dstfd}.
+	\item The Volume Control Mode state flow diagram is shown in Fig. \ref{fig:vc_dstfd}.
+\end{enumerate}
+
+Note that the combined behavior of all of these state flow diagrams is necessary for a complete understanding of how the software interacts.
+
+\begin{figure}
+	\includegraphics[scale= 0.82, trim=15 60 15 60, clip]{figures/main_loop_deprecated.pdf}
+	\caption{Main Program Loop}
+	\label{fig:main_dloop}
+\end{figure}
+
+\begin{sidewaysfigure}
+	\includegraphics[scale=0.8, trim = 6 6 6 6, clip]{figures/main_state_flow_deprecated.pdf}
+	\caption{Overall Program State Flow Diagram}
+	\label{fig:main_dstfd}
+\end{sidewaysfigure}
+
+\begin{sidewaysfigure}
+	\includegraphics[scale=0.8, trim = 6 6 6 6, clip]{figures/motor_zeroing_deprecated.pdf}
+	\caption{Motor Zeroing State Flow Diagram}
+	\label{fig:mz_dstfd}
+\end{sidewaysfigure}
+
+\begin{sidewaysfigure}
+	\includegraphics[scale=0.8, trim = 6 6 6 6, clip]{figures/ac_mode.pdf}
+	\caption{Assist Control Mode State Flow Diagram}
+	\label{fig:ac_dstfd}
+\end{sidewaysfigure}
+
+\begin{sidewaysfigure}
+	\includegraphics[scale=0.8, trim = 6 6 6 6, clip]{figures/vc_mode.pdf}
+	\caption{Volume Control Mode State Flow Diagram}
+	\label{fig:vc_dstfd}
+\end{sidewaysfigure}
+
+\begin{figure}
+	\includegraphics[scale= 0.82, trim=15 70 15 50, clip]{figures/alarm_handler.pdf}
+	\caption{Alarm Handler}
+	\label{fig:alarm_dloop}
+\end{figure}
+\label{app:dsfd}
+
 \section{Risk Assessment}
 The figures contained in this section outline the overall risk assessment of the ventilator system. Not all of the analysis in this section pertains to the software aspect of the ventilator.  For an examination of the software-specific risk mitigation implemented refer to Section \ref{sect:risk} of this document.
 This appendix provides the following Figures:

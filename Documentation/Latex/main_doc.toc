@@ -15,17 +15,18 @@
 \contentsline {subsection}{\numberline {7.7}Software Repository}{16}{}%
 \contentsline {section}{\numberline {8}Architecture Description}{17}{}%
 \contentsline {subsection}{\numberline {8.1}Startup and Calibration}{17}{}%
-\contentsline {subsection}{\numberline {8.2}Assist Control Mode}{17}{}%
-\contentsline {subsection}{\numberline {8.3}Volume Control Mode}{17}{}%
-\contentsline {subsection}{\numberline {8.4}Alarm Conditions}{18}{}%
-\contentsline {subsubsection}{\numberline {8.4.1}High Peak Inspiratory Pressure (PIP)}{18}{}%
-\contentsline {subsubsection}{\numberline {8.4.2}Low Peak Inspiratory Pressure (PIP)}{18}{}%
-\contentsline {subsubsection}{\numberline {8.4.3}High Peak End-Expiratory Pressure (PEEP)}{18}{}%
-\contentsline {subsubsection}{\numberline {8.4.4}Low Peak End-Expiratory Pressure (PEEP)}{18}{}%
-\contentsline {subsubsection}{\numberline {8.4.5}High Respiratory Rate (AC Mode Only)}{19}{}%
-\contentsline {subsection}{\numberline {8.5}Fault Conditions}{19}{}%
-\contentsline {subsubsection}{\numberline {8.5.1}Mechanical Failure}{19}{}%
-\contentsline {subsubsection}{\numberline {8.5.2}Homing Failure}{19}{}%
+\contentsline {subsection}{\numberline {8.2}Breath Reset}{17}{}%
+\contentsline {subsection}{\numberline {8.3}Assist Control Mode}{17}{}%
+\contentsline {subsection}{\numberline {8.4}Volume Control Mode}{18}{}%
+\contentsline {subsection}{\numberline {8.5}Alarm Conditions}{18}{}%
+\contentsline {subsubsection}{\numberline {8.5.1}High Peak Inspiratory Pressure (PIP)}{18}{}%
+\contentsline {subsubsection}{\numberline {8.5.2}Low Peak Inspiratory Pressure (PIP)}{18}{}%
+\contentsline {subsubsection}{\numberline {8.5.3}High Peak End-Expiratory Pressure (PEEP)}{18}{}%
+\contentsline {subsubsection}{\numberline {8.5.4}Low Peak End-Expiratory Pressure (PEEP)}{19}{}%
+\contentsline {subsubsection}{\numberline {8.5.5}High Respiratory Rate (AC Mode Only)}{19}{}%
+\contentsline {subsection}{\numberline {8.6}Fault Conditions}{19}{}%
+\contentsline {subsubsection}{\numberline {8.6.1}Mechanical Failure}{19}{}%
+\contentsline {subsubsection}{\numberline {8.6.2}Homing Failure}{19}{}%
 \contentsline {section}{\numberline {9}Risk Management}{20}{}%
 \contentsline {subsection}{\numberline {9.1}Motor Calibration}{20}{}%
 \contentsline {subsection}{\numberline {9.2}Inhale}{20}{}%
@@ -39,13 +40,15 @@
 \contentsline {subsubsection}{\numberline {10.2.3}High PEEP Alarm}{24}{}%
 \contentsline {subsubsection}{\numberline {10.2.4}Low PEEP Alarm}{24}{}%
 \contentsline {subsubsection}{\numberline {10.2.5}High Respiratory Rate Alarm}{24}{}%
-\contentsline {subsection}{\numberline {10.3}Verification of Risk Control Methods}{25}{}%
-\contentsline {subsubsection}{\numberline {10.3.1}Mechanical Fault Detection}{25}{}%
-\contentsline {subsubsection}{\numberline {10.3.2}Watchdog Timer}{25}{}%
-\contentsline {subsection}{\numberline {10.4}Anomalies}{25}{}%
+\contentsline {subsection}{\numberline {10.3}Verification and Validation of Proposed Software Change 022521}{25}{}%
+\contentsline {subsection}{\numberline {10.4}Verification of Risk Control Methods}{25}{}%
+\contentsline {subsubsection}{\numberline {10.4.1}Mechanical Fault Detection}{25}{}%
+\contentsline {subsubsection}{\numberline {10.4.2}Watchdog Timer}{25}{}%
+\contentsline {subsection}{\numberline {10.5}Anomalies}{26}{}%
 \contentsline {section}{\numberline {11}Maintenance}{27}{}%
 \contentsline {subsection}{\numberline {11.1}Software Problem Identification}{27}{}%
 \contentsline {subsection}{\numberline {11.2}Verification and Release of Modified Software}{27}{}%
 \contentsline {section}{\numberline {A}Software Flow Charts}{28}{}%
-\contentsline {section}{\numberline {B}Risk Assessment}{35}{}%
-\contentsline {section}{\numberline {C}Software Change Request Tracking}{44}{}%
+\contentsline {section}{\numberline {B}Deprecated Software Flow Charts}{35}{}%
+\contentsline {section}{\numberline {C}Risk Assessment}{35}{}%
+\contentsline {section}{\numberline {D}Software Change Request Tracking}{50}{}%
