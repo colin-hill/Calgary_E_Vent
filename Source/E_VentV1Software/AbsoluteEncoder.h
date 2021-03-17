@@ -3,23 +3,35 @@
 
 #include "PinAssignments.h"
 
+//Arduino library required for analogRead
+#if ARDUINO >= 100
+#include "Arduino.h"
+#else
+#include "WProgram.h"
+#endif
+
 const float ADC_MAX_VALUE = 1023.0;
 const float ADC_MAX_VOLTAGE = 5.0;
 
-float zeroPointVoltage;
+struct AbsoluteEncoderStruct{
 
-float voltageToTicksSlope;
+	float zeroPointVoltage;
+	float voltageToTicksSlope;
+	float voltageToTicksIntercept;
 
-float voltageToTicksIntercept;
+};
 
-void setZeroPointVoltage(float &zeroPointVoltage);
+AbsoluteEncoderStruct setupAbsoluteEncoder(void);
 
-void setVoltageToTicks(float &voltageToTicksSlope, float &voltageToTicksIntercept, const long int motorPosition, const float zeroPointVoltage);
+void setAbsZeroPointVoltage(AbsoluteEncoderStruct &absEncoder);
 
-float readAbsoluteEncoder();
+void setAbsVoltageToTicks(AbsoluteEncoderStruct &absEncoder, const long int motorPosition);
+
+float readAbsoluteEncoder(void);
 
 float convertADCToVolts(long adcReading);
 
-float readAbsoluteEncoderAngle(const float voltageToTicksSlope, const float voltageToTicksIntercept);
+float readAbsoluteEncoderTicks(AbsoluteEncoderStruct &absEncoder);
 
 
+#endif

@@ -56,6 +56,7 @@ void commandMotorZero(RoboClaw &controller_name, VentilatorState &state) {
 	//Make sure the motor has come to a stop
 	delay((HOMING_BUFFER*S_TO_MS));
 
+	setAbsZeroPointVoltage(state.absEncoder);
 
 
 	state.current_motor_position = readPosition(controller_name);
@@ -263,7 +264,13 @@ void handle_MotorZeroing(RoboClaw &controller_name, VentilatorState &state) {
 		state.alarm_outputs = 0;
 		//Check motor position
 		checkMotorStatus(controller_name, state);
+
+		setAbsVoltageToTicks(state.absEncoder, QP_TO_ZEROPOINT);
+
 		setMotorZero(controller_name);
+		//Set the abolute encoder to a new zeropoint
+		setAbsZeroPointVoltage(state.absEncoder);
+
 		return;
 	default:
 		//Should not happen

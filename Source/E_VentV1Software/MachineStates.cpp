@@ -100,6 +100,8 @@ VentilatorState get_init_state(void) {
 
     state.external_display = false;
 
+    state.absEncoder = setupAbsoluteEncoder();
+
     return state;
 }
 

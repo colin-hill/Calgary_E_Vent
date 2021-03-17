@@ -11,6 +11,7 @@
 #endif
 
 #include "conversions.h"
+#include "AbsoluteEncoder.h"
 
 
 // Make sure each state has a character in machineStatesCodes
@@ -155,6 +156,8 @@ struct VentilatorState {
     uint8_t mechanical_failure_count;
 
     bool external_display = false;
+
+    AbsoluteEncoderStruct absEncoder;
 };
 
 

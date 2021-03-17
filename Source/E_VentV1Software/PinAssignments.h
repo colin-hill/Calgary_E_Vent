@@ -64,7 +64,7 @@ const int AC_MODE_LED_PIN  = 13; //Originally 9
 const int RECALIBRATION_PIN = 22;
 
 //Absolute Encoder Pin
-const int ABS_ENCODER_PIN = A5;
+const int ABS_ENCODER_PIN = 5; //Compiler will call A5
 
 
 #endif
