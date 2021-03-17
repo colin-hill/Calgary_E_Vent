@@ -7,10 +7,11 @@ void setZeroPointVoltage(float &zeroPointVoltage){
 	return;
 }
 
-void setVoltageToTicks(float &voltageToTicks,const long int motorPosition, const float zeroPointVoltage){
+void setVoltageToTicks(float &voltageToTicksSlope, float &voltageToTicksIntercept, const long int motorPosition, const float zeroPointVoltage){
 	//This function should be called after zeroing the motor encoder and then moving in a set amount of ticks
 	float absEncoderVoltage = readAbsoluteEncoder(); //Returns current voltage reading
-	voltageToTicks = motorPosition/(absEncoderVoltage - zeroPointVoltage);
+	voltageToTicksSlope = motorPosition/(absEncoderVoltage - zeroPointVoltage);
+	voltageToTicksIntercept = -1*zeroPointVoltage*voltageToTicksSlope;
 	return;
 }
 
@@ -25,8 +26,8 @@ float convertADCToVolts(long adcReading){
 	return voltageReading;
 }
 
-float readAbsoluteEncoderTicks(const float voltageToTicks){
+float readAbsoluteEncoderTicks(const float voltageToTicks, const float voltageToTicksIntercept){
 	//Convert from an encoder voltage to ticks
-	float currentTicks = readAbsoluteEncoder()*voltageToTicks;
+	float currentTicks = readAbsoluteEncoder()*voltageToTicksSlope + voltageToTicksIntercept;
 	return currentTicks;
 }

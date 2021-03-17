@@ -8,16 +8,18 @@ const float ADC_MAX_VOLTAGE = 5.0;
 
 float zeroPointVoltage;
 
-float voltageToTicks;
+float voltageToTicksSlope;
+
+float voltageToTicksIntercept;
 
 void setZeroPointVoltage(float &zeroPointVoltage);
 
-void setVoltageToTicks(float &voltageToTicks,const long int motorPosition, const float zeroPointVoltage);
+void setVoltageToTicks(float &voltageToTicksSlope, float &voltageToTicksIntercept, const long int motorPosition, const float zeroPointVoltage);
 
 float readAbsoluteEncoder();
 
 float convertADCToVolts(long adcReading);
 
-float readAbsoluteEncoderAngle(const float voltageToTicks);
+float readAbsoluteEncoderAngle(const float voltageToTicksSlope, const float voltageToTicksIntercept);
 
 
