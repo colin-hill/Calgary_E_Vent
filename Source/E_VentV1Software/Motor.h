@@ -1,7 +1,7 @@
 #ifndef Motor_h
 #define Motor_h
 
-#define SERIAL_DEBUG
+//#define SERIAL_DEBUG
 
 
 #include "RoboClaw.h"

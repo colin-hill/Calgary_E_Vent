@@ -1,4 +1,4 @@
-#define SERIAL_DEBUG //Comment this out if not debugging, used for visual confirmation of state changes
+#define SERIAL_DEBUGGG //Comment this out if not debugging, used for visual confirmation of state changes
 //#define NO_INPUT_DEBUG //Comment this out if not debugging, used to spoof input parameters at startup when no controls are present
 //#define NO_LIMIT_SWITCH_DEBUG
 #define PYTHON_DEBUG //when defined: dumps key:value pairs to the serial port for logging by a seperate python script
@@ -218,6 +218,11 @@ void loop() {
         update_motor_settings(state);
 
         check_recalibration_button(state);
+
+        #ifdef SERIAL_DEBUGGG
+        Serial.println(F("ABS Encoder Reading: "));
+        Serial.println(readAbsoluteEncoderTicks(state.absEncoder));
+        #endif
 
     }
 
