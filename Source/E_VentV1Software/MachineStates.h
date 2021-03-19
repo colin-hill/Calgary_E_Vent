@@ -11,7 +11,6 @@
 #endif
 
 #include "conversions.h"
-#include "AbsoluteEncoder.h"
 
 
 // Make sure each state has a character in machineStatesCodes
@@ -73,6 +72,16 @@ enum zeroingStates {
                     MotorZero
 };
 
+
+
+struct AbsoluteEncoderStruct{
+
+  float limitSwitchVoltage;
+  float zeroPointVoltage;
+  float voltageToTicksSlope;
+  float voltageToTicksIntercept;
+
+};
 
 // Structure containing the full state of the ventilator.
 struct VentilatorState {
@@ -158,6 +167,7 @@ struct VentilatorState {
     bool external_display = false;
 
     AbsoluteEncoderStruct absEncoder;
+    
 };
 
 

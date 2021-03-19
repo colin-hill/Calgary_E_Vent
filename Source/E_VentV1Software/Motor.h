@@ -2,11 +2,8 @@
 #define Motor_h
 
 //#define SERIAL_DEBUG
-
-
 #include "RoboClaw.h"
 #include "MachineStates.h"
-#include "AbsoluteEncoder.h"
 
 //Motor Constants specific to the motor
 //const float QPPR = 17700.6; //Quadrature pulses per revolution

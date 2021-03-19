@@ -5,6 +5,8 @@
 #include "conversions.h"
 
 
+
+
 //Helper Functions
 
 void setMotorZero(RoboClaw &controller_name) {
@@ -55,8 +57,6 @@ void commandMotorZero(RoboClaw &controller_name, VentilatorState &state) {
 
 	//Make sure the motor has come to a stop
 	delay((HOMING_BUFFER*S_TO_MS));
-
-	setAbsZeroPointVoltage(state.absEncoder);
 
 
 	state.current_motor_position = readPosition(controller_name);
@@ -177,7 +177,7 @@ void handle_ACMode(RoboClaw &controller_name, VentilatorState &state) {
 		return;
 	case ACExhaleCommand:
 		checkMotorStatus(controller_name, state);
-		//state = checkMotorStatus(controller_name, state);
+		//state = checkMotorStatus(controller_name, state)
 		commandExhale(controller_name, state);
 		return;
 	case ACExhale:
@@ -185,6 +185,7 @@ void handle_ACMode(RoboClaw &controller_name, VentilatorState &state) {
 		break;
 	case ACReset:
 		checkMotorStatus(controller_name, state);
+
 		break;
 	default:
 		//Should not happen
@@ -199,7 +200,7 @@ void handle_VCMode(RoboClaw &controller_name, VentilatorState &state) {
   		Serial.println(F("Motor vc mode handle"));
   	#endif
 
-		switch(state.vc_state) {
+	switch(state.vc_state) {
 	case VCStart:
 		
 		break;
@@ -265,11 +266,7 @@ void handle_MotorZeroing(RoboClaw &controller_name, VentilatorState &state) {
 		//Check motor position
 		checkMotorStatus(controller_name, state);
 
-		setAbsVoltageToTicks(state.absEncoder, QP_TO_ZEROPOINT);
-
 		setMotorZero(controller_name);
-		//Set the abolute encoder to a new zeropoint
-		setAbsZeroPointVoltage(state.absEncoder);
 
 		return;
 	default:

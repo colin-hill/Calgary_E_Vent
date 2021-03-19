@@ -100,7 +100,10 @@ VentilatorState get_init_state(void) {
 
     state.external_display = false;
 
-    state.absEncoder = setupAbsoluteEncoder();
+    state.absEncoder.limitSwitchVoltage = 0.0;
+    state.absEncoder.zeroPointVoltage = 0.0;
+    state.absEncoder.voltageToTicksSlope = 0.0;
+    state.absEncoder.voltageToTicksIntercept = 0.0;
 
     return state;
 }
