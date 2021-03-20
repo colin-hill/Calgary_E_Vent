@@ -13,23 +13,63 @@ void setAbsVoltageToTicks(AbsoluteEncoderStruct &absEncoder, const long int moto
 //Returns the voltage reading of the absolute encoder at it current point
 float readAbsoluteEncoder(void){
 	long adcReading = analogRead(ABS_ENCODER_PIN);
+	#ifdef SERIAL_DEBUG
+		Serial.print(F("Raw ADC reading: "));
+		Serial.println(adcReading);
+	#endif
 	return convertADCToVolts(adcReading);
 }
 
 float convertADCToVolts(long adcReading){
 	float voltageReading = adcReading/ADC_MAX_VALUE*ADC_MAX_VOLTAGE;
+	#ifdef SERIAL_DEBUG
+		Serial.print(F("voltage conversion: "));
+		Serial.println(voltageReading);
+	#endif
+
+
 	return voltageReading;
 }
 
 float readAbsoluteEncoderTicks(AbsoluteEncoderStruct &absEncoder){
 	//Convert from an encoder voltage to ticks
 	float currentTicks = readAbsoluteEncoder()*absEncoder.voltageToTicksSlope + absEncoder.voltageToTicksIntercept;
+	#ifdef SERIAL_DEBUG
+		Serial.print(F("slope: "));
+		Serial.println(absEncoder.voltageToTicksSlope);
+		Serial.print(F("intercept: "));
+		Serial.println(absEncoder.voltageToTicksIntercept);
+		Serial.print(F("zeroPointVoltage: "));
+		Serial.println(absEncoder.zeroPointVoltage);
+		Serial.print(F("limitSwitchVoltage: "));
+		Serial.println(absEncoder.limitSwitchVoltage);
+	#endif
 	return currentTicks;
 }
 
 void handle_abs_motor_recalibration(RoboClaw &controller_name, VentilatorState &state){
 
 	//TODO: Check motor position, adjust encoder reading to zero if deviation is found
+	float currentAbsTicks = readAbsoluteEncoderTicks(state.absEncoder);
+	long int currentMotorTicks = controller_name.ReadEncM1(MOTOR_ADDRESS);
+
+	#ifdef SERIAL_DEBUG
+		Serial.println(F("In Motor Recal Funtion..."));
+		Serial.print(F("ABS: "));
+		Serial.println(currentAbsTicks);
+		Serial.print(F("Quad: "));
+		Serial.println(currentMotorTicks);
+	#endif
+
+	if (abs(currentAbsTicks-currentMotorTicks) > ABS_TO_QUAD_TOLERANCE) {
+		//controller_name.SetEncM1(MOTOR_ADDRESS, currentAbsTicks);
+
+		#ifdef SERIAL_DEBUG
+		Serial.print(F("Position Tolerance outside allowable range of: "));
+		Serial.println(ABS_TO_QUAD_TOLERANCE);
+		#endif
+
+	}
 
 	return;
 }

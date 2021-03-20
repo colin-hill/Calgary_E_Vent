@@ -9,7 +9,7 @@
 
 
 //IMPORTANT!! THIS MUST BE DEFINED FOR PRODUCTION CODE!!
-#define AUDIO_ALARM_ON //when defined: turns on the audible alarms
+//#define AUDIO_ALARM_ON //when defined: turns on the audible alarms
 //IMPORTANT!! THIS MUST BE DEFINED FOR PRODUCTION CODE!!
 
 
