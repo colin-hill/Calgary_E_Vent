@@ -1,6 +1,10 @@
 #include "AbsoluteEncoder.h"
 
 
+void jumpMotorEncoder(RoboClaw &controller_name){
+	controller_name.SetEncM1(MOTOR_ADDRESS, 10);
+}
+
 
 void setAbsVoltageToTicks(AbsoluteEncoderStruct &absEncoder, const long int motorPosition){
 	//This function should be called after zeroing the motor encoder and then moving in a set amount of ticks
@@ -62,7 +66,7 @@ void handle_abs_motor_recalibration(RoboClaw &controller_name, VentilatorState &
 	#endif
 
 	if (abs(currentAbsTicks-currentMotorTicks) > ABS_TO_QUAD_TOLERANCE) {
-		//controller_name.SetEncM1(MOTOR_ADDRESS, currentAbsTicks);
+		controller_name.SetEncM1(MOTOR_ADDRESS, currentAbsTicks);
 
 		#ifdef SERIAL_DEBUG
 		Serial.print(F("Position Tolerance outside allowable range of: "));

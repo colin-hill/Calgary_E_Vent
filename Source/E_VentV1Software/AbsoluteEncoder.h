@@ -16,8 +16,10 @@
 
 const float ADC_MAX_VALUE = 1023.0;
 const float ADC_MAX_VOLTAGE = 5.0;
-const float ABS_TO_QUAD_TOLERANCE = 200;
+const float ABS_TO_QUAD_TOLERANCE = 100;
 
+
+void jumpMotorEncoder(RoboClaw &controller_name);
 
 void setAbsVoltageToTicks(AbsoluteEncoderStruct &absEncoder, const long int motorPosition);
 

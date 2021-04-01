@@ -223,7 +223,10 @@ void loop() {
         setStateParameters(state, userParameters); //Must be before update_motor_settings
         update_motor_settings(state);
 
-        check_recalibration_button(state);
+        //check_recalibration_button(state);
+        if(LOW == digitalRead(RECALIBRATION_PIN)){
+            jumpMotorEncoder(motorController);
+        }
 
     }
 
