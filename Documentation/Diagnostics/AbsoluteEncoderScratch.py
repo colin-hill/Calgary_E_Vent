@@ -1,7 +1,7 @@
 import serial
 import time
 
-arduino_port_0 = "COM1"
+arduino_port_0 = "COM3"
 arduino_port_1 = "COM2"
 arduino_port_2 = "COM3"
 arduino_port_3 = "COM4"
@@ -10,8 +10,8 @@ arduino_port_5 = "COM6"
 arduino_port_6 = "COM7"
 
 def main():
-	try:
-		ser_0 = serial.Serial(arduino_port_0,9600,timeout=0)
+	
+	ser_0 = serial.Serial(arduino_port_0,9600,timeout=1)
 		#ser_1 = serial.Serial(arduino_port_1,9600,timeout=0)
 		#ser_2 = serial.Serial(arduino_port_2,9600,timeout=0)
 		#ser_3 = serial.Serial(arduino_port_3,9600,timeout=0)
@@ -66,12 +66,14 @@ def main():
 			time_string = getTimeString()
 
 			if arduino_0_response != 0:
+				print(arduino_0_response)
 				written = True
 				absolute_encoder_log.write("Time: ")
 				absolute_encoder_log.write(time_string)
+				absolute_encoder_log.write(" ")
 				absolute_encoder_log.write("Arduino 0: ")
 				absolute_encoder_log.write(arduino_0_response)
-				absolute_encoder_log.write(",")
+				#absolute_encoder_log.write(",")
 
 			#if arduino_1_response != 0:
 				#written = True
@@ -122,7 +124,7 @@ def main():
 			if written == True:
 				absolute_encoder_log.write("\n")
 
-			time.sleep(10)
+		time.sleep(0.001)
 
 	except KeyboardInterrupt:
 			absolute_encoder_log.close()
