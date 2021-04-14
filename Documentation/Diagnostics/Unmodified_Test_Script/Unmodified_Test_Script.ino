@@ -10,7 +10,7 @@ void setup() {
   Serial.begin(9600);
 
   for(uint8_t i = 0; i < num_sensor_pins; i++){
-    pinMode(sensor_pins[i],INPUT_PULLUP);
+    pinMode(sensor_pins[i],INPUT);
   }
 
   initial_time = millis();
