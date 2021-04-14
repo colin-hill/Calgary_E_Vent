@@ -1,5 +1,6 @@
 import serial
 import time
+import datetime
 
 arduino_port_0 = "COM3"
 arduino_port_1 = "COM2"
@@ -137,12 +138,14 @@ def main():
 			#ser_6.close()
 
 def getTimeString():
-	current_time = time.localtime(time.time())
-	day = current_time.tm_mday
-	hour = current_time.tm_hour
-	minute = current_time.tm_min
-	second = current_time.tm_sec
-	time_string = str(day) + "/" + str(hour) + ":" + str(minute) + ":" + str(second)
+	#current_time = time.localtime(time.time())
+	#day = current_time.tm_mday
+	#hour = current_time.tm_hour
+	#minute = current_time.tm_min
+	#second = current_time.tm_sec
+	#time_string = str(day) + "/" + str(hour) + ":" + str(minute) + ":" + str(second)
+	time = datetime.datetime.now()
+	time_string = str(time)
 	return time_string
 
 if __name__ == "__main__":
