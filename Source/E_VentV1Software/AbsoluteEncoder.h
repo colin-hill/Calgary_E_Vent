@@ -1,7 +1,8 @@
 #ifndef AbsoluteEncoder_h
 #define AbsoluteEncoder_h
 
-#define SERIAL_DEBUG
+//#define SERIAL_DEBUG
+#define PYTHON_DEBUG
 
 #include "PinAssignments.h"
 #include "Motor.h"
@@ -16,7 +17,7 @@
 
 const float ADC_MAX_VALUE = 1023.0;
 const float ADC_MAX_VOLTAGE = 5.0;
-const float ABS_TO_QUAD_TOLERANCE = 200;
+const float ABS_TO_QUAD_TOLERANCE = 25;
 
 
 void setAbsVoltageToTicks(AbsoluteEncoderStruct &absEncoder, const long int motorPosition);

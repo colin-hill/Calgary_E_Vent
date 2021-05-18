@@ -53,8 +53,8 @@ void handle_abs_motor_recalibration(RoboClaw &controller_name, VentilatorState &
 	float currentAbsTicks = readAbsoluteEncoderTicks(state.absEncoder);
 	long int currentMotorTicks = controller_name.ReadEncM1(MOTOR_ADDRESS);
 
-	#ifdef SERIAL_DEBUG
-		Serial.println(F("In Motor Recal Funtion..."));
+	#ifdef PYTHON_DEBUG
+		//Serial.println(F("In Motor Recal Funtion..."));
 		Serial.print(F("ABS: "));
 		Serial.println(currentAbsTicks);
 		Serial.print(F("Quad: "));
@@ -62,12 +62,12 @@ void handle_abs_motor_recalibration(RoboClaw &controller_name, VentilatorState &
 	#endif
 
 	if (abs(currentAbsTicks-currentMotorTicks) > ABS_TO_QUAD_TOLERANCE) {
-		//controller_name.SetEncM1(MOTOR_ADDRESS, currentAbsTicks);
+		controller_name.SetEncM1(MOTOR_ADDRESS, currentAbsTicks);
 
-		#ifdef SERIAL_DEBUG
-		Serial.print(F("Position Tolerance outside allowable range of: "));
-		Serial.println(ABS_TO_QUAD_TOLERANCE);
-		#endif
+		//#ifdef SERIAL_DEBUG
+		//Serial.print(F("Position Tolerance outside allowable range of: "));
+		//Serial.println(ABS_TO_QUAD_TOLERANCE);
+		//#endif
 
 	}
 
