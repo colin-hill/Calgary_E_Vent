@@ -1,7 +1,7 @@
 import serial
 import time
 
-arduino_port_0 = "COM3"
+arduino_port_0 = "COM9"
 arduino_port_1 = "COM2"
 arduino_port_2 = "COM3"
 arduino_port_3 = "COM4"
