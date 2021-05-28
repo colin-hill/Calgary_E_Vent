@@ -134,7 +134,12 @@ void update_motor_settings(VentilatorState &state) {
 
     state.motor_inhale_pulses = 0.01*state.tidal_volume*QP_AT_FULL_STROKE;
     state.motor_inhale_speed = state.motor_inhale_pulses/state.inspiration_time;
-    state.expiration_time = (SECONDS_PER_MINUTE/state.breaths_per_minute) - state.inspiration_time - (2*INERTIA_BUFFER) - DEFAULT_PLATEAU_PAUSE_TIME - CODE_LATENCY; 
+    if (ACMode == state.machine_state) {
+        state.expiration_time = (SECONDS_PER_MINUTE/state.breaths_per_minute) - state.inspiration_time - (2*INERTIA_BUFFER) - DEFAULT_PLATEAU_PAUSE_TIME - AC_CODE_LATENCY;
+    }
+    else if (VCMode == state.machine_state) {
+        state.expiration_time = (SECONDS_PER_MINUTE/state.breaths_per_minute) - state.inspiration_time - (2*INERTIA_BUFFER) - DEFAULT_PLATEAU_PAUSE_TIME - VC_CODE_LATENCY;
+    } 
     //state.motor_return_time = state.expiration_time*MOTOR_RETURN_FACTOR;
     //state.motor_return_speed = state.motor_inhale_pulses/state.motor_return_time;
     state.motor_return_speed = 7000;

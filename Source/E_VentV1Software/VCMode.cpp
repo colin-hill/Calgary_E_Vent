@@ -74,6 +74,7 @@ void vcInhale(VentilatorState &state, UserParameter *userParameters, RoboClaw &c
         state.vc_state = VCPeak;
         state.peak_pressure = state.current_loop_peak_pressure;
         state.errors |= check_pressure(state.pressure, userParameters);
+        reset_timer(state);
         
     }
 

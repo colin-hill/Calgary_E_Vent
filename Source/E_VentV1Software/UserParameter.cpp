@@ -31,11 +31,11 @@ void UserParameter::updateValue(){
 void UserParameter::updateTmpValue(int32_t numEncoderSteps){
 
     if(e_BPM == this->name){
-        this->maxValue = min(MAX_BPM,(60.0 / ((this->currentInspirationTime) + DEFAULT_PLATEAU_PAUSE_TIME + 2*INERTIA_BUFFER + CODE_LATENCY+ 0.25)));
+        this->maxValue = min(MAX_BPM,(60.0 / ((this->currentInspirationTime) + DEFAULT_PLATEAU_PAUSE_TIME + 2*INERTIA_BUFFER + AC_CODE_LATENCY+ 0.25)));
     }
     else if(e_InspirationTime == this->name){
         
-        float tmpNewMax = (60.0 / (this->currentBPM)) - ((DEFAULT_PLATEAU_PAUSE_TIME) + 2*INERTIA_BUFFER + (CODE_LATENCY) + 0.25);
+        float tmpNewMax = (60.0 / (this->currentBPM)) - ((DEFAULT_PLATEAU_PAUSE_TIME) + 2*INERTIA_BUFFER + (AC_CODE_LATENCY) + 0.25);
 
         float tmpNewMin = (this->currentTidalVolume) / 135.0; //TODO: Get rid of this magic number, this is the motor speed conversion factor
 

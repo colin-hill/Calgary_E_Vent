@@ -1,7 +1,7 @@
 clear
 clc
 
-dataFilePath = 'C:\Users\ColinHill\Documents\GitHub\Calgary_E_Vent\Documentation\Diagnostics\Evaluation Data\VC_mode_26_bpm.txt';
+dataFilePath = 'C:\Users\ColinHill\Documents\GitHub\Calgary_E_Vent\Documentation\Diagnostics\Evaluation Data\v2_vc_bpm_06.txt';
 
 
 
