@@ -31,9 +31,11 @@ float convertADCToVolts(long adcReading){
 	return voltageReading;
 }
 
-float readAbsoluteEncoderTicks(AbsoluteEncoderStruct &absEncoder){
+float readAbsoluteEncoderTicks(VentilatorState &state){
 	//Convert from an encoder voltage to ticks
-	float currentTicks = readAbsoluteEncoder()*absEncoder.voltageToTicksSlope + absEncoder.voltageToTicksIntercept;
+	float currentVoltage = readAbsoluteEncoder();
+	state.errors |= checkForRunningError(state, currentVoltage);
+	float currentTicks = currentVoltage*state.absEncoder.voltageToTicksSlope + state.absEncoder.voltageToTicksIntercept;
 	#ifdef SERIAL_DEBUG
 		Serial.print(F("slope: "));
 		Serial.println(absEncoder.voltageToTicksSlope);
@@ -47,10 +49,30 @@ float readAbsoluteEncoderTicks(AbsoluteEncoderStruct &absEncoder){
 	return currentTicks;
 }
 
+
+uint16_t checkForStartupError(AbsoluteEncoderStruct &absEncoder){
+	//Checks if the zero point and limit switch values are equal
+	if (abs(absEncoder.limitSwitchVoltage - absEncoder.zeroPointVoltage) < MIN_ABS_VOLT_CHANGE_AT_START){
+		return MECHANICAL_FAILURE_ALARM;
+	} else {
+		return 0;
+	}
+
+}
+
+uint16_t checkForRunningError(VentilatorState &state, float currentEncoderReading) {
+	//Checks if voltage value read at zero point aligns with original value from calibration
+	if (abs(state.absEncoder.zeroPointVoltage - currentEncoderReading) > MAX_ABS_VOLT_DEVIATION_AT_ZERO){
+		return MECHANICAL_FAILURE_ALARM;
+	} else {
+		return 0;
+	}
+}
+
 void handle_abs_motor_recalibration(RoboClaw &controller_name, VentilatorState &state){
 
 	//TODO: Check motor position, adjust encoder reading to zero if deviation is found
-	float currentAbsTicks = readAbsoluteEncoderTicks(state.absEncoder);
+	float currentAbsTicks = readAbsoluteEncoderTicks(state);
 	long int currentMotorTicks = controller_name.ReadEncM1(MOTOR_ADDRESS);
 
 	#ifdef PYTHON_DEBUG
@@ -99,6 +121,7 @@ void handle_absolute_encoder_zeroing(RoboClaw &controller_name, VentilatorState 
 	case MotorZero:
 		//Motor is now at zero point
 		state.absEncoder.zeroPointVoltage = readAbsoluteEncoder();
+		state.errors |= checkForStartupError(state.absEncoder);
 		setAbsVoltageToTicks(state.absEncoder, QP_TO_ZEROPOINT);
 		break;
 	default:

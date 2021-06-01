@@ -1,7 +1,7 @@
 //#define SERIAL_DEBUG //Comment this out if not debugging, used for visual confirmation of state changes
 //#define NO_INPUT_DEBUG //Comment this out if not debugging, used to spoof input parameters at startup when no controls are present
 //#define NO_LIMIT_SWITCH_DEBUG
-#define PYTHON_DEBUG //when defined: dumps key:value pairs to the serial port for logging by a seperate python script
+//#define PYTHON_DEBUG //when defined: dumps key:value pairs to the serial port for logging by a seperate python script
 
 
 #include <LiquidCrystal.h>
