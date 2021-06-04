@@ -52,8 +52,13 @@ float readAbsoluteEncoderTicks(VentilatorState &state){
 
 uint16_t checkForStartupError(AbsoluteEncoderStruct &absEncoder){
 	//Checks if the zero point and limit switch values are equal
+	Serial.println(F("In startup check......................... "));
+	Serial.print(F("Limit switch voltage: "));
+	Serial.println(absEncoder.limitSwitchVoltage);
+	Serial.print(F("Zero point voltage: "));
+	Serial.println(absEncoder.zeroPointVoltage);
 	if (abs(absEncoder.limitSwitchVoltage - absEncoder.zeroPointVoltage) < MIN_ABS_VOLT_CHANGE_AT_START){
-		return MECHANICAL_FAILURE_ALARM;
+		return FULL_DEVICE_FAILURE;
 	} else {
 		return 0;
 	}
@@ -63,7 +68,7 @@ uint16_t checkForStartupError(AbsoluteEncoderStruct &absEncoder){
 uint16_t checkForRunningError(VentilatorState &state, float currentEncoderReading) {
 	//Checks if voltage value read at zero point aligns with original value from calibration
 	if (abs(state.absEncoder.zeroPointVoltage - currentEncoderReading) > MAX_ABS_VOLT_DEVIATION_AT_ZERO){
-		return MECHANICAL_FAILURE_ALARM;
+		return FULL_DEVICE_FAILURE;
 	} else {
 		return 0;
 	}
@@ -121,8 +126,8 @@ void handle_absolute_encoder_zeroing(RoboClaw &controller_name, VentilatorState 
 	case MotorZero:
 		//Motor is now at zero point
 		state.absEncoder.zeroPointVoltage = readAbsoluteEncoder();
-		state.errors |= checkForStartupError(state.absEncoder);
 		setAbsVoltageToTicks(state.absEncoder, QP_TO_ZEROPOINT);
+		state.errors |= checkForStartupError(state.absEncoder);
 		break;
 	default:
 		//Should not happen
@@ -226,17 +231,17 @@ void handle_absolute_encoder(RoboClaw &controller_name, VentilatorState &state){
 		break;
 	case MotorZeroing:
 		handle_absolute_encoder_zeroing(controller_name, state);
-		return;
+		break;
 	case BreathLoopStart:
 		//Check abs encoder and reset motor quadrature encoder to zero if deviation is found
 		handle_abs_motor_recalibration(controller_name, state);
 		break;
 	case ACMode:
 		handle_absolute_encoder_ACMode(controller_name, state);
-		return;
+		break;
 	case VCMode:
 		handle_absolute_encoder_VCMode(controller_name, state);
-		return;
+		break;
 	case FailureMode:
 		//No action required
 		break;

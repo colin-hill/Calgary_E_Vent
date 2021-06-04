@@ -19,7 +19,7 @@
 const float ADC_MAX_VALUE = 1023.0;
 const float ADC_MAX_VOLTAGE = 5.0;
 const float ABS_TO_QUAD_TOLERANCE = 25;
-const float MIN_ABS_VOLT_CHANGE_AT_START = 0.1; 
+const float MIN_ABS_VOLT_CHANGE_AT_START = 0.15; 
 const float MAX_ABS_VOLT_DEVIATION_AT_ZERO = 0.1;
 
 

@@ -131,10 +131,10 @@ void loop_alarm_manager(elapsedMillis &externalDisplayTimer, elapsedMillis &alar
                         SelectedParameter &currentlySelectedParameter) {
 
   //If there is a mechanical failure, decide what happens next
-  if (state.errors & MECHANICAL_FAILURE_ALARM){
+  if (state.errors & MECHANICAL_FAILURE_ALARM || state.errors & FULL_DEVICE_FAILURE){
     //Increment count
     state.mechanical_failure_count += 1;
-    if (state.mechanical_failure_count >= 2){
+    if (state.mechanical_failure_count >= 2  || state.errors & FULL_DEVICE_FAILURE){
       state.machine_state = FailureMode;
       state.errors |= FULL_DEVICE_FAILURE;
     }

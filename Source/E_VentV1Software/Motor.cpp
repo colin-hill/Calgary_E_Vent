@@ -261,8 +261,8 @@ void handle_MotorZeroing(RoboClaw &controller_name, VentilatorState &state) {
 		break;
 	case MotorZero:
 		//Reset errors
-		state.errors = 0;
-		state.alarm_outputs = 0;
+		//state.errors = 0;
+		//state.alarm_outputs = 0;
 		//Check motor position
 		checkMotorStatus(controller_name, state);
 

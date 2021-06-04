@@ -1,4 +1,4 @@
-//#define SERIAL_DEBUG //Comment this out if not debugging, used for visual confirmation of state changes
+#define SERIAL_DEBUG //Comment this out if not debugging, used for visual confirmation of state changes
 //#define NO_INPUT_DEBUG //Comment this out if not debugging, used to spoof input parameters at startup when no controls are present
 //#define NO_LIMIT_SWITCH_DEBUG
 //#define PYTHON_DEBUG //when defined: dumps key:value pairs to the serial port for logging by a seperate python script
@@ -46,7 +46,7 @@ RoboClaw motorController(&Serial2, MOTOR_CONTROLLER_TIMEOUT);
 //#define SERIAL_DEBUG //Comment this out if not debugging, used for visual confirmation of state changes
 //#define NO_INPUT_DEBUG //Comment this out if not debugging, used to spoof input parameters at startup when no controls are present
 
-const char softwareVersion[] = "051821";
+const char softwareVersion[] = "060321";
 //------------------------------------------------------------------------------
 //End User Defined Section------------------------------------------------------
 
@@ -190,6 +190,8 @@ void loop() {
 
     //Handle absolute encoder
     handle_absolute_encoder(motorController, state);
+    Serial.print(F("Errors after abs handler: "));
+    Serial.println(state.errors);
 
     //Issue motor commands
     handle_motor(motorController, state);
