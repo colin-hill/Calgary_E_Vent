@@ -1,5 +1,5 @@
-#define SERIAL_DEBUG //Comment this out if not debugging, used for visual confirmation of state changes
-#define NO_INPUT_DEBUG //Comment this out if not debugging, used to spoof input parameters at startup when no controls are present
+//#define SERIAL_DEBUG //Comment this out if not debugging, used for visual confirmation of state changes
+//#define NO_INPUT_DEBUG //Comment this out if not debugging, used to spoof input parameters at startup when no controls are present
 
 #include "MotorZeroing.h"
 
